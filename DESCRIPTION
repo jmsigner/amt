@@ -1,0 +1,19 @@
+Package: amt
+Type: Package
+Title: Animal Movement Tools
+Version: 0.0.0.9000
+Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jmsigner@gmail.com"))
+Description: Functions to analyse animal movement data.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends:
+    tidyverse
+Imports:
+    lubridate,
+    Rcpp (>= 0.12.7),
+    rgeos,
+    sp,
+    spbabel
+LinkingTo: Rcpp
+RoxygenNote: 5.0.1
