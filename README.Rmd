@@ -16,3 +16,68 @@ knitr::opts_chunk$set(
 # amt (animal movement tools)
 
 The aim of `amt` is to make handling and analyzing animal telemetry data easier by providing functions that simplify common tasks, such as data filtering, calculation of path characteristics and home ranges, and the preparing data for more complex analyses (e.g., step selection functions and alike).
+
+
+## Installation
+
+To install the current development version of `amt` use:
+
+```{r, eval=FALSE}
+devtools::install_github("jmsigner/amt")
+
+```
+
+## Examples
+
+First we use some simulated dummy data and nest it by id:
+
+```{r}
+set.seed(123)
+
+library(amt)
+
+n <- 1e6
+df1 <- data_frame(
+  id = sample(1:30, n, TRUE),
+  object_ = 1:n,
+  x_ = cumsum(rnorm(n)),
+  y_ = cumsum(rnorm(n))
+)
+
+df1 %>% nest(-id) -> df2
+```
+
+
+### Calculating step lengths
+
+We can calculate some simple statistics (i.e step lengths):
+
+
+```{r}
+# add distance
+df2 %>% mutate(data = map(data, ~ mutate(.x, dist = distance(.x)))) -> df2
+
+# calcualte the mean distance per individual: 2 ways
+# 1. using the nested structure
+df2 %>% mutate(mean_dist = map_dbl(data, ~ mean(.$dist, na.rm = TRUE)))
+
+# 2. using dplyr::group_by
+df2 %>% unnest() %>% group_by(id) %>% summarise(mdist = mean(dist, na.rm = TRUE))
+
+```
+
+
+### Calculating Minimum Convex Polygon (MCP) home ranges
+
+And as a proof of concept, calculate a MCP home range
+
+```{r}
+# Calculate MCP home ranges
+df2 %>% mutate(mcp = map(data, ~ mcp2(.x, level = c(50, 75, 95)))) -> df3
+
+# obtain the HR area
+df3 %>% mutate(mcp_area = map(mcp, hr_area)) %>% select(id, mcp_area) %>% unnest()
+```
+
+
+
