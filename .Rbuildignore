@@ -1,3 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 scratch*
+^README\.Rmd$
+^README-.*\.png$
