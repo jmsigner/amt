@@ -57,7 +57,7 @@ direction_rel <- function(x) {
 #' @export
 distance <- function(x) {
   if (check_trackXY(x)) {
-    c(NA, sqrt((diff_x(x))^2 + (diff_y(x))^2))
+    c(sqrt((diff_x(x))^2 + (diff_y(x))^2))
   }
 }
 
