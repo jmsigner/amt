@@ -1,6 +1,5 @@
 #' @export
-#'
-#'
+
 mcp <- function(x, levels = 95) {
   if (check_trackXY(x)) {
     xy <- spbabel::sp(x)

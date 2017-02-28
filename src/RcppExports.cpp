@@ -16,3 +16,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mk_reg
+NumericVector mk_reg(NumericVector relocs_time, int time_dist, int time_tol, int start);
+RcppExport SEXP amt_mk_reg(SEXP relocs_timeSEXP, SEXP time_distSEXP, SEXP time_tolSEXP, SEXP startSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type relocs_time(relocs_timeSEXP);
+    Rcpp::traits::input_parameter< int >::type time_dist(time_distSEXP);
+    Rcpp::traits::input_parameter< int >::type time_tol(time_tolSEXP);
+    Rcpp::traits::input_parameter< int >::type start(startSEXP);
+    rcpp_result_gen = Rcpp::wrap(mk_reg(relocs_time, time_dist, time_tol, start));
+    return rcpp_result_gen;
+END_RCPP
+}
+// duration_acuracy
+NumericVector duration_acuracy(NumericVector x_, NumericVector y_, NumericVector t_, NumericVector dop, NumericVector dim, int duration_accuracy);
+RcppExport SEXP amt_duration_acuracy(SEXP x_SEXP, SEXP y_SEXP, SEXP t_SEXP, SEXP dopSEXP, SEXP dimSEXP, SEXP duration_accuracySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y_(y_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type t_(t_SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type dop(dopSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type dim(dimSEXP);
+    Rcpp::traits::input_parameter< int >::type duration_accuracy(duration_accuracySEXP);
+    rcpp_result_gen = Rcpp::wrap(duration_acuracy(x_, y_, t_, dop, dim, duration_accuracy));
+    return rcpp_result_gen;
+END_RCPP
+}

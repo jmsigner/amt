@@ -99,3 +99,13 @@ check_trackXYZT <- function(x) {
     stop("x is not an object of class trackXYZT")
   }
 }
+
+
+#' @export
+head_tail <- function(x, n = 6) {
+  rbind(
+    head(x, n = n),
+    tail(x, n = n)
+  )
+
+}

@@ -66,3 +66,23 @@ distance_with_diff <- function(xd, yd) {
   c(NA, sqrt((xd)^2 + (yd)^2))
 }
 
+#' @export
+time_diffs <- function(x) {
+  if (check_trackXYT(x)) {
+    diff(as.numeric(x$t_))
+  }
+}
+
+#' @export
+median_time_diff <- function(x) {
+  if (check_trackXYT(x)) {
+    median(time_diffs(x))
+  }
+}
+
+#' @export
+is.regular <- function(x, ) {
+  if (check_trackXYT(x)) {
+    median(time_diffs(x))
+  }
+}

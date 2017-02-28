@@ -5,3 +5,11 @@ diff_rcpp <- function(xs) {
     .Call('amt_diff_rcpp', PACKAGE = 'amt', xs)
 }
 
+mk_reg <- function(relocs_time, time_dist, time_tol, start) {
+    .Call('amt_mk_reg', PACKAGE = 'amt', relocs_time, time_dist, time_tol, start)
+}
+
+duration_acuracy <- function(x_, y_, t_, dop, dim, duration_accuracy) {
+    .Call('amt_duration_acuracy', PACKAGE = 'amt', x_, y_, t_, dop, dim, duration_accuracy)
+}
+
