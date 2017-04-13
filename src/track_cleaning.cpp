@@ -2,7 +2,114 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector mk_reg_steps(NumericVector t1, int time_dist, int time_tol, int start) {
+NumericVector track_align(NumericVector t1, NumericVector nt, int time_tol, int type) {
+  // Create variables
+  int burst = 1;  // burst
+  // int i = 0;  // obs
+  int j = 0;  // new traj
+
+  int n_obs = t1.size(); // number of points
+  int n_new = nt.size(); // number of new points
+  NumericVector out(n_obs);   // output
+
+  // for each point in t1, find the closest point in nt
+  for (int i = 0; i < n_obs; i++) {
+    int low = 0;
+    int high = n_new - 1;
+
+    while(low < high) {
+      int mid = (low + high) / 2;
+      int d1 = abs(nt[mid] - t1[i]);
+      int d2 = abs(nt[mid + 1] - t1[i]);
+
+      if (d2 <= d1) {
+        low = mid + 1;
+      } else {
+        high = mid;
+      }
+    }
+
+    if (t1[i] > (nt[high] - time_tol) && t1[i] < (nt[high] + time_tol)) {
+      out(i) = high;
+    } else {
+      out(i) = -1;
+    }
+  }
+
+  // check each element of the new traj again and only keep the closest (if there are more than 2 points)
+  int k = 0;
+  int out_k;
+  int dis_next;
+  while(k < n_obs) {
+    if (out[k] > -1) {
+      out_k = out[k];
+      int l = k;
+
+      while (out[k] == out[l]) {
+        if (t1[l] < nt[out_k]) {
+          dis_next = abs(t1[l + 1] - nt[out_k]);
+        } else {
+          dis_next = abs(t1[l - 1] - nt[out_k]);
+        }
+
+        int dis_current = abs(t1[l] - nt[out_k]);
+        if (dis_next < dis_current) {
+          out[l] = -1;
+        }
+        l++;
+      }
+      k = l;
+    } else {
+      k++;
+    }
+  }
+
+  // case: more than two points
+  // case: no points
+
+
+  // prep output
+  if (type == 1) { // type: which
+    return out;
+  }
+
+  if (type == 2) { // type: diff
+
+    for (int i = 0; i < n_obs; i++) {
+      if (out[i] != -1) {
+        out[i] = nt[out[i]] - t1[i];
+      }
+    }
+    return out;
+  }
+
+  if (type == 3) { // type: burst
+    // assign unique bursts
+    int diff = nt[1] - nt[0];
+
+    // find first point in out that should be considered again
+    int i = 0;
+    while (out[i] == -1) i++;
+    int old_i = nt[out[i]];
+    out[i] = burst;
+
+    for (i++; i < n_obs; i++) {
+      if (out[i] > -1) {
+        if ((nt[out[i]] - old_i) != diff) {
+          burst++;
+        }
+        old_i = nt[out[i]];
+        out[i] = burst;
+      }
+    }
+    return(out);
+  }
+}
+
+
+
+// [[Rcpp::export]]
+NumericVector mk_reg(NumericVector t1, int time_dist, int time_tol, int start) {
   // Create variables
   int k = 1;  // burst
   int i = start - 1;  // counter of points
@@ -12,30 +119,27 @@ NumericVector mk_reg_steps(NumericVector t1, int time_dist, int time_tol, int st
 
   // all positions that are left out in the beginning are 0ed
   for (int j = 0; j < i; j++)
-    out[j] = 0;
+    out[j] = -1;
 
   out[i] = k;
+  while(i < (n - 1)) {
+    // Rcout << "The value is " << i << std::endl;
 
-  while(i < n) {
-
-    t_min = time_dist - time_tol;
-    t_max = time_dist + time_tol;
-    double waited = t1[i];
-
+    t_min = t1[i] + time_dist - time_tol;
+    t_max = t1[i] + time_dist + time_tol;
     // bring j to the right position
     int j = i + 1;
-    while((j < n) && (waited < t_min)) {
-      out[j] = 0;
-      waited += t1[j];
+    while((j < (n - 1)) && (t1[j] < t_min)) {
+      out[j] = -1;
       j++;
     }
 
     i = j;
 
-    if (waited >= t_min && waited <= t_max) {
+    if (j == (n - 1) && t1[j] < t_min) {
+      out[j] = -1;
+    } else if (t1[j] >= t_min && t1[j] <= t_max) {
       out[j] = k;
-    } else if (j == (n - 1)) {
-      out[j] = 0;
     } else {
       k++;
       out[j] = k;
@@ -45,7 +149,7 @@ NumericVector mk_reg_steps(NumericVector t1, int time_dist, int time_tol, int st
 }
 
 // [[Rcpp::export]]
-NumericVector mk_reg(NumericVector relocs_time, int time_dist, int time_tol, int start) {
+NumericVector mk_reg_old(NumericVector relocs_time, int time_dist, int time_tol, int start) {
   // Create variables
   int k = 1;  // burst
   int i = start - 1;  // counter of points

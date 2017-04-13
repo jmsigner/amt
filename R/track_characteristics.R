@@ -4,61 +4,87 @@
 NULL
 
 #' @export
-angle_abs <- function(x) {
-  is_trackXY(x)
+velocity <- function(x, ...) {
+  UseMethod("velocity", x)
 }
 
 #' @export
-angle_rel <- function(x) {
-  is_trackXY(x)
+velocity.track_xyt <- function(x, ...) {
+  print("the velocity will be calculated here....")
 }
 
 #' @export
-velocity <- function(x) {
-  is_trackXY(x)
+nsd <- function(x, ...) {
+  UseMethod("nsd", x)
+}
+
+
+#' @export
+nsd.track_xy <- function(x, ...) {
+  (x$x_ - x$x_[1])^2 + (x$y_ - x$y_[1])^2
 }
 
 #' @export
-nsd <- function(x) {
-  if (check_trackXY(x)) {
-    (x$x_ - x$x_[1])^2 + (x$y_ - x$y_[1])^2
-  }
+diff_x <- function(x, ...) {
+  UseMethod("diff_x", x)
+}
+
+
+#' @export
+diff_x.track_xy <- function(x, ...) {
+   c(diff_rcpp(x$x_), NA)
 }
 
 #' @export
-diff_x <- function(x) {
-  if (check_trackXY(x)) {
-   c(NA, diff_rcpp(x$x_))
-  }
+diff_y <- function(x, ...) {
+  UseMethod("diff_y", x)
 }
 
 #' @export
-diff_y <- function(x) {
-  if (check_trackXY(x)) {
-   c(NA, diff_rcpp(x$y_))
-  }
+diff_y.track_xy <- function(x, ...) {
+   c(diff_rcpp(x$y_), NA)
 }
 
 
 #' @export
 direction_abs <- function(x) {
-  if (check_trackXY(x)) {
-    c(NA, ((atan2(diff_y(x), diff_x(x)) / pi * 180) + 360) %% 360)
-  }
+  UseMethod("direction_abs", x)
 }
 
+#' @export
+direction_abs.track_xy <- function(x) {
+  ((atan2(diff_y(x), diff_x(x)) / pi * 180) + 360) %% 360
+}
+
+#' @export
+direction_rel <- function(x, ...) {
+  UseMethod("directoin_rel", x)
+}
+
+#' @export
 direction_rel <- function(x) {
-  if (check_trackXY(x)) {
-    c(NA, diff_rcpp(direction_abs(x)))
-  }
+  c(NA, diff_rcpp(direction_abs(x)))
 }
 
 
 #' @export
-distance <- function(x) {
-  if (check_trackXY(x)) {
-    c(sqrt((diff_x(x))^2 + (diff_y(x))^2))
-  }
+step_lengths <- function(x, ...) {
+  UseMethod("step_lengths", x)
+}
+
+#' @export
+step_lengths.track_xy <- function(x, ...) {
+  sqrt(step_lengths_sq(x))
+}
+
+#' @export
+step_lenths_sq <- function(x, ...) {
+  UseMethod("step_lengths_sq", x)
+}
+
+#' @export
+step_lengths_sq <- function(x) {
+  diff_x(x)^2 + diff_y(x)^2
 }
 
 #' @noRd
@@ -81,7 +107,7 @@ median_time_diff <- function(x) {
 }
 
 #' @export
-is.regular <- function(x, ) {
+is.regular <- function(x) {
   if (check_trackXYT(x)) {
     median(time_diffs(x))
   }

@@ -1,8 +1,11 @@
 .Rproj.user
 .Rhistory
 .RData
+.RDataTmp
 .Ruserdata
 src/*.o
 src/*.so
 src/*.dll
 scratch*
+background/*
+test_builds/*

@@ -8,12 +8,29 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
-    tidyverse
+    R (>= 2.10),
+    tidyverse,
+    survival
 Imports:
+    circular,
+    dplyr,
+    fitdistrplus,
+    graphics,
+    grDevices,
+    lazyeval,
+    leaflet,
     lubridate,
+    methods,
     Rcpp (>= 0.12.7),
     rgeos,
+    raster,
     sp,
-    spbabel
+    stats,
+    tibble,
+    tidyr,
+    utils
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
+Suggests: testthat
+RdMacros: Rdpack
