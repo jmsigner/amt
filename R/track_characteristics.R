@@ -53,7 +53,9 @@ direction_abs <- function(x) {
 
 #' @export
 direction_abs.track_xy <- function(x) {
-  ((atan2(diff_y(x), diff_x(x)) / pi * 180) + 360) %% 360
+ # ((atan2(diff_y(x), diff_x(x)) / pi * 180) + 360) %% 360
+ # atan2(diff_y(x), diff_x(x)) * 180 / pi
+  (450 - atan2(diff_y(x), diff_x(x)) * 180 / pi) %% 360
 }
 
 #' @export

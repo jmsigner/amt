@@ -1,3 +1,9 @@
+#' Adjust Movement Parameters.
+#'
+#' Adjusting movement based parameters, based on Avgar et al. 2016.
+#'
+#' @param x A fitted conditional logistic regression
+#'
 #' @export
 adjust_params <- function(x) {
   if (x$sl_$distname == "gamma") {

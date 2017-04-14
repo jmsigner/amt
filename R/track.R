@@ -16,8 +16,6 @@
 #' @return If `t` was provided an object of class `track_xyt` is returned
 #'   otherwise a `track_xy`.
 #' @export
-#' @examples
-#' a <- 1:10
 track <- function(x, y, t, ..., crs = NULL) {
 
   if (missing(x) | missing(y)) {
@@ -30,7 +28,7 @@ track <- function(x, y, t, ..., crs = NULL) {
       y_ = y,
       ...
     )
-    class(out) <- c("track_xy", class(out))
+   class(out) <- c("track_xy", class(out))
 
   } else {
     out <- tibble(
@@ -39,7 +37,7 @@ track <- function(x, y, t, ..., crs = NULL) {
       t_ = t,
       ...
     )
-    class(out) <- c("track_xyt", "track_xy", class(out))
+   class(out) <- c("track_xyt", "track_xy", class(out))
   }
 
   attributes(out)$crs_ <- crs
@@ -49,37 +47,26 @@ track <- function(x, y, t, ..., crs = NULL) {
 
 # S3 Methods --------------------------------------------------------------
 
-
-track_transfer_attr <- function(from, to) {
-  from <- attributes(from)
-  attributes(to)$class <- from$class
-  attributes(to)$crs_ <- from$crs_
-  to
-}
+ track_transfer_attr <- function(from, to) {
+   from <- attributes(from)
+   attributes(to)$class <- from$class
+   attributes(to)$crs_ <- from$crs_
+   to
+ }
 
 # tibble methods
 #' @export
 `[.track_xy` <- function(x, i, j, drop = FALSE) {
-  track_transfer_attr(x, NextMethod())
+  xx <- NextMethod()
+  track_transfer_attr(x, xx)
 }
 
-
-#' @export
-`[[.track_xy` <- function(x, i, j, ..., exact = TRUE) {
-  track_transfer_attr(x, NextMethod())
-}
 
 #' @export
 `[.track_xyt` <- function(x, i, j, drop = FALSE) {
-  track_transfer_attr(x, NextMethod())
+  xx <- NextMethod()
+  track_transfer_attr(x, xx)
 }
-
-
-#' @export
-`[[.track_xyt` <- function(x, i, j, ..., exact = TRUE) {
-  track_transfer_attr(x, NextMethod())
-}
-
 
 # dplyr methods -----------------------------------------------------------
 
@@ -155,3 +142,5 @@ summarzse_.track_xy <- function(.data, ..., .dots) {
 summarzse_.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
+
+

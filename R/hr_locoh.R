@@ -6,6 +6,7 @@
 #' @param n Numeric scalar, the number of neighbours.
 #' @param level Numeric scalar/vector, home-range level. The level should be `0 < level < 1`.
 #' @param rand_buffer Numeric scalar, random buffer to avaoid polygons with area 0 (if coordinates are numerically identical).
+#' @template dots_none
 #' @name locoh_k
 #' @export
 locoh_k <- function(x, ...) {

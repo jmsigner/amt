@@ -92,7 +92,7 @@ fit_ta_dist_base <- function(x, na.rm = TRUE, distr = "vonmises", ...) {
   if (is.list(x)) x <- unlist(x, use.names = FALSE, recursive = TRUE)
   if (na.rm) x <- x[!is.na(x)]
 
-  x <- circular::as.circular(x, type = "angles", units = "radians", template = "none",
+  x <- circular::as.circular(x, type = "angles", units = "degrees", template = "none",
                              modulo = "asis", zero = 0, rotation = "counter")
   circular::mle.vonmises(x, ...)
 }

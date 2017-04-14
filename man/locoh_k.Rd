@@ -13,6 +13,8 @@ locoh_k(x, ...)
 \arguments{
 \item{x}{A \code{track_xy}.}
 
+\item{...}{Further arguments, none implemented.}
+
 \item{n}{Numeric scalar, the number of neighbours.}
 
 \item{level}{Numeric scalar/vector, home-range level. The level should be \code{0 < level < 1}.}

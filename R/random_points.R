@@ -98,10 +98,3 @@ summarise_.random_points <- function(.data, ..., .dots) {
   x
 }
 
-#' @export
-`[[.random_points` <- function(x, i, j, ..., exact = TRUE) {
-  x <- NextMethod()
-  class(x) <- c("random_points", class(x))
-  x
-}
-

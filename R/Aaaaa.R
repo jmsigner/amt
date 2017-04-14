@@ -11,8 +11,8 @@
 #' @importFrom utils data head tail
 #' @import survival tidyverse
 
-methods::setOldClass(c("track_xy", "tbl_df"))
-methods::setOldClass(c("track_xyt", "track_xy"))
-methods::setOldClass(c("random_points", "tbl_df"))
-methods::setOldClass(c("steps", "tbl_df"))
+methods::setOldClass(c("track_xy", "tbl_df", "tbl", "data.frame"))
+methods::setOldClass(c("track_xyt", "track_xy", "tbl_df", "tbl", "data.frame"))
+methods::setOldClass(c("random_points", "tbl_df", "tbl", "data.frame"))
+methods::setOldClass(c("steps", "tbl_df", "tbl", "data.frame"))
 NULL

@@ -29,6 +29,3 @@ Consructor to crate a track, the basic building block of the \code{amt} pacakge.
 \code{track} is usually created from a set of \code{x} and \code{y} coordinates, possibly
 time stamps, and any number of optional columns, such as id, sex, age, etc.
 }
-\examples{
-a <- 1:10
-}

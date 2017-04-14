@@ -70,12 +70,6 @@ methods::setOldClass(c("steps", "tbl_df"))
   steps_transfer_attr(x, xx)
 }
 
-#' @export
-`[[.steps` <- function(x, i, j, ..., exact = TRUE) {
-  xx <- NextMethod()
-  steps_transfer_attr(x, xx)
-}
-
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
 arrange_.steps <- function(.data, ..., .dots) {
