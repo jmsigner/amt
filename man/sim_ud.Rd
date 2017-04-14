@@ -24,6 +24,9 @@ issf_to_ud(fit, resources, start, quant = 0.99, adjust = TRUE, n = 1e+05)
 
 \item{exp}{A logical scalar, indicating whether or not the resulting habitat kernel should be exponentiated. This is usually \code{TRUE}.}
 
+\item{quant}{A numeric scalar, quantile of the step-length distribution that is
+the maximum movement distance.}
+
 \item{adjust}{A logical scalar, indicating whether or not step length
 parameters should be adjusted or not. Note, parameter adjustment is only
 possilbe, if movement related covariates were included in the model (e.g.,
@@ -36,9 +39,6 @@ step length and the log thereof).}
 \item{start}{A numeric vector of length two, giving the starting point of the simulatoin.}
 
 \item{n}{An integer, providing the number of simulation steps.}
-
-\item{q}{A numeric scalar, quantile of the step-length distribution that is
-the maximum movement distance.}
 }
 \value{
 The habitat kernel, as \code{RasterLayer}.

@@ -7,10 +7,12 @@
 \usage{
 transform_coords(x, ...)
 
-\method{transform_coords}{track_xy}(x, crs_to, crs_from)
+\method{transform_coords}{track_xy}(x, crs_to, crs_from, ...)
 }
 \arguments{
 \item{x}{A track.}
+
+\item{...}{Further arguments, none implemented.}
 
 \item{crs_to}{coordinate reference system the data should be transformed to, see \code{sp::CRS}.}
 

@@ -1,6 +1,6 @@
 #' @export
-fit_clogit <- function(x, ...) {
-  UseMethod("fit_clogit", x)
+fit_clogit <- function(data, ...) {
+  UseMethod("fit_clogit", data)
 }
 
 #' @export

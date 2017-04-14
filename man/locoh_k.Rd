@@ -7,7 +7,8 @@
 \usage{
 locoh_k(x, ...)
 
-\method{locoh_k}{track_xy}(x, n = 10, level = 0.95, rand_buffer = 1e-05)
+\method{locoh_k}{track_xy}(x, n = 10, level = 0.95, rand_buffer = 1e-05,
+  ...)
 }
 \arguments{
 \item{x}{A \code{track_xy}.}

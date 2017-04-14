@@ -2,6 +2,7 @@
 #'
 #' Transforms the CRS for a track.
 #' @param x A track.
+#' @template dots_none
 #'
 #' @export
 #' @seealso sp::spTransform
@@ -15,7 +16,7 @@ transform_coords <- function(x, ...) {
 #' @export
 #' @rdname transform_coords
 
-transform_coords.track_xy <- function(x, crs_to, crs_from) {
+transform_coords.track_xy <- function(x, crs_to, crs_from, ...) {
   if (missing(crs_from)) {
     if (!is.null(attributes(x)$crs)) {
       crs_from <- attributes(x)$crs

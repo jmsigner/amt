@@ -15,6 +15,7 @@ Imports:
     circular,
     dplyr,
     fitdistrplus,
+    FNN,
     graphics,
     grDevices,
     lazyeval,

@@ -1,6 +1,6 @@
 #' @export
-fit_logit <- function(x, ...) {
-  UseMethod("fit_logit", x)
+fit_logit <- function(data, ...) {
+  UseMethod("fit_logit", data)
 }
 
 #' @export
