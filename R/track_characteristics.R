@@ -45,16 +45,22 @@ diff_y.track_xy <- function(x, ...) {
    c(diff_rcpp(x$y_), NA)
 }
 
-
+#' Absolute Direction.
+#' Function to calculate the absolute direction of a movement track. 0 is north.
+#' @param x A track.
+#' @name direction_abs
+#'
 #' @export
 direction_abs <- function(x) {
   UseMethod("direction_abs", x)
 }
 
 #' @export
+#' @rdname direction_abs
 direction_abs.track_xy <- function(x) {
- # ((atan2(diff_y(x), diff_x(x)) / pi * 180) + 360) %% 360
- # atan2(diff_y(x), diff_x(x)) * 180 / pi
+  # ((atan2(diff_y(x), diff_x(x)) / pi * 180) + 360) %% 360
+  # atan2(diff_y(x), diff_x(x)) * 180 / pi
+  # make north up: https://grass.osgeo.org/grass70/manuals/r.slope.aspect.html
   (450 - atan2(diff_y(x), diff_x(x)) * 180 / pi) %% 360
 }
 
