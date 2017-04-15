@@ -1,15 +1,31 @@
+#' Fit a Step-Lengths distribution.
+#'
+#' Fit a distribution to the the step lengths of a track.
+#'
+#'
+#' @param .tbl A `track_xy*`.
+#' @param x The column, containing step lengths, usually `sl_`.
+#' @param distr Name of the distribution, curently only `gamma` distribution is supported.
+#' @param na.rm Logical scalar, should `NA` be removed?
+#' @tempalte dots_none
+#' @name fit_sl_dist
+#'
+#'
 #' @export
+#' @rdname fit_sl_dist
 fit_sl_dist_ <- function(.tbl, x, ...){
   fit_sl_dist_base(.tbl[[x]], ...)
 }
 
 #' @export
+#' @rdname fit_sl_dist
 fit_sl_dist <- function(.tbl, x, ...){
   fit_sl_dist_base(.tbl[deparse(substitute(x))], ...)
 }
 
 
 #' @export
+#' @rdname fit_sl_dist
 fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
   if (is.list(x)) x <- unlist(x, use.names = FALSE, recursive = TRUE)
   if (na.rm) x <- x[!is.na(x)]
@@ -22,22 +38,30 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
 
 }
 
+#' Step lengths parameters
+#'
+#' Returns the parameter of the distribution (e.g., gamma) fitted to the distribution of step lengths.
+#' @param x An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
 #' @export
+#' @name sl_params
 sl_params <- function (x, ...) {
   UseMethod("sl_params", x)
 }
 
 #' @export
+#' @rdname sl_params
 sl_params.fit_clogit <- function (x, ...) {
   sl_params(x$sl_)
 }
 
 #' @export
+#' @rdname sl_params
 sl_params.random_steps <- function (x, ...) {
   sl_params(attributes(x)$sl_)
 }
 
 #' @export
+#' @rdname sl_params
 sl_params.fitdist <- function(x, ...) {
   if (x$distname == "gamma") {
     if ("scale" %in% names(x$estimate)) {
@@ -52,22 +76,30 @@ sl_params.fitdist <- function(x, ...) {
   }
 }
 
+#' Step-length distribution
+#'
+#' Returns the name of the distribution (e.g., gamma) fitted to the distribution of step lengths.
+#' @param x An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
 #' @export
+#' @name sl_distr
 sl_distr <- function (x, ...) {
   UseMethod("sl_distr", x)
 }
 
 #' @export
+#' @rdname sl_distr
 sl_distr.fitdist <- function(x, ...) {
   x$distname
 }
 
 #' @export
+#' @rdname sl_distr
 sl_distr.fit_clogit <- function (x, ...) {
   sl_distr(x$sl_)
 }
 
 #' @export
+#' @rdname sl_distr
 sl_distr.random_steps <- function (x, ...) {
   sl_distr(attributes(x)$sl_)
 }
