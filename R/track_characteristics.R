@@ -120,3 +120,20 @@ is.regular <- function(x) {
     median(time_diffs(x))
   }
 }
+
+#' Centroid of a track
+#'
+#' Calcualtes the centroid of a track (i.e., the mean of the x and y coordinates).
+#' @param x A track.
+#' @template dots_none
+#' @name centroid
+#' @export
+centroid <- function(x, ...) {
+  UseMethod("centroid", x)
+}
+
+#' @export
+#' @rdname centroid
+centroid.track_xy <- function(x, ...) {
+  colMeans(trk[, c("x_", "y_")])
+}

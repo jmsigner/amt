@@ -47,9 +47,16 @@ track <- function(x, y, t, ..., crs = NULL) {
 
 # S3 Methods --------------------------------------------------------------
 
+# track_transfer_attr <- function(from, to) {
+#   from <- attributes(from)
+#   attributes(to)$class <- from$class
+#   attributes(to)$crs_ <- from$crs_
+#   to
+# }
+
  track_transfer_attr <- function(from, to) {
    from <- attributes(from)
-   attributes(to)$class <- from$class
+   attributes(to)$class <- c(setdiff(from$class, class(to)), class(to))
    attributes(to)$crs_ <- from$crs_
    to
  }

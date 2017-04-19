@@ -1,17 +1,19 @@
-## TODO: rename to track_resample
-
-# #' @export
-#
-# regular_sampling_rate_raw <- function(x, rate, tolerance, start = 1) {
-#   xx <- regular_sampling_rate_raw(x, rate, tolerance, start)
-# }
-
+#' Resample track
+#'
+#' Function to resample a track at a predefined sampling rate within some tolerance.
+#'
+#' @param x A `track_xyt`.
+#' @param rate A lubridate `Period`, that indicates the sampling rate.
+#' @param tolerance A lubridate `Period`, that indicates the tolerance of deviations of the sampling rate.
+#' @param start A integer scalar, that gives the relocation at which the sampling rate starts.
+#' @name track_resample
 #' @export
 track_resample <- function(x, ...) {
   UseMethod("track_resample", x)
 }
 
 #' @export
+#' @rdname track_resample
 track_resample.track_xyt <- function(x, rate = hours(2), tolerance = minutes(15), start = 1, ...) {
 
   t_ <- as.numeric(x$t_)
@@ -37,7 +39,7 @@ filter_min_n_burst.track_xy <- function(x, min_n = 3, ...) {
     stop("column 'burst_' not found.")
   }
   pred <- lazyeval::interp(~ col >= min_n, col = as.name("n"))
-  x_select <- group_by_(x, "burst_") %>% summarise_(n = ~n()) %>%
+  x_select <- group_by_(x, ~burst_) %>% summarise_(n = ~n()) %>%
     filter_(pred)
   #pred <- lazyeval::interp(~ col %in% x_select$burst_, col = as.name("burst_"))
   #x %>% filter_(pred)

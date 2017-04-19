@@ -1,10 +1,5 @@
 #' @export
-fit_logit <- function(data, ...) {
-  UseMethod("fit_logit", data)
-}
-
-#' @export
-fit_logit.random_points <- function(data, formula, more = NULL, ...) {
+fit_logit <- function(data, formula, more = NULL, ...) {
   m <- stats::glm(formula, data = data, family = stats::binomial(link = "logit"), ...)
   m <- list(model = m)
   class(m) <- c("fit_logit", class(m))

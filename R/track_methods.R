@@ -31,15 +31,6 @@ is_burst <- function(x) {
   }
 }
 
-#' @export
-centroid <- function(x, ...) {
-  UseMethod("centroid", x)
-}
-
-#' @export
-centroid.track_xy <- function(x, ...) {
-  colMeans(trk[, c("x_", "y_")])
-}
 
 ####################### most likely ot go
 
