@@ -10,14 +10,9 @@
 #' }
 "animal_sim"
 
-#' Simulated landscape.
+#' Habitat of simulated data
 #'
 #' A Gauss-Random-Field simulation of a landscape.
 #'
 #' @format A `RasterLayer`
-#' \describe{
-#'   \item{x_}{the x-coordinate}
-#'   \item{y_}{the y-coordinate}
-#'   \item{t_}{the timestamp}
-#' }
-"animal_sim"
+"habitat"

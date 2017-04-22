@@ -6,6 +6,7 @@
 #' @param rate A lubridate `Period`, that indicates the sampling rate.
 #' @param tolerance A lubridate `Period`, that indicates the tolerance of deviations of the sampling rate.
 #' @param start A integer scalar, that gives the relocation at which the sampling rate starts.
+#' @template dots_none
 #' @name track_resample
 #' @export
 track_resample <- function(x, ...) {
@@ -28,12 +29,21 @@ track_resample.track_xyt <- function(x, rate = hours(2), tolerance = minutes(15)
   filter(x, cond)
 }
 
+#' Filter Bursts
+#'
+#' Only retain bursts with a minimum number of relocations.
+#'
+#' @param x A track.
+#' @param min_n A numeric scalar, indicating the minimum number of relocations (=fixes= per burst)
+#' @template dots_none
+#' @name filter_min_n_burst
 #' @export
 filter_min_n_burst <- function(x, ...) {
   UseMethod("filter_min_n_burst")
 }
 
 #' @export
+#' @rdname filter_min_n_burst
 filter_min_n_burst.track_xy <- function(x, min_n = 3, ...) {
   if (!"burst_" %in% names(x)) {
     stop("column 'burst_' not found.")

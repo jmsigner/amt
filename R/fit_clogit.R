@@ -1,10 +1,13 @@
+#' Fit a conditional logistic regression
+#'
+#' Tihs function is a wrapper around `stats::glm`, making it usable in a piped workflow.
+#' @param data The data.
+#' @param formula The formula
+#' @param more Optional list returned in the output.
+#' @param ... Addtional arguments, passed to `survival::clogit`.
 #' @export
-fit_clogit <- function(data, ...) {
-  UseMethod("fit_clogit", data)
-}
 
-#' @export
-fit_clogit.random_steps <- function(data, formula, more = NULL, ...) {
+fit_clogit <- function(data, formula, more = NULL, ...) {
   m <- survival::clogit(formula, data = data, ...)
   m <- list(model = m,
             sl_ = attributes(data)$sl_,

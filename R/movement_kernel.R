@@ -26,7 +26,6 @@ movement_kernel <- function(fit, resources, quant = 0.99, adjust = FALSE) {
   }
 }
 
-#' @export
 mk_base <- function(r, res) {
   mov_kern <- expand.grid(x = seq(-r, r, by = res),
                           y = seq(-r, r, by = res))
@@ -46,7 +45,6 @@ mk_base <- function(r, res) {
 
 }
 
-#' @export
 mk_gamma <- function(mk, shape, scale) {
   d <- raster::getValues(mk)
   raster::setValues(mk, dgamma(d,  shape = shape, scale = scale) / (2 * pi * d))

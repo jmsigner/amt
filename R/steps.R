@@ -1,8 +1,17 @@
+#' Track to Steps.
+#'
+#' Converts a track to steps.
+#'
+#' @param x A track.
+#' @template dots_none
+#' @name steps
 #' @export
 steps_by_burst <- function(x, ...) {
   UseMethod("steps_by_burst", x)
 }
 
+#' @export
+#' @rdname steps
 #' @export
 steps_by_burst.track_xyt <- function(x, ...) {
 
@@ -17,11 +26,13 @@ steps_by_burst.track_xyt <- function(x, ...) {
 
 
 #' @export
+#' @rdname steps
 steps <- function(x, ...) {
   UseMethod("steps", x)
 }
 
 #' @export
+#' @rdname steps
 steps.track_xy <- function(x, ...) {
   n <- nrow(x)
   xx <- steps_base(x, n)
@@ -30,6 +41,7 @@ steps.track_xy <- function(x, ...) {
 }
 
 #' @export
+#' @rdname steps
 steps.track_xyt <- function(x, ...) {
   n <- nrow(x)
   if ("burst_" %in% names(x)) {
@@ -63,7 +75,6 @@ steps_transfer_attr <- function(from, to) {
   to
 }
 
-methods::setOldClass(c("steps", "tbl_df"))
 #' @export
 `[.steps` <- function(x, i, j, drop = FALSE) {
   xx <- NextMethod()

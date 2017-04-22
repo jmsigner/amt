@@ -17,6 +17,8 @@ sl_distr(x, ...)
 }
 \arguments{
 \item{x}{An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.}
+
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Returns the name of the distribution (e.g., gamma) fitted to the distribution of step lengths.

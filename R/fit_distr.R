@@ -5,7 +5,7 @@
 #' @param x The column, containing step lengths, usually `sl_`.
 #' @param distr Name of the distribution, curently only `gamma` distribution is supported.
 #' @param na.rm Logical scalar, should `NA` be removed?
-#' @tempalte dots_none
+#' @template dots_none
 #' @name fit_sl_dist
 #'
 #' @export
@@ -41,6 +41,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
 #' @param x An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
 #' @export
 #' @name sl_params
+#' @template dots_none
 sl_params <- function (x, ...) {
   UseMethod("sl_params", x)
 }
@@ -77,6 +78,7 @@ sl_params.fitdist <- function(x, ...) {
 #'
 #' Returns the name of the distribution (e.g., gamma) fitted to the distribution of step lengths.
 #' @param x An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
+#' @template dots_none
 #' @export
 #' @name sl_distr
 sl_distr <- function (x, ...) {
@@ -110,7 +112,7 @@ sl_distr.random_steps <- function (x, ...) {
 #' @param x The column, containing the relative turning angles, usually `ta_`.
 #' @param distr Name of the distribution, curently only `vonmises` distribution is supported.
 #' @param na.rm Logical scalar, should `NA` be removed?
-#' @tempalte dots_none
+#' @template dots_none
 #' @name fit_ta_dist
 
 #' @export

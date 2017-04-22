@@ -18,6 +18,8 @@ fit_sl_dist_base(x, na.rm = TRUE, distr = "gamma", ...)
 
 \item{x}{The column, containing step lengths, usually \code{sl_}.}
 
+\item{...}{Further arguments, none implemented.}
+
 \item{na.rm}{Logical scalar, should \code{NA} be removed?}
 
 \item{distr}{Name of the distribution, curently only \code{gamma} distribution is supported.}

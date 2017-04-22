@@ -141,12 +141,12 @@ summarise_.track_xyt <- function(.data, ..., .dots) {
 }
 
 #' @export
-summarzse_.track_xy <- function(.data, ..., .dots) {
+summarize_.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-summarzse_.track_xyt <- function(.data, ..., .dots) {
+summarize_.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 

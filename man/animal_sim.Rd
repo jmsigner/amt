@@ -3,7 +3,6 @@
 \docType{data}
 \name{animal_sim}
 \alias{animal_sim}
-\alias{animal_sim}
 \title{Simulated movement data of 1 animal.}
 \format{A \code{data_frame} with 32400 rows and 3 variables:
 \describe{
@@ -13,12 +12,8 @@
 }}
 \usage{
 animal_sim
-
-animal_sim
 }
 \description{
 32400 simulated relocations of an animal.
-
-A Gauss-Random-Field simulation of a landscape.
 }
 \keyword{datasets}

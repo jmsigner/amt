@@ -1,18 +1,24 @@
+#' Minimum Convex Polygon
+#'
+#' Function to calcualte a Minimum Convex Polygon (MCP) home range.
+#' @param x A track.
+#' @param levels, the home range levels.
+#' @template dots_none
+#' @name mcp
 #' @export
-mcp <- function(x, levels = 95) {
+mcp <- function(x, levels = 0.95, ...) {
   UseMethod("mcp", x)
 }
 
 #' @export
-mcp.track_xy <- function(x, levels = 0.95) {
-    xy <- as_sp(x)
+#' @rdname mcp
+mcp.track_xy <- function(x, levels = 0.95, ...) {
     # dist to centroid
-    dists <- data.frame(
-      id=1:length(xy),
-      dist=as.vector(rgeos::gDistance(rgeos::gCentroid(xy), xy, byid=TRUE)))
+    cent <- centroid(x)
+    x$dist = sqrt((x$x_ - cent[1])^2 + (x$y_ - cent[2])^2)
 
-    # calculate mcps
-    mcps <- lapply(levels, function(l) rgeos::gConvexHull(xy[dists[dists$dist <= quantile(dists$dist, l), "id"], ], id=l))
+    q <- quantile(x$dist, c(0.95))
+    mcps <- lapply(seq_along(q), function(i) rgeos::gConvexHull(as_sp(x[x$dist <= q[i], ]), id = q[i]))
 
     # Merge isopleths
     bb <- do.call(sp::rbind.SpatialPolygons, mcps)

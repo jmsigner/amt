@@ -1,10 +1,26 @@
-# add ta.distr
+# TODO: add ta.distr
+
+#' Generate Random Steps
+#'
+#' Function to generate a given number of random steps for each observed stepl
+#'
+#' @param x Steps.
+#' @param n_controll The number of controll steps for each observed step.
+#' @param sl.distr The distribution to be fitted to step lengths.
+#' @param ta.distr The distribution to be fitted to the turn angles.
+#' @param random.error Upper bount for a uniformly distributed random error
+#'   (beteen 0 and `random.error`) to be added to step lenghts, to avoid step
+#'   lengths of length 0.
+#' @param .progress Should progress message be printed?
+#' @template dots_none
 #' @export
+#' @name random_steps
 random_steps <- function(x, ...) {
   UseMethod("random_steps", x)
 }
 
 #' @export
+#' @rdname random_steps
 random_steps.steps <- function(x, n_controll = 10, sl.distr = "gamma", ta.distr = "vonmises", random.error = 0.001,
                                .progress = FALSE, ...) {
   if (any(is.na(x$sl_)) || any(is.na(x$ta_))) {
@@ -71,7 +87,6 @@ rsteps_transfer_attr <- function(from, to) {
   to
 }
 
-methods::setOldClass(c("random_steps", "tbl_df"))
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
 arrange_.random_steps <- function(.data, ..., .dots) {

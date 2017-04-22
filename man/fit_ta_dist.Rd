@@ -18,6 +18,8 @@ fit_ta_dist_base(x, na.rm = TRUE, distr = "vonmises", ...)
 
 \item{x}{The column, containing the relative turning angles, usually \code{ta_}.}
 
+\item{...}{Further arguments, none implemented.}
+
 \item{na.rm}{Logical scalar, should \code{NA} be removed?}
 
 \item{distr}{Name of the distribution, curently only \code{vonmises} distribution is supported.}

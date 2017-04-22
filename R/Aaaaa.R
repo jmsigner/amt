@@ -15,4 +15,9 @@ methods::setOldClass(c("track_xy", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("track_xyt", "track_xy", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("random_points", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("steps", "tbl_df", "tbl", "data.frame"))
+methods::setOldClass(c("random_steps", "tbl_df"))
+NULL
+
+#' @useDynLib amt
+#' @importFrom Rcpp sourceCpp
 NULL

@@ -1,14 +1,27 @@
+#' Generate Random Points.
+#'
+#' Functions to generate random points within an animals home range. This is usually used for Resource Selection Functions (RSF).
+#' @param x A track, or a home range.
+#' @param n The number of random points.
+#' @param type Argument passed to `sp::spsample type`.
+#' @param level Home range level.
+#' @param hr The home range estimator to be used.
+#' @param factor How many random points shoud be estimated for each observed point?
+#' @template dots_none
+#' @name random_points
 #' @export
 random_points <- function(x, ...) {
   UseMethod("random_points", x)
 }
 
 #' @export
+#' @rdname random_points
 random_points.mcp <- function(x, n = 100, type = "random", ...) {
   as_track(sp::spsample(hr_isopleths(x), n = n, type = type, ...))
 }
 
 #' @export
+#' @rdname random_points
 random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, ...) {
 
   if (hr == "mcp") {
@@ -32,7 +45,8 @@ random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, ...) {
 }
 
 #' @export
-plot.random_points <- function(x, ...) {
+#' @method plot random_points
+plot.random_points <- function(x, y = NULL, ...) {
   with(x[!x$case_, ], plot(x_, y_, pch = 20, col = adjustcolor("black", 0.1),
                            asp = 1, xlab = "x", ylab = "y", las = 1))
   with(x[x$case_, ], points(x_, y_, pch = 20, col = "red"))
