@@ -13,46 +13,31 @@ mcp <- function(x, levels = 0.95, ...) {
 #' @export
 #' @rdname mcp
 mcp.track_xy <- function(x, levels = 0.95, ...) {
-    # dist to centroid
-    cent <- centroid(x)
-    x$dist = sqrt((x$x_ - cent[1])^2 + (x$y_ - cent[2])^2)
+  xy <- select_(xy, ~ x_, ~ y_)
+  mxy <- colMeans(xy)
+  sqd <- (xy$x_ - mxy[1])^2 + (xy$y_ - mxy[2])^2
+  qts <- stats::quantile(sqd, levels)
+  mcps <- lapply(qts, function(i) chull_mcp(xy[sqd <= i, ]))
 
-    q <- quantile(x$dist, c(0.95))
-    mcps <- lapply(seq_along(q), function(i) rgeos::gConvexHull(as_sp(x[x$dist <= q[i], ]), id = q[i]))
+  for (i in seq_along(mcps)) {
+    mcps[[i]] <- sp::spChFIDs(mcps[[i]], as.character(levels[i]))
+  }
 
-    # Merge isopleths
-    bb <- do.call(sp::rbind.SpatialPolygons, mcps)
-    bb <- sp::SpatialPolygonsDataFrame(bb, data.frame(level=names(bb), area=rgeos::gArea(bb, byid=TRUE)))
-    bb <- list(mcp = bb)
-    class(bb) <- c("mcp", "hr")
-    bb
+  mcps <- do.call(sp::rbind.SpatialPolygons, mcps)
+  mcps <- sp::SpatialPolygonsDataFrame(mcps, data.frame(level=names(mcps), area=rgeos::gArea(mcps, byid=TRUE)))
+  mcp <- list(mcp = mcps)
+  class(mcp) <- c("mcp", "hr")
+  mcp
 }
 
 
 
-# Faster, but with an error -----------------------------------------------
 
-mcp2 <- function(x, levels = 95) {
-  UseMethod("mcp2", x)
-}
-
-mcp2.track_xy <- function(x, levels = 0.95) {
-    xy <- select_(x, ~ x_, ~ y_)
-    mxy <- colMeans(xy)
-    sqd <- (x$x_ - mxy[1])^2 + (x$y_ - mxy[2])^2
-    qts <- stats::quantile(sqd, levels)
-
-    mcp <- map(qts, ~ filter_(xy, ~ sqd <= .) %>% grDevices::chull(.)) %>%
-                  map(., ~ sp::SpatialPoints(as.matrix(xy[., ])), xy) %>%
-                  map(., ~ rgeos::gConvexHull(.))
-
-    for (i in seq_along(mcp)) {
-      mcp[[i]] <- sp::spChFIDs(mcp[[i]], as.character(levels[i]))
-    }
-
-    mcp <- do.call(sp::rbind.SpatialPolygons, mcp)
-    mcp <- sp::SpatialPolygonsDataFrame(mcp, data.frame(level=names(mcp), area=rgeos::gArea(mcp, byid=TRUE)))
-    mcp <- list(mcp = mcp)
-    class(mcp) <- c("mcp2", "hr")
-    mcp
+#' @param x A data.frame or matrix with the x and y coords
+#' @param l id for the resulting poly
+#' @return SpatialPolygons
+chull_mcp <- function(x, l = 1) {
+  ch <- grDevices::chull(x)
+  ch <- c(ch, ch[1])
+  sp::SpatialPolygons(list(sp::Polygons(list(sp::Polygon(x[ch, 1:2], hole = FALSE)), ID = l)))
 }
