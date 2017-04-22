@@ -6,6 +6,16 @@
 #' @template dots_none
 #' @name mcp
 #' @export
+#' @examples
+#' data(sh)
+#' trk <- track(sh$x_, sh$y_)
+#' mcps <- mcp(trk, levels = c(0.5, 0.95, 1))
+#' \dontrun{
+#' plot(trk, asp = 1)
+#' sp::plot(mcps$mcp, add = TRUE)
+#' }
+#'
+#'
 mcp <- function(x, levels = 0.95, ...) {
   UseMethod("mcp", x)
 }
@@ -13,7 +23,7 @@ mcp <- function(x, levels = 0.95, ...) {
 #' @export
 #' @rdname mcp
 mcp.track_xy <- function(x, levels = 0.95, ...) {
-  xy <- select_(xy, ~ x_, ~ y_)
+  xy <- select_(x, ~ x_, ~ y_)
   mxy <- colMeans(xy)
   sqd <- (xy$x_ - mxy[1])^2 + (xy$y_ - mxy[2])^2
   qts <- stats::quantile(sqd, levels)

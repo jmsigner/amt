@@ -19,3 +19,11 @@ mcp(x, levels = 0.95, ...)
 \description{
 Function to calcualte a Minimum Convex Polygon (MCP) home range.
 }
+\examples{
+data(sh)
+trk <- track(sh$x_, sh$y_)
+plot(trk, asp = 1)
+mcps <- mcp(trk, levels = c(0.5, 0.95, 1))
+plot(mcp(trk, levels = c(0.5, 0.95, 1))$mcp, add = TRUE)
+
+}
