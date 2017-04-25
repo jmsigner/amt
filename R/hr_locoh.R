@@ -13,6 +13,7 @@ locoh_k <- function(x, ...) {
   UseMethod("locoh_k", x)
 }
 
+
 #' @export
 #' @rdname locoh_k
 #' @examples
@@ -69,53 +70,5 @@ locoh_k.track_xy <- function(x, n = 10, level = 0.95, rand_buffer = 1e-5, ...) {
 
   qq2
 
-##   head(bb)
-##
-##   mcps2 <- lapply(1:nrow(bb), function(i) {
-##     xx <- xy[bb[i, ], ]
-##     ch <- chull(xx)
-##     xxc <- xx[c(ch, ch[1]), ]
-##   })
-##
-##   areas <- sapply(mcps2, function(x) {
-##     n <- nrow(x)
-##     x <- x[n:1, ]
-##     # follow: http://www.mathwords.com/a/area_convex_polygon.htm
-##     0.5 * (sum(as.numeric(x[-n, 1]) * x[-1, 2]) - sum(as.numeric(x[-1, 1]) * x[-n, 2]))
-##   })
-##
-##   mcp_areas_order <- order(areas)
-##
-##   ff <- areas[mcp_areas_order]
-##   ff_ids <- mcp_areas_order
-##   mm <- mcps2[mcp_areas_order]
-##
-##   pp <- rep(NA_integer_, length(ff))
-##   seen <- c()
-##
-##   ## this is still slow
-##   for (i in 1:length(ff)) {
-##     pp[i] <- length(unique(as.vector(bb[1:i, ])))
-##   }
-##
-##   qq <- list()
-##   qq[[1]] <- mm[[1]]
-##   pp <- pp/nrow(xy) * 100
-##
-##   level <- 95
-##
-##   wlevel <- sapply(level, function(l) which.min(abs(pp - l)))
-##   for (i in seq_along(wlevel)) {
-##     ## buffer is necessary, to overcome some topology errors if the polygon is quasi a line
-##     p1 <- lapply(1:wlevel[i], function(i) sp::Polygon(mm[[i]]))
-##     ff <- sp::SpatialPolygons(list(sp::Polygons(p1, ID=1)))
-##     qq[[i]] <- rgeos::gBuffer(rgeos::gUnaryUnion(ff), width=0, id=i)
-##   }
-##
-##   rr <- do.call(rbind, qq)
-##   areas <- sapply(qq, rgeos::gArea)
-##
-##   sp::SpatialPolygonsDataFrame(rr, data=data.frame(level=round(pp[wlevel], 2),
-##                                                    area=areas), match.ID=FALSE)
-##
 }
+

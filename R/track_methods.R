@@ -123,5 +123,5 @@ centroid <- function(x, ...) {
 #' @export
 #' @rdname track_methods
 centroid.track_xy <- function(x, ...) {
-  colMeans(trk[, c("x_", "y_")])
+  colMeans(x[, c("x_", "y_")])
 }

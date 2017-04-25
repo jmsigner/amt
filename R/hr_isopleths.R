@@ -6,8 +6,8 @@ hr_isopleths <- function (x, ...) {
 
 #' @rdname hr
 #' @export
-hr_isopleths.RasterLayer <- function (x, levels = 0.95, ...) {
-  raster::rasterToContour(cumulative_ud(x), levels = levels, ...)
+hr_isopleths.RasterLayer <- function (x, level = 0.95, ...) {
+  raster::rasterToContour(cumulative_ud(x), levels = level, ...)
 }
 
 #' @rdname hr

@@ -17,11 +17,11 @@ hr_area(x, ...)
 
 \method{hr_area}{locoh}(x, ...)
 
-\method{hr_area}{RasterLayer}(x, levels = 0.95, ...)
+\method{hr_area}{RasterLayer}(x, level = 0.95, ...)
 
 hr_isopleths(x, ...)
 
-\method{hr_isopleths}{RasterLayer}(x, levels = 0.95, ...)
+\method{hr_isopleths}{RasterLayer}(x, level = 0.95, ...)
 
 \method{hr_isopleths}{mcp}(x, ...)
 }
@@ -30,7 +30,7 @@ hr_isopleths(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{levels}{Numeric vector, the home range level (\code{0 < level < 1} is assumed).}
+\item{level}{Numeric scalar, the home range level.}
 }
 \description{
 Function to calculate the area and isopleths of a home range.
