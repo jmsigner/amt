@@ -12,17 +12,17 @@
 #' mcps <- mcp(trk, levels = c(0.5, 0.95, 1))
 #' \dontrun{
 #' plot(trk, asp = 1)
-#' sp::plot(mcps$mcp, add = TRUE)
+#' sp::plot(hr_mcps$mcp, add = TRUE)
 #' }
 #'
 #'
-mcp <- function(x, levels = 0.95, ...) {
+hr_mcp <- function(x, levels = 0.95, ...) {
   UseMethod("mcp", x)
 }
 
 #' @export
 #' @rdname mcp
-mcp.track_xy <- function(x, levels = 0.95, ...) {
+hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
   xy <- select_(x, ~ x_, ~ y_)
   mxy <- colMeans(xy)
   sqd <- (xy$x_ - mxy[1])^2 + (xy$y_ - mxy[2])^2

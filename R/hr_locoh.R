@@ -9,7 +9,7 @@
 #' @template dots_none
 #' @name locoh_k
 #' @export
-locoh_k <- function(x, ...) {
+hr_locoh_k <- function(x, ...) {
   UseMethod("locoh_k", x)
 }
 
@@ -20,7 +20,7 @@ locoh_k <- function(x, ...) {
 #' data(sh)
 #' x <- track(x = sh[, 1], y = sh[, 2])
 #' l <- locoh_k(x)
-locoh_k.track_xy <- function(x, n = 10, level = 0.95, rand_buffer = 1e-5, ...) {
+hr_locoh_k.track_xy <- function(x, n = 10, level = 0.95, rand_buffer = 1e-5, ...) {
 
   aa <- FNN::get.knn(x[, c("x_", "y_")], k = n)$nn.index
   xysp <- sp::SpatialPointsDataFrame(x[, c("x_", "y_")], data=data.frame(id=1:nrow(x)))
