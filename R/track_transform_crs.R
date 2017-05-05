@@ -11,7 +11,7 @@ transform_coords <- function(x, ...) {
   UseMethod("transform_coords", x)
 }
 
-#' @param crs_from coordinate reference system the data are currently in, see \code{sp::CRS}.
+#' @param crs_from coordinate reference system the data are currently in, see \code{sp::CRS}. If `crs_from` is missing, the `crs`-attribute of the track is used.
 #' @param crs_to coordinate reference system the data should be transformed to, see \code{sp::CRS}.
 #' @export
 #' @rdname transform_coords

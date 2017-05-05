@@ -28,7 +28,7 @@ simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
   nr <- nrow(habitat_kernel)
 
   mk <- raster::rasterToPoints(movement_kernel)
-  mk[, c("x", "y")] <- mk[, c("x", "y")] / res(movement_kernel)[1]
+  mk[, c("x", "y")] <- mk[, c("x", "y")] / raster::res(movement_kernel)[1]
 
   hk1 <- as.vector(m <- t(raster::as.matrix(habitat_kernel)))
   y <- as.vector(col(m))

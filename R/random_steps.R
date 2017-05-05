@@ -24,7 +24,7 @@ random_steps <- function(x, ...) {
 random_steps.steps <- function(x, n_controll = 10, sl.distr = "gamma", ta.distr = "vonmises", random.error = 0.001,
                                .progress = FALSE, ...) {
   if (any(is.na(x$sl_)) || any(is.na(x$ta_))) {
-    x <- x %>% filter(!is.na(sl_), !is.na(ta_))
+    x <- x[!is.na(x$sl_) & !is.na(x$ta_), ]
     warning("Step-lengths or truning angles contained NA, which were removed.")
   }
 

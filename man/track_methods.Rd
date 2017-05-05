@@ -10,14 +10,6 @@
 \alias{diff_x.track_xy}
 \alias{diff_y}
 \alias{diff_y.track_xy}
-\alias{direction_abs}
-\alias{direction_abs.track_xy}
-\alias{direction_rel}
-\alias{direction_rel}
-\alias{step_lengths}
-\alias{step_lengths.track_xy}
-\alias{step_lenths_sq}
-\alias{step_lengths_sq}
 \alias{centroid}
 \alias{centroid.track_xy}
 \title{Track Methods}
@@ -37,22 +29,6 @@ diff_x(x, ...)
 diff_y(x, ...)
 
 \method{diff_y}{track_xy}(x, ...)
-
-direction_abs(x)
-
-\method{direction_abs}{track_xy}(x)
-
-direction_rel(x)
-
-direction_rel(x)
-
-step_lengths(x, ...)
-
-\method{step_lengths}{track_xy}(x, ...)
-
-step_lenths_sq(x, ...)
-
-step_lengths_sq(x)
 
 centroid(x, ...)
 

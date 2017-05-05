@@ -45,6 +45,7 @@ track <- function(x, y, t, ..., crs = NULL) {
 }
 
 
+
 # S3 Methods --------------------------------------------------------------
 
 # track_transfer_attr <- function(from, to) {

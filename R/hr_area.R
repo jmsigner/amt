@@ -3,7 +3,7 @@
 #' Function to calculate the area and isopleths of a home range.
 #'
 #' @param x Fitted home range.
-#' @param level
+#' @param level Numeric scalar, home-range level.
 #' @template dots_none
 #' @name hr
 #' @export

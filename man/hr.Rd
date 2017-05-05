@@ -30,6 +30,8 @@ hr_isopleths(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
+\item{level}{Numeric scalar, home-range level.}
+
 \item{level}{Numeric scalar, the home range level.}
 }
 \description{

@@ -43,9 +43,9 @@ mcp.track_xy <- function(x, levels = 0.95, ...) {
 
 
 
-#' @param x A data.frame or matrix with the x and y coords
-#' @param l id for the resulting poly
-#' @return SpatialPolygons
+# @param x A data.frame or matrix with the x and y coords
+# @param l id for the resulting poly
+# @return SpatialPolygons
 chull_mcp <- function(x, l = 1) {
   ch <- grDevices::chull(x)
   ch <- c(ch, ch[1])

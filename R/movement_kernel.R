@@ -19,7 +19,7 @@ movement_kernel <- function(fit, resources, quant = 0.99, adjust = FALSE) {
     mk <- mk_gamma(mk, shape= params["shape"], scale = params["scale"])
     attributes(mk)$abt <- list(dist = sl_distr(fit), params = params,
                                adjust = adjust, dist = dist,
-                               quant = quant, res = res)
+                               quant = quant)
     mk
   } else {
     stop("not yet implemented")

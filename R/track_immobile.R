@@ -10,13 +10,8 @@
 #' @export
 
 track_immobile_base <- function(x, period = hours(2), spatial_tolerance = 0) {
-  if (is_trackXYZ(x)) {
     track_immobility(x$t_, x$x_, x$y_, lubridate::period_to_seconds(period), spatial_tolerance)
-  }
 }
 
 track_immobile_base <- function(x, period, spatial_tolerance) {
-  if (is_trackXYZ(x)) {
-
-  }
 }
