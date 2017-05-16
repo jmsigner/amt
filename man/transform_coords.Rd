@@ -16,7 +16,7 @@ transform_coords(x, ...)
 
 \item{crs_to}{coordinate reference system the data should be transformed to, see \code{sp::CRS}.}
 
-\item{crs_from}{coordinate reference system the data are currently in, see \code{sp::CRS}.}
+\item{crs_from}{coordinate reference system the data are currently in, see \code{sp::CRS}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
 }
 \description{
 Transforms the CRS for a track.

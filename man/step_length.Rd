@@ -24,3 +24,11 @@ step_lengths_sq(x, ...)
 \description{
 Funcitons to calculate step lenghts
 }
+\examples{
+step_lengths(trk)
+step_lengths(trk, lonlat = TRUE)
+
+m <- move::move(x, y, now() + hours(1:10), proj = CRS("+init=epsg:4326"))
+move::distance(m)
+
+}

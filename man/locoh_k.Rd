@@ -2,13 +2,14 @@
 % Please edit documentation in R/hr_locoh.R
 \name{locoh_k}
 \alias{locoh_k}
-\alias{locoh_k.track_xy}
+\alias{hr_locoh_k}
+\alias{hr_locoh_k.track_xy}
 \title{Local Convex Hull}
 \usage{
-locoh_k(x, ...)
+hr_locoh_k(x, ...)
 
-\method{locoh_k}{track_xy}(x, n = 10, level = 0.95, rand_buffer = 1e-05,
-  ...)
+\method{hr_locoh_k}{track_xy}(x, n = 10, level = 0.95,
+  rand_buffer = 1e-05, ...)
 }
 \arguments{
 \item{x}{A \code{track_xy}.}

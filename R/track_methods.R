@@ -57,64 +57,6 @@ diff_y.track_xy <- function(x, ...) {
 
 
 # Directions --------------------------------------------------------------
-#' Directions
-#'
-#' Functions to calculate the relative and absolute direction of an animal
-#'
-#' Anti clockwise angles of steps to an absolute direction (North, East, South or West).
-#' @export
-#' @param x A track.
-#' @param degrees Logcial scalar, if `TRUE` angles are returned in degrees, otherwise in radians.
-#' @param full_circle Logcial scalar, if `TRUE` angles are returned between 0 and 360 degrees or 0 and 2 pi (depnding on the value of `degrees`), otherwise angles are between -180 and 180 or -pi and pi.
-#' @param zero_dir Character scalar, must be either 'N', 'E', 'S' or 'W' and indicates the zero direction.
-#' @param clockwise Logical scalar, should angles be calculated clock or anti-clockwise.
-#' @param append_last Logical scalar, if `TRUE` an `NA` is appended at the end of all angles.
-#' @name direction
-direction_abs <- function(x, ...) {
-  UseMethod("direction_abs", x)
-}
-
-#' @export
-#' @rdname direction
-#' @examples
-#' # Absolute directions
-#'
-
-
-direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_dir = "E", clockwise = FALSE,
-                                   append_last = TRUE, planar = TRUE, ...) {
-  zero_dir <- toupper(zero_dir)
-  if (!zero_dir %in% c("E", "N", "W", "S")) {
-    stop("zero_dir should be in either 'E', 'N', 'W', or 'S'")
-  }
-
-  # angles
-
-  a <- if (planar) {
-    atan2(diff_y(x), diff_x(x)) * 180 / pi
-  } else {
-    xx <- sp::coordinates(as_sp(x))
-    (450 + ((360 - geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]))) %% 360) %% 360
-  }
-
-
-  # remove last NA
-  a <- if (!append_last) a[-length(a)] else a
-
-  a <- ifelse(a < 0, 360 + a, a)
-
-  a <- switch(zero_dir,
-         E = a,
-         S = (450 + a) %% 360,
-         W = (540 + a) %% 360,
-         N = (630 + a) %% 360
-  )
-
-  a <- if (clockwise)  (360 - a) %% 360 else a
-  a <- if (full_circle) a else ifelse(a > 180, (360 - a) * -1, a)
-  a * if (degrees) 1 else pi / 180
-}
-
 #' @rdname direction
 #' @export
 #' @examples
@@ -146,6 +88,13 @@ direction_rel <- function(x, degrees = TRUE) {
 
 #' @export
 #' @rdname step_length
+#' @examples
+#' step_lengths(trk)
+#' step_lengths(trk, lonlat = TRUE)
+#'
+#' m <- move::move(x, y, now() + hours(1:10), proj = CRS("+init=epsg:4326"))
+#' move::distance(m)
+#'
 step_lengths <- function(x, ...) {
   UseMethod("step_lengths", x)
 }

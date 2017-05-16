@@ -35,5 +35,12 @@ Imports:
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
 Roxygen: list(markdown = TRUE)
-Suggests: testthat
+Suggests: 
+  adehabitatLT,
+  bcpa,
+  move,
+  moveHMM,
+  spacetime,
+  testthat,
+  trajectories
 RdMacros: Rdpack
