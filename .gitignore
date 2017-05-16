@@ -9,3 +9,4 @@ src/*.dll
 scratch*
 background/*
 test_builds/*
+vignette_all/*

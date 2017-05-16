@@ -25,7 +25,7 @@ random_points.mcp <- function(x, n = 100, type = "random", ...) {
 random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, ...) {
 
   if (hr == "mcp") {
-    hr <- mcp(x, levels = level)
+    hr <- hr_mcp(x, levels = level)
   } else {
     stop("Only mcp is currently implemented.")
   }

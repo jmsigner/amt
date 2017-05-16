@@ -10,7 +10,7 @@
 #' @name locoh_k
 #' @export
 hr_locoh_k <- function(x, ...) {
-  UseMethod("locoh_k", x)
+  UseMethod("hr_locoh_k", x)
 }
 
 

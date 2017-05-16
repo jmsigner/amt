@@ -17,7 +17,7 @@
 #'
 #'
 hr_mcp <- function(x, levels = 0.95, ...) {
-  UseMethod("mcp", x)
+  UseMethod("hr_mcp", x)
 }
 
 #' @export

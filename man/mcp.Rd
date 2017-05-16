@@ -2,12 +2,13 @@
 % Please edit documentation in R/hr_mcp.R
 \name{mcp}
 \alias{mcp}
-\alias{mcp.track_xy}
+\alias{hr_mcp}
+\alias{hr_mcp.track_xy}
 \title{Minimum Convex Polygon}
 \usage{
-mcp(x, levels = 0.95, ...)
+hr_mcp(x, levels = 0.95, ...)
 
-\method{mcp}{track_xy}(x, levels = 0.95, ...)
+\method{hr_mcp}{track_xy}(x, levels = 0.95, ...)
 }
 \arguments{
 \item{x}{A track.}
@@ -25,7 +26,7 @@ trk <- track(sh$x_, sh$y_)
 mcps <- mcp(trk, levels = c(0.5, 0.95, 1))
 \dontrun{
 plot(trk, asp = 1)
-sp::plot(mcps$mcp, add = TRUE)
+sp::plot(hr_mcps$mcp, add = TRUE)
 }
 
 
