@@ -4,6 +4,8 @@
 #' `track` is usually created from a set of `x` and `y` coordinates, possibly
 #' time stamps, and any number of optional columns, such as id, sex, age, etc.
 #'
+#' @param .tbl A data.frame or tibble.
+#' @param .x,.y,.t Literal names of columns containng the coordinates and time stamp.
 #' @param x A *required* numeric vector, containing the x-coordinates (=
 #'   latitude).
 #' @param y A *required* numeric vector, containing the y-coordinates (=
@@ -16,7 +18,60 @@
 #' @return If `t` was provided an object of class `track_xyt` is returned
 #'   otherwise a `track_xy`.
 #' @export
+#' @name track
+
+mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
+
+  if (missing(.x) | missing(.y)) {
+    stop("x and y are required")
+  }
+
+  if (!is_tibble(tbl)) {
+    tbl <- as_tibble(tbl)
+  }
+
+  vars <- quos(...)
+
+  if (!all(sub("~", "", as.character(vars)) %in% names(tbl))) {
+    stop("Non existent columns from tbl were requested.")
+  }
+
+  .x <- enquo(.x)
+  .y <- enquo(.y)
+
+  if (missing(.t)) {
+    message(".t missing, creating `track_xy`.")
+    out <- tbl %>%
+      select(x_ = !!.x,
+             y_ = !!.y,
+             !!!vars)
+
+    class(out) <- c("track_xy", class(out))
+
+  } else {
+    message(".t found, creating `track_xyt`.")
+    .t <- enquo(.t)
+    out <- tbl %>%
+      select(x_ = !!.x,
+             y_ = !!.y,
+             t_ = !!.t,
+             !!!vars)
+    class(out) <- c("track_xyt", "track_xy", class(out))
+  }
+
+  attributes(out)$crs_ <- crs
+  out
+
+
+
+
+}
+
+#' @rdname track
+#' @export
 track <- function(x, y, t, ..., crs = NULL) {
+
+ # .Deprecated("mk_track", msg = "Use mk_track instead")
 
   if (missing(x) | missing(y)) {
     stop("x and y are required")
