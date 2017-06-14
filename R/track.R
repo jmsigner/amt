@@ -80,74 +80,74 @@ track <- function(x, y, t, ..., crs = NULL) {
 
 
 #' @export
-arrange_.track_xy <- function(.data, ..., .dots) {
+arrange.track_xy <- function(.data, ..., .dots) {
   x <- NextMethod()
   track_transfer_attr(.data, x)
 }
 
 #' @export
-arrange_.track_xyt <- function(.data, ..., .dots) {
+arrange.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-filter_.track_xy <- function(.data, ..., .dots) {
+filter.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-filter_.track_xyt <- function(.data, ..., .dots) {
+filter.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-group_by_.track_xy <- function(.data, ..., .dots) {
+group_by.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-group_by_.track_xyt <- function(.data, ..., .dots) {
+group_by.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-mutate_.track_xy <- function(.data, ..., .dots) {
+mutate.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-mutate_.track_xyt <- function(.data, ..., .dots) {
+mutate.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 
 #' @export
-select_.track_xy <- function(.data, ..., .dots) {
+select.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-select_.track_xyt <- function(.data, ..., .dots) {
+select.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-summarise_.track_xy <- function(.data, ..., .dots) {
+summarise.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-summarise_.track_xyt <- function(.data, ..., .dots) {
+summarise.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-summarize_.track_xy <- function(.data, ..., .dots) {
+summarize.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
-summarize_.track_xyt <- function(.data, ..., .dots) {
+summarize.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
 
