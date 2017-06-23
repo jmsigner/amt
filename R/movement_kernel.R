@@ -27,8 +27,9 @@ movement_kernel <- function(fit, resources, quant = 0.99, adjust = FALSE) {
 }
 
 mk_base <- function(r, res) {
-  mov_kern <- expand.grid(x = seq(-r, r, by = res),
-                          y = seq(-r, r, by = res))
+  xy <- c(0, rep(seq(res, r, res), each = 2) * c(-1, 1))
+  mov_kern <- expand.grid(x = xy,
+                          y = xy)
   mov_kern$d <- sqrt(mov_kern[, "x"]^2 + mov_kern[, "y"]^2)
 
   # Tal: Email 2016-02-18:  In fact, the division by 2*pi*r is a correction to the 'habitat-independent' movement kernel so
