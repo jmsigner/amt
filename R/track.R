@@ -42,7 +42,7 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
   if (missing(.t)) {
     message(".t missing, creating `track_xy`.")
     out <- tbl %>%
-      select(x_ = !!.x,
+      dplyr::select(x_ = !!.x,
              y_ = !!.y,
              !!!vars)
 
@@ -51,20 +51,23 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
   } else {
     message(".t found, creating `track_xyt`.")
 
-    if (any(duplicated(.t))) {
-      stop("duplicated time stamps are not allowed")
-    }
-
-    if (any(diff(.t) <= 0)) {
-      stop("0 or negative time stamps are not allowd")
-    }
-
     .t <- enquo(.t)
+    tt <- dplyr::select(tbl, t = !!.t) %>% pull(t)
+
+
+    if (any(duplicated(tt))) {
+      stop("duplicated time stamps are not allowed.")
+    }
+
+    if (any(diff(tt) <= 0)) {
+      stop("0 or negative time diffs are not allowd.")
+    }
+
     out <- tbl %>%
-      select(x_ = !!.x,
-             y_ = !!.y,
-             t_ = !!.t,
-             !!!vars)
+      dplyr::select(x_ = !!.x,
+                    y_ = !!.y,
+                    t_ = !!.t,
+                    !!!vars)
     class(out) <- c("track_xyt", "track_xy", class(out))
   }
 
