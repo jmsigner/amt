@@ -67,10 +67,10 @@ random_steps_base <- function(x, n_controll, sl, ta) {
   if (has_burst) {
     vars <- c("burst_", vars)
   }
-
   vars <- c(vars, base::setdiff(names(x), vars))
 
-  out <- bind_rows(x, xy_cc) %>% arrange_("step_id_") %>% select_(.dots = vars)
+  #out <- bind_rows(x, xy_cc) %>% arrange(quo("step_id_")) %>% select(.dots = vars)
+  out <- bind_rows(x, xy_cc) %>% arrange(step_id_) %>% select(vars)
 
   class(out) <- c("random_steps", class(out))
   attributes(out)$sl_ <- sl
@@ -89,38 +89,38 @@ rsteps_transfer_attr <- function(from, to) {
 
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
-arrange_.random_steps <- function(.data, ..., .dots) {
+arrange.random_steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)
 }
 
 #' @export
-filter_.random_steps <- function(.data, ..., .dots) {
+filter.random_steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)
 }
 
 #' @export
-group_by_.random_steps <- function(.data, ..., .dots) {
+group_by.random_steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)
 }
 
 #' @export
-select_.random_steps <- function(.data, ..., .dots) {
+select.random_steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)
 }
 
 #' @export
-summarise_.random_steps <- function(.data, ..., .dots) {
+summarise.random_steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)
 }
 
 
 #' @export
-summarize_.random_steps <- function(.data, ..., .dots) {
+summarize.random_steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)
 }

@@ -35,5 +35,11 @@ as_move <- function(x, ...) {
 #' @export
 #' @rdname coercion
 as_move.track_xy <- function(x, ...) {
-  message("not yet implemented")
+  move::move(x = x$x_, y = x$y_, proj = get_crs(x), ...)
+}
+
+#' @export
+#' @rdname coercion
+as_move.track_xyt <- function(x, ...) {
+  move::move(x = x$x_, y = x$y_, time = x$t_, proj = get_crs(x), ...)
 }

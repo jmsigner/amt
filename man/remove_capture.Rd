@@ -4,14 +4,14 @@
 \alias{remove_capture}
 \alias{remove_capture_effect}
 \alias{remove_capture_effect.track_xyt}
-\title{Remove for Capture Effects.}
+\title{Removes Capture Effects.}
 \usage{
 remove_capture_effect(x, ...)
 
 \method{remove_capture_effect}{track_xyt}(x, start, end, ...)
 }
 \arguments{
-\item{x}{A \code{data_table} .}
+\item{x}{An object of class \code{track_xyt}.}
 
 \item{...}{Further arguments, none implemented.}
 
@@ -20,7 +20,7 @@ remove_capture_effect(x, ...)
 \item{end}{A \code{lubirdate::Period}, indicating the time period to be removed at the end of the track.}
 }
 \description{
-Remove for Capture Effects.
+Removing relocations at the beginning and/or end of a track, that fall within a user specified period.
 }
 \examples{
 library(lubridate)

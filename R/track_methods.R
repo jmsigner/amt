@@ -129,14 +129,74 @@ distance_with_diff <- function(xd, yd) {
 
 
 
+# Utility functions -------------------------------------------------------
+
+#' Centroid of a track
+#'
+#' Calcualte the centroid of a track.
+#'
+#' @param x A track.
+#' @template dots_none
+#' @example
+#' data(deer)
+#' centroid(deer)
+
+
 #' @export
-#' @rdname track_methods
 centroid <- function(x, ...) {
   UseMethod("centroid", x)
 }
 
 #' @export
-#' @rdname track_methods
 centroid.track_xy <- function(x, ...) {
   colMeans(x[, c("x_", "y_")])
+}
+
+
+#' Coordinate References System
+#'
+#' Get the Coordinate Reference System (CRS) of a track.
+#'
+#' @param x A track.
+#' @template dots_none
+#' @export
+#' @example
+#' data(deer)
+#' get_crs(deer)
+
+get_crs <- function(x, ...) {
+  UseMethod("get_crs", x)
+}
+
+#' @export
+get_crs.track_xy <- function(x, ...) {
+  attr(x, "crs", ...)
+}
+
+
+#' Get bounding box of a track
+#' @param x A track.
+#' @param spatial Logical, whether or not to return a `sp`-object.
+#' @param buffer Numeric, an optional buffer.
+#' @export
+#' @example
+#' data(deer)
+#' bbox(deer)
+#' bbox(deer, buffer = 100)
+
+bbox <- function(x, ...) {
+  UseMethod("bbox", x)
+}
+
+#' @export
+bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL) {
+  bbx <- rgeos::gEnvelope(as_sp(x))
+  if (!is.null(buffer)) {
+    bbx <- rgeos::gEnvelope(rgeos::gBuffer(bbx, width = buffer))
+  }
+  if (spatial) {
+    bbx
+  } else {
+    sp::bbox(bbx)
+  }
 }

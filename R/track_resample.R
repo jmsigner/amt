@@ -25,8 +25,8 @@ track_resample.track_xyt <- function(x, rate = hours(2), tolerance = minutes(15)
   xx <- mk_reg(t1 = t_, time_dist = lubridate::period_to_seconds(rate),
          time_tol = lubridate::period_to_seconds(tolerance), start = start)
   x$burst_ <- xx
-  cond <- quote(burst_ > 0) # -1 indicates that point is left out
-  filter(x, cond)
+ # cond <- quo(burst_ > 0) # -1 indicates that point is left out
+  filter(x, burst_ > 0)
 }
 
 #' Filter Bursts

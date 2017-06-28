@@ -38,7 +38,7 @@ simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
   # start cell
   start1 <- nc * (nr - start[2]) + start[1]
 
-  s <- simulate_udf(n, start1, 200, 200, mk, hk1)
+  s <- simulate_udf(n, start1, nr, nc, mk, hk1)
   m <- raster::setValues(habitat_kernel, s)
   m <- m / sum(m[])
   m
