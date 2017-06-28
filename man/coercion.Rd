@@ -6,6 +6,7 @@
 \alias{as_sp.track_xy}
 \alias{as_move}
 \alias{as_move.track_xy}
+\alias{as_move.track_xyt}
 \title{Track coercion functions}
 \usage{
 as_sp(x, ...)
@@ -15,6 +16,8 @@ as_sp(x, ...)
 as_move(x, ...)
 
 \method{as_move}{track_xy}(x, ...)
+
+\method{as_move}{track_xyt}(x, ...)
 }
 \arguments{
 \item{x}{A \code{track_xy}.}

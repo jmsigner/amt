@@ -2,11 +2,22 @@
 % Please edit documentation in R/track.R
 \name{track}
 \alias{track}
+\alias{mk_track}
+\alias{track}
 \title{Create a Track}
 \usage{
+mk_track(tbl, .x, .y, .t, ..., crs = NULL)
+
 track(x, y, t, ..., crs = NULL)
 }
 \arguments{
+\item{.x, .y, .t}{Literal names of columns containng the coordinates and time stamp.}
+
+\item{...}{Additional columns, that should be given in the form of \code{key = val} (e.g., for ids this may look like this \code{id = c(1, 1, 1, 2, 2, 2} for
+three points for ids 1 and 2 each).}
+
+\item{crs}{An optional coordinate reference system of the points.}
+
 \item{x}{A \emph{required} numeric vector, containing the x-coordinates (=
 latitude).}
 
@@ -15,10 +26,7 @@ longitude).}
 
 \item{t}{An \emph{optional} vector of  \code{POSIXct} time stamps.}
 
-\item{...}{Additional columns, that should be given in the form of \code{key = val} (e.g., for ids this may look like this \code{id = c(1, 1, 1, 2, 2, 2} for
-three points for ids 1 and 2 each).}
-
-\item{crs}{An optional coordinate reference system of the points.}
+\item{.tbl}{A data.frame or tibble.}
 }
 \value{
 If \code{t} was provided an object of class \code{track_xyt} is returned

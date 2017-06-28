@@ -10,8 +10,6 @@
 \alias{diff_x.track_xy}
 \alias{diff_y}
 \alias{diff_y.track_xy}
-\alias{centroid}
-\alias{centroid.track_xy}
 \title{Track Methods}
 \usage{
 velocity(x, ...)
@@ -29,10 +27,6 @@ diff_x(x, ...)
 diff_y(x, ...)
 
 \method{diff_y}{track_xy}(x, ...)
-
-centroid(x, ...)
-
-\method{centroid}{track_xy}(x, ...)
 }
 \arguments{
 \item{x}{A track_xy{t}.}

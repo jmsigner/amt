@@ -50,6 +50,15 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
 
   } else {
     message(".t found, creating `track_xyt`.")
+
+    if (any(duplicated(.t))) {
+      stop("duplicated time stamps are not allowed")
+    }
+
+    if (any(diff(.t) <= 0)) {
+      stop("0 or negative time stamps are not allowd")
+    }
+
     .t <- enquo(.t)
     out <- tbl %>%
       select(x_ = !!.x,
@@ -59,7 +68,13 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
     class(out) <- c("track_xyt", "track_xy", class(out))
   }
 
-  attributes(out)$crs_ <- crs
+  if (!is.null(crs)) {
+    if (!is(crs, "CRS")) {
+      stop("crs is no instance of class CRS")
+    }
+    attributes(out)$crs_ <- crs
+  }
+
   out
 
 

@@ -80,3 +80,38 @@ IntegerVector simulate_udf(int n_steps, int start, int nc, int nr, NumericMatrix
 }
 
 
+
+// Simulate SSF
+//[[Rcpp::export]]
+
+IntegerVector cpp_simulate_ssf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk) {
+
+  int step, j,  npot = mk.nrow(); // no options from the movement kernel (mk)
+  int ncell = hk.nrow();
+
+  vector<vector<int> > cells (ncell);  // create vector of pointers
+  vector<vector<double> > probs (ncell);
+
+  IntegerVector path(n_steps, 0);
+
+  int k = start; // current position
+  path(0) = k;
+
+  for (step = 1; step < n_steps; step++) {
+
+    // this needs to be done only once per cell
+    if (cells[k].empty()) { // Allocate memory if needed
+
+      cells[k].resize(npot);
+      probs[k].resize(npot);
+      for (j = 0; j < npot; j++) {
+        cells[k][j] = mod((k % nc) + mk(j, 0), nc) + nc * mod(((k / nr) + mk(j, 1)), nr);
+        probs[k][j] = hk(cells[k][j], 1) * mk(j, 2);
+      }
+    }
+    k = rsamp(cells[k], probs[k]);
+    path(step) = k;
+  }
+  return path;
+}
+

@@ -45,6 +45,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_simulate_ssf
+IntegerVector cpp_simulate_ssf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk);
+RcppExport SEXP amt_cpp_simulate_ssf(SEXP n_stepsSEXP, SEXP startSEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP mkSEXP, SEXP hkSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    Rcpp::traits::input_parameter< int >::type start(startSEXP);
+    Rcpp::traits::input_parameter< int >::type nc(ncSEXP);
+    Rcpp::traits::input_parameter< int >::type nr(nrSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type mk(mkSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type hk(hkSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_simulate_ssf(n_steps, start, nc, nr, mk, hk));
+    return rcpp_result_gen;
+END_RCPP
+}
 // track_align
 NumericVector track_align(NumericVector t1, NumericVector nt, int time_tol, int type);
 RcppExport SEXP amt_track_align(SEXP t1SEXP, SEXP ntSEXP, SEXP time_tolSEXP, SEXP typeSEXP) {
@@ -117,4 +133,22 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(track_immobility(t, x, y, period, tol));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"amt_diff_rcpp", (DL_FUNC) &amt_diff_rcpp, 1},
+    {"amt_within_rcpp", (DL_FUNC) &amt_within_rcpp, 3},
+    {"amt_simulate_udf", (DL_FUNC) &amt_simulate_udf, 6},
+    {"amt_cpp_simulate_ssf", (DL_FUNC) &amt_cpp_simulate_ssf, 6},
+    {"amt_track_align", (DL_FUNC) &amt_track_align, 4},
+    {"amt_mk_reg", (DL_FUNC) &amt_mk_reg, 4},
+    {"amt_mk_reg_old", (DL_FUNC) &amt_mk_reg_old, 4},
+    {"amt_duration_acuracy", (DL_FUNC) &amt_duration_acuracy, 6},
+    {"amt_track_immobility", (DL_FUNC) &amt_track_immobility, 5},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_amt(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

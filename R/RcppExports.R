@@ -13,6 +13,10 @@ simulate_udf <- function(n_steps, start, nc, nr, mk, hk) {
     .Call('amt_simulate_udf', PACKAGE = 'amt', n_steps, start, nc, nr, mk, hk)
 }
 
+cpp_simulate_ssf <- function(n_steps, start, nc, nr, mk, hk) {
+    .Call('amt_cpp_simulate_ssf', PACKAGE = 'amt', n_steps, start, nc, nr, mk, hk)
+}
+
 track_align <- function(t1, nt, time_tol, type) {
     .Call('amt_track_align', PACKAGE = 'amt', t1, nt, time_tol, type)
 }

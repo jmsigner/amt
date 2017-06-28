@@ -3,6 +3,7 @@
 \docType{data}
 \name{sh}
 \alias{sh}
+\alias{sh}
 \title{Relocations of 1 red deer.}
 \format{A data frame with 1500 rows and 4 variables:
 \describe{
@@ -13,11 +14,17 @@
 }}
 \source{
 Verein für Wildtierforschung Dresden und Göttingen e.V.
+
+Verein für Wildtierforschung Dresden und Göttingen e.V.
 }
 \usage{
 sh
+
+sh
 }
 \description{
+1500 GPS relocations of one red deer from northern Germany.
+
 1500 GPS relocations of one red deer from northern Germany.
 }
 \keyword{datasets}

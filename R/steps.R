@@ -15,13 +15,22 @@ steps_by_burst <- function(x, ...) {
 #' @export
 steps_by_burst.track_xyt <- function(x, ...) {
 
-  nest_cols <- select_vars_(colnames(x), "-burst_")
-  xx <- nest_(x, key_col = "data", nest_cols)
+  togo <- cumsum(rle(x$burst_)$lengths)
+  ss <- suppressWarnings(steps(x))
+  ss <- tibble::add_column(ss, burst_ = x$burst_[-1], .before = 1)
+  ss[head(togo, -1) + 1, "ta_"] <- NA
+  ss <- ss[-togo, ]
+  class(ss) <- c("steps", class(x)[-(1:2)])
+  ss
 
-  xx$data <- map(xx$data, steps)
-  xx <- unnest(xx)
-  class(xx) <- c("steps", class(x)[-(1:2)])
-  xx
+  # dericate, for a speed increase of two orders
+  #  nest_cols <- select_vars_(colnames(x), "-burst_")
+  #  xx <- nest_(x, key_col = "data", nest_cols)
+  #
+  #  xx$data <- map(xx$data, steps)
+  #  xx <- unnest(xx)
+  #  class(xx) <- c("steps", class(x)[-(1:2)])
+  #  xx
 }
 
 
@@ -83,44 +92,44 @@ steps_transfer_attr <- function(from, to) {
 
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
-arrange_.steps <- function(.data, ..., .dots) {
+arrange.steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-filter_.steps <- function(.data, ..., .dots) {
+filter.steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-group_by_.steps <- function(.data, ..., .dots) {
+group_by.steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-mutate_.steps <- function(.data, ..., .dots) {
+mutate.steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-select_.steps <- function(.data, ..., .dots) {
+select.steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-summarise_.steps <- function(.data, ..., .dots) {
+summarise.steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 
 #' @export
-summarize_.steps <- function(.data, ..., .dots) {
+summarize.steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }

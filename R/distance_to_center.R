@@ -19,5 +19,7 @@ distance_to_center.track_xy <- function(x, trast, ...) {
     trast <- raster::raster(as_sp(x), res = 40)
   }
   cent <- colMeans(x[, c("x_", "y_")])
-  raster::distanceFromPoints(trast, cent)
+  r <- raster::distanceFromPoints(trast, cent)
+  names(r) <- "dist_cent"
+  r
 }

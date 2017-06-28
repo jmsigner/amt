@@ -1,6 +1,8 @@
-#' Remove for Capture Effects.
+#' Removes Capture Effects.
 #'
-#' @param x A \code{data_table} .
+#' Removing relocations at the beginning and/or end of a track, that fall within a user specified period.
+#'
+#' @param x An object of class `track_xyt`.
 #' @template dots_none
 #' @export
 #' @name remove_capture
