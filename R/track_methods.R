@@ -206,3 +206,20 @@ bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL) {
 points.track_xy <- function(x, ...) {
   graphics::points(x[, c("x_", "y_")], ...)
 }
+
+#' @export
+plot_sl <- function(x, ...) {
+  UseMethod("plot_sl", x)
+}
+
+#' @export
+plot_sl.fit_clogit <- function(x, n = 1000, ...) {
+  xx <- sl_params(x)
+  to <- qgamma(0.99, shape = xx[1], scale = xx[2])
+  xs <- seq(0, to, length.out = n)
+  plot(xs, ys <- dgamma(xs, shape = xx[1], scale = xx[2]), type = "l",
+       ylab = "Probablility",
+       xlab = "Distance")
+
+  invisible(data.frame(sl = xs, d = ys))
+}
