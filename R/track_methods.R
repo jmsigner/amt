@@ -200,3 +200,9 @@ bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL) {
     sp::bbox(bbx)
   }
 }
+
+
+#' @export
+points.track_xy <- function(x, ...) {
+  graphics::points(x[, c("x_", "y_")], ...)
+}
