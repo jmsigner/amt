@@ -70,7 +70,7 @@ random_steps_base <- function(x, n_controll, sl, ta) {
   vars <- c(vars, base::setdiff(names(x), vars))
 
   #out <- bind_rows(x, xy_cc) %>% arrange(quo("step_id_")) %>% select(.dots = vars)
-  out <- bind_rows(x, xy_cc) %>% arrange(step_id_) %>% select(vars)
+  suppressWarnings(out <- bind_rows(x, xy_cc) %>% arrange(step_id_) %>% select(vars))
 
   class(out) <- c("random_steps", class(out))
   attributes(out)$sl_ <- sl
