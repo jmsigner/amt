@@ -223,3 +223,17 @@ plot_sl.fit_clogit <- function(x, n = 1000, ...) {
 
   invisible(data.frame(sl = xs, d = ys))
 }
+
+
+#' Coordinates of a track.
+#'
+#' @param x A track
+#' @template dots_none
+#' @export
+#' @examples
+#' data(deer)
+#' coords(deer)
+
+coords <- function(x, ...) {
+  x[, c("x_", "y_")]
+}
