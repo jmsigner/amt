@@ -90,7 +90,10 @@ as_ltraj.track_xyt <- function(x, ...) {
 #' @rdname coercion
 #' @examples
 #' data(deer)
-#' as_bcpa(deer)
+#' d <- as_bcpa(deer)
+#' bcpa1 <- WindowSweep(d, "Theta", K = 2, windowsize = 50)
+#' plot(bcpa1, type = "flat", clusterwidth = 1)
+
 as_bcpa <- function(x, ...) {
   UseMethod("as_bcpa", x)
 }
@@ -98,12 +101,10 @@ as_bcpa <- function(x, ...) {
 #' @export
 #' @rdname coercion
 #' @examples
-as_bcpa.track_xyt <- function(x, id = "animal_1", ...) {
-  message("not yet implemented")
+as_bcpa.track_xyt <- function(x, ...) {
+  x <- dplyr::rename(x, X = x_, Y = y_, Time = t_)
+  bcpa::GetVT(x, ...)
 }
-
-
-
 
 # as_ctmm -----------------------------------------------------------------
 #' @export
@@ -127,8 +128,20 @@ as_ctmm.track_xyt <- function(x, id = "animal_1", ...) {
 #' @export
 #' @rdname coercion
 #' @examples
+#' # Fit HMM with two states
 #' data(deer)
-#' as_moveHMM(deer)
+#' dm <- as_moveHMM(deer)
+#' mu0 <- rep(mean(dm$step, na.rm = TRUE), 2) # step mean (two parameters: one for each state)
+#' sigma0 <- rep(sd(dm$step, na.rm = TRUE), 2) # step SD
+#' zeromass0 <- c(0.1, 0.05) # step zero-mass
+#' stepPar0 <- c(mu0, sigma0, zeromass0)
+#' angleMean0 <- c(pi, pi) # angle mean
+#' kappa0 <- c(1, 1) # angle concentration
+#' anglePar0 <- c(angleMean0, kappa0) ## call to fitting function
+#' m1 <- fitHMM(data = dm, nbStates = 2,
+#'        stepPar0 = stepPar0, anglePar0 = anglePar0, formula = ~ 1)
+#'
+#'
 as_moveHMM <- function(x, ...) {
   UseMethod("as_moveHMM", x)
 }
