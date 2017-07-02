@@ -136,9 +136,12 @@ as_moveHMM <- function(x, ...) {
 #' @export
 #' @rdname coercion
 #' @examples
-as_moveHMM.track_xyt <- function(x, id = "animal_1", ...) {
-  message("not yet implemented")
+as_moveHMM.track_xy <- function(x, ...) {
+  if (grepl("+proj=longlat", attr(x, "crs"))) {
+    moveHMM::prepData(as.data.frame(x), type = "LL", coordNames = c("x_", "y_"))
+  } else {
+    message("Assuming projected CRS")
+    moveHMM::prepData(as.data.frame(x), type = "UTM", coordNames = c("x_", "y_"))
+  }
 }
-
-
 
