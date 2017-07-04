@@ -59,6 +59,5 @@ The habitat kernel is calculated by multiplying resources with their correspondi
 }
 \references{
 \insertRef{avgar2016}{amt}
-
 \insertRef{signer2017}{amt}
 }

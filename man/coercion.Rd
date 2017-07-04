@@ -7,6 +7,15 @@
 \alias{as_move}
 \alias{as_move.track_xy}
 \alias{as_move.track_xyt}
+\alias{as_ltraj}
+\alias{as_ltraj.track_xy}
+\alias{as_ltraj.track_xyt}
+\alias{as_bcpa}
+\alias{as_bcpa.track_xyt}
+\alias{as_ctmm}
+\alias{as_ctmm.track_xyt}
+\alias{as_moveHMM}
+\alias{as_moveHMM.track_xy}
 \title{Track coercion functions}
 \usage{
 as_sp(x, ...)
@@ -18,6 +27,24 @@ as_move(x, ...)
 \method{as_move}{track_xy}(x, ...)
 
 \method{as_move}{track_xyt}(x, ...)
+
+as_ltraj(x, ...)
+
+\method{as_ltraj}{track_xy}(x, id = "animal_1", ...)
+
+\method{as_ltraj}{track_xyt}(x, ...)
+
+as_bcpa(x, ...)
+
+\method{as_bcpa}{track_xyt}(x, id = "animal_1", ...)
+
+as_ctmm(x, ...)
+
+\method{as_ctmm}{track_xyt}(x, id = "animal_1", ...)
+
+as_moveHMM(x, ...)
+
+\method{as_moveHMM}{track_xy}(x, ...)
 }
 \arguments{
 \item{x}{A \code{track_xy}.}
@@ -32,4 +59,18 @@ The following coercion functions are currently provided:
 \itemize{
 \item \code{as_sp} turns a track into \code{SpatialPoints}.
 }
+}
+\examples{
+data(deer)
+as_move(deer)
+as_move(deer, id = "foo")
+data(deer)
+as_ltraj(deer)
+as_ltraj(deer, id = "animal_3")
+data(deer)
+as_bcpa(deer)
+data(deer)
+as_ctmm(deer)
+data(deer)
+as_moveHMM(deer)
 }

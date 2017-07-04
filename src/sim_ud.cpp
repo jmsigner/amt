@@ -50,7 +50,8 @@ int rsamp(vector<int>& nums, vector<double>& probs) {
 
 IntegerVector simulate_udf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk) {
 
-  int step, j,  npot = mk.nrow(); // no options from the movement kernel (mk)
+  int step, j,
+    npot = mk.nrow(); // number of options cells possible move to (-> # cells in the movement kernel)
   int ncell = hk.nrow();
 
   vector<vector<int> > cells (ncell);  // create vector of pointers
@@ -61,15 +62,38 @@ IntegerVector simulate_udf(int n_steps, int start, int nc, int nr, NumericMatrix
   int k = start; // current position
   ud(k)++;
 
+  // step is just repeating the simulations n_steps time
+  // and not really neeeded in the simulations
+
+  // The variable k hold the current cell number
   for (step = 1; step < n_steps; step++) {
+    if (cells[k].empty()) {
+      // if a cell was not visisted before, calulate the dispersal kernel for that cell
+      // this needs to be done only once per cell
 
-    // this needs to be done only once per cell
-    if (cells[k].empty()) { // Allocate memory if needed
-
+      // first allocate memory to save the neighbouring cells and
+      // the probability of moving to one of these neighbouring cells: the prod of the
+      // dispersal and movement kernel
       cells[k].resize(npot);
       probs[k].resize(npot);
       for (j = 0; j < npot; j++) {
-        cells[k][j] = mod((k % nc) + mk(j, 0), nc) + nc * mod(((k / nr) + mk(j, 1)), nr);
+
+        // The possilbe cells are: the current cell + cells that fall within the movement
+        // kernel
+
+        // row-major order
+        // https://stackoverflow.com/questions/5991837/row-major-order-indices
+        // index = X + Y * Width;
+        // Y = (int)(index / Width)
+        // X = index - (Y * Width)
+
+        // to get cell, we use: x % nr + nc * y / nc
+        // nc * (y - 1) + x
+        // x = k mod nc
+        // y = k / nr
+
+        // cells[k][j] = mod((k % nc) + mk(j, 0), nc) + nc * mod(((k / nr) + mk(j, 1)), nr);
+        cells[k][j] = mod((k % nc) + mk(j, 0), nc) + nc * mod(((k / nc) + mk(j, 1)), nr);
         probs[k][j] = hk(cells[k][j], 1) * mk(j, 2);
       }
     }

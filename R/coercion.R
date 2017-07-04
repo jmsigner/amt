@@ -119,8 +119,8 @@ as_ctmm <- function(x, ...) {
 #' @export
 #' @rdname coercion
 #' @examples
-as_ctmm.track_xyt <- function(x, id = "animal_1", ...) {
-  message("not yet implemented")
+as_ctmm.track_xyt <- function(x, ...) {
+  ctmm::as.telemetry(as_move(x, ...))
 }
 
 

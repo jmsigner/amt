@@ -8,7 +8,6 @@
 #' @template resources
 #' @references
 #' \insertRef{avgar2016}{amt}
-#'
 #' \insertRef{signer2017}{amt}
 #'
 #' @return The habitat kernel, as `RasterLayer`.
@@ -24,21 +23,30 @@ NULL
 #' @rdname sim_ud
 #' @export
 simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
+
+  # Get extent of the raster
   nc <- ncol(habitat_kernel)
   nr <- nrow(habitat_kernel)
 
+  # normalize movement kernel (i.e., remove coordinates)
   mk <- raster::rasterToPoints(movement_kernel)
   mk[, c("x", "y")] <- mk[, c("x", "y")] / raster::res(movement_kernel)[1]
 
+  # convert habitat kernel to row-major order
+  # cont. here
+  # index = X + Y * Width;
+  # Y = (int)(index / Width)
+  # X = index - (Y * Width)
   hk1 <- as.vector(m <- t(raster::as.matrix(habitat_kernel)))
-  y <- as.vector(col(m))
-  x <- as.vector(row(m))
+  x <- as.vector(col(m))
+  y <- as.vector(row(m))
   hk1 <- cbind(cell = nc * (y - 1) + x, hk1)
 
   # start cell
-  start1 <- nc * (nr - start[2]) + start[1]
+  start1 <- cellFromXY(habitat_kernel, start)
+  # start <- nc * (nr - start[2]) + start[1]
 
-  s <- simulate_udf(n, start1, nr, nc, mk, hk1)
+  s <- simulate_udf(n, start1, nc, nr, mk, hk1)
   m <- raster::setValues(habitat_kernel, s)
   m <- m / sum(m[])
   m
