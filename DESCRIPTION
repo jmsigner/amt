@@ -1,7 +1,7 @@
 Package: amt
 Type: Package
 Title: Animal Movement Tools
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jmsigner@gmail.com"))
 Description: Functions to analyse animal movement data.
 License: GPL-3

@@ -148,8 +148,14 @@ centroid <- function(x, ...) {
 }
 
 #' @export
-centroid.track_xy <- function(x, ...) {
-  colMeans(x[, c("x_", "y_")])
+centroid.track_xy <- function(x, spatial = FALSE, ...) {
+  xx <- colMeans(x[, c("x_", "y_")])
+
+  if (spatial) {
+    sp::SpatialPoints(cbind(xx$x_, xx$y_))
+  } else {
+    xx
+  }
 }
 
 

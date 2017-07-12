@@ -56,11 +56,11 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
 
 
     if (any(duplicated(tt))) {
-      stop("duplicated time stamps are not allowed.")
+      warning("duplicated time stamps.")
     }
 
     if (any(diff(tt) <= 0)) {
-      stop("0 or negative time diffs are not allowd.")
+      warning("0 or negative time diffs.")
     }
 
     out <- tbl %>%
