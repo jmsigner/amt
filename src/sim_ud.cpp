@@ -45,7 +45,7 @@ int rsamp(vector<int>& nums, vector<double>& probs) {
   }
 }
 
-Simulate UD new try
+// Simulate UD new try
 //[[Rcpp::export]]
 
 IntegerVector simulate_udf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk) {
@@ -104,7 +104,7 @@ IntegerVector simulate_udf(int n_steps, int start, int nc, int nr, NumericMatrix
 
 
 
-Simulate SSF
+// Simulate SSF
 //[[Rcpp::export]]
 
 IntegerVector cpp_simulate_ssf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk) {
