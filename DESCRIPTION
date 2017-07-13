@@ -44,6 +44,7 @@ Roxygen: list(markdown = TRUE)
 Suggests: 
   adehabitatLT,
   bcpa,
+  ctmm,
   move,
   moveHMM,
   spacetime,
