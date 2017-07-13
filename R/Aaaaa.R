@@ -24,5 +24,3 @@ methods::setOldClass(c("random_steps", "tbl_df"))
 NULL
 
 #' @useDynLib amt
-#' @importFrom Rcpp sourceCpp
-NULL
