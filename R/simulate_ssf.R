@@ -19,8 +19,8 @@ simulate_ssf <- function(scale, shape, quant = 0.99, sel_coef, resources, n, sta
 
   # mk
   dist <- ceiling(qgamma(quant, scale = scale, shape = shape))
-  mk <- amt:::mk_base(dist, raster::res(resources)[1])
-  mk <- amt:::mk_gamma(mk, shape = shape, scale = scale)
+  mk <- mk_base(dist, raster::res(resources)[1])
+  mk <- mk_gamma(mk, shape = shape, scale = scale)
 
   # hk
   hk <- raster::raster(resources)
