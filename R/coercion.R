@@ -91,8 +91,10 @@ as_ltraj.track_xyt <- function(x, ...) {
 #' @examples
 #' data(deer)
 #' d <- as_bcpa(deer)
+#' \dontrun{
 #' bcpa1 <- WindowSweep(d, "Theta", K = 2, windowsize = 50)
 #' plot(bcpa1, type = "flat", clusterwidth = 1)
+#' }
 
 as_bcpa <- function(x, ...) {
   UseMethod("as_bcpa", x)
@@ -131,6 +133,7 @@ as_ctmm.track_xyt <- function(x, ...) {
 #' # Fit HMM with two states
 #' data(deer)
 #' dm <- as_moveHMM(deer)
+#' \dontrun{
 #' mu0 <- rep(mean(dm$step, na.rm = TRUE), 2) # step mean (two parameters: one for each state)
 #' sigma0 <- rep(sd(dm$step, na.rm = TRUE), 2) # step SD
 #' zeromass0 <- c(0.1, 0.05) # step zero-mass
@@ -140,7 +143,7 @@ as_ctmm.track_xyt <- function(x, ...) {
 #' anglePar0 <- c(angleMean0, kappa0) ## call to fitting function
 #' m1 <- fitHMM(data = dm, nbStates = 2,
 #'        stepPar0 = stepPar0, anglePar0 = anglePar0, formula = ~ 1)
-#'
+#' }
 #'
 as_moveHMM <- function(x, ...) {
   UseMethod("as_moveHMM", x)
