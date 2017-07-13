@@ -14,3 +14,7 @@ centroid(x, ...)
 \description{
 Calcualte the centroid of a track.
 }
+\examples{
+data(deer)
+centroid(deer)
+}

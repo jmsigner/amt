@@ -16,3 +16,8 @@ bbox(x, ...)
 \description{
 Get bounding box of a track
 }
+\examples{
+data(deer)
+bbox(deer)
+bbox(deer, buffer = 100)
+}

@@ -14,3 +14,7 @@ get_crs(x, ...)
 \description{
 Get the Coordinate Reference System (CRS) of a track.
 }
+\examples{
+data(deer)
+get_crs(deer)
+}

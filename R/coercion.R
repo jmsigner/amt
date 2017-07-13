@@ -65,7 +65,6 @@ as_ltraj <- function(x, ...) {
 
 #' @export
 #' @rdname coercion
-#' @examples
 as_ltraj.track_xy <- function(x, id = "animal_1", ...) {
   if (is.null(list(...)[["id"]])) {
     adehabitatLT::as.ltraj(coords(x), typeII = FALSE, id = "animal_1", ...)
@@ -102,7 +101,6 @@ as_bcpa <- function(x, ...) {
 
 #' @export
 #' @rdname coercion
-#' @examples
 as_bcpa.track_xyt <- function(x, ...) {
   x <- dplyr::rename(x, X = x_, Y = y_, Time = t_)
   bcpa::GetVT(x, ...)
@@ -120,7 +118,6 @@ as_ctmm <- function(x, ...) {
 
 #' @export
 #' @rdname coercion
-#' @examples
 as_ctmm.track_xyt <- function(x, ...) {
   ctmm::as.telemetry(as_move(x, ...))
 }
@@ -151,7 +148,6 @@ as_moveHMM <- function(x, ...) {
 
 #' @export
 #' @rdname coercion
-#' @examples
 as_moveHMM.track_xy <- function(x, ...) {
   if (grepl("+proj=longlat", attr(x, "crs"))) {
     moveHMM::prepData(as.data.frame(x), type = "LL", coordNames = c("x_", "y_"))

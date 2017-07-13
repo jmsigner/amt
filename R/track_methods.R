@@ -59,7 +59,6 @@ diff_y.track_xy <- function(x, ...) {
 # Directions --------------------------------------------------------------
 #' @rdname direction
 #' @export
-#' @examples
 direction_rel <- function(x, ...) {
   UseMethod("directoin_rel", x)
 }
@@ -137,7 +136,7 @@ distance_with_diff <- function(xd, yd) {
 #'
 #' @param x A track.
 #' @template dots_none
-#' @example
+#' @examples
 #' data(deer)
 #' centroid(deer)
 
@@ -166,7 +165,7 @@ centroid.track_xy <- function(x, spatial = FALSE, ...) {
 #' @param x A track.
 #' @template dots_none
 #' @export
-#' @example
+#' @examples
 #' data(deer)
 #' get_crs(deer)
 
@@ -185,7 +184,7 @@ get_crs.track_xy <- function(x, ...) {
 #' @param spatial Logical, whether or not to return a `sp`-object.
 #' @param buffer Numeric, an optional buffer.
 #' @export
-#' @example
+#' @examples
 #' data(deer)
 #' bbox(deer)
 #' bbox(deer, buffer = 100)
