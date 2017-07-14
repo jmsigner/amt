@@ -67,7 +67,14 @@ random_steps_base <- function(x, n_controll, sl, ta) {
   if (has_burst) {
     vars <- c("burst_", vars)
   }
-  vars <- c(vars, base::setdiff(names(x), vars))
+
+  # shuffle attributes in non_vars
+  v1 <- base::setdiff(names(x), vars)
+  xy_cc <- xy_cc %>% mutate_at(v1, sample)
+  message("suffling non standard columns")
+
+  vars <- c(vars, v1)
+
 
   #out <- bind_rows(x, xy_cc) %>% arrange(quo("step_id_")) %>% select(.dots = vars)
   suppressWarnings(out <- bind_rows(x, xy_cc) %>% arrange(step_id_) %>% select(vars))

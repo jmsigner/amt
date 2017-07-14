@@ -2,12 +2,17 @@
 % Please edit documentation in R/track_methods.R
 \name{bbox}
 \alias{bbox}
+\alias{bbox.track_xy}
 \title{Get bounding box of a track}
 \usage{
 bbox(x, ...)
+
+\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL)
 }
 \arguments{
 \item{x}{A track.}
+
+\item{...}{Further arguments, none implemented.}
 
 \item{spatial}{Logical, whether or not to return a \code{sp}-object.}
 

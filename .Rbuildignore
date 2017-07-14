@@ -9,7 +9,6 @@ background/*
 .RData
 manuscript/*
 data-create/*
-help/*
 man-roxygen/*
 use_cases/*
 vignette_all/*

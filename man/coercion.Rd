@@ -3,7 +3,6 @@
 \name{coercion}
 \alias{coercion}
 \alias{as_sp}
-\alias{as_sp.track_xy}
 \alias{as_move}
 \alias{as_move.track_xy}
 \alias{as_move.track_xyt}
@@ -19,8 +18,6 @@
 \title{Track coercion functions}
 \usage{
 as_sp(x, ...)
-
-\method{as_sp}{track_xy}(x, ...)
 
 as_move(x, ...)
 
@@ -50,6 +47,8 @@ as_moveHMM(x, ...)
 \item{x}{A \code{track_xy}.}
 
 \item{...}{Further arguments, none implemented.}
+
+\item{id}{Animal id(s).}
 }
 \description{
 amt provides several coercion functions that operate on \code{tracks} and \code{steps}.

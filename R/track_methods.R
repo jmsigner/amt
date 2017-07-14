@@ -164,6 +164,7 @@ centroid.track_xy <- function(x, spatial = FALSE, ...) {
 #'
 #' @param x A track.
 #' @template dots_none
+#' @name crs
 #' @export
 #' @examples
 #' data(deer)
@@ -178,11 +179,33 @@ get_crs.track_xy <- function(x, ...) {
   attr(x, "crs", ...)
 }
 
+#' @export
+get_crs.steps <- function(x, ...) {
+  attr(x, "crs", ...)
+}
+
+#' @export
+#' @rdname crs
+has_crs <- function(x, ...) {
+  UseMethod("has_crs", x)
+}
+
+#' @export
+has_crs.track_xy <- function(x, ...) {
+  !is.null(attr(x, "crs", ...))
+}
+
+#' @export
+has_crs.steps <- function(x, ...) {
+  !is.null(attr(x, "crs", ...))
+}
 
 #' Get bounding box of a track
 #' @param x A track.
 #' @param spatial Logical, whether or not to return a `sp`-object.
 #' @param buffer Numeric, an optional buffer.
+#' @template dots_none
+#' @name bbox
 #' @export
 #' @examples
 #' data(deer)
@@ -194,6 +217,7 @@ bbox <- function(x, ...) {
 }
 
 #' @export
+#' @rdname bbox
 bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL) {
   bbx <- rgeos::gEnvelope(as_sp(x))
   if (!is.null(buffer)) {

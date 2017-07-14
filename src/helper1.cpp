@@ -1,6 +1,10 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+// headers
+NumericVector diff_rcpp(NumericVector xs);
+LogicalVector within_rcpp(NumericVector x, int a, int b);
+
 // Function taken from: https://stat.ethz.ch/pipermail/r-help/2012-January/301873.html
 
 // [[Rcpp::export]]
