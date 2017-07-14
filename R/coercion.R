@@ -5,6 +5,7 @@
 #' The following coercion functions are currently provided:
 #'  * `as_sp` turns a track into `SpatialPoints`.
 #' @param x A `track_xy`.
+#' @param id Animal id(s).
 #' @template dots_none
 #' @details
 #' @name coercion
@@ -14,7 +15,6 @@ as_sp <- function(x, ...) {
 }
 
 #' @export
-#' @rdname coercion
 as_sp.track_xy <- function(x, ...) {
   sp::SpatialPoints(
     coords = x[, c("x_", "y_")],
@@ -24,6 +24,29 @@ as_sp.track_xy <- function(x, ...) {
       sp::CRS(as.character(NA))
     }
   )
+}
+
+#' @export
+as_sp.steps <- function(x, end = TRUE, ...) {
+  if (end) {
+    sp::SpatialPoints(
+      coords = x[, c("x2_", "y2_")],
+      proj4string = if (!is.null(attributes(x)$crs_)) {
+        attributes(x)$crs_
+      } else {
+        sp::CRS(as.character(NA))
+      }
+    )
+  } else {
+    sp::SpatialPoints(
+      coords = x[, c("x1_", "y1_")],
+      proj4string = if (!is.null(attributes(x)$crs_)) {
+        attributes(x)$crs_
+      } else {
+        sp::CRS(as.character(NA))
+      }
+    )
+  }
 }
 
 
