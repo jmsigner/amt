@@ -75,12 +75,13 @@ df[[1]]$abs.angle
 amt::direction_abs(trk, degrees = FALSE, full_circle = FALSE)
 
 # bcpa
-df <- bcpa::MakeTrack(x, y, now() +  hours(1:10))
+library(lubridate)
+df <- bcpa::MakeTrack(x, y, lubridate::now() +  hours(1:10))
 bcpa::GetVT(df)$Phi
-amt::direction_abs(trk, degrees = FALSE, full_circle = FALSE, append_last = FALSE)
+direction_abs(trk, degrees = FALSE, full_circle = FALSE, append_last = FALSE)
 
 # move
-m <- move::move(x, y, now() + hours(1:10), proj = CRS("+init=epsg:4326"))
+m <- move::move(x, y, now() + hours(1:10), proj = sp::CRS("+init=epsg:4326"))
 move::angle(m)
 direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N",
   clockwise = TRUE, append_na = FALSE, planar = FALSE)
@@ -88,7 +89,7 @@ direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N",
 # trajectories
 library(trajectories)
 library(spacetime)
-t1 <- Track(STIDF(SpatialPoints(cbind(x, y)), now() + hours(1:10), data = data.frame(1:10)))
+t1 <- Track(STIDF(sp::SpatialPoints(cbind(x, y)), now() + hours(1:10), data = data.frame(1:10)))
 
 t1[["direction"]]
 direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N", clockwise = TRUE, append_last = FALSE)

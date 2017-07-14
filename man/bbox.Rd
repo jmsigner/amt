@@ -7,7 +7,7 @@
 \usage{
 bbox(x, ...)
 
-\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL)
+\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, ...)
 }
 \arguments{
 \item{x}{A track.}

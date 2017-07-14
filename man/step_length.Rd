@@ -14,7 +14,7 @@ step_lengths(x, ...)
 
 step_lengths_sq(x, ...)
 
-\method{step_lengths_sq}{track_xy}(x)
+\method{step_lengths_sq}{track_xy}(x, ...)
 }
 \arguments{
 \item{x}{A track.}

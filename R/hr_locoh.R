@@ -19,7 +19,7 @@ hr_locoh_k <- function(x, ...) {
 #' @examples
 #' data(sh)
 #' x <- track(x = sh[, 1], y = sh[, 2])
-#' l <- locoh_k(x)
+#' l <- hr_locoh_k(x)
 hr_locoh_k.track_xy <- function(x, n = 10, level = 0.95, rand_buffer = 1e-5, ...) {
 
   aa <- FNN::get.knn(x[, c("x_", "y_")], k = n)$nn.index

@@ -100,7 +100,7 @@ step_lengths_sq <- function(x, ...) {
 
 #' @export
 #' @rdname step_length
-step_lengths_sq.track_xy <- function(x) {
+step_lengths_sq.track_xy <- function(x, ...) {
   diff_x(x)^2 + diff_y(x)^2
 }
 
@@ -201,7 +201,7 @@ bbox <- function(x, ...) {
 
 #' @export
 #' @rdname bbox
-bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL) {
+bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL, ...) {
   bbx <- rgeos::gEnvelope(as_sp(x))
   if (!is.null(buffer)) {
     bbx <- rgeos::gEnvelope(rgeos::gBuffer(bbx, width = buffer))
