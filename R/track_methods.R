@@ -66,6 +66,7 @@ diff_y.track_xy <- function(x, ...) {
 #' @export
 #' @param x A track.
 #' @param lonlat Logcial scalar, if `TRUE` geogrphic distances are calculated
+#' @template dots_none
 #' @name step_length
 
 #' @export
@@ -213,6 +214,9 @@ points.track_xy <- function(x, ...) {
   graphics::points(x[, c("x_", "y_")], ...)
 }
 
+#' Plot step length distribution
+#'
+#' @param x A fitted step selection.
 #' @export
 plot_sl <- function(x, ...) {
   UseMethod("plot_sl", x)

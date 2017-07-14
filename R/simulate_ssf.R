@@ -1,6 +1,3 @@
-
-#' @export
-
 simulate_ssf <- function(scale, shape, quant = 0.99, sel_coef, resources, n, start) {
 
   ###

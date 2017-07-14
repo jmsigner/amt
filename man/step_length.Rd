@@ -19,6 +19,8 @@ step_lengths_sq(x, ...)
 \arguments{
 \item{x}{A track.}
 
+\item{...}{Further arguments, none implemented.}
+
 \item{lonlat}{Logcial scalar, if \code{TRUE} geogrphic distances are calculated}
 }
 \description{

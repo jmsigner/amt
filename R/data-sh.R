@@ -36,4 +36,4 @@
 #'   \item{t_}{time stamp}
 #' }
 #' @source Verein für Wildtierforschung Dresden und Göttingen e.V.
-"sh"
+"deer"
