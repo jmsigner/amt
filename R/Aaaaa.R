@@ -14,7 +14,8 @@
 #' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd
 #' @importFrom graphics plot
 #' @importFrom utils data head tail
-#' @importFrom lubridate hours minutes seconds
+#' @importFrom lubridate hours minutes seconds now
+#' @importFrom sp CRS SpatialPoints
 #' @import survival tidyverse
 
 methods::setOldClass(c("track_xy", "tbl_df", "tbl", "data.frame"))

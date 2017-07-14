@@ -56,23 +56,6 @@ diff_y.track_xy <- function(x, ...) {
 }
 
 
-# Directions --------------------------------------------------------------
-#' @rdname direction
-#' @export
-direction_rel <- function(x, ...) {
-  UseMethod("directoin_rel", x)
-}
-
-#' @export
-#' @rdname direction
-direction_rel <- function(x, degrees = TRUE) {
-  p <- c(NA, diff_rcpp(direction_abs(x, degrees = FALSE)))
-  p <- ifelse( p <= (-pi), p + 2 * pi, p)
-  p <- ifelse( p > pi, p - 2 * pi, p)
-  p * if (degrees) 180 / pi else 1
-}
-
-
 
 # step lengths ------------------------------------------------------------
 

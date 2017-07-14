@@ -64,7 +64,8 @@ direction_abs <- function(x, ...) {
 #' # move
 #' m <- move::move(x, y, now() + hours(1:10), proj = CRS("+init=epsg:4326"))
 #' move::angle(m)
-#' amt::direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N", clockwise = TRUE, append_na = FALSE, planar = FALSE)
+#' direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N",
+#'   clockwise = TRUE, append_na = FALSE, planar = FALSE)
 #'
 #' # trajectories
 #' library(trajectories)
@@ -111,3 +112,21 @@ direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_
   a <- if (full_circle) a else ifelse(a > 180, (360 - a) * -1, a)
   a * if (degrees) 1 else pi / 180
 }
+
+# Directions rel ----------------------------------------------------------
+#' @rdname direction
+#' @export
+direction_rel <- function(x, ...) {
+  UseMethod("directoin_rel", x)
+}
+
+#' @export
+#' @rdname direction
+direction_rel <- function(x, degrees = TRUE) {
+  p <- c(NA, diff_rcpp(direction_abs(x, degrees = FALSE)))
+  p <- ifelse( p <= (-pi), p + 2 * pi, p)
+  p <- ifelse( p > pi, p - 2 * pi, p)
+  p * if (degrees) 180 / pi else 1
+}
+
+
