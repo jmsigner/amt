@@ -3,21 +3,12 @@
 \name{hr}
 \alias{hr}
 \alias{hr_area}
-\alias{hr_area.mcp}
-\alias{hr_area.locoh}
-\alias{hr_area.RasterLayer}
 \alias{hr_isopleths}
 \alias{hr_isopleths.RasterLayer}
 \alias{hr_isopleths.mcp}
 \title{Working with home ranges}
 \usage{
 hr_area(x, ...)
-
-\method{hr_area}{mcp}(x, ...)
-
-\method{hr_area}{locoh}(x, ...)
-
-\method{hr_area}{RasterLayer}(x, level = 0.95, ...)
 
 hr_isopleths(x, ...)
 
@@ -31,8 +22,6 @@ hr_isopleths(x, ...)
 \item{...}{Further arguments, none implemented.}
 
 \item{level}{Numeric scalar, home-range level.}
-
-\item{level}{Numeric scalar, the home range level.}
 }
 \description{
 Function to calculate the area and isopleths of a home range.

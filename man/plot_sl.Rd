@@ -8,6 +8,8 @@ plot_sl(x, ...)
 }
 \arguments{
 \item{x}{A fitted step selection.}
+
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Plot step length distribution

@@ -4,7 +4,7 @@
 #' `track` is usually created from a set of `x` and `y` coordinates, possibly
 #' time stamps, and any number of optional columns, such as id, sex, age, etc.
 #'
-#' @param .tbl A data.frame or tibble.
+#' @param tbl A data.frame or tibble.
 #' @param .x,.y,.t Literal names of columns containng the coordinates and time stamp.
 #' @param x A *required* numeric vector, containing the x-coordinates (=
 #'   latitude).

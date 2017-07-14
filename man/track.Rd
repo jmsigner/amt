@@ -11,6 +11,8 @@ mk_track(tbl, .x, .y, .t, ..., crs = NULL)
 track(x, y, t, ..., crs = NULL)
 }
 \arguments{
+\item{tbl}{A data.frame or tibble.}
+
 \item{.x, .y, .t}{Literal names of columns containng the coordinates and time stamp.}
 
 \item{...}{Additional columns, that should be given in the form of \code{key = val} (e.g., for ids this may look like this \code{id = c(1, 1, 1, 2, 2, 2} for
@@ -25,8 +27,6 @@ latitude).}
 longitude).}
 
 \item{t}{An \emph{optional} vector of  \code{POSIXct} time stamps.}
-
-\item{.tbl}{A data.frame or tibble.}
 }
 \value{
 If \code{t} was provided an object of class \code{track_xyt} is returned

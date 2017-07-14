@@ -12,20 +12,16 @@ hr_area <- function(x, ...) {
 }
 
 #' @export
-#' @rdname hr
 hr_area.mcp <- function(x, ...) {
   as_data_frame(x$mcp)
 }
 
 #' @export
-#' @rdname hr
 hr_area.locoh <- function(x, ...) {
   as_data_frame(x)
 }
 
 #' @export
-#' @param level Numeric scalar, the home range level.
-#' @rdname hr
 hr_area.RasterLayer <- function(x, level = 0.95, ...) {
     x <- cumulative_ud(x)
     sum(x[] <= level) * prod(raster::res(x))

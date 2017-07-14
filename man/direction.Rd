@@ -21,6 +21,8 @@ direction_rel(x, degrees = TRUE)
 \arguments{
 \item{x}{A track.}
 
+\item{...}{Further arguments, none implemented.}
+
 \item{degrees}{Logcial scalar, if \code{TRUE} angles are returned in degrees, otherwise in radians.}
 
 \item{full_circle}{Logcial scalar, if \code{TRUE} angles are returned between 0 and 360 degrees or 0 and 2 pi (depnding on the value of \code{degrees}), otherwise angles are between -180 and 180 or -pi and pi.}
@@ -30,6 +32,8 @@ direction_rel(x, degrees = TRUE)
 \item{clockwise}{Logical scalar, should angles be calculated clock or anti-clockwise.}
 
 \item{append_last}{Logical scalar, if \code{TRUE} an \code{NA} is appended at the end of all angles.}
+
+\item{planar}{Logical scalar, if \code{TRUE} a planar (projected) coordinate reference system is assumed, otherwise geographical coordinates are assumed.}
 }
 \description{
 Functions to calculate the relative and absolute direction of an animal
@@ -92,7 +96,8 @@ library(spacetime)
 t1 <- Track(STIDF(sp::SpatialPoints(cbind(x, y)), now() + hours(1:10), data = data.frame(1:10)))
 
 t1[["direction"]]
-direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N", clockwise = TRUE, append_last = FALSE)
+direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",
+  clockwise = TRUE, append_last = FALSE)
 
 # moveHMM (only rel. ta)
 df <- data.frame(ID = 1, x = x, y = y)

@@ -39,7 +39,7 @@ sinuosity, mean turn angle correlation (tac) .
 }
 \examples{
 data("sh")
-sh <- mk_track(sh, x_epsg31467, y_epsg31467)
+mk_track(sh, x_epsg31467, y_epsg31467)
 
 tot_dist(sh)
 cum_dist(sh)

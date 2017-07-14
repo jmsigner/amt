@@ -217,6 +217,7 @@ points.track_xy <- function(x, ...) {
 #' Plot step length distribution
 #'
 #' @param x A fitted step selection.
+#' @template dots_none
 #' @export
 plot_sl <- function(x, ...) {
   UseMethod("plot_sl", x)

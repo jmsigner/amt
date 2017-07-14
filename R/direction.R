@@ -8,6 +8,8 @@
 #' @param zero_dir Character scalar, must be either 'N', 'E', 'S' or 'W' and indicates the zero direction.
 #' @param clockwise Logical scalar, should angles be calculated clock or anti-clockwise.
 #' @param append_last Logical scalar, if `TRUE` an `NA` is appended at the end of all angles.
+#' @param planar Logical scalar, if `TRUE` a planar (projected) coordinate reference system is assumed, otherwise geographical coordinates are assumed.
+#' @template dots_none
 #' @name direction
 #'
 direction_abs <- function(x, ...) {
@@ -74,7 +76,8 @@ direction_abs <- function(x, ...) {
 #' t1 <- Track(STIDF(sp::SpatialPoints(cbind(x, y)), now() + hours(1:10), data = data.frame(1:10)))
 #'
 #' t1[["direction"]]
-#' direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N", clockwise = TRUE, append_last = FALSE)
+#' direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",
+#'   clockwise = TRUE, append_last = FALSE)
 #'
 #' # moveHMM (only rel. ta)
 #' df <- data.frame(ID = 1, x = x, y = y)
