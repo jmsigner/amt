@@ -28,5 +28,5 @@ Calculate Local Convex Hull (LoCoH) home range type "k". That is, the k nearest 
 \examples{
 data(sh)
 x <- track(x = sh[, 1], y = sh[, 2])
-l <- locoh_k(x)
+l <- hr_locoh_k(x)
 }

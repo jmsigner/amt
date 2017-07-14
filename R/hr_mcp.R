@@ -9,7 +9,7 @@
 #' @examples
 #' data(sh)
 #' trk <- track(sh$x_, sh$y_)
-#' mcps <- mcp(trk, levels = c(0.5, 0.95, 1))
+#' mcps <- hr_mcp(trk, levels = c(0.5, 0.95, 1))
 #' \dontrun{
 #' plot(trk, asp = 1)
 #' sp::plot(hr_mcps$mcp, add = TRUE)

@@ -70,13 +70,7 @@ diff_y.track_xy <- function(x, ...) {
 
 #' @export
 #' @rdname step_length
-#' @examples
-#' step_lengths(trk)
-#' step_lengths(trk, lonlat = TRUE)
-#'
-#' m <- move::move(x, y, now() + hours(1:10), proj = CRS("+init=epsg:4326"))
-#' move::distance(m)
-#'
+
 step_lengths <- function(x, ...) {
   UseMethod("step_lengths", x)
 }
