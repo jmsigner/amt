@@ -25,7 +25,6 @@ day_night.track_xyt <- function(x, ...) {
 #' @export
 day_night.steps <- function(x, end = TRUE, ...) {
   # has crs?
-  x <- stps
   if (has_crs(x)) {
     pts <- sp::spTransform(as_sp(x, end = TRUE), sp::CRS("+init=epsg:4326"))
   } else {

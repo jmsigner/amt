@@ -23,7 +23,7 @@ hr_mcp <- function(x, levels = 0.95, ...) {
 #' @export
 #' @rdname mcp
 hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
-  xy <- select_(x, ~ x_, ~ y_)
+  xy <- select(x, c("x_", "y_"))
   mxy <- colMeans(xy)
   sqd <- (xy$x_ - mxy[1])^2 + (xy$y_ - mxy[2])^2
   qts <- stats::quantile(sqd, levels)

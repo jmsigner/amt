@@ -43,7 +43,7 @@ simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
   hk1 <- cbind(cell = nc * (y - 1) + x, hk1)
 
   # start cell
-  start1 <- cellFromXY(habitat_kernel, start)
+  start1 <- raster::cellFromXY(habitat_kernel, start)
   # start <- nc * (nr - start[2]) + start[1]
 
   s <- simulate_udf(n, start1, nc, nr, mk, hk1)

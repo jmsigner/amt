@@ -1,11 +1,11 @@
 #' @importFrom dplyr arrange filter group_by select summarize summarise
-#' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars
-#' @importFrom graphics plot
-#' @importFrom grDevices adjustcolor legend
+#' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars n
+#' @importFrom graphics plot legend
+#' @importFrom grDevices adjustcolor
 #' @importFrom lazyeval lazy_dots lazy
 #' @importFrom lubridate hours minutes seconds now
-#' @importFrom rlang enquo quos
 #' @importFrom methods is
+#' @importFrom rlang enquo quos quo
 #' @importFrom purrr map
 #' @importFrom sp CRS SpatialPoints
 #' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd

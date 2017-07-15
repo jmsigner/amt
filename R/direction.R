@@ -107,10 +107,10 @@ direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_
   a <- if (!append_last) a[-length(a)] else a
   a <- ifelse(a < 0, 360 + a, a)
   a <- switch(zero_dir,
-         E = a,
-         S = (450 + a) %% 360,
-         W = (540 + a) %% 360,
-         N = (630 + a) %% 360
+         "E" = a,
+         "S" = (450 + a) %% 360,
+         "W" = (540 + a) %% 360,
+         "N" = (630 + a) %% 360
   )
   a <- if (clockwise)  (360 - a) %% 360 else a
   a <- if (full_circle) a else ifelse(a > 180, (360 - a) * -1, a)

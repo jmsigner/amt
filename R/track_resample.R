@@ -26,7 +26,7 @@ track_resample.track_xyt <- function(x, rate = hours(2), tolerance = minutes(15)
          time_tol = lubridate::period_to_seconds(tolerance), start = start)
   x$burst_ <- xx
  # cond <- quo(burst_ > 0) # -1 indicates that point is left out
-  filter(x, burst_ > 0)
+  filter(x, !!quo(burst_ > 0))
 }
 
 #' Filter Bursts
@@ -49,8 +49,8 @@ filter_min_n_burst.track_xy <- function(x, min_n = 3, ...) {
     stop("column 'burst_' not found.")
   }
   pred <- lazyeval::interp(~ col >= min_n, col = as.name("n"))
-  x_select <- group_by_(x, ~burst_) %>% summarise_(n = ~n()) %>%
-    filter_(pred)
+  x_select <- group_by(x, !!quo(burst_)) %>% summarise(n = n()) %>%
+    filter(pred)
   #pred <- lazyeval::interp(~ col %in% x_select$burst_, col = as.name("burst_"))
   #x %>% filter_(pred)
   xx <- x[x$burst_ %in% x_select$burst_, ]

@@ -6,17 +6,15 @@
 #' @param tol The tolerance.
 #' @template dots_none
 #' @name track_align
-#' @export
 track_align <- function(x, ...) {
   UseMethod("track_align", x)
 }
 
-#' @export
 #' @rdname track_align
 track_align.track_xyt <- function(x, nt, tol, ...) {
   x[["burst_"]] <- track_align_raw(x, nt, tol, type = "burst")
   cond <- quote(burst_ > -1) # -1 indicates that point is left out
-  filter_(x, cond)
+  filter(x, cond)
 }
 
 
