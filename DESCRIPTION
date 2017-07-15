@@ -22,6 +22,7 @@ Imports:
     lazyeval,
     leaflet,
     lubridate,
+    maptools,
     methods,
     purrr,
     Rcpp (>= 0.12.7),
