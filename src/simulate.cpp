@@ -19,8 +19,10 @@ int mod (int a, int b) {
 }
 // http://stackoverflow.com/questions/2704521/generate-random-double-numbers-in-c
 double frand(double upper) {
-  double f = (double)rand() / RAND_MAX;
-  return f * upper;
+  return runif(1, 0, upper)(0);
+  // Remove C implementation in favor for R to remove check note
+  //double f = (double)rand() / RAND_MAX;
+  //return f * upper;
 }
 
 
