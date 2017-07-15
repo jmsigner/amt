@@ -125,7 +125,7 @@ as_bcpa <- function(x, ...) {
 #' @export
 #' @rdname coercion
 as_bcpa.track_xyt <- function(x, ...) {
-  x <- dplyr::rename(x, X = x_, Y = y_, Time = t_)
+  x <- data_frame(X = x$x_, Y = x$y_, Time = x$t_)
   bcpa::GetVT(x, ...)
 }
 

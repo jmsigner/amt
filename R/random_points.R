@@ -65,17 +65,17 @@ const_call_random_points <- function(fun, data, ..., .dots) {
 
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
-arrange_.random_points <- function(.data, ..., .dots) {
+arrange.random_points <- function(.data, ..., .dots) {
   const_call_random_points(dplyr::arrange_, .data, ..., .dots)
 }
 
 #' @export
-filter_.random_points <- function(.data, ..., .dots) {
+filter.random_points <- function(.data, ..., .dots) {
   const_call_random_points(dplyr::filter_, .data, ..., .dots)
 }
 
 #' @export
-group_by_.random_points <- function(.data, ..., .dots) {
+group_by.random_points <- function(.data, ..., .dots) {
   const_call_random_points(dplyr::group_by_, data, ..., .dots)
 }
 
@@ -85,22 +85,22 @@ ungroup.random_points <- function(x, ...) {
 }
 
 #' @export
-distinct_.random_points <- function(.data, ..., .dots) {
+distinct.random_points <- function(.data, ..., .dots) {
   const_call_random_points(dplyr::distinct_, data, ..., .dots)
 }
 
 #' @export
-select_.random_points <- function(.data, ..., .dots) {
+select.random_points <- function(.data, ..., .dots) {
   const_call_random_points(dplyr::select_, data, ..., .dots)
 }
 
 #' @export
-summarize_.random_points <- function(.data, ..., .dots) {
+summarize.random_points <- function(.data, ..., .dots) {
   const_call_random_points(dplyr::summarize_, data, ..., .dots)
 }
 
 #' @export
-summarise_.random_points <- function(.data, ..., .dots) {
+summarise.random_points <- function(.data, ..., .dots) {
   const_call_random_points(dplyr::summarise_, data, ..., .dots)
 }
 
