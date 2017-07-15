@@ -14,7 +14,7 @@
 #' \insertRef{swihart1985}{amt}
 #' @examples
 #' data("sh")
-#' mk_track(sh, x_epsg31467, y_epsg31467)
+#' sh <- mk_track(sh, x_epsg31467, y_epsg31467)
 #'
 #' tot_dist(sh)
 #' cum_dist(sh)
