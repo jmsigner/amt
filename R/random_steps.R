@@ -12,6 +12,7 @@
 #'   (beteen 0 and `random.error`) to be added to step lenghts, to avoid step
 #'   lengths of length 0.
 #' @param .progress Should progress message be printed?
+#' @param shuffle Character vector, indicating columngs to shuffle.
 #' @template dots_none
 #' @export
 #' @name random_steps
@@ -70,8 +71,8 @@ random_steps_base <- function(x, n_controll, sl, ta) {
 
   # shuffle attributes in non_vars
   v1 <- base::setdiff(names(x), vars)
-  xy_cc <- xy_cc %>% mutate_at(v1, sample)
-  message("suffling non standard columns")
+  #xy_cc <- xy_cc %>% mutate_at(v1, function(x) sample(unique(x), length(x), TRUE))
+  #message("shuffling non standard columns")
 
   vars <- c(vars, v1)
 

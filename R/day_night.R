@@ -12,12 +12,16 @@ day_night <- function(x, ...) {
 
 #' @export
 day_night.track_xyt <- function(x, ...) {
-  # has crs?
+  if (has_crs(x)) {
+    pts <- sp::spTransform(as_sp(x, end = TRUE), sp::CRS("+init=epsg:4326"))
+  } else {
+    stop("No CRS found.")
+  }
   day <- lubridate::interval(
-    maptools::sunriset(as_sp(x), x$t_, direction = "sunrise", POSIXct.out = TRUE)$time,
-    maptools::sunriset(as_sp(x), x$t_, direction = "sunset", POSIXct.out = TRUE)$time
+    maptools::sunriset(pts, x$t_, direction = "sunrise", POSIXct.out = TRUE)$time,
+    maptools::sunriset(pts, x$t_, direction = "sunset", POSIXct.out = TRUE)$time
   )
-  lubridate::`%within%`(x$t_, day)
+  ifelse(lubridate::`%within%`(x$t_, day), "day", "night")
 }
 
 #' @param end A logical scalar, indicating if the time stemp of the end of the step should be used.
