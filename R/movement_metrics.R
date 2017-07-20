@@ -1,26 +1,26 @@
-#' Different metrics for a movement track
+#' Movement metrics
 #'
-#' Functions to calculate metrics such as straightness, mean squred displacement (msd), intensity use, for a track.
+#' Functions to calculate metrics such as straightness, mean squred displacement (msd), intensity use,
+#' sinuosity, mean turn angle correlation (`tac`) of a track.
 #'
-#' The intensity use is calculated by dividing the total movement distance by the square of the area of movement (= minimum convex polygon 100),
-#' sinuosity, mean turn angle correlation (tac) .
+#' The intensity use is calculated by dividing the total movement distance (`tot_dist`) by the square of the area of movement (= minimum convex polygon 100).
 #'
-#' @param x A `track_xy{y}`
+#' @template track_xy_star
 #' @template dots_none
 #' @name movement_metrics
 #' @export
 #' @references
+#' \insertRef{abrahams2017}{amt}
 #' \insertRef{almeida2010}{amt}
 #' \insertRef{swihart1985}{amt}
 #' @examples
-#' data("sh")
-#' sh <- mk_track(sh, x_epsg31467, y_epsg31467)
+#' data(deer)
 #'
-#' tot_dist(sh)
-#' cum_dist(sh)
-#' straightness(sh)
-#' msd(sh)
-#' intensity_use(sh)
+#' tot_dist(deer)
+#' cum_dist(deer)
+#' straightness(deer)
+#' msd(deer)
+#' intensity_use(deer)
 #'
 
 straightness <- function(x, ...) {

@@ -9,6 +9,7 @@
 #' @name inspect
 #' @note Important, `x` requires a valid coordinate reference system.
 #' @export
+#' @return An interactive `leaflet` map.
 #' @seealso `leaflet::leaflet()`
 #' @examples
 #' data(sh)

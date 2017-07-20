@@ -9,7 +9,7 @@
 \alias{intensity_use}
 \alias{sinuosity}
 \alias{tac}
-\title{Different metrics for a movement track}
+\title{Movement metrics}
 \usage{
 straightness(x, ...)
 
@@ -26,29 +26,29 @@ sinuosity(x, ...)
 tac(x, ...)
 }
 \arguments{
-\item{x}{A \code{track_xy{y}}}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track}.}
 
 \item{...}{Further arguments, none implemented.}
 }
 \description{
-Functions to calculate metrics such as straightness, mean squred displacement (msd), intensity use, for a track.
+Functions to calculate metrics such as straightness, mean squred displacement (msd), intensity use,
+sinuosity, mean turn angle correlation (\code{tac}) of a track.
 }
 \details{
-The intensity use is calculated by dividing the total movement distance by the square of the area of movement (= minimum convex polygon 100),
-sinuosity, mean turn angle correlation (tac) .
+The intensity use is calculated by dividing the total movement distance (\code{tot_dist}) by the square of the area of movement (= minimum convex polygon 100).
 }
 \examples{
-data("sh")
-sh <- mk_track(sh, x_epsg31467, y_epsg31467)
+data(deer)
 
-tot_dist(sh)
-cum_dist(sh)
-straightness(sh)
-msd(sh)
-intensity_use(sh)
+tot_dist(deer)
+cum_dist(deer)
+straightness(deer)
+msd(deer)
+intensity_use(deer)
 
 }
 \references{
+\insertRef{abrahams2017}{amt}
 \insertRef{almeida2010}{amt}
 \insertRef{swihart1985}{amt}
 }

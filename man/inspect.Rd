@@ -18,8 +18,11 @@ inspect(x, ...)
 
 \item{cluster}{\code{[logical(1)]} \cr If \code{TRUE} points are clustered at lower zoom levels.}
 }
+\value{
+An interactive \code{leaflet} map.
+}
 \description{
-Provides a very basic interfact to \code{leaflet} and lets the user inspect relocations on an interactive map.
+Provides a very basic interface to \code{leaflet} and lets the user inspect relocations on an interactive map.
 }
 \note{
 Important, \code{x} requires a valid coordinate reference system.
