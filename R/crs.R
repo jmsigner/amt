@@ -1,8 +1,8 @@
 #' Coordinate References System
 #'
-#' Get the Coordinate Reference System (CRS) of a track.
+#' Check if an object has a coordinate reference system (`has_crs`) and returns the `proj4string` with `get_crs` of the coordinate ference system.
 #'
-#' @param x A track.
+#' @template any
 #' @template dots_none
 #' @name crs
 #' @export
@@ -15,11 +15,20 @@ get_crs <- function(x, ...) {
 }
 
 #' @export
+get_crs.default <- function(x, ...) {
+  "Not implementes for objects of this class"
+}
+
+#' @export
 #' @rdname crs
 has_crs <- function(x, ...) {
   UseMethod("has_crs", x)
 }
 
+#' @export
+has_crs.default <- function(x, ...) {
+  "Not implementes for objects of this class"
+}
 
 # track -------------------------------------------------------------------
 

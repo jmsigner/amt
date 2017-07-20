@@ -1,12 +1,13 @@
 #' Inspect a track
 #'
-#' Provides a very basic interfact to `leaflet` and lets the user inspect relocations on an interactive map.
+#' Provides a very basic interface to `leaflet` and lets the user inspect relocations on an interactive map.
 #'
-#' @param x A `track_xy`. Important, `x` requires a valid coordinate reference system.
-#' @param cluster A locigcal scalar, indicating if points should be clustered at lower zoom levels.
-#' @param popup A character vector of length == `nrow(x)`, optionally providing popups.
+#' @template track_xy_star
+#' @param cluster `[logical(1)]` \cr If `TRUE` points are clustered at lower zoom levels.
+#' @param popup `[character(nrow(x))]` \cr Optional labels for popups.
 #' @template dots_none
 #' @name inspect
+#' @note Important, `x` requires a valid coordinate reference system.
 #' @export
 #' @seealso `leaflet::leaflet()`
 #' @examples
@@ -26,7 +27,7 @@ inspect <- function(x, ...) {
 #' @export
 #' @rdname inspect
 inspect.track_xy <- function(x, popup = NULL, cluster = TRUE, ...) {
-  if (!is.null(attr(x, "crs_"))) {
+  if (has_crs(x)) {
     x <- transform_coords(x, sp::CRS("+init=epsg:4326"))
   } else {
     stop("x is not projected.")

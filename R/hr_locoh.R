@@ -1,13 +1,4 @@
-#' Local Convex Hull
-#'
-#' Calculate Local Convex Hull (LoCoH) home range type "k". That is, the k nearest neighbours are considered.
-#'
-#' @param x A `track_xy`.
-#' @param n Numeric scalar, the number of neighbours.
-#' @param level Numeric scalar/vector, home-range level. The level should be `0 < level < 1`.
-#' @param rand_buffer Numeric scalar, random buffer to avaoid polygons with area 0 (if coordinates are numerically identical).
-#' @template dots_none
-#' @name locoh_k
+#' @rdname hr
 #' @export
 hr_locoh_k <- function(x, ...) {
   UseMethod("hr_locoh_k", x)
@@ -15,12 +6,8 @@ hr_locoh_k <- function(x, ...) {
 
 
 #' @export
-#' @rdname locoh_k
-#' @examples
-#' data(sh)
-#' x <- track(x = sh[, 1], y = sh[, 2])
-#' l <- hr_locoh_k(x)
-hr_locoh_k.track_xy <- function(x, n = 10, level = 0.95, rand_buffer = 1e-5, ...) {
+#' @rdname hr
+hr_locoh_k.track_xy <- function(x, n = 10, levels = 0.95, rand_buffer = 1e-5, ...) {
 
   aa <- FNN::get.knn(x[, c("x_", "y_")], k = n)$nn.index
   xysp <- sp::SpatialPointsDataFrame(x[, c("x_", "y_")], data=data.frame(id=1:nrow(x)))
@@ -49,7 +36,7 @@ hr_locoh_k.track_xy <- function(x, n = 10, level = 0.95, rand_buffer = 1e-5, ...
   qq[[1]] <- mm[[1]]
   pp <- pp/nrow(x)
 
-  wlevel <- sapply(level, function(l) which.min(abs(pp - l)))
+  wlevel <- sapply(levels, function(l) which.min(abs(pp - l)))
   for (i in seq_along(wlevel)) {
     ## buffer is necessary, to overcome some topology errors if the polygon is quasi a line
     p1 <- lapply(1:wlevel[i], function(i) sp::Polygon(mm[[i]]@polygons[[1]]@Polygons[[1]]@coords))
@@ -68,7 +55,9 @@ hr_locoh_k.track_xy <- function(x, n = 10, level = 0.95, rand_buffer = 1e-5, ...
     sp::proj4string(qq2) <- attr(x, "crs_")
   }
 
-  qq2
+  out <- list(locoh = qq2)
+  class(out) <- c("locoh", "hr", "list")
+  out
 
 }
 

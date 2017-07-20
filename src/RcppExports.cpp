@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // diff_rcpp
 NumericVector diff_rcpp(NumericVector xs);
-RcppExport SEXP amt_diff_rcpp(SEXP xsSEXP) {
+RcppExport SEXP _amt_diff_rcpp(SEXP xsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -18,7 +18,7 @@ END_RCPP
 }
 // within_rcpp
 LogicalVector within_rcpp(NumericVector x, int a, int b);
-RcppExport SEXP amt_within_rcpp(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP) {
+RcppExport SEXP _amt_within_rcpp(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -31,7 +31,7 @@ END_RCPP
 }
 // simulate_udf
 IntegerVector simulate_udf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk);
-RcppExport SEXP amt_simulate_udf(SEXP n_stepsSEXP, SEXP startSEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP mkSEXP, SEXP hkSEXP) {
+RcppExport SEXP _amt_simulate_udf(SEXP n_stepsSEXP, SEXP startSEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP mkSEXP, SEXP hkSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -47,7 +47,7 @@ END_RCPP
 }
 // cpp_simulate_ssf
 IntegerVector cpp_simulate_ssf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk);
-RcppExport SEXP amt_cpp_simulate_ssf(SEXP n_stepsSEXP, SEXP startSEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP mkSEXP, SEXP hkSEXP) {
+RcppExport SEXP _amt_cpp_simulate_ssf(SEXP n_stepsSEXP, SEXP startSEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP mkSEXP, SEXP hkSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -63,7 +63,7 @@ END_RCPP
 }
 // track_align
 NumericVector track_align(NumericVector t1, NumericVector nt, int time_tol, int type);
-RcppExport SEXP amt_track_align(SEXP t1SEXP, SEXP ntSEXP, SEXP time_tolSEXP, SEXP typeSEXP) {
+RcppExport SEXP _amt_track_align(SEXP t1SEXP, SEXP ntSEXP, SEXP time_tolSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -77,7 +77,7 @@ END_RCPP
 }
 // mk_reg
 NumericVector mk_reg(NumericVector t1, int time_dist, int time_tol, int start);
-RcppExport SEXP amt_mk_reg(SEXP t1SEXP, SEXP time_distSEXP, SEXP time_tolSEXP, SEXP startSEXP) {
+RcppExport SEXP _amt_mk_reg(SEXP t1SEXP, SEXP time_distSEXP, SEXP time_tolSEXP, SEXP startSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -91,7 +91,7 @@ END_RCPP
 }
 // mk_reg_old
 NumericVector mk_reg_old(NumericVector relocs_time, int time_dist, int time_tol, int start);
-RcppExport SEXP amt_mk_reg_old(SEXP relocs_timeSEXP, SEXP time_distSEXP, SEXP time_tolSEXP, SEXP startSEXP) {
+RcppExport SEXP _amt_mk_reg_old(SEXP relocs_timeSEXP, SEXP time_distSEXP, SEXP time_tolSEXP, SEXP startSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -105,7 +105,7 @@ END_RCPP
 }
 // duration_acuracy
 NumericVector duration_acuracy(NumericVector x_, NumericVector y_, NumericVector t_, NumericVector dop, NumericVector dim, int duration_accuracy);
-RcppExport SEXP amt_duration_acuracy(SEXP x_SEXP, SEXP y_SEXP, SEXP t_SEXP, SEXP dopSEXP, SEXP dimSEXP, SEXP duration_accuracySEXP) {
+RcppExport SEXP _amt_duration_acuracy(SEXP x_SEXP, SEXP y_SEXP, SEXP t_SEXP, SEXP dopSEXP, SEXP dimSEXP, SEXP duration_accuracySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -121,7 +121,7 @@ END_RCPP
 }
 // track_immobility
 NumericVector track_immobility(NumericVector t, NumericVector x, NumericVector y, double period, double tol);
-RcppExport SEXP amt_track_immobility(SEXP tSEXP, SEXP xSEXP, SEXP ySEXP, SEXP periodSEXP, SEXP tolSEXP) {
+RcppExport SEXP _amt_track_immobility(SEXP tSEXP, SEXP xSEXP, SEXP ySEXP, SEXP periodSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -136,15 +136,15 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"amt_diff_rcpp", (DL_FUNC) &amt_diff_rcpp, 1},
-    {"amt_within_rcpp", (DL_FUNC) &amt_within_rcpp, 3},
-    {"amt_simulate_udf", (DL_FUNC) &amt_simulate_udf, 6},
-    {"amt_cpp_simulate_ssf", (DL_FUNC) &amt_cpp_simulate_ssf, 6},
-    {"amt_track_align", (DL_FUNC) &amt_track_align, 4},
-    {"amt_mk_reg", (DL_FUNC) &amt_mk_reg, 4},
-    {"amt_mk_reg_old", (DL_FUNC) &amt_mk_reg_old, 4},
-    {"amt_duration_acuracy", (DL_FUNC) &amt_duration_acuracy, 6},
-    {"amt_track_immobility", (DL_FUNC) &amt_track_immobility, 5},
+    {"_amt_diff_rcpp", (DL_FUNC) &_amt_diff_rcpp, 1},
+    {"_amt_within_rcpp", (DL_FUNC) &_amt_within_rcpp, 3},
+    {"_amt_simulate_udf", (DL_FUNC) &_amt_simulate_udf, 6},
+    {"_amt_cpp_simulate_ssf", (DL_FUNC) &_amt_cpp_simulate_ssf, 6},
+    {"_amt_track_align", (DL_FUNC) &_amt_track_align, 4},
+    {"_amt_mk_reg", (DL_FUNC) &_amt_mk_reg, 4},
+    {"_amt_mk_reg_old", (DL_FUNC) &_amt_mk_reg_old, 4},
+    {"_amt_duration_acuracy", (DL_FUNC) &_amt_duration_acuracy, 6},
+    {"_amt_track_immobility", (DL_FUNC) &_amt_track_immobility, 5},
     {NULL, NULL, 0}
 };
 

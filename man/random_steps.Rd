@@ -26,6 +26,8 @@ random_steps(x, ...)
 lengths of length 0.}
 
 \item{.progress}{Should progress message be printed?}
+
+\item{shuffle}{Character vector, indicating columngs to shuffle.}
 }
 \description{
 Function to generate a given number of random steps for each observed stepl

@@ -10,16 +10,19 @@ inspect(x, ...)
 \method{inspect}{track_xy}(x, popup = NULL, cluster = TRUE, ...)
 }
 \arguments{
-\item{x}{A \code{track_xy}. Important, \code{x} requires a valid coordinate reference system.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{popup}{A character vector of length == \code{nrow(x)}, optionally providing popups.}
+\item{popup}{\code{[character(nrow(x))]} \cr Optional labels for popups.}
 
-\item{cluster}{A locigcal scalar, indicating if points should be clustered at lower zoom levels.}
+\item{cluster}{\code{[logical(1)]} \cr If \code{TRUE} points are clustered at lower zoom levels.}
 }
 \description{
 Provides a very basic interfact to \code{leaflet} and lets the user inspect relocations on an interactive map.
+}
+\note{
+Important, \code{x} requires a valid coordinate reference system.
 }
 \examples{
 data(sh)

@@ -1,27 +1,11 @@
-#' Minimum Convex Polygon
-#'
-#' Function to calcualte a Minimum Convex Polygon (MCP) home range.
-#' @param x A track.
-#' @param levels, the home range levels.
-#' @template dots_none
-#' @name mcp
+#' @rdname hr
 #' @export
-#' @examples
-#' data(sh)
-#' trk <- track(sh$x_, sh$y_)
-#' mcps <- hr_mcp(trk, levels = c(0.5, 0.95, 1))
-#' \dontrun{
-#' plot(trk, asp = 1)
-#' sp::plot(hr_mcps$mcp, add = TRUE)
-#' }
-#'
-#'
-hr_mcp <- function(x, levels = 0.95, ...) {
+hr_mcp <- function(x, ...) {
   UseMethod("hr_mcp", x)
 }
 
 #' @export
-#' @rdname mcp
+#' @rdname hr
 hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
   xy <- select(x, c("x_", "y_"))
   mxy <- colMeans(xy)
@@ -36,6 +20,11 @@ hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
   mcps <- do.call(sp::rbind.SpatialPolygons, mcps)
   mcps <- sp::SpatialPolygonsDataFrame(mcps, data.frame(level=names(mcps), area=rgeos::gArea(mcps, byid=TRUE)))
   mcp <- list(mcp = mcps)
+
+  if (has_crs(x)) {
+    sp::proj4string(mcp$mcp) <- get_crs(x)
+  }
+
   class(mcp) <- c("mcp", "hr")
   mcp
 }
