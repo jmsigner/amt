@@ -34,16 +34,7 @@ Imports:
     tibble,
     tidyr,
     utils
-Suggests:
-    adehabitatLT,
-    bcpa,
-    ctmm,
-    move,
-    moveHMM
-LinkingTo: Rcpp
-RoxygenNote: 6.0.1
-Roxygen: list(markdown = TRUE)
-Suggests: 
+Suggests: Suggests: 
   adehabitatLT,
   bcpa,
   ctmm,
@@ -51,5 +42,11 @@ Suggests:
   moveHMM,
   spacetime,
   testthat,
-  trajectories
+  trajectories,
+    knitr,
+    rmarkdown
+LinkingTo: Rcpp
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
+VignetteBuilder: knitr

@@ -1,18 +1,61 @@
-#' Generate Random Points.
+#' Generate random points
 #'
-#' Functions to generate random points within an animals home range. This is usually used for Resource Selection Functions (RSF).
-#' @param x A track, or a home range.
-#' @param n The number of random points.
-#' @param type Argument passed to `sp::spsample type`.
-#' @param level Home range level.
-#' @param hr The home range estimator to be used.
-#' @param factor How many random points shoud be estimated for each observed point?
-#' @template dots_none
+#' Functions to generate random points within an animals home range. This is usually the first step for investigating habitat selection via Resource Selection Functions (RSF).
+#' @template track_xy_star
+#' @param n `[integer(1)]` \cr The number of random points.
+#' @param type `[character(1)]` \cr Argument passed to `sp::spsample type`. The default is `random`.
+#' @param level `[numeric(1)]` \cr Home-range level of the minimum convex polygon, used for generating the background samples.
+#' @param hr `[character(1)]` \cr The home range estimator to be used. Currently only MCP is implemented.
+#' @param factor `[numeric(1)]` Determines the number of random points that are generated. If `factor == 1` the number of presence points is equal to the number of observed points.
+#' @param ... `[any]`\cr None implemented.
+#' @note For objects of class `track_xyt` the timestamp (`t_`) is lost.
 #' @name random_points
 #' @export
+#' @examples
+#'
+#' data(deer)
+#'
+#' # track_xyt ---------------------------------------------------------------
+#' # Default settings
+#' rp <- random_points(deer)
+#' \dontrun{
+#' plot(rp)
+#' }
+#' # Only one random point for each observed point
+#' rp <- random_points(deer, factor = 1)
+#' \dontrun{
+#' plot(rp)
+#' }
+#'
+#' # Within a home range -----------------------------------------------------
+#' hr <- hr_mcp(deer, level = 1)
+#'
+#' # 100 random point within the home range
+#' rp <- random_points(hr, n = 100)
+#' \dontrun{
+#' plot(rp)
+#' }
+#'
+#' # 100 regular point within the home range
+#' rp <- random_points(hr, n = 100, type = "regular")
+#' \dontrun{
+#' plot(rp)
+#' }
+#' # 100 hexagonal point within the home range
+#' rp <- random_points(hr, n = 100, type = "hexagonal")
+#' \dontrun{
+#' plot(rp)
+#' }
+#'
 random_points <- function(x, ...) {
   UseMethod("random_points", x)
 }
+
+#' @export
+random_points.default <- function(x, ...) {
+  stop("No methode random_points is implemented for this kind of objects.")
+}
+
 
 #' @export
 #' @rdname random_points
