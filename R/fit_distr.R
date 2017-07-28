@@ -38,6 +38,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
 #'
 #' Returns the parameter of the distribution (e.g., gamma) fitted to the distribution of step lengths.
 #' @param x An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
+#' @param alpha `[numeric(1)=0.05]<0-1>`\cr Alpha value for calculating 1-alpha confidence intervalls.
 #' @export
 #' @name sl_params
 #' @template dots_none
@@ -59,15 +60,23 @@ sl_params.random_steps <- function (x, ...) {
 
 #' @export
 #' @rdname sl_params
-sl_params.fitdist <- function(x, ...) {
+sl_params.fitdist <- function(x, alpha = 0.05, ...) {
   if (x$distname == "gamma") {
     if ("scale" %in% names(x$estimate)) {
-      c(shape = unname(x$estimate["shape"]),
-        scale = unname(x$estimate["scale"]))
+      est <- c(shape = unname(x$estimate["shape"]),
+               scale = unname(x$estimate["scale"]))
+      se <- c(shape = unname(x$sd["shape"]),
+               scale = unname(x$sd["scale"]))
     } else {
-      c(shape = unname(x$estimate["shape"]),
-        scale = 1 / unname(x$estimate["rate"]))
+      est <- c(shape = unname(x$estimate["shape"]),
+               scale = 1 / unname(x$estimate["rate"]))
+      se <- c(shape = unname(x$sd["shape"]),
+               scale = est[2]^2 * unname(x$sd["rate"])) # approximated SE
     }
+    tv <- stats::qt(1 - (alpha / 2), x$n - 1)
+    ci_l <- est - tv * se
+    ci_h <- est + tv * se
+    cbind(est, se, lower_ci = ci_l, upper_ci = ci_h)
   } else {
     stop("Function only works for gamma distr at the moment.")
   }
