@@ -1,6 +1,9 @@
 #' Fit a conditional logistic regression
 #'
-#' Tihs function is a wrapper around `stats::glm`, making it usable in a piped workflow.
+#' This function is a wrapper around `stats::glm`, making it usable in a piped workflow.
+#'
+#' When including step length and log(step length) in the model and later parameter adjustment is desired, step length must be called `sl_` and log(step length) either `log_sl_` when precalculated, or `log(sl_)` when it is calculated within the formula.
+#'
 #' @param data The data.
 #' @param formula The formula
 #' @param more Optional list returned in the output.

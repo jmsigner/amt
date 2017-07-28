@@ -57,54 +57,6 @@ diff_y.track_xy <- function(x, ...) {
 
 
 
-# step lengths ------------------------------------------------------------
-
-#' Step lengths
-#'
-#' Funcitons to calculate step lenghts
-#'
-#' @export
-#' @param x A track.
-#' @param lonlat Logcial scalar, if `TRUE` geogrphic distances are calculated
-#' @template dots_none
-#' @name step_length
-
-#' @export
-#' @rdname step_length
-
-step_lengths <- function(x, ...) {
-  UseMethod("step_lengths", x)
-}
-
-#' @export
-#' @rdname step_length
-step_lengths.track_xy <- function(x, lonlat = FALSE, ...) {
-  if (lonlat) {
-    pts <- sp::coordinates(as_sp(x))
-    raster::pointDistance(pts[-nrow(pts), ], pts[-1, ], lonlat = TRUE)
-  } else {
-    sqrt(step_lengths_sq(x))
-  }
-}
-
-#' @export
-#' @rdname step_length
-step_lengths_sq <- function(x, ...) {
-  UseMethod("step_lengths_sq", x)
-}
-
-#' @export
-#' @rdname step_length
-step_lengths_sq.track_xy <- function(x, ...) {
-  diff_x(x)^2 + diff_y(x)^2
-}
-
-#' @noRd
-distance_with_diff <- function(xd, yd) {
-  c(NA, sqrt((xd)^2 + (yd)^2))
-}
-
-
 
 # Utility functions -------------------------------------------------------
 
@@ -173,9 +125,9 @@ points.track_xy <- function(x, ...) {
   graphics::points(x[, c("x_", "y_")], ...)
 }
 
-#' Plot step length distribution
+#' Plot step-length distribution
 #'
-#' @param x A fitted step selection.
+#' @param x `[fit_clogit]` \cr A fitted step selection.
 #' @template dots_none
 #' @export
 plot_sl <- function(x, ...) {
@@ -206,4 +158,9 @@ plot_sl.fit_clogit <- function(x, n = 1000, ...) {
 
 coords <- function(x, ...) {
   x[, c("x_", "y_")]
+}
+
+#' @export
+plot.track_xy <- function(x, ...) {
+  plot(x$x_, x$y_, ...)
 }

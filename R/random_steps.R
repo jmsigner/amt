@@ -12,7 +12,6 @@
 #'   (beteen 0 and `random.error`) to be added to step lenghts, to avoid step
 #'   lengths of length 0.
 #' @param .progress Should progress message be printed?
-#' @param shuffle Character vector, indicating columngs to shuffle.
 #' @template dots_none
 #' @export
 #' @name random_steps

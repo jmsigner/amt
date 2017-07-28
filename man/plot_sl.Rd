@@ -2,15 +2,15 @@
 % Please edit documentation in R/track_methods.R
 \name{plot_sl}
 \alias{plot_sl}
-\title{Plot step length distribution}
+\title{Plot step-length distribution}
 \usage{
 plot_sl(x, ...)
 }
 \arguments{
-\item{x}{A fitted step selection.}
+\item{x}{\code{[fit_clogit]} \cr A fitted step selection.}
 
 \item{...}{Further arguments, none implemented.}
 }
 \description{
-Plot step length distribution
+Plot step-length distribution
 }

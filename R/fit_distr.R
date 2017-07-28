@@ -1,21 +1,20 @@
 #' Fit a Step-Lengths distribution.
 #'
 #' Fit a distribution to the the step lengths of a track.
-#' @param .tbl A `track_xy*`.
-#' @param x The column, containing step lengths, usually `sl_`.
-#' @param distr Name of the distribution, curently only `gamma` distribution is supported.
-#' @param na.rm Logical scalar, should `NA` be removed?
+#' @param .tbl `[track_xy,track_xyt]` \cr A track.
+#' @param x `[expression]` \cr The name of the column containing step lengths, usually `sl_`.
+#' @param distr `[character(1)]` \cr Name of the distribution, curently only `gamma`-distribution is supported.
+#' @param na.rm `[logical(1)]` \cr Should `NA` be removed?
 #' @template dots_none
 #' @name fit_sl_dist
 #'
 #' @export
 #' @rdname fit_sl_dist
-fit_sl_dist_ <- function(.tbl, x, ...){
-  fit_sl_dist_base(.tbl[[x]], ...)
-}
+#' @examples
+#' data(deer)
+#' stps <- steps_by_burst(deer)
+#' fit_sl_dist(stps, sl_)
 
-#' @export
-#' @rdname fit_sl_dist
 fit_sl_dist <- function(.tbl, x, ...){
   fit_sl_dist_base(.tbl[deparse(substitute(x))], ...)
 }
@@ -31,7 +30,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
     stop("0 length steps are not possible, consider adding a random error")
   }
 
-  fitdistrplus::fitdist(x, distr, lower = c(0, 0))
+  fitdistrplus::fitdist(x, distr, lower = c(0, 0), keepdata = FALSE)
 
 }
 

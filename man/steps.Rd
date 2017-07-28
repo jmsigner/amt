@@ -2,28 +2,169 @@
 % Please edit documentation in R/steps.R
 \name{steps}
 \alias{steps}
+\alias{direction_abs}
+\alias{direction_abs.track_xy}
+\alias{direction_rel}
+\alias{direction_rel.track_xy}
+\alias{step_lengths}
+\alias{step_lengths.track_xy}
 \alias{steps_by_burst}
 \alias{steps_by_burst.track_xyt}
 \alias{steps}
 \alias{steps.track_xy}
 \alias{steps.track_xyt}
-\title{Track to Steps.}
+\title{Functions to create and work with steps}
 \usage{
+direction_abs(x, ...)
+
+\method{direction_abs}{track_xy}(x, degrees = TRUE, full_circle = FALSE,
+  zero_dir = "E", clockwise = FALSE, append_last = TRUE, lonlat = FALSE,
+  ...)
+
+direction_rel(x, ...)
+
+\method{direction_rel}{track_xy}(x, lonlat = FALSE, degrees = TRUE,
+  append_last = TRUE, zero_dir = "E", ...)
+
+step_lengths(x, ...)
+
+\method{step_lengths}{track_xy}(x, lonlat = FALSE, append_last = TRUE, ...)
+
 steps_by_burst(x, ...)
 
-\method{steps_by_burst}{track_xyt}(x, ...)
+\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, ...)
 
 steps(x, ...)
 
-\method{steps}{track_xy}(x, ...)
+\method{steps}{track_xy}(x, lonlat = FALSE, ...)
 
-\method{steps}{track_xyt}(x, ...)
+\method{steps}{track_xyt}(x, lonlat = FALSE, ...)
 }
 \arguments{
-\item{x}{A track.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track}.}
 
-\item{...}{Further arguments, none implemented.}
+\item{...}{Further arguments, none implemented}
+
+\item{degrees}{\code{[logical(1)=TRUE]} \cr Should turn angles be calculated in degrees or radians? If \code{TRUE} angles are returned in degrees, otherwise in radians.}
+
+\item{full_circle}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} angles are returned between 0 and 360 degrees or 0 and $2pi$ (depnding on the value of \code{degrees}), otherwise angles are between -180 and 180 or $-pi$ and $pi$.}
+
+\item{zero_dir}{\code{[character(1)='E']} \cr Indicating the zero direction. Must be either \code{N}, \code{E}, \code{S}, or \code{W}.}
+
+\item{clockwise}{\code{[logical(1)=FALSE]} \cr Should angles be calculated clock or anti-clockwise?}
+
+\item{append_last}{\code{[logical(1)=TRUE]} \cr If \code{TRUE} an \code{NA} is appended at the end of all angles.}
+
+\item{lonlat}{\code{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geogrphic distances are calculated.}
+}
+\value{
+\code{[numeric]} \cr For \code{step_lengths()} and \code{direction_*} a numeric vector. \cr
+\code{[data.frame]} \cr For \code{steps} and \code{steps_by_burst}, containing the steps.
 }
 \description{
-Converts a track to steps.
+\code{step_lengths} can be use to calculate step lengths of a track. \code{direction_abs} and \code{direction_rel} calculate the absolute and relative direction of steps. \code{steps} converts a \code{track_xy*} from a point representation to a step representation and automatically calculates step lengths and relative turning angles.
+}
+\details{
+\code{step_lengths} calculates the step lengths between points a long the path. The last value returned is \code{NA}, because no observed step is 'started' at the last point. If \code{lonlat = TRUE}, \code{step_lengths()} wraps \code{\link[raster:pointDistance]{raster::pointDistance()}}.
+}
+\examples{
+
+
+# Absolute directions
+
+xy <- data_frame(
+  x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
+  y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
+trk <- mk_track(xy, x, y)
+
+# append last
+direction_abs(trk, append_last = TRUE)
+direction_abs(trk, append_last = FALSE)
+
+# degrees
+direction_abs(trk, degrees = FALSE)
+direction_abs(trk, degrees = TRUE)
+
+# full circle or not
+direction_abs(trk, degrees = TRUE, full_circle = TRUE)
+direction_abs(trk, degrees = TRUE, full_circle = FALSE)
+
+# direction of 0
+direction_abs(trk, full_circle = TRUE, zero_dir = "N")
+direction_abs(trk, full_circle = TRUE, zero_dir = "E")
+direction_abs(trk, full_circle = TRUE, zero_dir = "S")
+direction_abs(trk, full_circle = TRUE, zero_dir = "W")
+
+# clockwise or not
+direction_abs(trk, full_circle = TRUE, zero_dir = "N", clockwise = FALSE)
+direction_abs(trk, full_circle = TRUE, zero_dir = "N", clockwise = TRUE)
+
+# Bearing (i.e. azimuth): only for lon/lat
+direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = FALSE, clockwise = TRUE)
+direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = TRUE, clockwise = TRUE)
+
+# How do results compare to other packages
+# adehabitatLT
+df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
+df[[1]]$abs.angle
+amt::direction_abs(trk, degrees = FALSE, full_circle = FALSE)
+
+# bcpa
+df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(1:10))
+bcpa::GetVT(df)$Phi
+direction_abs(trk, degrees = FALSE, full_circle = FALSE, append_last = FALSE)
+
+# move
+m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:10),
+ proj = sp::CRS("+init=epsg:4326"))
+move::angle(m)
+direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N",
+  clockwise = TRUE, append_na = FALSE, lonlat = TRUE)
+
+# trajectories
+t1 <- trajectories::Track(
+  spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
+  lubridate::now() + lubridate::hours(1:10), data = data.frame(1:10)))
+
+t1[["direction"]]
+direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",
+  clockwise = TRUE, append_last = FALSE)
+
+# moveHMM (only rel. ta)
+df <- data.frame(ID = 1, x = xy$x, y = xy$y)
+moveHMM::prepData(df, type = "UTM")
+# How do results compare to other packages
+xy <- data_frame(
+  x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
+  y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
+trk <- mk_track(xy, x, y)
+# adehabitatLT
+df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
+df[[1]]$rel.angle
+amt::direction_rel(trk, degrees = FALSE, full_circle = FALSE)
+
+# trajectories
+t1 <- trajectories::Track(
+  spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
+  lubridate::now() + lubridate::hours(1:10), data = data.frame(1:10)))
+
+t1[["direction"]]
+direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",
+  clockwise = TRUE, append_last = FALSE)
+
+# moveHMM (only rel. ta)
+df <- data.frame(ID = 1, x = xy$x, y = xy$y)
+moveHMM::prepData(df, type = "UTM")
+
+trk
+
+# stel_lengths ------------------------------------------------------------
+xy <- data_frame(
+  x = c(0, 1, 2),
+  y = c(0, 1, 2)
+)
+xy <- mk_track(xy, x, y)
+
+step_lengths(xy, lonlat = FALSE)
+step_lengths(xy, lonlat = TRUE) # in m, but coords are assumed in degrees
 }

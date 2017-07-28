@@ -9,7 +9,7 @@
 \alias{issf_to_ud}
 \title{Simulate UD from fitted SSF}
 \usage{
-habitat_kernel(coefs, resources, exp = TRUE)
+habitat_kernel(fit, resources, exp = TRUE, coef = NULL)
 
 movement_kernel(fit, resources, quant = 0.99, adjust = FALSE)
 
@@ -18,11 +18,13 @@ simulate_ud(movement_kernel, habitat_kernel, start, n = 100000L)
 issf_to_ud(fit, resources, start, quant = 0.99, adjust = TRUE, n = 1e+05)
 }
 \arguments{
+\item{fit}{A fitted (i)SSF.}
+
 \item{resources}{A `RasterLayer` or `RasterStack`, the resources available to the animals.}
 
 \item{exp}{A logical scalar, indicating whether or not the resulting habitat kernel should be exponentiated. This is usually \code{TRUE}.}
 
-\item{fit}{A fitted (i)SSF.}
+\item{coef}{\code{[numeric]} \cr Vector with coeffiecients, not yet implemented.}
 
 \item{quant}{A numeric scalar, quantile of the step-length distribution that is
 the maximum movement distance.}
@@ -39,8 +41,6 @@ step length and the log thereof).}
 \item{start}{A numeric vector of length two, giving the starting point of the simulatoin.}
 
 \item{n}{An integer, providing the number of simulation steps.}
-
-\item{coef}{A vector of coefficients for each resource.}
 }
 \value{
 The habitat kernel, as \code{RasterLayer}.

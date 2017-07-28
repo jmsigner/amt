@@ -1,26 +1,39 @@
-#' Create a Track
+#' Create a `track_*`
 #'
 #' Consructor to crate a track, the basic building block of the `amt` pacakge. A
 #' `track` is usually created from a set of `x` and `y` coordinates, possibly
 #' time stamps, and any number of optional columns, such as id, sex, age, etc.
 #'
-#' @param tbl A data.frame or tibble.
-#' @param .x,.y,.t Literal names of columns containng the coordinates and time stamp.
-#' @param x A *required* numeric vector, containing the x-coordinates (=
-#'   latitude).
-#' @param y A *required* numeric vector, containing the y-coordinates (=
-#'   longitude).
-#' @param t An *optional* vector of  `POSIXct` time stamps.
-#' @param ... Additional columns, that should be given in the form of `key =
-#'   val` (e.g., for ids this may look like this `id = c(1, 1, 1, 2, 2, 2` for
-#'   three points for ids 1 and 2 each).
-#' @param crs An optional coordinate reference system of the points.
+#' @param tbl [data.frame] \cr The `data.frame` from which a track should be
+#'   created.
+#' @param .x,.y,.t `[expression(1)]` \cr Unquoted variable names of columns
+#'   containing the x and y coorindates, and optionally a time stamp.
+#' @param ... `[expression]` \cr Additional columns from `tbl` to be used in a
+#'   track. Columns should be provided in the form of `key = val` (e.g., for ids
+#'   this may look like this `id = c(1, 1, 1, 2, 2, 2` for three points for ids
+#'   1 and 2 each).
+#' @param crs `[sp::CRS]` \cr An optional coordinate reference system of the
+#'   points.
+#' @param order_by_ts `[logical(1)]` \cr Should relocations be ordered by time
+#'   stamp, default is `TRUE`.
 #' @return If `t` was provided an object of class `track_xyt` is returned
 #'   otherwise a `track_xy`.
 #' @export
 #' @name track
+#' @examples
+#' df1 <- data_frame(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2),
+#'                   id = 1, age = 4)
+#'
+#' # first we only create a track_xy
+#' tr1 <- mk_track(df1, x, y, id = id, age = age)
+#' tr1
+#'
+#' # now lets create a track_xyt
+#' tr1 <- mk_track(df1, x, y, t, id = id, age = age)
+#' tr1
 
-mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
+mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE) {
+
 
   if (missing(.x) | missing(.y)) {
     stop("x and y are required")
@@ -52,15 +65,21 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
     message(".t found, creating `track_xyt`.")
 
     .t <- enquo(.t)
+    if (order_by_ts) {
+      tbl <- arrange(tbl, !!.t)
+    }
     tt <- dplyr::select(tbl, t = !!.t) %>% pull(t)
 
-
     if (any(duplicated(tt))) {
-      warning("duplicated time stamps.")
+      stop("duplicated time stamps.")
+    }
+
+    if (any(is.na(tt))) {
+      stop("NA in time stamps.")
     }
 
     if (any(diff(tt) <= 0)) {
-      warning("0 or negative time diffs.")
+      stop("negative time diffs.")
     }
 
     out <- tbl %>%
@@ -79,42 +98,39 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL) {
   }
 
   out
-
-
-
-
 }
 
 #' @rdname track
 #' @export
-track <- function(x, y, t, ..., crs = NULL) {
+track <- function(...) {
 
- # .Deprecated("mk_track", msg = "Use mk_track instead")
+  .Deprecated("mk_track", msg = "Use mk_track instead")
 
-  if (missing(x) | missing(y)) {
-    stop("x and y are required")
-  }
 
-  if (missing(t)) {
-    out <- tibble(
-      x_ = x,
-      y_ = y,
-      ...
-    )
-   class(out) <- c("track_xy", class(out))
-
-  } else {
-    out <- tibble(
-      x_ = x,
-      y_ = y,
-      t_ = t,
-      ...
-    )
-   class(out) <- c("track_xyt", "track_xy", class(out))
-  }
-
-  attributes(out)$crs_ <- crs
-  out
+#  if (missing(x) | missing(y)) {
+#    stop("x and y are required")
+#  }
+#
+#  if (missing(t)) {
+#    out <- tibble(
+#      x_ = x,
+#      y_ = y,
+#      ...
+#    )
+#   class(out) <- c("track_xy", class(out))
+#
+#  } else {
+#    out <- tibble(
+#      x_ = x,
+#      y_ = y,
+#      t_ = t,
+#      ...
+#    )
+#   class(out) <- c("track_xyt", "track_xy", class(out))
+#  }
+#
+#  attributes(out)$crs_ <- crs
+#  out
 }
 
 

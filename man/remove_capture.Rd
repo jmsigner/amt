@@ -23,13 +23,12 @@ remove_capture_effect(x, ...)
 Removing relocations at the beginning and/or end of a track, that fall within a user specified period.
 }
 \examples{
-library(lubridate)
 n <- 10
 df <- track(
   x = cumsum(rnorm(n)),
   y = cumsum(rnorm(n)),
-  t = ymd_hm("2017-01-01 00:00") +
-  hours(seq(0, by = 24, length.out = n))
+  t = lubridate::ymd_hm("2017-01-01 00:00") +
+  lubridate::hours(seq(0, by = 24, length.out = n))
 )
 
 df

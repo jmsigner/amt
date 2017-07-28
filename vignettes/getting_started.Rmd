@@ -73,14 +73,133 @@ tr4
 
 ### An example with real data
 
+In the `amt` relocation data of one red deer from northern Germany is included. We will use this data set to to illustrate how to create a track.
+
+We beginn with loading and inspecting the data.
+
+```{r}
+data(sh)
+head(sh)
+```
+
+Before creating a track, we have to do some data cleaning:
+
+1. check if any coordinates are missing (and if so, remove the relocations), 
+2. parse the date and time, 
+3. create a time stamp, 
+4. check for duplicated time stamps, and
+5. create two new columns for the id and month of the year.
+
+```{r}
+# check if all observations are complete
+all(complete.cases(sh)) # no action required
+
+# parse date and time
+sh$day <- lubridate::ymd(sh$day)
+sh$time <- lubridate::hms(sh$time)
+
+# create a time stamp
+sh$ts <- as.POSIXct(sh$day + sh$time)
+
+# check for duplicated time stamps
+any(duplicated(sh$ts))
+
+# We have some duplicated time stamps, these need to be removed prior to
+# creating a track.
+sh <- sh[!duplicated(sh$ts), ]
+
+# create new columns
+sh$id <- "Animal 1"
+sh$month <- lubridate::month(sh$ts)
+```
+
+Now we can create a track.
+
+```{r}
+tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month)
+```
+
+The column names of the data set already indicate the CRS of the data. We cann add this information when creating a track.
+
+```{r}
+tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month, 
+                crs = sp::CRS("+init=epsg:31467"))
+```
+
 ### A note on pipes (`%>%`)
+`amt` was heavily inspired through workflows suggested by the popular packages from the `tidyverse`. The above steps could easily be connected using pipes. Note that result will be exactly the same, the only difference is in programming style.
+
+```{r}
+data(sh)
+tr2 <- sh %>% filter(complete.cases(.)) %>% 
+  mutate(
+    day = lubridate::ymd(day), 
+    time = lubridate::hms(.$time), 
+    ts = as.POSIXct(day + time), 
+    id = "Animal 1", 
+    month = lubridate::month(ts)
+  ) %>% 
+  filter(!duplicated(ts)) %>% 
+  mk_track(x_epsg31467, y_epsg31467, ts, id = id, month = month, 
+           crs = sp::CRS("+init=epsg:31467"))
+tr2
+```
 
 ## Working with tracks
+
+### Utility functions
+#### Basic manipulation
+
+Remember, that `tracks_xy*` behaving like regular `data.frames`. This means that we can use all data manipulation verbs that we are used from `base` R or `tidyverse`. For example we an filter a track based on some characteristic. As an example we extract all relocations from Mai.
+
+```{r}
+tr3 <- tr2 %>% filter(month == 5)
+
+# we are left with a track
+class(tr3)
+```
+
+
+#### Transforming CRS
+
+If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper arround `sp::spTransform`). For illustration we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
+
+```{r}
+transform_coords(tr2, sp::CRS("+init=epsg:4326"))
+```
+
+### Some initial data exploration
+
+Several functions for calculating derived quantities are available. We will start with looking at step length. The function `step_lengths` can be used for this.
+
+```{r}
+tr2 <- tr2 %>% mutate(sl_ = step_lengths(.))
+```
+
+If we look at a summary of `sl_`
+
+```{r}
+summary(tr2$sl_)
+```
+
+we note two things. First, there is one `NA` step length, this is expected, because we are stil in a point representation (i.e., there is no step length for the last relocation). Secondly, the range is quiet large from 0 to almost 5km. Before looking at step lengths in any further detail, we will have to make sure the sampling rate is more or less regular.
+
+The funciton `summarize_sampling_rate` provides an easy way to look at the sampling rate.
+
+```{r}
+summarize_sampling_rate(tr2)
+```
+
+
+### From tracks to steps
+
+
+
 
 ## How to deal with several animals
 
 ## Session
 ```{r}
-devtools::session_info()
+sessionInfo()
 ```
 

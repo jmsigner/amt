@@ -4,29 +4,29 @@
 \alias{track}
 \alias{mk_track}
 \alias{track}
-\title{Create a Track}
+\title{Create a \code{track_*}}
 \usage{
-mk_track(tbl, .x, .y, .t, ..., crs = NULL)
+mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE)
 
-track(x, y, t, ..., crs = NULL)
+track(...)
 }
 \arguments{
-\item{tbl}{A data.frame or tibble.}
+\item{tbl}{\link{data.frame} \cr The \code{data.frame} from which a track should be
+created.}
 
-\item{.x, .y, .t}{Literal names of columns containng the coordinates and time stamp.}
+\item{.x, .y, .t}{\code{[expression(1)]} \cr Unquoted variable names of columns
+containing the x and y coorindates, and optionally a time stamp.}
 
-\item{...}{Additional columns, that should be given in the form of \code{key = val} (e.g., for ids this may look like this \code{id = c(1, 1, 1, 2, 2, 2} for
-three points for ids 1 and 2 each).}
+\item{...}{\code{[expression]} \cr Additional columns from \code{tbl} to be used in a
+track. Columns should be provided in the form of \code{key = val} (e.g., for ids
+this may look like this \code{id = c(1, 1, 1, 2, 2, 2} for three points for ids
+1 and 2 each).}
 
-\item{crs}{An optional coordinate reference system of the points.}
+\item{crs}{\code{[sp::CRS]} \cr An optional coordinate reference system of the
+points.}
 
-\item{x}{A \emph{required} numeric vector, containing the x-coordinates (=
-latitude).}
-
-\item{y}{A \emph{required} numeric vector, containing the y-coordinates (=
-longitude).}
-
-\item{t}{An \emph{optional} vector of  \code{POSIXct} time stamps.}
+\item{order_by_ts}{\code{[logical(1)]} \cr Should relocations be ordered by time
+stamp, default is \code{TRUE}.}
 }
 \value{
 If \code{t} was provided an object of class \code{track_xyt} is returned
@@ -36,4 +36,16 @@ otherwise a \code{track_xy}.
 Consructor to crate a track, the basic building block of the \code{amt} pacakge. A
 \code{track} is usually created from a set of \code{x} and \code{y} coordinates, possibly
 time stamps, and any number of optional columns, such as id, sex, age, etc.
+}
+\examples{
+df1 <- data_frame(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2),
+                  id = 1, age = 4)
+
+# first we only create a track_xy
+tr1 <- mk_track(df1, x, y, id = id, age = age)
+tr1
+
+# now lets create a track_xyt
+tr1 <- mk_track(df1, x, y, t, id = id, age = age)
+tr1
 }
