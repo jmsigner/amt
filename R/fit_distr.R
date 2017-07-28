@@ -30,7 +30,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
     stop("0 length steps are not possible, consider adding a random error")
   }
 
-  fitdistrplus::fitdist(x, distr, lower = c(0, 0), keepdata = FALSE)
+  fitdistrplus::fitdist(x, distr, keepdata = FALSE)
 
 }
 
