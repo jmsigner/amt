@@ -30,7 +30,10 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
     stop("0 length steps are not possible, consider adding a random error")
   }
 
-  fitdistrplus::fitdist(x, distr, keepdata = FALSE)
+  list(
+    name = distr,
+    fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE)
+  )
 
 }
 
@@ -38,7 +41,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
 #'
 #' Returns the parameter of the distribution (e.g., gamma) fitted to the distribution of step lengths.
 #' @param x An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
-#' @param alpha `[numeric(1)=0.05]<0-1>`\cr Alpha value for calculating 1-alpha confidence intervalls.
+#' @param alpha `[numeric(1)=0.05]{0-1}`\cr Alpha value for calculating 1-alpha confidence intervalls.
 #' @export
 #' @name sl_params
 #' @template dots_none
@@ -49,13 +52,27 @@ sl_params <- function (x, ...) {
 #' @export
 #' @rdname sl_params
 sl_params.fit_clogit <- function (x, ...) {
-  sl_params(x$sl_)
+  sl_params(x$sl_$fit)
 }
 
 #' @export
 #' @rdname sl_params
 sl_params.random_steps <- function (x, ...) {
-  sl_params(attributes(x)$sl_)
+  sl_params(attributes(x)$sl_$fit)
+}
+
+#' @export
+#' @rdname sl_params
+sl_shape <- function (x, ...) {
+  x <- sl_params(x)
+  x["shape", "est"]
+}
+
+#' @export
+#' @rdname sl_params
+sl_scale <- function (x, ...) {
+  x <- sl_params(x)
+  x["scale", "est"]
 }
 
 #' @export
@@ -95,8 +112,8 @@ sl_distr <- function (x, ...) {
 
 #' @export
 #' @rdname sl_distr
-sl_distr.fitdist <- function(x, ...) {
-  x$distname
+sl_distr.list <- function(x, ...) {
+  x$name
 }
 
 #' @export
@@ -142,9 +159,87 @@ fit_ta_dist_base <- function(x, na.rm = TRUE, distr = "vonmises", ...) {
   if (is.list(x)) x <- unlist(x, use.names = FALSE, recursive = TRUE)
   if (na.rm) x <- x[!is.na(x)]
 
-  x <- circular::as.circular(x, type = "angles", units = "degrees", template = "none",
-                             modulo = "asis", zero = 0, rotation = "counter")
-  circular::mle.vonmises(x, ...)
+  if (distr == "vonmises") {
+    x <- circular::as.circular(x, type = "angles", units = "degrees", template = "none",
+                               modulo = "asis", zero = 0, rotation = "counter")
+    fit <- circular::mle.vonmises(x, ...)
+    list(
+      name = "vonmises",
+      params = fit$kappa,
+      fit = fit
+    )
+  } else if (distr == "unif") {
+    list(
+      name = "unif",
+      params = c(-pi, pi),
+      fit = c(-pi, pi)
+    )
+  } else {
+    stop("Requested distribution not implemented")
+  }
 }
 
 
+
+#' Turn angle parameters
+#'
+#' Returns the parameter of the distribution (e.g., von Mises) fitted to the distribution of turn angles.
+#' @param x `[fit_clogit(1),random_steps(1)]` \cr An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
+#' @export
+#' @template dots_none
+#' @name ta_params
+ta_params <- function (x, ...) {
+  UseMethod("ta_params", x)
+}
+
+#' @export
+#' @rdname ta_params
+ta_params.fit_clogit <- function (x, ...) {
+  x$ta_$params
+}
+
+#' @export
+#' @rdname sl_params
+ta_params.random_steps <- function (x, ...) {
+  attributes(x)$ta_$params
+}
+
+#' @export
+#' @rdname ta_params
+ta_kappa <- function (x, ...) {
+  if (ta_distr(x) == "vonmises") {
+    ta_params(x)
+  } else {
+    stop("kappa works only with von mises distr.")
+  }
+}
+
+
+#' Turn angle distribution
+#'
+#' Returns the name of the distribution (e.g., von Mises) fitted to the distribution of turn angles.
+#' @param x `[fit_clogit(1),random_steps(1)]` \cr An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
+#' @template dots_none
+#' @export
+#' @name ta_distr
+ta_distr <- function (x, ...) {
+  UseMethod("ta_distr", x)
+}
+
+#' @export
+#' @rdname ta_distr
+ta_distr.list <- function(x, ...) {
+  x$name
+}
+
+#' @export
+#' @rdname ta_distr
+ta_distr.fit_clogit <- function (x, ...) {
+  ta_distr(x$ta_)
+}
+
+#' @export
+#' @rdname ta_distr
+ta_distr.random_steps <- function (x, ...) {
+  ta_distr(attributes(x)$ta_)
+}

@@ -2,14 +2,14 @@
 % Please edit documentation in R/fit_distr.R
 \name{sl_distr}
 \alias{sl_distr}
-\alias{sl_distr.fitdist}
+\alias{sl_distr.list}
 \alias{sl_distr.fit_clogit}
 \alias{sl_distr.random_steps}
 \title{Step-length distribution}
 \usage{
 sl_distr(x, ...)
 
-\method{sl_distr}{fitdist}(x, ...)
+\method{sl_distr}{list}(x, ...)
 
 \method{sl_distr}{fit_clogit}(x, ...)
 

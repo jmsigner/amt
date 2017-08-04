@@ -4,7 +4,10 @@
 \alias{sl_params}
 \alias{sl_params.fit_clogit}
 \alias{sl_params.random_steps}
+\alias{sl_shape}
+\alias{sl_scale}
 \alias{sl_params.fitdist}
+\alias{ta_params.random_steps}
 \title{Step lengths parameters}
 \usage{
 sl_params(x, ...)
@@ -13,12 +16,20 @@ sl_params(x, ...)
 
 \method{sl_params}{random_steps}(x, ...)
 
-\method{sl_params}{fitdist}(x, ...)
+sl_shape(x, ...)
+
+sl_scale(x, ...)
+
+\method{sl_params}{fitdist}(x, alpha = 0.05, ...)
+
+\method{ta_params}{random_steps}(x, ...)
 }
 \arguments{
 \item{x}{An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.}
 
 \item{...}{Further arguments, none implemented.}
+
+\item{alpha}{\code{[numeric(1)=0.05]{0-1}}\cr Alpha value for calculating 1-alpha confidence intervalls.}
 }
 \description{
 Returns the parameter of the distribution (e.g., gamma) fitted to the distribution of step lengths.

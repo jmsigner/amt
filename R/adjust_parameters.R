@@ -1,20 +1,55 @@
-#' @rdname fit_clogit
+#' Adjust parameters
+#'
+#' Functions aiding parameter adjustment after fitting an integrated step selection function (iSSF).
+#'
+#' @param tentative `[numeric]` \cr The tentative parameter estimate.
+#' @param modifier `[numeric=0]` \cr The modifier to adjust the tentative estimate.
+#' @name adjust_param
 #' @export
-adjust_params <- function(x) {
+adjust_shape <- function(tentative, modifier = 0) {
+  tentative + modifier
+}
+
+#' @export
+#' @rdname adjust_param
+adjust_scale <- function(tentative, modifier = 0) {
+  1 / ((1 / tentative) - modifier)
+}
+
+#' @export
+#' @rdname adjust_param
+adjust_kappa <- function(tentative, modifier = 0) {
+  tentative + modifier
+}
+
+# obsolete
+adjust_params <- function(x, coef_names = c(step_length = "sl_", log_step_length = "log_sl_"), ...) {
   if (x$sl_$distname == "gamma") {
-    params <- sl_params(x$sl_)
+    params <- sl_params(x$sl_, ...)
     coef_n <- names(coef(x))
 
-    if (any(grepl("sl_", coef_n)) & any(grepl("log\\(sl_\\)|log_sl_", coef_n))) {
-      # following Avgar et al. 2016
-      # see background/shape&scale.pdf from Tal
-      c(
-        params["shape"] + if (any(grepl("log_sl_", coef_n))) coef(x)["log_sl_"] else coef(x)["log(sl_)"],
-        1 / ((1 / params["scale"]) - coef(x)["sl_"])
-      )
+    # following Avgar et al. 2016
+    # see background/shape&scale.pdf from Tal
+
+    scale <- params["scale", c(1, 3:4)] # 1: est; 3:4 are the CI
+    scale_modifier <- if ("step_length" %in% names(coef_names)) {
+      coef(x)[coef_names["step_length"]]
     } else {
-      stop("Parameter adjustment requested, but 'sl_' and 'log(sl_)' were not included in the model.")
+      0
     }
+
+    shape <- params["shape", c(1, 3:4)]
+    shape_modifier <- if ("step_length" %in% names(coef_names)) {
+      coef(x)[coef_names["log_step_length"]]
+    } else {
+      0
+    }
+
+    rbind(
+      shape = shape + shape_modifier,
+      scale = 1 / ((1 / scale) - scale_modifier)
+    )
+
   } else {
     stop("Not yet implemented")
   }

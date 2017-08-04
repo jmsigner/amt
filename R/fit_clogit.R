@@ -10,13 +10,22 @@
 #' @param ... Addtional arguments, passed to `survival::clogit`.
 #' @export
 
-fit_clogit <- function(data, formula, more = NULL, ...) {
+fit_clogit <- function(data, formula, more = NULL, summary_only = FALSE, ...) {
   m <- survival::clogit(formula, data = data, ...)
-  m <- list(model = m,
-            sl_ = attributes(data)$sl_,
-            ta_ = attributes(data)$ta_,
-            more = more)
-  class(m) <- c("fit_clogit", class(m))
+
+  if (summary_only) {
+    m <- list(model = broom::tidy(m),
+              sl_ = attributes(data)$sl_,
+              ta_ = attributes(data)$ta_,
+              more = more)
+    class(m) <- c("fit_clogit_summary_only", "fit_clogit", class(m))
+  } else {
+    m <- list(model = m,
+              sl_ = attributes(data)$sl_,
+              ta_ = attributes(data)$ta_,
+              more = more)
+    class(m) <- c("fit_clogit", class(m))
+  }
   m
 }
 
@@ -30,3 +39,4 @@ coef.fit_clogit <- function(object, ...) {
 summary.fit_clogit <- function(object, ...) {
   base::summary(object$model, ...)
 }
+
