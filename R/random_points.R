@@ -65,7 +65,7 @@ random_points.mcp <- function(x, n = 100, type = "random", ...) {
 
 #' @export
 #' @rdname random_points
-random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, ...) {
+random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, type = "random", ...) {
 
   if (hr == "mcp") {
     hr <- hr_mcp(x, levels = level)
@@ -73,7 +73,7 @@ random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, ...) {
     stop("Only mcp is currently implemented.")
   }
 
-  rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = "random", ...)
+  rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = type, ...)
 
   n <- nrow(x)
   n_rnd <- nrow(rnd_pts)

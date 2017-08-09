@@ -9,6 +9,14 @@ within_rcpp <- function(x, a, b) {
     .Call('_amt_within_rcpp', PACKAGE = 'amt', x, a, b)
 }
 
+rolling_mean <- function(x, win) {
+    .Call('_amt_rolling_mean', PACKAGE = 'amt', x, win)
+}
+
+rolling_median <- function(x, win) {
+    .Call('_amt_rolling_median', PACKAGE = 'amt', x, win)
+}
+
 simulate_udf <- function(n_steps, start, nc, nr, mk, hk) {
     .Call('_amt_simulate_udf', PACKAGE = 'amt', n_steps, start, nc, nr, mk, hk)
 }

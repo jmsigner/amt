@@ -29,6 +29,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rolling_mean
+NumericVector rolling_mean(NumericVector x, int win);
+RcppExport SEXP _amt_rolling_mean(SEXP xSEXP, SEXP winSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    rcpp_result_gen = Rcpp::wrap(rolling_mean(x, win));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rolling_median
+NumericVector rolling_median(NumericVector x, int win);
+RcppExport SEXP _amt_rolling_median(SEXP xSEXP, SEXP winSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type win(winSEXP);
+    rcpp_result_gen = Rcpp::wrap(rolling_median(x, win));
+    return rcpp_result_gen;
+END_RCPP
+}
 // simulate_udf
 IntegerVector simulate_udf(int n_steps, int start, int nc, int nr, NumericMatrix mk, NumericMatrix hk);
 RcppExport SEXP _amt_simulate_udf(SEXP n_stepsSEXP, SEXP startSEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP mkSEXP, SEXP hkSEXP) {
@@ -138,6 +162,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_amt_diff_rcpp", (DL_FUNC) &_amt_diff_rcpp, 1},
     {"_amt_within_rcpp", (DL_FUNC) &_amt_within_rcpp, 3},
+    {"_amt_rolling_mean", (DL_FUNC) &_amt_rolling_mean, 2},
+    {"_amt_rolling_median", (DL_FUNC) &_amt_rolling_median, 2},
     {"_amt_simulate_udf", (DL_FUNC) &_amt_simulate_udf, 6},
     {"_amt_cpp_simulate_ssf", (DL_FUNC) &_amt_cpp_simulate_ssf, 6},
     {"_amt_track_align", (DL_FUNC) &_amt_track_align, 4},

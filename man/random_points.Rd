@@ -11,7 +11,7 @@ random_points(x, ...)
 \method{random_points}{mcp}(x, n = 100, type = "random", ...)
 
 \method{random_points}{track_xy}(x, level = 1, hr = "mcp", factor = 10,
-  ...)
+  type = "random", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track}.}

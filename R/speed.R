@@ -6,6 +6,7 @@
 #' @param append_na `[logical(1)=TRUE]` \cr Should an `NA` be appended at the end.
 #' @return `[numeric]` \cr The speed in `m/s`.
 #' @examples
+#' @export
 #' data(deer)
 #' speed(deer)
 #'
@@ -14,6 +15,7 @@ speed <- function(x, ...) {
   UseMethod("speed", x)
 }
 
+#' @export
 speed.track_xyt <- function(x, append_na = TRUE, ...) {
   stps <- suppressWarnings(steps(x))
   s <- stps$sl_ / as.numeric(stps$dt_, units = "secs")
@@ -22,5 +24,4 @@ speed.track_xyt <- function(x, append_na = TRUE, ...) {
   } else {
     s
   }
-
 }
