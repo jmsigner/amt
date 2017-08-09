@@ -107,30 +107,30 @@ track <- function(...) {
   .Deprecated("mk_track", msg = "Use mk_track instead")
 
 
-#  if (missing(x) | missing(y)) {
-#    stop("x and y are required")
-#  }
-#
-#  if (missing(t)) {
-#    out <- tibble(
-#      x_ = x,
-#      y_ = y,
-#      ...
-#    )
-#   class(out) <- c("track_xy", class(out))
-#
-#  } else {
-#    out <- tibble(
-#      x_ = x,
-#      y_ = y,
-#      t_ = t,
-#      ...
-#    )
-#   class(out) <- c("track_xyt", "track_xy", class(out))
-#  }
-#
-#  attributes(out)$crs_ <- crs
-#  out
+  if (missing(x) | missing(y)) {
+    stop("x and y are required")
+  }
+
+  if (missing(t)) {
+    out <- tibble(
+      x_ = x,
+      y_ = y,
+      ...
+    )
+   class(out) <- c("track_xy", class(out))
+
+  } else {
+    out <- tibble(
+      x_ = x,
+      y_ = y,
+      t_ = t,
+      ...
+    )
+   class(out) <- c("track_xyt", "track_xy", class(out))
+  }
+
+  attributes(out)$crs_ <- crs
+  out
 }
 
 
