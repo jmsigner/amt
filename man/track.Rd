@@ -8,7 +8,7 @@
 \usage{
 mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE)
 
-track(...)
+track(x, y, t, ...)
 }
 \arguments{
 \item{tbl}{\link{data.frame} \cr The \code{data.frame} from which a track should be
