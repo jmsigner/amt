@@ -32,7 +32,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
 
   list(
     name = distr,
-    fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE)
+    fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE, lower = 0)
   )
 
 }
