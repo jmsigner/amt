@@ -102,9 +102,9 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE) {
 
 #' @rdname track
 #' @export
-track <- function(...) {
+track <- function(x, y, t, ..., crs = NULL) {
 
-  .Deprecated("mk_track", msg = "Use mk_track instead")
+  # .Deprecated("mk_track", msg = "Use mk_track instead")
 
 
   if (missing(x) | missing(y)) {
@@ -197,6 +197,20 @@ group_by.track_xy <- function(.data, ..., .dots) {
 #' @export
 group_by.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
+}
+
+#' @export
+ungroup.track_xy <- function(.data, ..., .dots) {
+  x <- track_transfer_attr(.data, NextMethod())
+  class(x) <- class(x)[class(x) != "grouped_df"]
+  x
+}
+
+#' @export
+ungroup.track_xyt <- function(.data, ..., .dots) {
+  x <- track_transfer_attr(.data, NextMethod())
+  class(x) <- class(x)[class(x) != "grouped_df"]
+  x
 }
 
 #' @export
