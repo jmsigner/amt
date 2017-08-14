@@ -182,7 +182,7 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_las
                                    zero_dir = "E", ...) {
 
   p <- direction_abs(x, degrees = FALSE, lonlat = lonlat, full_circle = FALSE,
-                     zero_dist = "E", clockwise = FALSE, append_last = append_last)
+                     zero_dir = zero_dir, clockwise = FALSE, append_last = append_last)
   p <- c(NA, diff_rcpp(p))
   p <- ifelse( p <= (-pi), p + 2 * pi, p)
   p <- ifelse( p > pi, p - 2 * pi, p)
