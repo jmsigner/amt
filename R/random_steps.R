@@ -22,7 +22,7 @@ random_steps.steps <- function(x, n_controll = 10, sl_distr = "gamma", ta_distr 
                                ...) {
   if (any(is.na(x$sl_)) || any(is.na(x$ta_))) {
     x <- x[!is.na(x$sl_) & !is.na(x$ta_), ]
-    warning("Step-lengths or truning angles contained NA, which were removed.")
+    warning("Step-lengths or turning angles contained NA, which were removed.")
   }
 
   # random.error

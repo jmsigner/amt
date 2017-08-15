@@ -1,6 +1,4 @@
 # library(amt)
-# library(devtools)
-# load_all()
 #
 # x <- 1:10
 # y <- 1:10

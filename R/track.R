@@ -16,6 +16,8 @@
 #'   points.
 #' @param order_by_ts `[logical(1)]` \cr Should relocations be ordered by time
 #'   stamp, default is `TRUE`.
+#' @param x,y `[numeric]` \cr The x and y coordinates.
+#' @param t `[POSIXct]` \cr The time stamp.
 #' @return If `t` was provided an object of class `track_xyt` is returned
 #'   otherwise a `track_xy`.
 #' @export
@@ -200,15 +202,15 @@ group_by.track_xyt <- function(.data, ..., .dots) {
 }
 
 #' @export
-ungroup.track_xy <- function(.data, ..., .dots) {
-  x <- track_transfer_attr(.data, NextMethod())
+ungroup.track_xy <- function(x, ..., .dots) {
+  x <- track_transfer_attr(x, NextMethod())
   class(x) <- class(x)[class(x) != "grouped_df"]
   x
 }
 
 #' @export
-ungroup.track_xyt <- function(.data, ..., .dots) {
-  x <- track_transfer_attr(.data, NextMethod())
+ungroup.track_xyt <- function(x, ..., .dots) {
+  x <- track_transfer_attr(x, NextMethod())
   class(x) <- class(x)[class(x) != "grouped_df"]
   x
 }

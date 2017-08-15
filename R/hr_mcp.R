@@ -20,13 +20,10 @@ hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
   mcps <- do.call(sp::rbind.SpatialPolygons, mcps)
   mcps <- sp::SpatialPolygonsDataFrame(mcps, data.frame(level=names(mcps), area=rgeos::gArea(mcps, byid=TRUE)))
 
+  mcp <- list(mcp = mcps)
   if (has_crs(x)) {
     sp::proj4string(mcp$mcp) <- get_crs(x)
   }
-
-  mcp <- list(mcp = mcps)
-
-
   class(mcp) <- c("mcp", "hr")
   mcp
 }

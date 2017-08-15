@@ -1,4 +1,4 @@
-#' @importFrom dplyr arrange filter group_by select summarize summarise
+#' @importFrom dplyr arrange filter group_by select summarize summarise ungroup
 #' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars n
 #' @importFrom graphics plot legend
 #' @importFrom grDevices adjustcolor
@@ -19,6 +19,7 @@ methods::setOldClass(c("track_xyt", "track_xy", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("random_points", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("steps", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("random_steps", "tbl_df"))
+utils::globalVariables(c("burst_", "step_id_")) # to omit CRAN notes
 NULL
 
 #' @useDynLib amt

@@ -106,6 +106,10 @@ direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_
     stop("zero_dir should be in either 'E', 'N', 'W', or 'S'")
   }
 
+  if (zero_dir == "E") {
+    zero_dir <- "East"
+  }
+
   # angles
   a <- if (!lonlat) {
     atan2(diff_y(x), diff_x(x)) * 180 / pi
@@ -119,7 +123,7 @@ direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_
   a <- if (append_last) a else a[-length(a)]
   a <- ifelse(a < 0, 360 + a, a)
   a <- switch(zero_dir,
-         "E" = a,
+         "East" = a,  # to avoid partial matching with EXPR
          "S" = (450 + a) %% 360,
          "W" = (540 + a) %% 360,
          "N" = (630 + a) %% 360

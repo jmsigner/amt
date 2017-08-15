@@ -2,12 +2,17 @@
 % Please edit documentation in R/speed.R
 \name{speed}
 \alias{speed}
+\alias{speed.track_xyt}
 \title{Speed}
 \usage{
 speed(x, ...)
+
+\method{speed}{track_xyt}(x, append_na = TRUE, ...)
 }
 \arguments{
 \item{x}{A \code{track_xyt}.}
+
+\item{...}{Further arguments, none implemented.}
 
 \item{append_na}{\code{[logical(1)=TRUE]} \cr Should an \code{NA} be appended at the end.}
 }

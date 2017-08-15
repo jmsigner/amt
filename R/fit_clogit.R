@@ -7,6 +7,7 @@
 #' @param data The data.
 #' @param formula The formula
 #' @param more Optional list returned in the output.
+#' @param summary_only `[logical(1)=FALSE]` \cr If `TRUE` only a `broom::tidy` summary of the model is returned.
 #' @param ... Addtional arguments, passed to `survival::clogit`.
 #' @export
 

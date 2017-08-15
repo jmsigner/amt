@@ -7,7 +7,7 @@
 as_rad(x)
 }
 \arguments{
-\item{angales}{\code{[numeric]}\cr Angles.}
+\item{x}{\code{[numeric]}\cr Angles.}
 }
 \description{
 Utility functions.

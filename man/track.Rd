@@ -8,7 +8,7 @@
 \usage{
 mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE)
 
-track(x, y, t, ...)
+track(x, y, t, ..., crs = NULL)
 }
 \arguments{
 \item{tbl}{\link{data.frame} \cr The \code{data.frame} from which a track should be
@@ -27,6 +27,10 @@ points.}
 
 \item{order_by_ts}{\code{[logical(1)]} \cr Should relocations be ordered by time
 stamp, default is \code{TRUE}.}
+
+\item{x, y}{\code{[numeric]} \cr The x and y coordinates.}
+
+\item{t}{\code{[POSIXct]} \cr The time stamp.}
 }
 \value{
 If \code{t} was provided an object of class \code{track_xyt} is returned

@@ -4,17 +4,16 @@
 #'
 #' @param x A `track_xyt`.
 #' @param append_na `[logical(1)=TRUE]` \cr Should an `NA` be appended at the end.
+#' @template dots_none
 #' @return `[numeric]` \cr The speed in `m/s`.
-#' @examples
+#' @name speed
 #' @export
-#' data(deer)
-#' speed(deer)
-#'
 
 speed <- function(x, ...) {
   UseMethod("speed", x)
 }
 
+#' @rdname speed
 #' @export
 speed.track_xyt <- function(x, append_na = TRUE, ...) {
   stps <- suppressWarnings(steps(x))

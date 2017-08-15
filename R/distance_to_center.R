@@ -41,7 +41,7 @@ distance_to_centers.track_xy <- function(x, trast, top_n = 10, square = TRUE, ..
   centers <- raster::rasterize(as_sp(x), trast, fun = "count")
   pts <- raster::rasterToPoints(centers, spatial = TRUE)
   pts <- pts[order(pts$layer, decreasing = TRUE), ][1:top_n, ]
-  r <- distanceFromPoints(trast, pts)^if (square) 2 else 1
+  r <- raster::distanceFromPoints(trast, pts)^if (square) 2 else 1
   names(r) <- "dist_cent"
   r
 }

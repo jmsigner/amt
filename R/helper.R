@@ -2,7 +2,7 @@
 #'
 #' Utility functions.
 #'
-#' @param angales `[numeric]`\cr Angles.
+#' @param x `[numeric]`\cr Angles.
 #' @export
 #'
 
