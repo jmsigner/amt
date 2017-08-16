@@ -1,6 +1,6 @@
-#' Coordinate References System
+#' Coordinate References System (CRS)
 #'
-#' Check if an object has a coordinate reference system (`has_crs`) and returns the `proj4string` with `get_crs` of the coordinate ference system.
+#' Check if an object has a coordinate reference system (`has_crs`) and returns the `proj4string` with `get_crs` of the coordinate reference system.
 #'
 #' @template any
 #' @template dots_none

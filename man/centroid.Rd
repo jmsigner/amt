@@ -2,14 +2,16 @@
 % Please edit documentation in R/track_methods.R
 \name{centroid}
 \alias{centroid}
-\title{Centroid of a track}
+\title{Calcualte the centroid of a track.}
 \usage{
 centroid(x, ...)
 }
 \arguments{
-\item{x}{A track.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
+
+\item{spatial}{\code{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPoints}-object or not.}
 }
 \description{
 Calcualte the centroid of a track.

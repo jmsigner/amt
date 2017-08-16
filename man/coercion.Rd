@@ -15,7 +15,7 @@
 \alias{as_ctmm.track_xyt}
 \alias{as_moveHMM}
 \alias{as_moveHMM.track_xy}
-\title{Track coercion functions}
+\title{Coerce a track to other formats.}
 \usage{
 as_sp(x, ...)
 
@@ -44,20 +44,14 @@ as_moveHMM(x, ...)
 \method{as_moveHMM}{track_xy}(x, ...)
 }
 \arguments{
-\item{x}{A \code{track_xy}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{id}{Animal id(s).}
+\item{id}{\code{[numeric,character,factor]} \cr Animal id(s).}
 }
 \description{
-amt provides several coercion functions that operate on \code{tracks} and \code{steps}.
-}
-\details{
-The following coercion functions are currently provided:
-\itemize{
-\item \code{as_sp} turns a track into \code{SpatialPoints}.
-}
+Several other packages provides methods to analyse movement data, and \code{amt} provides coercion methods to some packages.
 }
 \examples{
 data(deer)

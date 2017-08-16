@@ -1,12 +1,23 @@
 #' Extract covariate values.
 #'
-#' Functions to extract the value of covariates for tracks or steps.
-#' @param x A track or step.
-#' @param covariates A `RasterLayeR` or a `RasterStack`.
-#' @param where A character scalar, for `steps` this can take the values `start` or `end`.
+#' Extract the covariate values at relocations, or at the beginning or end of
+#' steps.
+#' @template track_xy_star_steps
+#' @param covariates `[RasterLayer,RasterStack,RasterBrick]` \cr The
+#'   (environmental) covariates.
+#' @param where `[character(1)="end"]{"start", "end"}` \cr For `steps` this
+#'   determines if the covariate values should be extracted at the beginning or
+#'   the end of a step. or `end`.
 #' @template dots_none
 #' @name extract_covariates
 #' @export
+#' @examples
+#' data(deer)
+#' data(sh_forest)
+#' deer %>% extract_covariates(sh_forest)
+#' deer %>% steps %>% extract_covariates(sh_forest)
+#' deer %>% steps %>% extract_covariates(sh_forest, where = "start")
+
 extract_covariates <- function(x, ...) {
   UseMethod("extract_covariates", x)
 }

@@ -3,23 +3,23 @@
 \name{bbox}
 \alias{bbox}
 \alias{bbox.track_xy}
-\title{Get bounding box of a track}
+\title{Get bounding box of a track.}
 \usage{
 bbox(x, ...)
 
 \method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, ...)
 }
 \arguments{
-\item{x}{A track.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{spatial}{Logical, whether or not to return a \code{sp}-object.}
+\item{spatial}{\code{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPolygons}-object or not.}
 
-\item{buffer}{Numeric, an optional buffer.}
+\item{buffer}{\code{[numeric(0)=NULL]{NULL, >0}} \cr An optional buffer of the bounding box.}
 }
 \description{
-Get bounding box of a track
+Get bounding box of a track.
 }
 \examples{
 data(deer)

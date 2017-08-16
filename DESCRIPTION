@@ -3,7 +3,11 @@ Type: Package
 Title: Animal Movement Tools
 Version: 0.0.1.9000
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jmsigner@gmail.com"))
-Description: Functions to analyse animal movement data.
+Description: A collection of functions to work with animal movement data. 
+  The functionality includes methods to resample movement to regular sampling rates, 
+  calculate track statistics (e.g. step lengths, speed, or turning angles), 
+  prepare data for fitting habitat selection analyses (resource and step selection functions), 
+  and interface other packages.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

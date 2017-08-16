@@ -60,11 +60,10 @@ diff_y.track_xy <- function(x, ...) {
 
 # Utility functions -------------------------------------------------------
 
-#' Centroid of a track
-#'
 #' Calcualte the centroid of a track.
 #'
-#' @param x A track.
+#' @template track_xy_star
+#' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object or not.
 #' @template dots_none
 #' @examples
 #' data(deer)
@@ -79,7 +78,6 @@ centroid <- function(x, ...) {
 #' @export
 centroid.track_xy <- function(x, spatial = FALSE, ...) {
   xx <- colMeans(x[, c("x_", "y_")])
-
   if (spatial) {
     sp::SpatialPoints(cbind(xx$x_, xx$y_))
   } else {
@@ -89,10 +87,10 @@ centroid.track_xy <- function(x, spatial = FALSE, ...) {
 
 
 
-#' Get bounding box of a track
-#' @param x A track.
-#' @param spatial Logical, whether or not to return a `sp`-object.
-#' @param buffer Numeric, an optional buffer.
+#' Get bounding box of a track.
+#' @template track_xy_star
+#' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPolygons`-object or not.
+#' @param buffer `[numeric(0)=NULL]{NULL, >0}` \cr An optional buffer of the bounding box.
 #' @template dots_none
 #' @name bbox
 #' @export
@@ -149,14 +147,20 @@ plot_sl.fit_clogit <- function(x, n = 1000, ...) {
 
 #' Coordinates of a track.
 #'
-#' @param x A track
+#' @template track_xy_star
 #' @template dots_none
+#' @return `[data_frame]` \cr The coordinates.
 #' @export
 #' @examples
 #' data(deer)
 #' coords(deer)
 
 coords <- function(x, ...) {
+  UseMethod("coords", x)
+}
+
+#' @export
+coords.track_xy <- function(x, ...) {
   x[, c("x_", "y_")]
 }
 

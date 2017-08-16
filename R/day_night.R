@@ -6,6 +6,11 @@
 #' @template dots_none
 #' @name day_night
 #' @export
+#' @examples
+#' data(deer)
+#' deer %>% mutate(time_of_day = day_night(.))
+#' deer %>% steps_by_burst %>%
+#'   mutate(time_of_day = day_night(.))
 day_night <- function(x, ...) {
   UseMethod("day_night", x)
 }
@@ -24,7 +29,7 @@ day_night.track_xyt <- function(x, ...) {
   ifelse(lubridate::`%within%`(x$t_, day), "day", "night")
 }
 
-#' @param end A logical scalar, indicating if the time stemp of the end of the step should be used.
+#' @param end `[logical(1)=TRUE]` \cr If `TRUE` the timestamp of the end of the step is used. Else the timestamp of the start of the step is used.
 #' @rdname day_night
 #' @export
 day_night.steps <- function(x, end = TRUE, ...) {

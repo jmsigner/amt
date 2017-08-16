@@ -41,7 +41,7 @@ steps(x, ...)
 \method{steps}{track_xyt}(x, lonlat = FALSE, ...)
 }
 \arguments{
-\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented}
 

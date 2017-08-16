@@ -1,10 +1,23 @@
 #' Adjust parameters
 #'
-#' Functions aiding parameter adjustment after fitting an integrated step selection function (iSSF).
+#' Functions aiding parameter adjustment after fitting an integrated step
+#' selection function (iSSF).
+#'
+#' Currently the shape and scale parameter of a Gamma distribution and the
+#' concentration parameter (=kappa) of a von Mises distribution can be adapted.
+#' When fitting a integrated step selection model, the tentative shape parameter
+#' of the Gamma distribution of the step length can be adjusted with the
+#' coefficients of the log of step lengths, the scale of the Gamma distribution
+#' can be adjusted with the step lengths, and the kappa parameter of the von
+#' Mises distribution can be adjusted with the coefficient for the cosine of the
+#' turn angle.
 #'
 #' @param tentative `[numeric]` \cr The tentative parameter estimate.
-#' @param modifier `[numeric=0]` \cr The modifier to adjust the tentative estimate.
+#' @param modifier `[numeric=0]` \cr The modifier to adjust the tentative
+#'   estimate.
 #' @name adjust_param
+#' @references
+#' \insertRef{avgar2016}{amt}
 #' @export
 adjust_shape <- function(tentative, modifier = 0) {
   tentative + modifier

@@ -4,7 +4,7 @@
 \alias{crs}
 \alias{get_crs}
 \alias{has_crs}
-\title{Coordinate References System}
+\title{Coordinate References System (CRS)}
 \usage{
 get_crs(x, ...)
 
@@ -16,7 +16,7 @@ has_crs(x, ...)
 \item{...}{Further arguments, none implemented.}
 }
 \description{
-Check if an object has a coordinate reference system (\code{has_crs}) and returns the \code{proj4string} with \code{get_crs} of the coordinate ference system.
+Check if an object has a coordinate reference system (\code{has_crs}) and returns the \code{proj4string} with \code{get_crs} of the coordinate reference system.
 }
 \examples{
 data(deer)

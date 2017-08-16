@@ -1,13 +1,17 @@
 #' Calculate a cumulative UD
 #'
-#' @param x A UD.
+#' @param x `[RasterLayer]` \cr Containig the Utilization Distribution (UD).
 #' @template dots_none
 #' @export
+#' @note This function is typically used to obtain isopleths.
+#' @return `[RasterLayer]` \cr The cumulative UD.
+#' @name cum_ud
 cumulative_ud <- function (x, ...) {
   UseMethod("cumulative_ud", x)
 }
 
 #' @export
+#' @rdname cum_ud
 cumulative_ud.RasterLayer <- function(x, ...) {
   r1 <- x
   v <- raster::getValues(r1)

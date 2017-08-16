@@ -1,0 +1,146 @@
+---
+title: "Fitting Step-Selection Functions with `amt`"
+author: "Johannes Signer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+set.seed(20161113)
+```
+
+
+## About
+
+This vignette briefly introduces how one can fit a Step-Selection Function (SSF) with the `amt` package. We will be using the example data of one red deer from northern Germany and one covariate: a forest cover map.
+
+## Getting the data ready
+
+First we load the required libraries and the relocation data (called `deer`)
+
+```{r}
+library(lubridate)
+library(raster)
+library(amt)
+data("deer")
+deer
+```
+
+In order to continue, we need a regular sampling rate. To check the current sampling rate, we use `summarize_sampling_rate`:
+
+```{r}
+summarize_sampling_rate(deer)
+```
+
+The median sampling rate is 6h, which is what we aimed for.
+
+
+Next, we have to get the environmental covariates. A forest layer is included in the package. Note, that this a regular `RasterLayer`. 
+
+```{r}
+data("sh_forest")
+sh_forest
+```
+
+## Prepare Data for SSF
+
+Before fitting a step selection, the data well need to prepared. First, we change from a point representation to a step representation, using the function `steps_by_burst`, which in contrast to the `steps` function accounts for bursts.
+
+```{r}
+ssf1 <- deer %>% steps_by_burst()
+```
+
+Next, we generate random steps with the function `random_steps`. This function fits by default a Gamma distribution to the step lengths and a von Mises distribution to the turn angles, and then pairs each observed step with `n` random steps.
+
+```{r}
+ssf1 <- ssf1 %>% random_steps(n = 15)
+```
+
+As a last step, we have to extract the covariates at the end point of each step. We can do this with `extract_covariates`.
+
+```{r}
+ssf1 <- ssf1 %>% extract_covariates(sh_forest) 
+```
+
+
+Since the forest layers is coded as `1 = forest` and `2 != forest`, we create a factor with appropriate levels. We also calculate the log of the step length and the cosine of the turn angle, which we may use later for a integrated step selection function.
+
+
+```{r}
+ssf1 <- ssf1 %>% 
+  mutate(forest = factor(sh.forest, levels = 1:2, labels = c("forest", "non-forest")), 
+         cos_ta = cos(ta_), 
+         log_sl = log(sl_)) 
+```
+
+## Fitting SSF 
+
+Now all pieces are there to fit a SSF. We will use `fit_clogit`, which is a wrapper around `survival::clogit`.
+
+```{r}
+m0 <- ssf1 %>% fit_clogit(case_ ~ forest + strata(step_id_))
+m1 <- ssf1 %>% fit_clogit(case_ ~ forest + forest:cos_ta + forest:log_sl + log_sl * cos_ta + strata(step_id_))
+m2 <- ssf1 %>% fit_clogit(case_ ~ forest + forest:cos_ta + forest:log_sl + log_sl + cos_ta + strata(step_id_))
+summary(m0)
+summary(m1)
+summary(m2)
+AIC(m0$model)
+AIC(m1$model)
+AIC(m2$model)
+```
+
+### Interpretation of coefficients
+
+To be done.
+
+<!---
+The coefficients are:
+
+```{r}
+coef(m2)
+```
+
+
+- `forestnon-forest`: There is positive selection for non-forested areas, although it is not significant (at a $\alpha = 0.05$ level). Exponentiating the selection coefficient for forest, results with a relative selection strength of `r round(exp(coef(m2)[1]))`.
+
+
+
+
+- The coefficients for `log_sl` and `cos_ta` are both signicant and indicating that the intial parameters need to be adjusted.
+- The interaction between 
+- 
+- 
+
+--->
+
+## A note on piping
+
+All steps described above, could easily be wrapped into one piped workflow:
+
+```{r}
+m1 <- deer %>% 
+  steps_by_burst() %>% random_steps(n = 15) %>% 
+  extract_covariates(sh_forest) %>% 
+  mutate(forest = factor(sh.forest, levels = 1:2, labels = c("forest", "non-forest")), 
+         cos_ta = cos(ta_), 
+         log_sl = log(sl_)) %>% 
+  fit_clogit(case_ ~ forest + forest:cos_ta + forest:sl_ + sl_ * cos_ta + strata(step_id_))
+```
+
+```{r}
+summary(m1)
+```
+
+
+## Session
+
+```{r}
+devtools::session_info()
+```
+

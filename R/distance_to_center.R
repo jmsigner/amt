@@ -1,14 +1,27 @@
 #' Distance to center.
 #'
-#' Calculates the distance of each pixel to the centroid of the track.
-#' @param x a `track_xy`.
+#' Distances to frequently used areas. `distance_to_center` calculates the
+#' distance to the home-range center (i.e., the centroid of the `x` and `y`
+#' coordinates). `distance_to_centers` calculates the distance to `top_n` most
+#' frequently used cells. Note, that the results of `distance_to_center` is
+#' different to `distance_to_centers` with `top_n = 1`, since in the first case
+#' the distance to the centroid is calculated and in the second case the
+#' distance to the raster cell with the most relocations.
+#' @template track_xy_star
 #' @param trast `[RasterLayer]` \cr A template.
 #' @param square `[logical(1)]` \cr Should the distance be squared?
-#' @param top_n `[integer(1)]` \cr To how many centers should the distance be calculated?
+#' @param top_n `[integer(1)]` \cr To how many centers should the distance be
+#'   calculated?
 #' @template dots_none
 #' @export
 #' @return `RasterLayer`
 #' @name dist_cent
+#' @examples
+#' data(deer)
+#' r <- raster::raster(bbox(deer, buffer = 100), res = 40)
+#' d1 <- distance_to_center(deer, r)
+#' d2 <- distance_to_centers(deer, r, top_n = 1)
+#' d3 <- distance_to_centers(deer, r, top_n = 10)
 distance_to_center <- function(x, ...) {
   UseMethod("distance_to_center", x)
 }

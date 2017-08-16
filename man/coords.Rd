@@ -7,9 +7,12 @@
 coords(x, ...)
 }
 \arguments{
-\item{x}{A track}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
+}
+\value{
+\code{[data_frame]} \cr The coordinates.
 }
 \description{
 Coordinates of a track.

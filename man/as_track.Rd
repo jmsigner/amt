@@ -3,17 +3,17 @@
 \name{as_track}
 \alias{as_track}
 \alias{as_track.SpatialPoints}
-\title{Coerces to track.}
+\title{Coerce to track.}
 \usage{
 as_track(x, ...)
 
 \method{as_track}{SpatialPoints}(x, ...)
 }
 \arguments{
-\item{x}{Object to be converted to a track.}
+\item{x}{\code{[SpatialPoints]} \cr Object to be converted to a track.}
 
 \item{...}{Further arguments, none implemented.}
 }
 \description{
-Funcitons to coerece other classes (currently implemented: \code{SpatialPoints}) to a \code{track_xy}.
+Coerce other classes (currently implemented: \code{SpatialPoints}) to a \code{track_xy}.
 }

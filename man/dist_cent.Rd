@@ -18,7 +18,7 @@ distance_to_centers(x, ...)
   ...)
 }
 \arguments{
-\item{x}{a \code{track_xy}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
 
@@ -26,11 +26,25 @@ distance_to_centers(x, ...)
 
 \item{square}{\code{[logical(1)]} \cr Should the distance be squared?}
 
-\item{top_n}{\code{[integer(1)]} \cr To how many centers should the distance be calculated?}
+\item{top_n}{\code{[integer(1)]} \cr To how many centers should the distance be
+calculated?}
 }
 \value{
 \code{RasterLayer}
 }
 \description{
-Calculates the distance of each pixel to the centroid of the track.
+Distances to frequently used areas. \code{distance_to_center} calculates the
+distance to the home-range center (i.e., the centroid of the \code{x} and \code{y}
+coordinates). \code{distance_to_centers} calculates the distance to \code{top_n} most
+frequently used cells. Note, that the results of \code{distance_to_center} is
+different to \code{distance_to_centers} with \code{top_n = 1}, since in the first case
+the distance to the centroid is calculated and in the second case the
+distance to the raster cell with the most relocations.
+}
+\examples{
+data(deer)
+r <- raster::raster(bbox(deer, buffer = 100), res = 40)
+d1 <- distance_to_center(deer, r)
+d2 <- distance_to_centers(deer, r, top_n = 1)
+d3 <- distance_to_centers(deer, r, top_n = 10)
 }

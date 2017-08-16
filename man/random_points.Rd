@@ -14,7 +14,7 @@ random_points(x, ...)
   type = "random", ...)
 }
 \arguments{
-\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{\code{[any]}\cr None implemented.}
 

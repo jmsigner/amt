@@ -16,14 +16,25 @@ extract_covariates(x, ...)
 \method{extract_covariates}{steps}(x, covariates, where = "end", ...)
 }
 \arguments{
-\item{x}{A track or step.}
+\item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{covariates}{A \code{RasterLayeR} or a \code{RasterStack}.}
+\item{covariates}{\code{[RasterLayer,RasterStack,RasterBrick]} \cr The
+(environmental) covariates.}
 
-\item{where}{A character scalar, for \code{steps} this can take the values \code{start} or \code{end}.}
+\item{where}{\code{[character(1)="end"]{"start", "end"}} \cr For \code{steps} this
+determines if the covariate values should be extracted at the beginning or
+the end of a step. or \code{end}.}
 }
 \description{
-Functions to extract the value of covariates for tracks or steps.
+Extract the covariate values at relocations, or at the beginning or end of
+steps.
+}
+\examples{
+data(deer)
+data(sh_forest)
+deer \%>\% extract_covariates(sh_forest)
+deer \%>\% steps \%>\% extract_covariates(sh_forest)
+deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
 }

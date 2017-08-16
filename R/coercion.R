@@ -1,13 +1,10 @@
-#' Track coercion functions
+#' Coerce a track to other formats.
 #'
-#' amt provides several coercion functions that operate on `tracks` and `steps`.
+#' Several other packages provides methods to analyse movement data, and `amt` provides coercion methods to some packages.
 #'
-#' The following coercion functions are currently provided:
-#'  * `as_sp` turns a track into `SpatialPoints`.
-#' @param x A `track_xy`.
-#' @param id Animal id(s).
+#' @template track_xy_star
+#' @param id `[numeric,character,factor]` \cr Animal id(s).
 #' @template dots_none
-#' @details
 #' @name coercion
 #' @export
 as_sp <- function(x, ...) {

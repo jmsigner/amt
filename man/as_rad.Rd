@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper.R
 \name{as_rad}
 \alias{as_rad}
-\title{Helper functions}
+\title{Converts angles to radians}
 \usage{
 as_rad(x)
 }
@@ -10,5 +10,8 @@ as_rad(x)
 \item{x}{\code{[numeric]}\cr Angles.}
 }
 \description{
-Utility functions.
+Converts angles to radians
+}
+\examples{
+as_rad(seq(-180, 180, 30))
 }

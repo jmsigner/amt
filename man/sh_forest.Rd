@@ -4,11 +4,7 @@
 \name{sh_forest}
 \alias{sh_forest}
 \title{Forest cover.}
-\format{A \code{RasterLAyer}
-\describe{
-\item{1}{forest}
-\item{2}{non-forest}
-}}
+\format{A \code{RasterLAyer} \describe{ \item{1}{forest} \item{2}{non-forest} }}
 \source{
 JRC
 }
@@ -19,6 +15,8 @@ sh_forest
 Forest cover for the home range of one red deer in northern Germany.
 }
 \references{
-A. Pekkarinen, L. Reithmaier, P. Strobl (2007): “Pan-European Forest/Non-Forest mapping with Landsat ETM+ and CORINE Land Cover 2000 data.
+A. Pekkarinen, L. Reithmaier, P. Strobl (2007): “Pan-European
+Forest/Non-Forest mapping with Landsat ETM+ and CORINE Land Cover 2000
+data.
 }
 \keyword{datasets}

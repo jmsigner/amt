@@ -14,8 +14,14 @@ day_night(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{end}{A logical scalar, indicating if the time stemp of the end of the step should be used.}
+\item{end}{\code{[logical(1)=TRUE]} \cr If \code{TRUE} the timestamp of the end of the step is used. Else the timestamp of the start of the step is used.}
 }
 \description{
 A convinience wrapper around \code{maptools::sunriset}.
+}
+\examples{
+data(deer)
+deer \%>\% mutate(time_of_day = day_night(.))
+deer \%>\% steps_by_burst \%>\%
+  mutate(time_of_day = day_night(.))
 }

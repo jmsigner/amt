@@ -4,12 +4,9 @@
 \name{deer}
 \alias{deer}
 \title{Relocations of 1 red deer.}
-\format{A track_xyt
-\describe{
-\item{x_epsg31467}{the x-coordinate}
-\item{y_epsg31467}{the y-coordinate}
-\item{t_}{time stamp}
-}}
+\format{A track_xyt \describe{ \item{x_}{the x-coordinate} \item{y_}{the
+y-coordinate} \item{t_}{the timestamp} \item{burst_}{the burst a particular
+points belongs to.} }}
 \source{
 Verein für Wildtierforschung Dresden und Göttingen e.V.
 }
@@ -17,6 +14,8 @@ Verein für Wildtierforschung Dresden und Göttingen e.V.
 deer
 }
 \description{
-1500 GPS relocations of one red deer from northern Germany.
+826 GPS relocations of one red deer from northern Germany. The data is
+already resampled to a regular time interval of 6 hours and the coordinate
+reference system is transformed to \code{epsg:3035}.
 }
 \keyword{datasets}
