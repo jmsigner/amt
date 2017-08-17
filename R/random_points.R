@@ -97,61 +97,65 @@ plot.random_points <- function(x, y = NULL, ...) {
          legend = c("observed", "random"))
 }
 
-const_call_random_points <- function(fun, data, ..., .dots) {
-  cls <- attributes(data)
-  class(data) <- class(data)[-1]
-  out <- do.call(fun, list(data, ..., .dots))
-  attributes(out)$class <- c(cls$class[1], class(out))
-  attributes(out)$crs <- cls$crs
-  out
+rp_transfer_attr <- function(from, to) {
+  from <- attributes(from)
+  attributes(to)$class <- from$class
+  attributes(to)$crs_ <- from$crs_
+  to
 }
 
-# see here: https://github.com/hadley/dplyr/issues/719
+
+#' @export
+`[.random_points` <- function(x, i, j, drop = FALSE) {
+  xx <- NextMethod()
+  rp_transfer_attr(x, xx)
+}
+
 #' @export
 arrange.random_points <- function(.data, ..., .dots) {
-  const_call_random_points(dplyr::arrange_, .data, ..., .dots)
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 
 #' @export
 filter.random_points <- function(.data, ..., .dots) {
-  const_call_random_points(dplyr::filter_, .data, ..., .dots)
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 
 #' @export
 group_by.random_points <- function(.data, ..., .dots) {
-  const_call_random_points(dplyr::group_by_, data, ..., .dots)
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 
 #' @export
 ungroup.random_points <- function(x, ...) {
-  const_call_random_points(dplyr::ungroup, x, ..., NULL)
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 
 #' @export
 distinct.random_points <- function(.data, ..., .dots) {
-  const_call_random_points(dplyr::distinct_, data, ..., .dots)
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 
 #' @export
 select.random_points <- function(.data, ..., .dots) {
-  const_call_random_points(dplyr::select_, data, ..., .dots)
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 
 #' @export
 summarize.random_points <- function(.data, ..., .dots) {
-  const_call_random_points(dplyr::summarize_, data, ..., .dots)
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 
 #' @export
 summarise.random_points <- function(.data, ..., .dots) {
-  const_call_random_points(dplyr::summarise_, data, ..., .dots)
-}
-
-# tibble methods
-#' @export
-`[.random_points` <- function(x, i, j, drop = FALSE) {
-  x <- NextMethod()
-  class(x) <- c("random_points", class(x))
-  x
+  xx <- NextMethod()
+  rp_transfer_attr(.data, xx)
 }
 

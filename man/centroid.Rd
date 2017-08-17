@@ -2,9 +2,12 @@
 % Please edit documentation in R/track_methods.R
 \name{centroid}
 \alias{centroid}
+\alias{centroid.track_xy}
 \title{Calcualte the centroid of a track.}
 \usage{
 centroid(x, ...)
+
+\method{centroid}{track_xy}(x, spatial = FALSE, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}

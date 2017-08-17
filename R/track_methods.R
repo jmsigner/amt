@@ -65,8 +65,8 @@ diff_y.track_xy <- function(x, ...) {
 #' @template track_xy_star
 #' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object or not.
 #' @template dots_none
-#' @examples
 #' @name centroid
+#' @examples
 #' data(deer)
 #' centroid(deer)
 
