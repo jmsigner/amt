@@ -49,7 +49,10 @@ random_steps_base <- function(x, n_controll, sl, ta) {
   tar <- if (ta$name == "vonmises") {
     mu <- circular::as.circular(0, type = "angles", units = "degrees", template = "none",
                                 modulo = "asis", zero = 0, rotation = "counter")
-    x[case_for_controll, ]$ta_ + circular::rvonmises(ns * n_controll, mu = mu, kappa = ta$fit$kappa)  # turn angles for new stps
+    # turn angles for new stps
+    rta <- as.vector(circular::rvonmises(ns * n_controll, mu = mu, kappa = ta$fit$kappa))
+    rta <- (rta + x[case_for_controll, ]$ta_) %% 360
+    ifelse(rta > 180, rta - 360, rta)
   } else if (ta$name == "unif") {
     x[case_for_controll, ]$ta_ + stats::runif(ns * n_controll, -pi, pi)  # turning angles for new stps
   } else {
