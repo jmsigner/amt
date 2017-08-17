@@ -22,10 +22,16 @@ to(x, ...)
 \method{to}{track_xyt}(x, ...)
 }
 \arguments{
-\item{x}{A track.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
 }
 \description{
 Function that returns the start (\code{from}), end (\code{to}), and the duration (\code{from_to}) of a track.
+}
+\examples{
+data(deer)
+from(deer)
+to(deer)
+from_to(deer)
 }

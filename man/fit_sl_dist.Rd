@@ -3,7 +3,7 @@
 \name{fit_sl_dist}
 \alias{fit_sl_dist}
 \alias{fit_sl_dist_base}
-\title{Fit a Step-Lengths distribution.}
+\title{Fit a statistical distribution to step lenghts.}
 \usage{
 fit_sl_dist(.tbl, x, ...)
 
@@ -21,7 +21,7 @@ fit_sl_dist_base(x, na.rm = TRUE, distr = "gamma", ...)
 \item{distr}{\code{[character(1)]} \cr Name of the distribution, curently only \code{gamma}-distribution is supported.}
 }
 \description{
-Fit a distribution to the the step lengths of a track.
+Fit a statistical distribution to step lenghts.
 }
 \examples{
 data(deer)

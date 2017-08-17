@@ -3,19 +3,19 @@
 \name{filter_min_n_burst}
 \alias{filter_min_n_burst}
 \alias{filter_min_n_burst.track_xy}
-\title{Filter Bursts}
+\title{Filter bursts by number of relocations}
 \usage{
 filter_min_n_burst(x, ...)
 
 \method{filter_min_n_burst}{track_xy}(x, min_n = 3, ...)
 }
 \arguments{
-\item{x}{A track.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{min_n}{A numeric scalar, indicating the minimum number of relocations (=fixes= per burst)}
+\item{min_n}{\code{[numeric(1)=3]} \cr Indicating the minimum number of relocations (=fixes per burst).}
 }
 \description{
-Only retain bursts with a minimum number of relocations.
+Only retain bursts with a minimum number (= \code{min_n}) of relocations.
 }

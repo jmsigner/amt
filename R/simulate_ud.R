@@ -4,21 +4,23 @@
 #'
 #' The habitat kernel is calculated by multiplying resources with their corresponding coefficients from the fitted (i)SSF.
 #'
-#' @template fit
-#' @template resources
+#' @param fit `[fitted_clogit]` \cr Fitted model.
+#' @param resources `[RasterLayer, RasterStack]` \cr The resources.
 #' @references
 #' \insertRef{avgar2016}{amt}
 #' \insertRef{signer2017}{amt}
 #'
 #' @return The habitat kernel, as `RasterLayer`.
 #' @name sim_ud
+#' @note This functions are still experimental and should be used with care. If in doubt, please contact the author.
+#' @author Johannes Signer (jmsigner@@gmail.com)
 
 NULL
 
-#' @param movement_kernel A `RasterLayer` providing the movement kernel.
-#' @param habitat_kernel A `RasterLayer` providing the kernel kernel.
-#' @param start A numeric vector of length two, giving the starting point of the simulatoin.
-#' @param n An integer, providing the number of simulation steps.
+#' @param movement_kernel `[RasterLayer]` \cr The movement kernel.
+#' @param habitat_kernel `[RasterLayer]` \cr The habitat kernel.
+#' @param start `[numeric(2)]` \cr Starting point of the simulation.
+#' @param n `[integer(1)=1e5]` \cr The number of simulation steps.
 #' @details  **`simulate_ud()`:** simulates a utilization distribution (UD) from a fitted (iSSF).
 #' @rdname sim_ud
 #' @export

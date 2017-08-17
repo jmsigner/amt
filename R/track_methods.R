@@ -66,6 +66,7 @@ diff_y.track_xy <- function(x, ...) {
 #' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object or not.
 #' @template dots_none
 #' @examples
+#' @name centroid
 #' data(deer)
 #' centroid(deer)
 
@@ -75,6 +76,7 @@ centroid <- function(x, ...) {
   UseMethod("centroid", x)
 }
 
+#' @rdname centroid
 #' @export
 centroid.track_xy <- function(x, spatial = FALSE, ...) {
   xx <- colMeans(x[, c("x_", "y_")])

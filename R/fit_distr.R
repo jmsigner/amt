@@ -1,6 +1,5 @@
-#' Fit a Step-Lengths distribution.
+#' Fit a statistical distribution to step lenghts.
 #'
-#' Fit a distribution to the the step lengths of a track.
 #' @param .tbl `[track_xy,track_xyt]` \cr A track.
 #' @param x `[expression]` \cr The name of the column containing step lengths, usually `sl_`.
 #' @param distr `[character(1)]` \cr Name of the distribution, curently only `gamma`-distribution is supported.
@@ -130,21 +129,21 @@ sl_distr.random_steps <- function (x, ...) {
 
 
 # turning angles ----------------------------------------------------------
-#' Fit a turning-angles distribution.
+#' Fit a statistical distribution to the turn angles of a track.
 #'
-#' Fit a distribution to the the turning angles of a track.
-#' @param .tbl A `track_xy*`.
-#' @param x The column, containing the relative turning angles, usually `ta_`.
-#' @param distr Name of the distribution, curently only `vonmises` distribution is supported.
-#' @param na.rm Logical scalar, should `NA` be removed?
+#' @param .tbl `[track_xy,track_xyt]` \cr A track.
+#' @param x `[expression]` \cr The name of the column containing turn angles, usually `ta_`.
+#' @param distr `[character(1)]` \cr Name of the distribution, curently only `vonmises`-distribution is supported.
+#' @param na.rm `[logical(1)]` \cr Should `NA` be removed?
+#'
 #' @template dots_none
 #' @name fit_ta_dist
 
-#' @export
-#' @rdname fit_ta_dist
-fit_ta_dist_ <- function(.tbl, x, ...){
-  fit_ta_dist_base(.tbl[[x]], ...)
-}
+# #' @export
+# #' @rdname fit_ta_dist
+# fit_ta_dist_ <- function(.tbl, x, ...){
+#   fit_ta_dist_base(.tbl[[x]], ...)
+# }
 
 #' @export
 #' @rdname fit_ta_dist

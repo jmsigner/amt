@@ -45,6 +45,7 @@ int rsamp(vector<int>& nums, vector<double>& probs) {
       return *it_num;
     rnd -= *it_prob;
   }
+  return 0;
 }
 
 // Simulate UD new try

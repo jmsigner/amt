@@ -1,8 +1,8 @@
 #' Fit logistic regression
 #'
-#' Tihs function is a wrapper around `stats::glm`, making it usable in a piped workflow.
-#' @param data The data.
-#' @param formula The formula
+#' Tihs function is a wrapper around `stats::glm` for piped workflows.
+#' @param data `[data.frame]` \cr The data used to fit a model.
+#' @param formula `[formula]` \cr The model formula.
 #' @param ... Further arguments passed to `stats::glm`.
 #' @export
 fit_logit <- function(data, formula, ...) {

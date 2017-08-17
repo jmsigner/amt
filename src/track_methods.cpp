@@ -104,6 +104,7 @@ NumericVector track_align(NumericVector t1, NumericVector nt, int time_tol, int 
     }
     return(out);
   }
+  return(out);
 }
 
 

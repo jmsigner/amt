@@ -18,9 +18,9 @@ simulate_ud(movement_kernel, habitat_kernel, start, n = 100000L)
 issf_to_ud(fit, resources, start, quant = 0.99, adjust = TRUE, n = 1e+05)
 }
 \arguments{
-\item{fit}{A fitted (i)SSF.}
+\item{fit}{\code{[fitted_clogit]} \cr Fitted model.}
 
-\item{resources}{A `RasterLayer` or `RasterStack`, the resources available to the animals.}
+\item{resources}{\code{[RasterLayer, RasterStack]} \cr The resources.}
 
 \item{exp}{A logical scalar, indicating whether or not the resulting habitat kernel should be exponentiated. This is usually \code{TRUE}.}
 
@@ -34,13 +34,13 @@ parameters should be adjusted or not. Note, parameter adjustment is only
 possilbe, if movement related covariates were included in the model (e.g.,
 step length and the log thereof).}
 
-\item{movement_kernel}{A \code{RasterLayer} providing the movement kernel.}
+\item{movement_kernel}{\code{[RasterLayer]} \cr The movement kernel.}
 
-\item{habitat_kernel}{A \code{RasterLayer} providing the kernel kernel.}
+\item{habitat_kernel}{\code{[RasterLayer]} \cr The habitat kernel.}
 
-\item{start}{A numeric vector of length two, giving the starting point of the simulatoin.}
+\item{start}{\code{[numeric(2)]} \cr Starting point of the simulation.}
 
-\item{n}{An integer, providing the number of simulation steps.}
+\item{n}{\code{[integer(1)=1e5]} \cr The number of simulation steps.}
 }
 \value{
 The habitat kernel, as \code{RasterLayer}.
@@ -59,7 +59,13 @@ The habitat kernel is calculated by multiplying resources with their correspondi
 
 \strong{\code{issf_to_ud()}:} this function is a convenience wrapper, that combines the functions \code{movement_kernel}, \code{habitat_kernel} and \code{simulate_ud}.
 }
+\note{
+This functions are still experimental and should be used with care. If in doubt, please contact the author.
+}
 \references{
 \insertRef{avgar2016}{amt}
 \insertRef{signer2017}{amt}
+}
+\author{
+Johannes Signer (jmsigner@gmail.com)
 }

@@ -2,28 +2,24 @@
 % Please edit documentation in R/fit_distr.R
 \name{fit_ta_dist}
 \alias{fit_ta_dist}
-\alias{fit_ta_dist_}
-\alias{fit_ta_dist}
 \alias{fit_ta_dist_base}
-\title{Fit a turning-angles distribution.}
+\title{Fit a statistical distribution to the turn angles of a track.}
 \usage{
-fit_ta_dist_(.tbl, x, ...)
-
 fit_ta_dist(.tbl, x, ...)
 
 fit_ta_dist_base(x, na.rm = TRUE, distr = "vonmises", ...)
 }
 \arguments{
-\item{.tbl}{A \code{track_xy*}.}
+\item{.tbl}{\code{[track_xy,track_xyt]} \cr A track.}
 
-\item{x}{The column, containing the relative turning angles, usually \code{ta_}.}
+\item{x}{\code{[expression]} \cr The name of the column containing turn angles, usually \code{ta_}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{na.rm}{Logical scalar, should \code{NA} be removed?}
+\item{na.rm}{\code{[logical(1)]} \cr Should \code{NA} be removed?}
 
-\item{distr}{Name of the distribution, curently only \code{vonmises} distribution is supported.}
+\item{distr}{\code{[character(1)]} \cr Name of the distribution, curently only \code{vonmises}-distribution is supported.}
 }
 \description{
-Fit a distribution to the the turning angles of a track.
+Fit a statistical distribution to the turn angles of a track.
 }

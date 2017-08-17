@@ -7,12 +7,12 @@
 fit_logit(data, formula, ...)
 }
 \arguments{
-\item{data}{The data.}
+\item{data}{\code{[data.frame]} \cr The data used to fit a model.}
 
-\item{formula}{The formula}
+\item{formula}{\code{[formula]} \cr The model formula.}
 
 \item{...}{Further arguments passed to \code{stats::glm}.}
 }
 \description{
-Tihs function is a wrapper around \code{stats::glm}, making it usable in a piped workflow.
+Tihs function is a wrapper around \code{stats::glm} for piped workflows.
 }

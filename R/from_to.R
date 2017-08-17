@@ -1,10 +1,16 @@
 #' Duration of tracks
 #'
 #' Function that returns the start (`from`), end (`to`), and the duration (`from_to`) of a track.
-#' @param x A track.
+#' @template track_xy_star
 #' @template dots_none
 #' @name from_to
 #' @export
+#' @examples
+#' data(deer)
+#' from(deer)
+#' to(deer)
+#' from_to(deer)
+
 from_to <- function(x, ...) {
   UseMethod("from_to", x)
 }

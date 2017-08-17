@@ -7,11 +7,11 @@
 fit_clogit(data, formula, more = NULL, summary_only = FALSE, ...)
 }
 \arguments{
-\item{data}{The data.}
+\item{data}{\code{[data.frame]} \cr The data used to fit a model.}
 
-\item{formula}{The formula}
+\item{formula}{\code{[formula]} \cr The model formula.}
 
-\item{more}{Optional list returned in the output.}
+\item{more}{\code{[list]} \cr Optional list that is passed on the output.}
 
 \item{summary_only}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} only a \code{broom::tidy} summary of the model is returned.}
 
@@ -19,7 +19,4 @@ fit_clogit(data, formula, more = NULL, summary_only = FALSE, ...)
 }
 \description{
 This function is a wrapper around \code{stats::glm}, making it usable in a piped workflow.
-}
-\details{
-When including step length and log(step length) in the model and later parameter adjustment is desired, step length must be called \code{sl_} and log(step length) either \code{log_sl_} when precalculated, or \code{log(sl_)} when it is calculated within the formula.
 }

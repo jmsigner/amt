@@ -29,12 +29,12 @@ track_resample.track_xyt <- function(x, rate = hours(2), tolerance = minutes(15)
   filter(x, !!quo(burst_ > 0))
 }
 
-#' Filter Bursts
+#' Filter bursts by number of relocations
 #'
-#' Only retain bursts with a minimum number of relocations.
+#' Only retain bursts with a minimum number (= `min_n`) of relocations.
 #'
-#' @param x A track.
-#' @param min_n A numeric scalar, indicating the minimum number of relocations (=fixes= per burst)
+#' @template track_xy_star
+#' @param min_n `[numeric(1)=3]` \cr Indicating the minimum number of relocations (=fixes per burst).
 #' @template dots_none
 #' @name filter_min_n_burst
 #' @export

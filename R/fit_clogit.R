@@ -2,11 +2,9 @@
 #'
 #' This function is a wrapper around `stats::glm`, making it usable in a piped workflow.
 #'
-#' When including step length and log(step length) in the model and later parameter adjustment is desired, step length must be called `sl_` and log(step length) either `log_sl_` when precalculated, or `log(sl_)` when it is calculated within the formula.
-#'
-#' @param data The data.
-#' @param formula The formula
-#' @param more Optional list returned in the output.
+#' @param data `[data.frame]` \cr The data used to fit a model.
+#' @param formula `[formula]` \cr The model formula.
+#' @param more `[list]` \cr Optional list that is passed on the output.
 #' @param summary_only `[logical(1)=FALSE]` \cr If `TRUE` only a `broom::tidy` summary of the model is returned.
 #' @param ... Addtional arguments, passed to `survival::clogit`.
 #' @export
