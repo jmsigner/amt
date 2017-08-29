@@ -11,7 +11,7 @@
 #' @rdname sim_ud
 movement_kernel <- function(fit, resources, quant = 0.99, adjust = FALSE) {
   if (sl_distr(fit) == "gamma") {
-    params <- if (adjust) adjust_params(fit) else sl_params(fit)
+    params <- if (adjust) adjust_params(fit) else sl_params(fit)[, "est"]
 
     dist <- ceiling(qgamma(quant, scale = params["scale"], shape = params["shape"]))
 
