@@ -3,10 +3,10 @@
 #' Function to screen relocations for possible errors. The algorithm was first described by Bjorneraas et al. 2010.
 #'
 #' @param x A `track_xyt`
-#' @param median_crit `[numeric(1)]{>0}` \cr Threshhold for the median (in m).
-#' @param mean_crit `[numeric(1)]{>0}` \cr Threshhold for the mean (in m).
-#' @param spike_speed `[numeric(1)]{>0}` \cr Threshhold spike speed in m/s.
-#' @param spike_cos `[numeric(1)]{>0}` \cr Threshhold for the cosine.
+#' @param median_crit `[numeric(1)]{>0}` \cr Threshold for the median (in m).
+#' @param mean_crit `[numeric(1)]{>0}` \cr Threshold for the mean (in m).
+#' @param spike_speed `[numeric(1)]{>0}` \cr Threshold spike speed in m/s.
+#' @param spike_cos `[numeric(1)]{>0}` \cr Threshold for the cosine.
 #' @param window `[numeric(1)=10]{>2}` \cr Window width.
 #' @export
 #'

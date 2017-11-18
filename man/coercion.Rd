@@ -49,6 +49,8 @@ as_moveHMM(x, ...)
 \item{...}{Further arguments, none implemented.}
 
 \item{id}{\code{[numeric,character,factor]} \cr Animal id(s).}
+
+\item{end}{\code{[logical(1)=TRUE]} \cr For steps, should the end or start points be used?}
 }
 \description{
 Several other packages provides methods to analyse movement data, and \code{amt} provides coercion methods to some packages.

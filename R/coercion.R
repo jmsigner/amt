@@ -4,6 +4,7 @@
 #'
 #' @template track_xy_star
 #' @param id `[numeric,character,factor]` \cr Animal id(s).
+#' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @template dots_none
 #' @name coercion
 #' @export

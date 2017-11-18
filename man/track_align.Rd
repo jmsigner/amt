@@ -19,5 +19,5 @@ track_align(x, ...)
 \item{tol}{The tolerance.}
 }
 \description{
-Functions to only selects relocations that can be aligned with a new timesires (within osme tolerance).
+Functions to only selects relocations that can be aligned with a new time series (within some tolerance).
 }

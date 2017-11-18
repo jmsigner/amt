@@ -29,14 +29,21 @@ hr_mcp(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{n}{\code{[integer(1)]} \cr The number of neighbours used when calculating local convex hulls.}
+\item{n}{\code{[integer(1)]} \cr The number of neighbors used when calculating
+local convex hulls.}
 
-\item{levels}{\code{[numeric]} \cr The isopleth levels used for calculating home ranges. Should be \code{0 < level < 1}.}
+\item{levels}{\code{[numeric]} \cr The isopleth levels used for calculating home
+ranges. Should be \code{0 < level < 1}.}
 
-\item{rand_buffer}{\code{[numeric(1)]} \cr Random buffer to avaoid polygons with area 0 (if coordinates are numerically identical).}
+\item{rand_buffer}{\code{[numeric(1)]} \cr Random buffer to avoid polygons with
+area 0 (if coordinates are numerically identical).}
 }
 \description{
-Functions to calculate animal home ranges from a \code{track_xy*}, and to work with home ranges. \code{hr_mcp} and \code{hr_locoh} calculate the minimum convex polygon and local convex hull home range respectively. \code{hr_area} extracts the area of an home range, \code{hr_isopleths} returns the isopleth as a \code{SpatialPolygonsDataFrame}.
+Functions to calculate animal home ranges from a \code{track_xy*}, and to work
+with home ranges. \code{hr_mcp} and \code{hr_locoh} calculate the minimum convex
+polygon and local convex hull home range respectively. \code{hr_area} extracts the
+area of an home range, \code{hr_isopleths} returns the isopleth as a
+\code{SpatialPolygonsDataFrame}.
 }
 \examples{
 data(deer)

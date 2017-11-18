@@ -9,12 +9,12 @@ track_immobile_base(x, period, spatial_tolerance)
 \arguments{
 \item{x}{A \code{trackXYT}.}
 
-\item{period}{Time threshhold that defines immobility, object of class \code{lubridate::Period}.}
+\item{period}{Time threshold that defines immobility, object of class \code{lubridate::Period}.}
 
-\item{spatial_tolerance}{Distance thresshold for consecutive relocations that define immobility in units of the coordinate reference system.}
+\item{spatial_tolerance}{Distance threshold for consecutive relocations that define immobility in units of the coordinate reference system.}
 }
 \value{
-A vecto of length \code{nrow(x)}, with 1 for fixes that are before an immobility period, and -1 for fixes that are within and after the immobility period.
+A vector of length \code{nrow(x)}, with 1 for fixes that are before an immobility period, and -1 for fixes that are within and after the immobility period.
 }
 \description{
 Function to find periods where an animal is immobile (within a spatial range) for a given amount of time, i.e. it does not move.

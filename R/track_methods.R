@@ -60,7 +60,7 @@ diff_y.track_xy <- function(x, ...) {
 
 # Utility functions -------------------------------------------------------
 
-#' Calcualte the centroid of a track.
+#' Calculate the centroid of a track.
 #'
 #' @template track_xy_star
 #' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object or not.
@@ -125,26 +125,6 @@ points.track_xy <- function(x, ...) {
   graphics::points(x[, c("x_", "y_")], ...)
 }
 
-#' Plot step-length distribution
-#'
-#' @param x `[fit_clogit]` \cr A fitted step selection.
-#' @template dots_none
-#' @export
-plot_sl <- function(x, ...) {
-  UseMethod("plot_sl", x)
-}
-
-#' @export
-plot_sl.fit_clogit <- function(x, n = 1000, ...) {
-  xx <- sl_params(x)
-  to <- qgamma(0.99, shape = xx[1], scale = xx[2])
-  xs <- seq(0, to, length.out = n)
-  plot(xs, ys <- dgamma(xs, shape = xx[1], scale = xx[2]), type = "l",
-       ylab = "Probablility",
-       xlab = "Distance")
-
-  invisible(data.frame(sl = xs, d = ys))
-}
 
 
 #' Coordinates of a track.

@@ -15,7 +15,7 @@ track(x, y, t, ..., crs = NULL)
 created.}
 
 \item{.x, .y, .t}{\code{[expression(1)]} \cr Unquoted variable names of columns
-containing the x and y coorindates, and optionally a time stamp.}
+containing the x and y coordinates, and optionally a time stamp.}
 
 \item{...}{\code{[expression]} \cr Additional columns from \code{tbl} to be used in a
 track. Columns should be provided in the form of \code{key = val} (e.g., for ids
@@ -37,7 +37,7 @@ If \code{t} was provided an object of class \code{track_xyt} is returned
 otherwise a \code{track_xy}.
 }
 \description{
-Consructor to crate a track, the basic building block of the \code{amt} pacakge. A
+Constructor to crate a track, the basic building block of the \code{amt} package. A
 \code{track} is usually created from a set of \code{x} and \code{y} coordinates, possibly
 time stamps, and any number of optional columns, such as id, sex, age, etc.
 }

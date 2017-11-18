@@ -3,7 +3,7 @@
 \name{centroid}
 \alias{centroid}
 \alias{centroid.track_xy}
-\title{Calcualte the centroid of a track.}
+\title{Calculate the centroid of a track.}
 \usage{
 centroid(x, ...)
 
@@ -17,7 +17,7 @@ centroid(x, ...)
 \item{spatial}{\code{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPoints}-object or not.}
 }
 \description{
-Calcualte the centroid of a track.
+Calculate the centroid of a track.
 }
 \examples{
 data(deer)

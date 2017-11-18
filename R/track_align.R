@@ -1,6 +1,6 @@
 #' Selects relocations that fit a new time series
 #'
-#' Functions to only selects relocations that can be aligned with a new timesires (within osme tolerance).
+#' Functions to only selects relocations that can be aligned with a new time series (within some tolerance).
 #' @param x A track.
 #' @param nt The new time trajectory.
 #' @param tol The tolerance.

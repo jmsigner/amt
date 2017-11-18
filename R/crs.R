@@ -27,7 +27,8 @@ has_crs <- function(x, ...) {
 
 #' @export
 has_crs.default <- function(x, ...) {
-  "Not implementes for objects of this class"
+  warning("Not implementes for objects of this class")
+  FALSE
 }
 
 # track -------------------------------------------------------------------

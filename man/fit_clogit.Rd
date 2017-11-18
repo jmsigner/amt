@@ -15,7 +15,7 @@ fit_clogit(data, formula, more = NULL, summary_only = FALSE, ...)
 
 \item{summary_only}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} only a \code{broom::tidy} summary of the model is returned.}
 
-\item{...}{Addtional arguments, passed to \code{survival::clogit}.}
+\item{...}{Additional arguments, passed to \code{survival::clogit}.}
 }
 \description{
 This function is a wrapper around \code{stats::glm}, making it usable in a piped workflow.

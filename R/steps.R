@@ -3,9 +3,9 @@
 #' `step_lengths` can be use to calculate step lengths of a track. `direction_abs` and `direction_rel` calculate the absolute and relative direction of steps. `steps` converts a `track_xy*` from a point representation to a step representation and automatically calculates step lengths and relative turning angles.
 #'
 #' @template track_xy_star
-#' @param lonlat `[logical(1)=TRUE]` \cr Should geographical or planar coordinates be used? If `TRUE` geogrphic distances are calculated.
+#' @param lonlat `[logical(1)=TRUE]` \cr Should geographical or planar coordinates be used? If `TRUE` geographic distances are calculated.
 #' @param degrees `[logical(1)=TRUE]` \cr Should turn angles be calculated in degrees or radians? If `TRUE` angles are returned in degrees, otherwise in radians.
-#' @param full_circle `[logical(1)=FALSE]` \cr If `TRUE` angles are returned between 0 and 360 degrees or 0 and $2pi$ (depnding on the value of `degrees`), otherwise angles are between -180 and 180 or $-pi$ and $pi$.
+#' @param full_circle `[logical(1)=FALSE]` \cr If `TRUE` angles are returned between 0 and 360 degrees or 0 and $2pi$ (depending on the value of `degrees`), otherwise angles are between -180 and 180 or $-pi$ and $pi$.
 #' @param zero_dir `[character(1)='E']` \cr Indicating the zero direction. Must be either `N`, `E`, `S`, or `W`.
 #' @param clockwise `[logical(1)=FALSE]` \cr Should angles be calculated clock or anti-clockwise?
 #' @param append_last `[logical(1)=TRUE]` \cr If `TRUE` an `NA` is appended at the end of all angles.
@@ -187,8 +187,8 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_las
 
   p <- direction_abs(x, degrees = FALSE, lonlat = lonlat, full_circle = FALSE,
                      zero_dir = zero_dir, clockwise = FALSE, append_last = append_last)
-  p <- c(NA, diff_rcpp(p))
-  p <- ifelse( p <= (-pi), p + 2 * pi, p)
+  p <- c(NA, diff_rcpp(p)) %% (2 * pi)
+  #p <- ifelse(p <= (-pi), p + 2 * pi, p)
   p <- ifelse( p > pi, p - 2 * pi, p)
   p * if (degrees) 180 / pi else 1
 }
@@ -258,11 +258,16 @@ steps_by_burst <- function(x, ...) {
 
 #' @rdname steps
 #' @export
-steps_by_burst.track_xyt <- function(x, lonlat = FALSE, ...) {
+steps_by_burst.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
 
   togo <- cumsum(rle(x$burst_)$lengths)
-  ss <- suppressWarnings(steps(x, lonlat = lonlat))
+  ss <- suppressWarnings(steps(x, lonlat = lonlat, ...))
   ss <- tibble::add_column(ss, burst_ = x$burst_[-1], .before = 1)
+
+  if (!degrees) {
+    ss$ta_ <- ss$ta_ * pi / 180
+  }
+
   ss[head(togo, -1) + 1, "ta_"] <- NA
   ss <- ss[-togo, ]
   class(ss) <- c("steps", class(x)[-(1:2)])
@@ -289,7 +294,7 @@ steps.track_xy <- function(x, lonlat = FALSE, ...) {
 
 #' @export
 #' @rdname steps
-steps.track_xyt <- function(x, lonlat = FALSE, ...) {
+steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE) {
   n <- nrow(x)
   if ("burst_" %in% names(x)) {
     warning("burst's are ignored, use steps_by_burst instead.")
@@ -298,6 +303,11 @@ steps.track_xyt <- function(x, lonlat = FALSE, ...) {
   xx$t1_ <- x$t_[-n]
   xx$t2_ <- x$t_[-1]
   xx$dt_ <- xx$t2_ - xx$t1_
+
+  if (!degrees) {
+    xx$ta_ <- xx$ta_ * pi / 180
+  }
+
   class(xx) <- c("steps", class(x)[-(1:2)])
   attr(xx, "crs_") <- attr(x, "crs_")
   xx

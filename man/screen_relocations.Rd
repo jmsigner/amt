@@ -9,13 +9,13 @@ screen_relocations(x, median_crit, mean_crit, spike_speed, spike_cos, window)
 \arguments{
 \item{x}{A \code{track_xyt}}
 
-\item{median_crit}{\code{[numeric(1)]{>0}} \cr Threshhold for the median (in m).}
+\item{median_crit}{\code{[numeric(1)]{>0}} \cr Threshold for the median (in m).}
 
-\item{mean_crit}{\code{[numeric(1)]{>0}} \cr Threshhold for the mean (in m).}
+\item{mean_crit}{\code{[numeric(1)]{>0}} \cr Threshold for the mean (in m).}
 
-\item{spike_speed}{\code{[numeric(1)]{>0}} \cr Threshhold spike speed in m/s.}
+\item{spike_speed}{\code{[numeric(1)]{>0}} \cr Threshold spike speed in m/s.}
 
-\item{spike_cos}{\code{[numeric(1)]{>0}} \cr Threshhold for the cosine.}
+\item{spike_cos}{\code{[numeric(1)]{>0}} \cr Threshold for the cosine.}
 
 \item{window}{\code{[numeric(1)=10]{>2}} \cr Window width.}
 }

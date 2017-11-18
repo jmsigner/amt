@@ -11,7 +11,7 @@
 #'   `table`.
 #' @template dots_none
 #'
-#' @return Dependeing on `summarize` and `as_tibble`, a vector, table or tibble.
+#' @return Depending on `summarize` and `as_tibble`, a vector, table or tibble.
 #' @export
 #'
 #' @name summarize_sampling_rate

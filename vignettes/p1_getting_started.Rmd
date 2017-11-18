@@ -29,10 +29,11 @@ tr1
 ```
 
 At the moment there are two types of tracks:
+
 - `track_xy` is a track that only has coordinates, and
 - `track_xyt` is a track that has a timestamp associated to each coordinate pair.
 
-Creating the either a `track_xy` or `track_xyt` is determined wether or not a time stamp is passed to the function `mk_track`. In the previouse example we only passed `x` and `y` coordinats. Hency a `track_xy` was created.
+Whether a `track_xy` or `track_xyt` is created is determined whether or not a timestamp is passed to the function `mk_track`. In the previous example we only passed `x` and `y` coordinates. Hence a `track_xy` was created.
 
 
 ```{r}
@@ -47,7 +48,7 @@ tr2 <- mk_track(df1, x, y, t)
 class(tr2)
 ```
 
-From the output above we see, that a `track_xyt` is also a `track_xy`. This means that all methods for `track_xy` also work for a `track_xyt` (but not the reverse).
+From the output above we see that a `track_xyt` is also a `track_xy`. This means that all methods for `track_xy` also work for a `track_xyt` (but not the reverse).
 
 
 ### Adding additional information
@@ -69,13 +70,13 @@ tr4
 
 ### Coordinate refenece system
 
-`mk_track` has one further optional argument (`crs`), which allows the user to set a coordinate reference system (CRS) of the track. The CRS needs to be provided as vaild `proj4string`, see the documentation of `sp::CRS` for further details. 
+`mk_track` has one further optional argument (`crs`), which allows the user to set a coordinate reference system (CRS) of the track. The CRS needs to be provided as valid `proj4string`, see the documentation of `sp::CRS` for further details. 
 
 ### An example with real data
 
 In the `amt` relocation data of one red deer from northern Germany is included. We will use this data set to to illustrate how to create a track.
 
-We beginn with loading and inspecting the data.
+We benign with loading and inspecting the data.
 
 ```{r}
 data(sh)
@@ -84,7 +85,7 @@ head(sh)
 
 Before creating a track, we have to do some data cleaning:
 
-1. check if any coordinates are missing (and if so, remove the relocations), 
+1. check if any coordinates are missing (and if so, remove the relocation), 
 2. parse the date and time, 
 3. create a time stamp, 
 4. check for duplicated time stamps, and
@@ -119,7 +120,7 @@ Now we can create a track.
 tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month)
 ```
 
-The column names of the data set already indicate the CRS of the data. We cann add this information when creating a track.
+The column names of the data set already indicate the CRS of the data. We can add this information when creating a track.
 
 ```{r}
 tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month, 
@@ -162,7 +163,7 @@ class(tr3)
 
 #### Transforming CRS
 
-If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper arround `sp::spTransform`). For illustration we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
+If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper around `sp::spTransform`). For illustration we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
 
 ```{r}
 transform_coords(tr2, sp::CRS("+init=epsg:4326"))
@@ -182,9 +183,9 @@ If we look at a summary of `sl_`
 summary(tr2$sl_)
 ```
 
-we note two things. First, there is one `NA` step length, this is expected, because we are stil in a point representation (i.e., there is no step length for the last relocation). Secondly, the range is quiet large from 0 to almost 5km. Before looking at step lengths in any further detail, we will have to make sure the sampling rate is more or less regular.
+we note two things. First, there is one `NA` step length, this is expected, because we are still in a point representation (i.e., there is no step length for the last relocation). Secondly, the range is quiet large from 0 to almost 5km. Before looking at step lengths in any further detail, we will have to make sure the sampling rate is more or less regular.
 
-The funciton `summarize_sampling_rate` provides an easy way to look at the sampling rate.
+The function `summarize_sampling_rate` provides an easy way to look at the sampling rate.
 
 ```{r}
 summarize_sampling_rate(tr2)

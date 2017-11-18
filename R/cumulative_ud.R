@@ -1,6 +1,6 @@
 #' Calculate a cumulative UD
 #'
-#' @param x `[RasterLayer]` \cr Containig the Utilization Distribution (UD).
+#' @param x `[RasterLayer]` \cr Containing the Utilization Distribution (UD).
 #' @template dots_none
 #' @export
 #' @note This function is typically used to obtain isopleths.

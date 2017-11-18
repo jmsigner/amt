@@ -11,7 +11,7 @@ cumulative_ud(x, ...)
 \method{cumulative_ud}{RasterLayer}(x, ...)
 }
 \arguments{
-\item{x}{\code{[RasterLayer]} \cr Containig the Utilization Distribution (UD).}
+\item{x}{\code{[RasterLayer]} \cr Containing the Utilization Distribution (UD).}
 
 \item{...}{Further arguments, none implemented.}
 }

@@ -2,26 +2,28 @@
 % Please edit documentation in R/day_night.R
 \name{day_night}
 \alias{day_night}
-\alias{day_night.steps}
-\title{Extract if a fix was taken during day or night.}
+\title{Extract if a fix was taken during day or night (optionally also include dawn and dusk).}
 \usage{
-day_night(x, ...)
-
-\method{day_night}{steps}(x, end = TRUE, ...)
+day_night(.tbl, x = t_, solar.dep = 6, include.crepuscule = TRUE, ...)
 }
 \arguments{
-\item{x}{A \code{track_xyt} or \code{steps_xyt}}
+\item{.tbl}{\code{[track_xyt,steps_xyt]}\cr A track or steps.}
+
+\item{x}{\code{[symbol(1)=t_]}\cr Name of the time column, usually this is \code{t_}.}
+
+\item{solar.dep}{\code{[numeric(1,n)=6]}\cr The angle of the sun below the horizon in degrees. Passed to \code{maptools::crepuscule}.}
+
+\item{include.crepuscule}{\code{[logical(1)=TRUE]}\cr Should dawn and dusk be included.}
 
 \item{...}{Further arguments, none implemented.}
-
-\item{end}{\code{[logical(1)=TRUE]} \cr If \code{TRUE} the timestamp of the end of the step is used. Else the timestamp of the start of the step is used.}
 }
 \description{
-A convinience wrapper around \code{maptools::sunriset}.
+A convenience wrapper around \code{maptools::sunriset} and \code{maptools::repuscule}.
 }
 \examples{
 data(deer)
-deer \%>\% mutate(time_of_day = day_night(.))
+deer \%>\% mutate(time_of_day = day_night(t_))
 deer \%>\% steps_by_burst \%>\%
-  mutate(time_of_day = day_night(.))
+  mutate(time_of_day = day_night(t_))
+
 }

@@ -29,7 +29,7 @@ sl_scale(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{alpha}{\code{[numeric(1)=0.05]{0-1}}\cr Alpha value for calculating 1-alpha confidence intervalls.}
+\item{alpha}{\code{[numeric(1)=0.05]{0-1}}\cr Alpha value for calculating 1-alpha confidence intervals.}
 }
 \description{
 Returns the parameter of the distribution (e.g., gamma) fitted to the distribution of step lengths.

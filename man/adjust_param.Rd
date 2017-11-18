@@ -25,7 +25,7 @@ selection function (iSSF).
 }
 \details{
 Currently the shape and scale parameter of a Gamma distribution and the
-concentration parameter (=kappa) of a von Mises distribution can be adapted.
+concentration parameter (=kappa) of a von-Mises distribution can be adjusted.
 When fitting a integrated step selection model, the tentative shape parameter
 of the Gamma distribution of the step length can be adjusted with the
 coefficients of the log of step lengths, the scale of the Gamma distribution

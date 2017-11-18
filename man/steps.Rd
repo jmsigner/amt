@@ -32,13 +32,13 @@ step_lengths(x, ...)
 
 steps_by_burst(x, ...)
 
-\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, ...)
+\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, degrees = TRUE, ...)
 
 steps(x, ...)
 
 \method{steps}{track_xy}(x, lonlat = FALSE, ...)
 
-\method{steps}{track_xyt}(x, lonlat = FALSE, ...)
+\method{steps}{track_xyt}(x, lonlat = FALSE, degrees = TRUE)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
@@ -47,7 +47,7 @@ steps(x, ...)
 
 \item{degrees}{\code{[logical(1)=TRUE]} \cr Should turn angles be calculated in degrees or radians? If \code{TRUE} angles are returned in degrees, otherwise in radians.}
 
-\item{full_circle}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} angles are returned between 0 and 360 degrees or 0 and $2pi$ (depnding on the value of \code{degrees}), otherwise angles are between -180 and 180 or $-pi$ and $pi$.}
+\item{full_circle}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} angles are returned between 0 and 360 degrees or 0 and $2pi$ (depending on the value of \code{degrees}), otherwise angles are between -180 and 180 or $-pi$ and $pi$.}
 
 \item{zero_dir}{\code{[character(1)='E']} \cr Indicating the zero direction. Must be either \code{N}, \code{E}, \code{S}, or \code{W}.}
 
@@ -55,7 +55,7 @@ steps(x, ...)
 
 \item{append_last}{\code{[logical(1)=TRUE]} \cr If \code{TRUE} an \code{NA} is appended at the end of all angles.}
 
-\item{lonlat}{\code{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geogrphic distances are calculated.}
+\item{lonlat}{\code{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geographic distances are calculated.}
 }
 \value{
 \code{[numeric]} \cr For \code{step_lengths()} and \code{direction_*} a numeric vector. \cr

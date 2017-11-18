@@ -18,7 +18,7 @@ fit_ta_dist_base(x, na.rm = TRUE, distr = "vonmises", ...)
 
 \item{na.rm}{\code{[logical(1)]} \cr Should \code{NA} be removed?}
 
-\item{distr}{\code{[character(1)]} \cr Name of the distribution, curently only \code{vonmises}-distribution is supported.}
+\item{distr}{\code{[character(1)]} \cr Name of the distribution, currently only \code{vonmises}-distribution is supported.}
 }
 \description{
 Fit a statistical distribution to the turn angles of a track.

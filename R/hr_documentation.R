@@ -1,11 +1,18 @@
 #' Home ranges
 #'
-#' Functions to calculate animal home ranges from a `track_xy*`, and to work with home ranges. `hr_mcp` and `hr_locoh` calculate the minimum convex polygon and local convex hull home range respectively. `hr_area` extracts the area of an home range, `hr_isopleths` returns the isopleth as a `SpatialPolygonsDataFrame`.
+#' Functions to calculate animal home ranges from a `track_xy*`, and to work
+#' with home ranges. `hr_mcp` and `hr_locoh` calculate the minimum convex
+#' polygon and local convex hull home range respectively. `hr_area` extracts the
+#' area of an home range, `hr_isopleths` returns the isopleth as a
+#' `SpatialPolygonsDataFrame`.
 #'
 #' @template track_xy_star
-#' @param levels `[numeric]` \cr The isopleth levels used for calculating home ranges. Should be `0 < level < 1`.
-#' @param n `[integer(1)]` \cr The number of neighbours used when calculating local convex hulls.
-#' @param rand_buffer `[numeric(1)]` \cr Random buffer to avaoid polygons with area 0 (if coordinates are numerically identical).
+#' @param levels `[numeric]` \cr The isopleth levels used for calculating home
+#'   ranges. Should be `0 < level < 1`.
+#' @param n `[integer(1)]` \cr The number of neighbors used when calculating
+#'   local convex hulls.
+#' @param rand_buffer `[numeric(1)]` \cr Random buffer to avoid polygons with
+#'   area 0 (if coordinates are numerically identical).
 #' @template dots_none
 #' @name hr
 #' @examples

@@ -1,8 +1,12 @@
-#' Fit a statistical distribution to step lenghts.
+
+# step-lengths ------------------------------------------------------------
+
+
+#' Fit a statistical distribution to step lengths.
 #'
 #' @param .tbl `[track_xy,track_xyt]` \cr A track.
 #' @param x `[expression]` \cr The name of the column containing step lengths, usually `sl_`.
-#' @param distr `[character(1)]` \cr Name of the distribution, curently only `gamma`-distribution is supported.
+#' @param distr `[character(1)]` \cr Name of the distribution, currently only `gamma`-distribution is supported.
 #' @param na.rm `[logical(1)]` \cr Should `NA` be removed?
 #' @template dots_none
 #' @name fit_sl_dist
@@ -40,7 +44,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
 #'
 #' Returns the parameter of the distribution (e.g., gamma) fitted to the distribution of step lengths.
 #' @param x An object that contains either a fitted conditional logistic regression, random steps or just a fitted distribution.
-#' @param alpha `[numeric(1)=0.05]{0-1}`\cr Alpha value for calculating 1-alpha confidence intervalls.
+#' @param alpha `[numeric(1)=0.05]{0-1}`\cr Alpha value for calculating 1-alpha confidence intervals.
 #' @export
 #' @name sl_params
 #' @template dots_none
@@ -127,13 +131,33 @@ sl_distr.random_steps <- function (x, ...) {
   sl_distr(attributes(x)$sl_)
 }
 
+#' Plot step-length distribution
+#'
+#' @param x `[fit_clogit]` \cr A fitted step selection.
+#' @template dots_none
+#' @export
+plot_sl <- function(x, ...) {
+  UseMethod("plot_sl", x)
+}
+
+#' @export
+plot_sl.fit_clogit <- function(x, n = 1000, ...) {
+  xx <- sl_params(x)
+  to <- qgamma(0.99, shape = xx[1], scale = xx[2])
+  xs <- seq(0, to, length.out = n)
+  plot(xs, ys <- dgamma(xs, shape = xx[1], scale = xx[2]), type = "l",
+       ylab = "Probablility",
+       xlab = "Distance")
+
+  invisible(data.frame(sl = xs, d = ys))
+}
 
 # turning angles ----------------------------------------------------------
 #' Fit a statistical distribution to the turn angles of a track.
 #'
 #' @param .tbl `[track_xy,track_xyt]` \cr A track.
 #' @param x `[expression]` \cr The name of the column containing turn angles, usually `ta_`.
-#' @param distr `[character(1)]` \cr Name of the distribution, curently only `vonmises`-distribution is supported.
+#' @param distr `[character(1)]` \cr Name of the distribution, currently only `vonmises`-distribution is supported.
 #' @param na.rm `[logical(1)]` \cr Should `NA` be removed?
 #'
 #' @template dots_none
@@ -241,4 +265,23 @@ ta_distr.fit_clogit <- function (x, ...) {
 #' @rdname ta_distr
 ta_distr.random_steps <- function (x, ...) {
   ta_distr(attributes(x)$ta_)
+}
+
+#' Get `kappa`
+#'
+#' Convenience function to extract kappa and its SE.
+#'
+#' @param `[list]` \cr Fitted turn angle distribution.
+#' @template dots_none
+#' @export
+get_kappa <- function (x, ...) {
+  UseMethod("get_kappa", x)
+}
+
+#' @export
+get_kappa.list <- function (x, ...) {
+  tibble::tibble(
+    kappa = x$fit$kappa,
+    se = x$fit$se.kappa
+  )
 }

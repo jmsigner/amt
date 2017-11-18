@@ -26,7 +26,7 @@ sampling intervals are returned.}
 \code{table}.}
 }
 \value{
-Dependeing on \code{summarize} and \code{as_tibble}, a vector, table or tibble.
+Depending on \code{summarize} and \code{as_tibble}, a vector, table or tibble.
 }
 \description{
 Returns a summary of sampling rates

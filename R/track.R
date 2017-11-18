@@ -1,13 +1,13 @@
 #' Create a `track_*`
 #'
-#' Consructor to crate a track, the basic building block of the `amt` pacakge. A
+#' Constructor to crate a track, the basic building block of the `amt` package. A
 #' `track` is usually created from a set of `x` and `y` coordinates, possibly
 #' time stamps, and any number of optional columns, such as id, sex, age, etc.
 #'
 #' @param tbl [data.frame] \cr The `data.frame` from which a track should be
 #'   created.
 #' @param .x,.y,.t `[expression(1)]` \cr Unquoted variable names of columns
-#'   containing the x and y coorindates, and optionally a time stamp.
+#'   containing the x and y coordinates, and optionally a time stamp.
 #' @param ... `[expression]` \cr Additional columns from `tbl` to be used in a
 #'   track. Columns should be provided in the form of `key = val` (e.g., for ids
 #'   this may look like this `id = c(1, 1, 1, 2, 2, 2` for three points for ids
