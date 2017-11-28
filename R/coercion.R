@@ -4,7 +4,6 @@
 #'
 #' @template track_xy_star
 #' @param id `[numeric,character,factor]` \cr Animal id(s).
-#' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @template dots_none
 #' @name coercion
 #' @export
@@ -25,6 +24,8 @@ as_sp.track_xy <- function(x, ...) {
 }
 
 #' @export
+#' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
+#' @rdname coercion
 as_sp.steps <- function(x, end = TRUE, ...) {
   if (end) {
     sp::SpatialPoints(
@@ -112,7 +113,7 @@ as_ltraj.track_xyt <- function(x, ...) {
 #' data(deer)
 #' d <- as_bcpa(deer)
 #' \dontrun{
-#' bcpa1 <- WindowSweep(d, "Theta", K = 2, windowsize = 50)
+#' bcpa1 <- bcpa::WindowSweep(d, "Theta", K = 2, windowsize = 50)
 #' plot(bcpa1, type = "flat", clusterwidth = 1)
 #' }
 

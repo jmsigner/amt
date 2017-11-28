@@ -36,9 +36,9 @@ steps_by_burst(x, ...)
 
 steps(x, ...)
 
-\method{steps}{track_xy}(x, lonlat = FALSE, ...)
+\method{steps}{track_xy}(x, lonlat = FALSE, degrees = TRUE, ...)
 
-\method{steps}{track_xyt}(x, lonlat = FALSE, degrees = TRUE)
+\method{steps}{track_xyt}(x, lonlat = FALSE, degrees = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}

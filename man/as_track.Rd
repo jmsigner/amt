@@ -17,3 +17,7 @@ as_track(x, ...)
 \description{
 Coerce other classes (currently implemented: \code{SpatialPoints}) to a \code{track_xy}.
 }
+\examples{
+xy <- sp::SpatialPoints(x = c(1, 3, 2, 1), y = c(3, 2, 2, 1))
+as_track(xy)
+}

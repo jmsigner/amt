@@ -1,5 +1,7 @@
 #' Calculate a cumulative UD
 #'
+#' Calculate the cumulative utilization distribution (UD).
+#'
 #' @param x `[RasterLayer]` \cr Containing the Utilization Distribution (UD).
 #' @template dots_none
 #' @export
@@ -15,7 +17,7 @@ cumulative_ud <- function (x, ...) {
 cumulative_ud.RasterLayer <- function(x, ...) {
   r1 <- x
   v <- raster::getValues(r1)
-  v <- v / sum(v, na.rm=TRUE)  # standarize
+  v <- v / sum(v, na.rm = TRUE)  # standarize
   udFromDat <- raster::setValues(r1, v)
   v <- cumsum(v[order(-v)])[order(order(-v))]
   raster::setValues(r1, v)

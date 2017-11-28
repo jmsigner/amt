@@ -3,20 +3,23 @@
 \name{transform_coords}
 \alias{transform_coords}
 \alias{transform_coords.track_xy}
+\alias{transform_crs}
 \title{Transform CRS}
 \usage{
 transform_coords(x, ...)
 
 \method{transform_coords}{track_xy}(x, crs_to, crs_from, ...)
+
+transform_crs(x, ...)
 }
 \arguments{
-\item{x}{A track.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{crs_to}{coordinate reference system the data should be transformed to, see \code{sp::CRS}.}
+\item{crs_to}{\code{[sp::CRS(1)]} \cr Coordinate reference system the data should be transformed to, see \code{sp::CRS}.}
 
-\item{crs_from}{coordinate reference system the data are currently in, see \code{sp::CRS}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
+\item{crs_from}{\code{[sp::CRS(1)]} \cr Coordinate reference system the data are currently in, see \code{sp::CRS}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
 }
 \description{
 Transforms the CRS for a track.

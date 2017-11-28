@@ -284,9 +284,14 @@ steps <- function(x, ...) {
 
 #' @export
 #' @rdname steps
-steps.track_xy <- function(x, lonlat = FALSE, ...) {
+steps.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
   n <- nrow(x)
   xx <- steps_base(x, n, lonlat = lonlat)
+
+  if (!degrees) {
+    xx$ta_ <- xx$ta_ * pi / 180
+  }
+
   class(xx) <- c("steps", class(x)[-1])
   attr(xx, "crs_") <- attr(x, "crs_")
   xx
@@ -294,7 +299,7 @@ steps.track_xy <- function(x, lonlat = FALSE, ...) {
 
 #' @export
 #' @rdname steps
-steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE) {
+steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
   n <- nrow(x)
   if ("burst_" %in% names(x)) {
     warning("burst's are ignored, use steps_by_burst instead.")

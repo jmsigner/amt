@@ -24,6 +24,6 @@ A convenience wrapper around \code{maptools::sunriset} and \code{maptools::repus
 data(deer)
 deer \%>\% mutate(time_of_day = day_night(t_))
 deer \%>\% steps_by_burst \%>\%
-  mutate(time_of_day = day_night(t_))
+  mutate(time_of_day = day_night(t2_))
 
 }

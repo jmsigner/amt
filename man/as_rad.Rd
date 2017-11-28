@@ -2,16 +2,20 @@
 % Please edit documentation in R/helper.R
 \name{as_rad}
 \alias{as_rad}
-\title{Converts angles to radians}
+\title{Converts angles to radians.}
 \usage{
 as_rad(x)
 }
 \arguments{
-\item{x}{\code{[numeric]}\cr Angles.}
+\item{x}{\code{[numeric]}\cr Angles in degrees.}
 }
 \description{
-Converts angles to radians
+Converts angles to radians.
 }
 \examples{
 as_rad(seq(-180, 180, 30))
+
+# The default unit of turning angles is degrees.
+data(deer)
+deer \%>\% steps() \%>\% mutate(ta_ = as_rad(ta_))
 }

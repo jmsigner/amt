@@ -271,7 +271,7 @@ ta_distr.random_steps <- function (x, ...) {
 #'
 #' Convenience function to extract kappa and its SE.
 #'
-#' @param `[list]` \cr Fitted turn angle distribution.
+#' @param x `[list]` \cr Fitted turn angle distribution.
 #' @template dots_none
 #' @export
 get_kappa <- function (x, ...) {

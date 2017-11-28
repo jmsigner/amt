@@ -8,6 +8,7 @@
 #' @export
 #' @examples
 #' data(deer)
+#' has_crs(deer)
 #' get_crs(deer)
 
 get_crs <- function(x, ...) {

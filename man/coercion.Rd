@@ -3,6 +3,7 @@
 \name{coercion}
 \alias{coercion}
 \alias{as_sp}
+\alias{as_sp.steps}
 \alias{as_move}
 \alias{as_move.track_xy}
 \alias{as_move.track_xyt}
@@ -18,6 +19,8 @@
 \title{Coerce a track to other formats.}
 \usage{
 as_sp(x, ...)
+
+\method{as_sp}{steps}(x, end = TRUE, ...)
 
 as_move(x, ...)
 
@@ -48,9 +51,9 @@ as_moveHMM(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{id}{\code{[numeric,character,factor]} \cr Animal id(s).}
-
 \item{end}{\code{[logical(1)=TRUE]} \cr For steps, should the end or start points be used?}
+
+\item{id}{\code{[numeric,character,factor]} \cr Animal id(s).}
 }
 \description{
 Several other packages provides methods to analyse movement data, and \code{amt} provides coercion methods to some packages.
@@ -65,7 +68,7 @@ as_ltraj(deer, id = "animal_3")
 data(deer)
 d <- as_bcpa(deer)
 \dontrun{
-bcpa1 <- WindowSweep(d, "Theta", K = 2, windowsize = 50)
+bcpa1 <- bcpa::WindowSweep(d, "Theta", K = 2, windowsize = 50)
 plot(bcpa1, type = "flat", clusterwidth = 1)
 }
 data(deer)

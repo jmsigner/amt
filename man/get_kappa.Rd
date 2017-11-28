@@ -7,9 +7,9 @@
 get_kappa(x, ...)
 }
 \arguments{
-\item{...}{Further arguments, none implemented.}
+\item{x}{\code{[list]} \cr Fitted turn angle distribution.}
 
-\item{`[list]`}{\cr Fitted turn angle distribution.}
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Convenience function to extract kappa and its SE.
