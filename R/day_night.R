@@ -1,6 +1,6 @@
 #' Extract if a fix was taken during day or night (optionally also include dawn and dusk).
 #'
-#' A convenience wrapper around `maptools::sunriset` and `maptools::repuscule`.
+#' A convenience wrapper around `maptools::sunriset` and `maptools::crepuscule`.
 #'
 #' @param .tbl `[track_xyt,steps_xyt]`\cr A track or steps.
 #' @param x `[symbol(1)=t_]`\cr Name of the time column, usually this is `t_`.
@@ -13,7 +13,7 @@
 #' data(deer)
 #' deer %>% mutate(time_of_day = day_night(t_))
 #' deer %>% steps_by_burst %>%
-#'   mutate(time_of_day = day_night(t_))
+#'   mutate(time_of_day = day_night(t2_))
 #'
 #' @export
 day_night <- function(.tbl, x = t_, solar.dep = 6, include.crepuscule = TRUE, ...) {
