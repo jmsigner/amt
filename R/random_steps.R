@@ -40,7 +40,7 @@ random_steps_base <- function(x, n_control, sl, ta) {
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(1:ns, each = n_control)
 
-  slr <-  if (sl$name %in% c("gamma", "exp", "weibull")) {
+  slr <-  if (sl$name %in% c("gamma")) {
     do.call(paste0("r", sl$fit$distname), c(list(n = ns * n_control), as.list(sl$fit$estimate)))
   } else {
     stop("sl dist not implemented")

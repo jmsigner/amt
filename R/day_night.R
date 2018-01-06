@@ -11,9 +11,10 @@
 #' @export
 #' @examples
 #' data(deer)
-#' deer %>% mutate(time_of_day = day_night(t_))
+#' deer %>% day_night(t_)
+#' deer %>% mutate(time_of_day = day_night(., t_))
 #' deer %>% steps_by_burst %>%
-#'   mutate(time_of_day = day_night(t2_))
+#'   mutate(time_of_day = day_night(., t2_))
 #'
 #' @export
 day_night <- function(.tbl, x = t_, solar.dep = 6, include.crepuscule = TRUE, ...) {

@@ -14,7 +14,7 @@ habitat_kernel <- function(fit, resources, exp = TRUE, coef = NULL) {
 
   hk <- raster::raster(resources)
   hk <- raster::setValues(hk, 0)
-  for (i in 1:length(vars)) {
+  for (i in vars) {
     hk <- hk + resources[[i]] * coef(fit)[i]
   }
   if (exp) {

@@ -5,7 +5,7 @@
 #' @template track_xy_star_steps
 #' @param covariates `[RasterLayer,RasterStack,RasterBrick]` \cr The
 #'   (environmental) covariates.
-#' @param where `[character(1)="end"]{"start", "end"}` \cr For `steps` this
+#' @param where `[character(1)="end"]{"start", "end", "both"}` \cr For `steps` this
 #'   determines if the covariate values should be extracted at the beginning or
 #'   the end of a step. or `end`.
 #' @template dots_none
@@ -38,10 +38,19 @@ extract_covariates.random_points <- function(x, covariates, ...) {
 #' @rdname extract_covariates
 extract_covariates.steps <- function(x, covariates, where = "end", ...) {
   if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
-    x[names(covariates)] <- if (where == "end") {
-      raster::extract(covariates, x[, c("x2_", "y2_")])
+    if (where == "both") {
+      x_start <- raster::extract(covariates, x[, c("x1_", "y1_")], df = TRUE)[, -1]
+      names(x_start) <- paste0(names(x_start), "_start")
+      x_end <- raster::extract(covariates, x[, c("x2_", "y2_")], df = TRUE)[, -1]
+      names(x_end) <- paste0(names(x_end), "_end")
+      x_all <- cbind(x_start, x_end)
+      x[names(x_all)] <- x_all
     } else {
-      raster::extract(covariates, x[, c("x1_", "y1_")])
+      x[names(covariates)] <- if (where == "end") {
+        raster::extract(covariates, x[, c("x2_", "y2_")])
+      } else if (where == "start") {
+        raster::extract(covariates, x[, c("x1_", "y1_")])
+      }
     }
     x
   } else {
