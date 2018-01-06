@@ -11,7 +11,7 @@ movement_kernel <- function(scale, shape, template, quant = 0.99) {
     mk <- mk_base(dist, raster::res(template)[1])
     mk <- mk_gamma(mk, shape= shape, scale = scale)
     attributes(mk)$abt <- list(scale = scale, shape = shape,
-                               adjust = adjust, dist = dist,
+                               dist = dist,
                                quant = quant)
     mk
 }
