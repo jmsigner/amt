@@ -153,7 +153,7 @@ plot_sl.fit_clogit <- function(x, n = 1000, ...) {
 }
 
 # turning angles ----------------------------------------------------------
-#' Fit a statistical distribution to the turn angles of a track.
+#' Fit a statistical distribution to the turn angles of a track
 #'
 #' @param .tbl `[track_xy,track_xyt]` \cr A track.
 #' @param x `[expression]` \cr The name of the column containing turn angles, usually `ta_`.

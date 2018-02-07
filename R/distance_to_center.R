@@ -1,4 +1,4 @@
-#' Distance to center.
+#' Distance to center
 #'
 #' Distances to frequently used areas. `distance_to_center` calculates the
 #' distance to the home-range center (i.e., the centroid of the `x` and `y`

@@ -1,4 +1,4 @@
-#' Relocations of 1 red deer.
+#' Relocations of 1 red deer
 #'
 #' 1500 GPS relocations of one red deer from northern Germany.
 #'
@@ -12,7 +12,7 @@
 #' @source Verein für Wildtierforschung Dresden und Göttingen e.V.
 "sh"
 
-#' Forest cover.
+#' Forest cover
 #'
 #' Forest cover for the home range of one red deer in northern Germany.
 #'
@@ -23,7 +23,7 @@
 #'   data.
 "sh_forest"
 
-#' Relocations of 1 red deer.
+#' Relocations of 1 red deer
 #'
 #' 826 GPS relocations of one red deer from northern Germany. The data is
 #' already resampled to a regular time interval of 6 hours and the coordinate

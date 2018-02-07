@@ -12,8 +12,6 @@
 \alias{as_ltraj.track_xyt}
 \alias{as_bcpa}
 \alias{as_bcpa.track_xyt}
-\alias{as_ctmm}
-\alias{as_ctmm.track_xyt}
 \alias{as_moveHMM}
 \alias{as_moveHMM.track_xy}
 \title{Coerce a track to other formats.}
@@ -38,10 +36,6 @@ as_bcpa(x, ...)
 
 \method{as_bcpa}{track_xyt}(x, ...)
 
-as_ctmm(x, ...)
-
-\method{as_ctmm}{track_xyt}(x, ...)
-
 as_moveHMM(x, ...)
 
 \method{as_moveHMM}{track_xy}(x, ...)
@@ -56,7 +50,7 @@ as_moveHMM(x, ...)
 \item{id}{\code{[numeric,character,factor]} \cr Animal id(s).}
 }
 \description{
-Several other packages provides methods to analyse movement data, and \code{amt} provides coercion methods to some packages.
+Several other packages provides methods to analyse movement data, and \code{amt} provides coercion methods to some packages
 }
 \examples{
 data(deer)
@@ -71,8 +65,6 @@ d <- as_bcpa(deer)
 bcpa1 <- bcpa::WindowSweep(d, "Theta", K = 2, windowsize = 50)
 plot(bcpa1, type = "flat", clusterwidth = 1)
 }
-data(deer)
-as_ctmm(deer)
 # Fit HMM with two states
 data(deer)
 dm <- as_moveHMM(deer)

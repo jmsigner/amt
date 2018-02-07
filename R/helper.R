@@ -1,4 +1,4 @@
-#' Converts angles to radians.
+#' Converts angles to radians
 #'
 #' @param x `[numeric]`\cr Angles in degrees.
 #' @export

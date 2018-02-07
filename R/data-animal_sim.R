@@ -1,6 +1,6 @@
 #' Simulated movement data of 1 animal.
 #'
-#' 32400 simulated relocations of an animal.
+#' 32400 simulated relocations of an animal
 #'
 #' @format A `data_frame` with 32400 rows and 3 variables:
 #' \describe{

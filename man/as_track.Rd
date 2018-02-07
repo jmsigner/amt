@@ -3,7 +3,7 @@
 \name{as_track}
 \alias{as_track}
 \alias{as_track.SpatialPoints}
-\title{Coerce to track.}
+\title{Coerce to track}
 \usage{
 as_track(x, ...)
 
@@ -18,6 +18,6 @@ as_track(x, ...)
 Coerce other classes (currently implemented: \code{SpatialPoints}) to a \code{track_xy}.
 }
 \examples{
-xy <- sp::SpatialPoints(x = c(1, 3, 2, 1), y = c(3, 2, 2, 1))
+xy <- sp::SpatialPoints(cbind(c(1, 3, 2, 1), c(3, 2, 2, 1)))
 as_track(xy)
 }

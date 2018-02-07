@@ -4,7 +4,6 @@
 #'
 #' The habitat kernel is calculated by multiplying resources with their corresponding coefficients from the fitted (i)SSF.
 #'
-#' @param fit `[fitted_clogit]` \cr Fitted model.
 #' @param resources `[RasterLayer, RasterStack]` \cr The resources.
 #' @references
 #' \insertRef{avgar2016}{amt}
@@ -21,7 +20,7 @@ NULL
 #' @param habitat_kernel `[RasterLayer]` \cr The habitat kernel.
 #' @param start `[numeric(2)]` \cr Starting point of the simulation.
 #' @param n `[integer(1)=1e5]` \cr The number of simulation steps.
-#' @details  **`simulate_ud()`:** simulates a utilization distribution (UD) from a fitted (iSSF).
+#' @details  **`simulate_ud()`:** simulates a utilization distribution (UD) from a fitted Step-Selection Function.
 #' @rdname sim_ud
 #' @export
 simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
@@ -54,15 +53,4 @@ simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
   m
 
 }
-
-#' @rdname sim_ud
-#' @details  **`issf_to_ud()`:** this function is a convenience wrapper, that combines the functions `movement_kernel`, `habitat_kernel` and `simulate_ud`.
-#' @export
-issf_to_ud <- function(fit, resources, start, quant = 0.99, adjust = TRUE, n = 1e5) {
-  mk <- movement_kernel(fit = fit, resources = resources, quant = quant, adjust = adjust)
-  hk <- habitat_kernel(fit, resources, exp = TRUE)
-  ud <- simulate_ud(movement_kernel = mk, habitat_kernel = hk, start = start, n = n)
-  ud
-}
-
 

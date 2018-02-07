@@ -3,7 +3,7 @@
 \docType{data}
 \name{deer}
 \alias{deer}
-\title{Relocations of 1 red deer.}
+\title{Relocations of 1 red deer}
 \format{A track_xyt \describe{ \item{x_}{the x-coordinate} \item{y_}{the
 y-coordinate} \item{t_}{the timestamp} \item{burst_}{the burst a particular
 points belongs to.} }}

@@ -1,6 +1,7 @@
-#' @param scale,shape `[numeric](1)\cr` Scale and scale parameter of the gamma distribution of step lengths.
+#' @param scale,shape `[numeric](1)`\cr Scale and scale parameter of the gamma distribution of step lengths.
 #' @param quant A numeric scalar, quantile of the step-length distribution that is
 #'   the maximum movement distance.
+#' @param template `[RasterLayer,RasterStack]`\cr A raster serving as template for the simulations.
 #' @details  **`movement_kernel()`:** calculates a movement kernel from a fitted
 #'   (i)SSF. The method is currently only implemented for the gamma
 #'   distribution.

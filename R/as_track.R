@@ -1,4 +1,4 @@
-#' Coerce to track.
+#' Coerce to track
 #'
 #' Coerce other classes (currently implemented: `SpatialPoints`) to a `track_xy`.
 #' @export

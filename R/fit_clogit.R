@@ -7,6 +7,7 @@
 #' @param more `[list]` \cr Optional list that is passed on the output.
 #' @param summary_only `[logical(1)=FALSE]` \cr If `TRUE` only a `broom::tidy` summary of the model is returned.
 #' @param ... Additional arguments, passed to `survival::clogit`.
+#' @name fit_clogit
 #' @export
 
 fit_clogit <- function(data, formula, more = NULL, summary_only = FALSE, ...) {
@@ -39,3 +40,11 @@ summary.fit_clogit <- function(object, ...) {
   base::summary(object$model, ...)
 }
 
+
+#' @rdname fit_clogit
+#' @export
+fit_ssf <- fit_clogit
+
+#' @rdname fit_clogit
+#' @export
+fit_issf <- fit_clogit

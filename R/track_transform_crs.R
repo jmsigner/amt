@@ -15,7 +15,7 @@ transform_coords <- function(x, ...) {
 #' @param crs_to `[sp::CRS(1)]` \cr Coordinate reference system the data should be transformed to, see \code{sp::CRS}.
 #' @export
 #' @rdname transform_coords
-#' @example
+#' @examples
 #' data(deer)
 #' get_crs(deer)
 #'

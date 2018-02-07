@@ -24,6 +24,13 @@ transform_crs(x, ...)
 \description{
 Transforms the CRS for a track.
 }
+\examples{
+data(deer)
+get_crs(deer)
+
+# project to geographical coordinates (note the CRS is taken automatically from the object deer).
+d1 <- transform_coords(deer, sp::CRS("+init=epsg:4326"))
+}
 \seealso{
 sp::spTransform
 }

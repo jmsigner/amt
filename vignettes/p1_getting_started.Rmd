@@ -128,7 +128,7 @@ tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month,
 ```
 
 ### A note on pipes (`%>%`)
-`amt` was heavily inspired through workflows suggested by the popular packages from the `tidyverse`. The above steps could easily be connected using pipes. Note that result will be exactly the same, the only difference is in programming style.
+`amt` was heavily inspired through workflows suggested by the popular packages from the `tidyverse`. The above steps could easily be connected using pipes. Note that result will be exactly the same.
 
 ```{r}
 data(sh)
@@ -151,7 +151,7 @@ tr2
 ### Utility functions
 #### Basic manipulation
 
-Remember, that `tracks_xy*` behaving like regular `data.frames`. This means that we can use all data manipulation verbs that we are used from `base` R or `tidyverse`. For example we an filter a track based on some characteristic. As an example we extract all relocations from Mai.
+Remember, that `tracks_xy*` behave like regular `data.frames`. This means that we can use all data manipulation verbs that we are used from `base` R or `tidyverse`. For example we an filter a track based on some characteristic. As an example we extract all relocations from May.
 
 ```{r}
 tr3 <- tr2 %>% filter(month == 5)
@@ -183,7 +183,7 @@ If we look at a summary of `sl_`
 summary(tr2$sl_)
 ```
 
-we note two things. First, there is one `NA` step length, this is expected, because we are still in a point representation (i.e., there is no step length for the last relocation). Secondly, the range is quiet large from 0 to almost 5km. Before looking at step lengths in any further detail, we will have to make sure the sampling rate is more or less regular.
+Note, 1) there is one `NA` for step lengths, this is expected, because we are still in a point representation (i.e., there is no step length for the last relocation). 2) the range is quiet large from 0 to almost 5km. Before looking at step lengths in any further detail, we will have to make sure the sampling rate is more or less regular.
 
 The function `summarize_sampling_rate` provides an easy way to look at the sampling rate.
 
@@ -194,10 +194,13 @@ summarize_sampling_rate(tr2)
 
 ### From tracks to steps
 
+todo
 
 
 
 ## How to deal with several animals
+
+todo
 
 ## Session
 ```{r}

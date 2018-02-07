@@ -1,4 +1,4 @@
-#' Extract covariate values.
+#' Extract covariate values
 #'
 #' Extract the covariate values at relocations, or at the beginning or end of
 #' steps.
@@ -39,9 +39,9 @@ extract_covariates.random_points <- function(x, covariates, ...) {
 extract_covariates.steps <- function(x, covariates, where = "end", ...) {
   if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
     if (where == "both") {
-      x_start <- raster::extract(covariates, x[, c("x1_", "y1_")], df = TRUE)[, -1]
+      x_start <- raster::extract(covariates, x[, c("x1_", "y1_")], df = TRUE)[, -1, drop = FALSE]
       names(x_start) <- paste0(names(x_start), "_start")
-      x_end <- raster::extract(covariates, x[, c("x2_", "y2_")], df = TRUE)[, -1]
+      x_end <- raster::extract(covariates, x[, c("x2_", "y2_")], df = TRUE)[, -1, drop = FALSE]
       names(x_end) <- paste0(names(x_end), "_end")
       x_all <- cbind(x_start, x_end)
       x[names(x_all)] <- x_all

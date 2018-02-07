@@ -4,6 +4,7 @@
 #' @param data `[data.frame]` \cr The data used to fit a model.
 #' @param formula `[formula]` \cr The model formula.
 #' @param ... Further arguments passed to `stats::glm`.
+#' @name fit_logit
 #' @export
 fit_logit <- function(data, formula, ...) {
   m <- stats::glm(formula, data = data, family = stats::binomial(link = "logit"), ...)
@@ -22,3 +23,7 @@ coef.fit_logit <- function(object, ...) {
 summary.fit_logit <- function(object, ...) {
   base::summary(object$model, ...)
 }
+
+#' @rdname fit_logit
+#' @export
+fit_rsf <- fit_logit
