@@ -63,7 +63,7 @@ diff_y.track_xy <- function(x, ...) {
 #' Calculate the centroid of a track.
 #'
 #' @template track_xy_star
-#' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object or not.
+#' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object.
 #' @template dots_none
 #' @name centroid
 #' @examples

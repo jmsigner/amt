@@ -32,8 +32,11 @@ random_steps.steps <- function(x, n_control = 10, sl_distr = "gamma", ta_distr =
 
   sl <- fit_sl_dist_base(x$sl_, distr = sl_distr)
   ta <- fit_ta_dist_base(x$ta_, distr = ta_distr)
-  random_steps_base(x, n_control, sl, ta)
+  xx <- random_steps_base(x, n_control, sl, ta)
+  attr(xx, "crs_") <- attr(x, "crs_")
+  xx
 }
+
 
 random_steps_base <- function(x, n_control, sl, ta) {
   # Generate random points
@@ -101,6 +104,7 @@ rsteps_transfer_attr <- function(from, to) {
   attributes(to)$class <- from$class
   attributes(to)$sl_ <- from$sl_
   attributes(to)$ta_ <- from$ta_
+  attributes(to)$crs_ <- from$crs_
   to
 }
 

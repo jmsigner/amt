@@ -5,7 +5,7 @@
 \alias{extract_covariates.track_xy}
 \alias{extract_covariates.random_points}
 \alias{extract_covariates.steps}
-\title{Extract covariate values.}
+\title{Extract covariate values}
 \usage{
 extract_covariates(x, ...)
 
@@ -23,7 +23,7 @@ extract_covariates(x, ...)
 \item{covariates}{\code{[RasterLayer,RasterStack,RasterBrick]} \cr The
 (environmental) covariates.}
 
-\item{where}{\code{[character(1)="end"]{"start", "end"}} \cr For \code{steps} this
+\item{where}{\code{[character(1)="end"]{"start", "end", "both"}} \cr For \code{steps} this
 determines if the covariate values should be extracted at the beginning or
 the end of a step. or \code{end}.}
 }

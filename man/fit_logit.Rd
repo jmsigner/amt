@@ -2,9 +2,12 @@
 % Please edit documentation in R/fit_logit.R
 \name{fit_logit}
 \alias{fit_logit}
+\alias{fit_rsf}
 \title{Fit logistic regression}
 \usage{
 fit_logit(data, formula, ...)
+
+fit_rsf(data, formula, ...)
 }
 \arguments{
 \item{data}{\code{[data.frame]} \cr The data used to fit a model.}

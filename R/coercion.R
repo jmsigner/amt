@@ -1,6 +1,6 @@
 #' Coerce a track to other formats.
 #'
-#' Several other packages provides methods to analyse movement data, and `amt` provides coercion methods to some packages.
+#' Several other packages provides methods to analyse movement data, and `amt` provides coercion methods to some packages
 #'
 #' @template track_xy_star
 #' @param id `[numeric,character,factor]` \cr Animal id(s).
@@ -129,20 +129,21 @@ as_bcpa.track_xyt <- function(x, ...) {
 }
 
 # as_ctmm -----------------------------------------------------------------
-#' @export
-#' @rdname coercion
-#' @examples
-#' data(deer)
-#' as_ctmm(deer)
-as_ctmm <- function(x, ...) {
-  UseMethod("as_ctmm", x)
-}
-
-#' @export
-#' @rdname coercion
-as_ctmm.track_xyt <- function(x, ...) {
-  ctmm::as.telemetry(as_move(x, ...))
-}
+# TODO
+# #' @export
+# #' @rdname coercion
+# #' @examples
+# #' data(deer)
+# #' as_ctmm(deer)
+# as_ctmm <- function(x, ...) {
+#   UseMethod("as_ctmm", x)
+# }
+#
+# #' @export
+# #' @rdname coercion
+# as_ctmm.track_xyt <- function(x, ...) {
+#   ctmm::as.telemetry(as_move(x, ...))
+# }
 
 
 # as_moveHMM --------------------------------------------------------------

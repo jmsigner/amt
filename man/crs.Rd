@@ -20,5 +20,6 @@ Check if an object has a coordinate reference system (\code{has_crs}) and return
 }
 \examples{
 data(deer)
+has_crs(deer)
 get_crs(deer)
 }

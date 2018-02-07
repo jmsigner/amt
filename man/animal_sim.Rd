@@ -14,6 +14,6 @@
 animal_sim
 }
 \description{
-32400 simulated relocations of an animal.
+32400 simulated relocations of an animal
 }
 \keyword{datasets}

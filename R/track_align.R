@@ -1,16 +1,16 @@
-#' Selects relocations that fit a new time series
-#'
-#' Functions to only selects relocations that can be aligned with a new time series (within some tolerance).
-#' @param x A track.
-#' @param nt The new time trajectory.
-#' @param tol The tolerance.
-#' @template dots_none
-#' @name track_align
+# #' Selects relocations that fit a new time series
+# #'
+# #' Functions to only selects relocations that can be aligned with a new time series (within some tolerance).
+# #' @param x A track.
+# #' @param nt The new time trajectory.
+# #' @param tol The tolerance.
+# #' @template dots_none
+# #' @name track_align
 track_align <- function(x, ...) {
   UseMethod("track_align", x)
 }
 
-#' @rdname track_align
+# #' @rdname track_align
 track_align.track_xyt <- function(x, nt, tol, ...) {
   x[["burst_"]] <- track_align_raw(x, nt, tol, type = "burst")
   cond <- quote(burst_ > -1) # -1 indicates that point is left out

@@ -1,4 +1,4 @@
-#' Removes Capture Effects.
+#' Removes Capture Effects
 #'
 #' Removing relocations at the beginning and/or end of a track, that fall within a user specified period.
 #'

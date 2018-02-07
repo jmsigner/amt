@@ -6,7 +6,7 @@
 \alias{distance_to_center.track_xy}
 \alias{distance_to_centers}
 \alias{distance_to_centers.track_xy}
-\title{Distance to center.}
+\title{Distance to center}
 \usage{
 distance_to_center(x, ...)
 

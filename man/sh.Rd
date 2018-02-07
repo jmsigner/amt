@@ -3,7 +3,7 @@
 \docType{data}
 \name{sh}
 \alias{sh}
-\title{Relocations of 1 red deer.}
+\title{Relocations of 1 red deer}
 \format{A data frame with 1500 rows and 4 variables:
 \describe{
 \item{x_epsg31467}{the x-coordinate}

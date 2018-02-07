@@ -2,9 +2,15 @@
 % Please edit documentation in R/fit_clogit.R
 \name{fit_clogit}
 \alias{fit_clogit}
+\alias{fit_ssf}
+\alias{fit_issf}
 \title{Fit a conditional logistic regression}
 \usage{
 fit_clogit(data, formula, more = NULL, summary_only = FALSE, ...)
+
+fit_ssf(data, formula, more = NULL, summary_only = FALSE, ...)
+
+fit_issf(data, formula, more = NULL, summary_only = FALSE, ...)
 }
 \arguments{
 \item{data}{\code{[data.frame]} \cr The data used to fit a model.}

@@ -4,7 +4,7 @@
 \alias{remove_capture}
 \alias{remove_capture_effect}
 \alias{remove_capture_effect.track_xyt}
-\title{Removes Capture Effects.}
+\title{Removes Capture Effects}
 \usage{
 remove_capture_effect(x, ...)
 

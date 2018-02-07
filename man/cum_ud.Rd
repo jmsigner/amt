@@ -19,7 +19,7 @@ cumulative_ud(x, ...)
 \code{[RasterLayer]} \cr The cumulative UD.
 }
 \description{
-Calculate a cumulative UD
+Calculate the cumulative utilization distribution (UD).
 }
 \note{
 This function is typically used to obtain isopleths.

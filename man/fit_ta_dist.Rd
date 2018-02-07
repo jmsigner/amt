@@ -3,7 +3,7 @@
 \name{fit_ta_dist}
 \alias{fit_ta_dist}
 \alias{fit_ta_dist_base}
-\title{Fit a statistical distribution to the turn angles of a track.}
+\title{Fit a statistical distribution to the turn angles of a track}
 \usage{
 fit_ta_dist(.tbl, x, ...)
 
@@ -21,5 +21,5 @@ fit_ta_dist_base(x, na.rm = TRUE, distr = "vonmises", ...)
 \item{distr}{\code{[character(1)]} \cr Name of the distribution, currently only \code{vonmises}-distribution is supported.}
 }
 \description{
-Fit a statistical distribution to the turn angles of a track.
+Fit a statistical distribution to the turn angles of a track
 }

@@ -6,33 +6,27 @@
 \alias{movement_kernel}
 \alias{sim_ud}
 \alias{simulate_ud}
-\alias{issf_to_ud}
 \title{Simulate UD from fitted SSF}
 \usage{
-habitat_kernel(fit, resources, exp = TRUE, coef = NULL)
+habitat_kernel(coef, resources, exp = TRUE)
 
-movement_kernel(fit, resources, quant = 0.99, adjust = FALSE)
+movement_kernel(scale, shape, template, quant = 0.99)
 
 simulate_ud(movement_kernel, habitat_kernel, start, n = 100000L)
-
-issf_to_ud(fit, resources, start, quant = 0.99, adjust = TRUE, n = 1e+05)
 }
 \arguments{
-\item{fit}{\code{[fitted_clogit]} \cr Fitted model.}
+\item{coef}{\code{[list]} \cr Vector with coeffiecients, not yet implemented.}
 
 \item{resources}{\code{[RasterLayer, RasterStack]} \cr The resources.}
 
 \item{exp}{A logical scalar, indicating whether or not the resulting habitat kernel should be exponentiated. This is usually \code{TRUE}.}
 
-\item{coef}{\code{[numeric]} \cr Vector with coeffiecients, not yet implemented.}
+\item{scale, shape}{\code{[numeric](1)}\cr Scale and scale parameter of the gamma distribution of step lengths.}
+
+\item{template}{\code{[RasterLayer,RasterStack]}\cr A raster serving as template for the simulations.}
 
 \item{quant}{A numeric scalar, quantile of the step-length distribution that is
 the maximum movement distance.}
-
-\item{adjust}{A logical scalar, indicating whether or not step length
-parameters should be adjusted or not. Note, parameter adjustment is only
-possilbe, if movement related covariates were included in the model (e.g.,
-step length and the log thereof).}
 
 \item{movement_kernel}{\code{[RasterLayer]} \cr The movement kernel.}
 
@@ -55,9 +49,7 @@ distribution.
 
 The habitat kernel is calculated by multiplying resources with their corresponding coefficients from the fitted (i)SSF.
 
-\strong{\code{simulate_ud()}:} simulates a utilization distribution (UD) from a fitted (iSSF).
-
-\strong{\code{issf_to_ud()}:} this function is a convenience wrapper, that combines the functions \code{movement_kernel}, \code{habitat_kernel} and \code{simulate_ud}.
+\strong{\code{simulate_ud()}:} simulates a utilization distribution (UD) from a fitted Step-Selection Function.
 }
 \note{
 This functions are still experimental and should be used with care. If in doubt, please contact the author.

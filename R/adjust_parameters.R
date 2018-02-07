@@ -1,16 +1,12 @@
 #' Adjust parameters
 #'
-#' Functions aiding parameter adjustment after fitting an integrated step
-#' selection function (iSSF).
+#' Functions for parameter adjustment after fitting an integrated step-selection function (iSSF).
 #'
-#' Currently the shape and scale parameter of a Gamma distribution and the
-#' concentration parameter (=kappa) of a von-Mises distribution can be adjusted.
-#' When fitting a integrated step selection model, the tentative shape parameter
-#' of the Gamma distribution of the step length can be adjusted with the
-#' coefficients of the log of step lengths, the scale of the Gamma distribution
-#' can be adjusted with the step lengths, and the kappa parameter of the von
-#' Mises distribution can be adjusted with the coefficient for the cosine of the
-#' turn angle.
+#' The shape and scale parameter of a gamma distribution, and the
+#' concentration parameter (=kappa) of a von-Mises distribution can be adjusted. The following adjustments are possible:
+#' 1. The shape parameter of a gamma distribution fitted to the observed step lengths, can be adjusted with the coefficient for the log of the step lenghts.
+#' 2. The scale parameter of a gamma distribution fitted to the observed step lengths, can be adjusted with the coefficient for the step lenghts.
+#' 3. The concentration parameter of fa von Mises distribution fitted to the observed turning angle, can be adjusted with the coefficient for the cosine of turning angles.
 #'
 #' @examples
 #' # Using the deer data set
