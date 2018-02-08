@@ -1,15 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-scratch*
-test_builds
 ^README\.Rmd$
 ^README-.*\.png$
-background/*
 .RDataTmp
 .RData
-manuscript/*
-data-create/*
 man-roxygen/*
-use_cases/*
-vignette_all/*
+^cran-comments.md$
 

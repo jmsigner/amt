@@ -3,9 +3,9 @@ Type: Package
 Title: Animal Movement Tools
 Version: 0.0.2.0
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"))
-Description: amt (animal movement tools), provides a collection of functions to work with animal movement data. The functionality includes methods to resample movement to regular sampling rates, calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource and step-selection functions), and simulation of space-use from fitted step-selection functions.
+Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource and step-selection functions), and simulation of space-use from fitted step-selection functions.
 License: GPL-3
-Encoding: UTF-8
+Encoding: UTF-8 
 LazyData: true
 Depends:
     R (>= 2.10),
