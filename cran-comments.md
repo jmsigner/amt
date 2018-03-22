@@ -1,3 +1,32 @@
+# Version 0.0.3.0
+# Round 1
+## Test environments
+* local Ubuntu 16.04.3 LTS, R 3.4.3
+* win-builder (devel and release)
+
+### What changed
+
+Minor update to fix:
+- Vignette titles
+- Add `Rdpack` (used for Rdmacros) to suggested packages.
+
+### R CMD check results
+There were no ERRORs or WARNINGs. 
+
+There was one NOTE:
+
+```
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Johannes Signer <jsigner@gwdg.de>'
+```
+
+
+
+## Downstream dependencies
+There are no downstream dependencies.
+
+---
+
 # Version 0.0.2.0
 # Round 1
 ## Test environments

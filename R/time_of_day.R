@@ -47,6 +47,12 @@ time_of_day.steps <- function(x, solar.dep = 6, include.crepuscule = FALSE, wher
     x
 }
 
+# dist_to_twilight <- function(x, solar.dep = 6) {
+#   x <- deer
+#   time_of_day(x, solar.dep = 6, include.crepuscule = FALSE)
+#
+# }
+
 time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
   if (suppressWarnings(has_crs(x))) {
     pts <- sp::spTransform(as_sp(x, end = end), sp::CRS("+init=epsg:4326"))
