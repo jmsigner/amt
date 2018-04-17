@@ -11,15 +11,7 @@ Minor update to fix:
 - Add `Rdpack` (used for Rdmacros) to suggested packages.
 
 ### R CMD check results
-There were no ERRORs or WARNINGs. 
-
-There was one NOTE:
-
-```
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Johannes Signer <jsigner@gwdg.de>'
-```
-
+There were no ERRORs, WARNINGs or NOTEs. 
 
 
 ## Downstream dependencies

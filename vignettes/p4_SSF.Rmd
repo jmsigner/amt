@@ -90,9 +90,9 @@ m2 <- ssf1 %>% fit_clogit(case_ ~ forest + forest:cos_ta + forest:log_sl + log_s
 summary(m0)
 summary(m1)
 summary(m2)
-AIC(m0$model)
-AIC(m1$model)
-AIC(m2$model)
+#AIC(m0$model)
+#AIC(m1$model)
+#AIC(m2$model)
 ```
 
 ### Interpretation of coefficients

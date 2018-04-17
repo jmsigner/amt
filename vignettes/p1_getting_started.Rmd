@@ -95,12 +95,9 @@ Before creating a track, we have to do some data cleaning:
 # check if all observations are complete
 all(complete.cases(sh)) # no action required
 
-# parse date and time
-sh$day <- lubridate::ymd(sh$day)
-sh$time <- lubridate::hms(sh$time)
-
-# create a time stamp
-sh$ts <- as.POSIXct(sh$day + sh$time)
+# parse date and time and create time stamps
+sh$ts <- as.POSIXct(lubridate::ymd(sh$day) +
+                      lubridate::hms(sh$time))
 
 # check for duplicated time stamps
 any(duplicated(sh$ts))
@@ -134,9 +131,7 @@ tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month,
 data(sh)
 tr2 <- sh %>% filter(complete.cases(.)) %>% 
   mutate(
-    day = lubridate::ymd(day), 
-    time = lubridate::hms(.$time), 
-    ts = as.POSIXct(day + time), 
+    ts = as.POSIXct(lubridate::ymd(day) + lubridate::hms(time)), 
     id = "Animal 1", 
     month = lubridate::month(ts)
   ) %>% 

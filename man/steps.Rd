@@ -124,7 +124,7 @@ direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N",
 # trajectories
 t1 <- trajectories::Track(
   spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
-  lubridate::now() + lubridate::hours(1:10), data = data.frame(1:10)))
+  lubridate::now(tzone = "UTC") + lubridate::hours(1:10), data = data.frame(1:10)))
 
 t1[["direction"]]
 direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",

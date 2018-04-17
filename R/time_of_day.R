@@ -51,6 +51,17 @@ time_of_day.steps <- function(x, solar.dep = 6, include.crepuscule = FALSE, wher
 #   x <- deer
 #   time_of_day(x, solar.dep = 6, include.crepuscule = FALSE)
 #
+#   if (suppressWarnings(has_crs(x))) {
+#     pts <- sp::spTransform(as_sp(x, end = end), sp::CRS("+init=epsg:4326"))
+#   } else {
+#     stop("No CRS found.")
+#   }
+#
+#   sunr <- as.numeric(maptools::sunriset(pts, t, direction = "sunrise", POSIXct.out = TRUE)$time)
+#   suns <- as.numeric(maptools::sunriset(pts, t, direction = "sunset", POSIXct.out = TRUE)$time)
+#
+#   tt <- as.numeric(t)
+#
 # }
 
 time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
