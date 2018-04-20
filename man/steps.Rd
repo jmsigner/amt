@@ -38,7 +38,8 @@ steps(x, ...)
 
 \method{steps}{track_xy}(x, lonlat = FALSE, degrees = TRUE, ...)
 
-\method{steps}{track_xyt}(x, lonlat = FALSE, degrees = TRUE, ...)
+\method{steps}{track_xyt}(x, lonlat = FALSE, degrees = TRUE,
+  diff_time_units = "auto", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
@@ -56,6 +57,8 @@ steps(x, ...)
 \item{append_last}{\code{[logical(1)=TRUE]} \cr If \code{TRUE} an \code{NA} is appended at the end of all angles.}
 
 \item{lonlat}{\code{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geographic distances are calculated.}
+
+\item{diff_time_units}{\code{[character(1)='auto']} \cr The unit for time differences, see \code{?difftime}.}
 }
 \value{
 \code{[numeric]} \cr For \code{step_lengths()} and \code{direction_*} a numeric vector. \cr

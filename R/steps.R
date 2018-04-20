@@ -298,8 +298,9 @@ steps.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
 }
 
 #' @export
+#' @param diff_time_units `[character(1)='auto']` \cr The unit for time differences, see `?difftime`.
 #' @rdname steps
-steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
+steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, diff_time_units = "auto", ...) {
   n <- nrow(x)
   if ("burst_" %in% names(x)) {
     warning("burst's are ignored, use steps_by_burst instead.")
@@ -307,7 +308,7 @@ steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
   xx <- steps_base(x, n, lonlat)
   xx$t1_ <- x$t_[-n]
   xx$t2_ <- x$t_[-1]
-  xx$dt_ <- xx$t2_ - xx$t1_
+  xx$dt_ <- difftime(xx$t2_,  xx$t1_, units = diff_time_units)
 
   if (!degrees) {
     xx$ta_ <- xx$ta_ * pi / 180
