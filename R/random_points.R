@@ -17,10 +17,25 @@
 #'
 #' # track_xyt ---------------------------------------------------------------
 #' # Default settings
-#' rp <- random_points(deer)
+#' rp1 <- random_points(deer)
+#' rp2 <- random_points(deer, hr = "kde") # we need a larger template raster for kde
+#'
 #' \dontrun{
-#' plot(rp)
+#' plot(rp1)
+#' plot(rp2)
 #' }
+#'
+#' # rp2 does not make sense, because the `trast` is to small.
+#' # this can be overcome by increasing the trast manually.
+#' trast <- raster(bbox(deer, buffer = 2000), res = 30)
+#' rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
+#'
+#'  \dontrun{
+#' plot(rp2)
+#' plot(rp3)
+#' }
+#'
+#'
 #' # Only one random point for each observed point
 #' rp <- random_points(deer, factor = 1)
 #' \dontrun{
@@ -65,15 +80,23 @@ random_points.mcp <- function(x, n = 100, type = "random", ...) {
 
 #' @export
 #' @rdname random_points
+random_points.kde <- function(x, n = 100, type = "random", ...) {
+  as_track(sp::spsample(hr_isopleths(x), n = n, type = type, ...))
+}
+
+#' @export
+#' @rdname random_points
 random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, type = "random", ...) {
 
   if (hr == "mcp") {
-    hr <- hr_mcp(x, levels = level)
+    hr <- hr_mcp(x, levels = level, ...)
+  } else if (hr == "kde") {
+    hr <- hr_kde(x, levels = level, ...)
   } else {
-    stop("Only mcp is currently implemented.")
+    stop("Only mcp and kde home ranges are currently implemented.")
   }
 
-  rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = type, ...)
+  rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = type)
 
   n <- nrow(x)
   n_rnd <- nrow(rnd_pts)

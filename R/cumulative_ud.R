@@ -22,3 +22,9 @@ cumulative_ud.RasterLayer <- function(x, ...) {
   v <- cumsum(v[order(-v)])[order(order(-v))]
   raster::setValues(r1, v)
 }
+
+#' @export
+#' @rdname cum_ud
+cumulative_ud.kde <- function(x, ...) {
+  cumulative_ud(x$ud, ...)
+}

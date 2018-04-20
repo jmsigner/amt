@@ -4,11 +4,14 @@
 \alias{cum_ud}
 \alias{cumulative_ud}
 \alias{cumulative_ud.RasterLayer}
+\alias{cumulative_ud.kde}
 \title{Calculate a cumulative UD}
 \usage{
 cumulative_ud(x, ...)
 
 \method{cumulative_ud}{RasterLayer}(x, ...)
+
+\method{cumulative_ud}{kde}(x, ...)
 }
 \arguments{
 \item{x}{\code{[RasterLayer]} \cr Containing the Utilization Distribution (UD).}

@@ -7,7 +7,7 @@
 \title{Create a \code{track_*}}
 \usage{
 mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
-  check_duplicates = FALSE, use_all = TRUE)
+  check_duplicates = FALSE, all_cols = FALSE)
 
 track(x, y, t, ..., crs = NULL)
 }
@@ -32,11 +32,11 @@ stamp, default is \code{TRUE}.}
 \item{check_duplicates}{\code{[logical(1)=FALSE]} \cr Should it be checked if there are
 duplicated time stamp, default is \code{FALSE}.}
 
+\item{all_cols}{\code{[logical(1)=FALSE]} \cr Should all columns be carried over to the track object, default is \code{FALSE}.}
+
 \item{x, y}{\code{[numeric]} \cr The x and y coordinates.}
 
 \item{t}{\code{[POSIXct]} \cr The time stamp.}
-
-\item{all_cols}{\code{[logical(1)=FALSE]} \cr Should all columns be carried over to the track object, default is \code{FALSE}.}
 }
 \value{
 If \code{t} was provided an object of class \code{track_xyt} is returned
@@ -53,6 +53,10 @@ df1 <- data_frame(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate
 
 # first we only create a track_xy
 tr1 <- mk_track(df1, x, y, id = id, age = age)
+tr1
+
+# Alternatively, `all_cols` can be set to true
+tr1 <- mk_track(df1, x, y, all_cols = TRUE)
 tr1
 
 # now lets create a track_xyt

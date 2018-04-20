@@ -3,12 +3,15 @@
 \name{random_points}
 \alias{random_points}
 \alias{random_points.mcp}
+\alias{random_points.kde}
 \alias{random_points.track_xy}
 \title{Generate random points}
 \usage{
 random_points(x, ...)
 
 \method{random_points}{mcp}(x, n = 100, type = "random", ...)
+
+\method{random_points}{kde}(x, n = 100, type = "random", ...)
 
 \method{random_points}{track_xy}(x, level = 1, hr = "mcp", factor = 10,
   type = "random", ...)
@@ -40,9 +43,24 @@ data(deer)
 
 # track_xyt ---------------------------------------------------------------
 # Default settings
-rp <- random_points(deer)
+rp1 <- random_points(deer)
+rp2 <- random_points(deer, hr = "kde") # we need a larger template raster for kde
+k1 <- hr_kde(deer)
+i1 <- hr_isopleths(k1)
+plot(i1)
+proj4string(i1)
+
+
+# trast
+trast <- raster(bbox(deer, buffer = 2000), res = 30)
+rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
+kd1 <- hr_kde(deer, trast = trast)
+plot(kd1)
+plot(iso <- hr_isopleths(kd1), add = TRUE)
+class(iso)
 \dontrun{
-plot(rp)
+plot(rp1)
+plot(rp2)
 }
 # Only one random point for each observed point
 rp <- random_points(deer, factor = 1)
