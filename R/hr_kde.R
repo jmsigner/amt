@@ -56,7 +56,7 @@ hr_kde_ref <- function(x, ...) {
 
 #' @export
 #' @rdname hr
-hr_kde_ref.track_xy <- function(x, rescale = "none") {
+hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
 
   if (!rescale %in% c("unitvar", "xvar", "none")) {
     stop("hr_kde_ref: scale: not one of unitvar, xvar or none")

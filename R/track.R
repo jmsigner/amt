@@ -122,6 +122,7 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
 }
 
 #' @export
+#' @rdname track
 make_track <- mk_track
 
 #' @rdname track

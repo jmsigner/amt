@@ -45,23 +45,23 @@ data(deer)
 # Default settings
 rp1 <- random_points(deer)
 rp2 <- random_points(deer, hr = "kde") # we need a larger template raster for kde
-k1 <- hr_kde(deer)
-i1 <- hr_isopleths(k1)
-plot(i1)
-proj4string(i1)
 
-
-# trast
-trast <- raster(bbox(deer, buffer = 2000), res = 30)
-rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
-kd1 <- hr_kde(deer, trast = trast)
-plot(kd1)
-plot(iso <- hr_isopleths(kd1), add = TRUE)
-class(iso)
 \dontrun{
 plot(rp1)
 plot(rp2)
 }
+
+# rp2 does not make sense, because the `trast` is to small.
+# this can be overcome by increasing the trast manually.
+trast <- raster(bbox(deer, buffer = 2000), res = 30)
+rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
+
+ \dontrun{
+plot(rp2)
+plot(rp3)
+}
+
+
 # Only one random point for each observed point
 rp <- random_points(deer, factor = 1)
 \dontrun{

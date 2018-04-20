@@ -54,6 +54,8 @@
 \alias{\%>\%}
 \alias{reexports}
 \alias{Surv}
+\alias{reexports}
+\alias{raster}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -68,6 +70,8 @@ below to see their documentation.
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
 
   \item{purrr}{\code{\link[purrr]{map}}}
+
+  \item{raster}{\code{\link[raster]{raster}}}
 
   \item{sp}{\code{\link[sp]{CRS}}}
 

@@ -17,10 +17,6 @@ s2 <- x1 %>% group_by(id) %>% nest(-id) %>%
 s3 <- x1 %>% group_by(id) %>% nest(-id) %>%
   mutate(steps = map(data, steps, diff_time_units = "mins")) %>% select(id, steps) %>% unnest()
 
-s1$dt_
-s2$dt_
-attr(s3$dt_, "units")
-
 test_that("tracks are created correctly", {
   expect_equal(attr(s1$dt_, "units"), "secs")
   expect_equal(attr(s2$dt_, "units"), "hours")

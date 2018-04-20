@@ -26,7 +26,7 @@ hr_kde(x, ...)
 
 hr_kde_ref(x, ...)
 
-\method{hr_kde_ref}{track_xy}(x, rescale = "none")
+\method{hr_kde_ref}{track_xy}(x, rescale = "none", ...)
 
 hr_locoh_k(x, ...)
 
@@ -98,8 +98,6 @@ get_crs(locoh1)
 
 # Kernel density estimaiton (KDE) -----------------------------------------
 kde1 <- hr_kde(deer)
-plot(kde1)
-plot(hr_isopleths(kde1, 0.95))
 hr_area(kde1)
 get_crs(kde1)
 }

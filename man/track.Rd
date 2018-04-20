@@ -3,10 +3,14 @@
 \name{track}
 \alias{track}
 \alias{mk_track}
+\alias{make_track}
 \alias{track}
 \title{Create a \code{track_*}}
 \usage{
 mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
+  check_duplicates = FALSE, all_cols = FALSE)
+
+make_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
   check_duplicates = FALSE, all_cols = FALSE)
 
 track(x, y, t, ..., crs = NULL)

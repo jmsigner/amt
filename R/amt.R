@@ -4,14 +4,15 @@
 #' @importFrom grDevices adjustcolor
 #' @importFrom lazyeval lazy_dots lazy
 #' @importFrom lubridate hours minutes seconds now days weeks
-#' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd
+#' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd var
 #' @importFrom tidyr nest unnest
 #' @importFrom tibble as_data_frame data_frame tibble tribble is_tibble as_tibble
 #' @importFrom utils data head tail
 #' @importFrom sp CRS
 #' @importFrom methods is
 #' @importFrom purrr map
-#' @importFrom rlang quo quos enquo
+#' @importFrom rlang quo quos enquo quo_name
+#' @importFrom raster raster
 #' @import survival
 #' @export
 
@@ -101,3 +102,6 @@ magrittr::`%>%`
 
 #' @export
 survival::Surv
+
+#' @export
+raster::raster
