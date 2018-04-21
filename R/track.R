@@ -26,10 +26,12 @@
 #' @export
 #' @name track
 #' @examples
+#' library(tidyverse)
 #' df1 <- data_frame(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2),
 #'                   id = 1, age = 4)
 #'
 #' # first we only create a track_xy
+#' \donotrun{
 #' tr1 <- mk_track(df1, x, y, id = id, age = age)
 #' tr1
 #'
@@ -40,6 +42,7 @@
 #' # now lets create a track_xyt
 #' tr1 <- mk_track(df1, x, y, t, id = id, age = age)
 #' tr1
+#' }
 
 mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
                      check_duplicates = FALSE, all_cols = FALSE) {
