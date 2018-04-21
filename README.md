@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/amt)](https://cran.r-project.org/package=amt) [![](https://cranlogs.r-pkg.org/badges/amt)](https://cran.r-project.org/package=amt) [![Travis-CI Build Status](https://travis-ci.org/jmsigner/amt.svg?branch=master)](https://travis-ci.org/jmsigner/amt)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/amt)](https://cran.r-project.org/package=amt) [![](https://cranlogs.r-pkg.org/badges/amt)](https://cran.r-project.org/package=amt) [![Travis-CI Build Status](https://travis-ci.org/jmsigner/amt.svg?branch=master)](https://travis-ci.org/jmsigner/amt) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/jmsigner/amt?branch=master&svg=true)](https://ci.appveyor.com/project/jmsigner/amt)
 
 amt (animal movement tools)
 ===========================
