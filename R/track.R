@@ -31,7 +31,7 @@
 #'                   id = 1, age = 4)
 #'
 #' # first we only create a track_xy
-#' \donotrun{
+#' \dontrun{
 #' tr1 <- mk_track(df1, x, y, id = id, age = age)
 #' tr1
 #'
