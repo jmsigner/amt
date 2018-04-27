@@ -14,8 +14,8 @@
 
 
 #### minor changes
-- Removed: Depends tidyverse
-- Fixed errors with lubridate::Periods within `data_frame`s
+- Removed: Depends tidyverse (requested by the `tidyverse` developer)
+- Fixed errors with lubridate::Periods within `data_frame`s (requested by the `dplyr` developers)
 
 ### R CMD check results
 There were no ERRORs, WARNINGs or NOTEs. 

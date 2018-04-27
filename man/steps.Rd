@@ -32,14 +32,16 @@ step_lengths(x, ...)
 
 steps_by_burst(x, ...)
 
-\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, degrees = TRUE, ...)
+\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, degrees = TRUE,
+  keep_cols = NULL, ...)
 
 steps(x, ...)
 
-\method{steps}{track_xy}(x, lonlat = FALSE, degrees = TRUE, ...)
+\method{steps}{track_xy}(x, lonlat = FALSE, keep_cols = NULL,
+  degrees = TRUE, ...)
 
 \method{steps}{track_xyt}(x, lonlat = FALSE, degrees = TRUE,
-  diff_time_units = "auto", ...)
+  keep_cols = NULL, diff_time_units = "auto", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
@@ -57,6 +59,8 @@ steps(x, ...)
 \item{append_last}{\code{[logical(1)=TRUE]} \cr If \code{TRUE} an \code{NA} is appended at the end of all angles.}
 
 \item{lonlat}{\code{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geographic distances are calculated.}
+
+\item{keep_cols}{\code{[character(1)=NULL]{'start', 'end'}} \cr Should columns with attribute information be transfered to steps? If \code{keep_cols = 'start'} the attributes from the starting point are use, otherwise the columns from the end points are used.}
 
 \item{diff_time_units}{\code{[character(1)='auto']} \cr The unit for time differences, see \code{?difftime}.}
 }
@@ -161,7 +165,7 @@ moveHMM::prepData(df, type = "UTM")
 
 trk
 
-# stel_lengths ------------------------------------------------------------
+# step_lengths ------------------------------------------------------------
 xy <- data_frame(
   x = c(0, 1, 2),
   y = c(0, 1, 2)
@@ -170,4 +174,32 @@ xy <- mk_track(xy, x, y)
 
 step_lengths(xy, lonlat = FALSE)
 step_lengths(xy, lonlat = TRUE) # in m, but coords are assumed in degrees
+
+
+# creating steps ----------------------------------------------------------
+
+# Create some dummy data
+library(lubridate)
+df <- data_frame(
+  x = runif(10),
+  y = runif(10),
+  a = runif(10),
+  t = now() + hours(c(1:2, 5:6, 9:10, 14:17)),
+  b = 3,
+  c = a + 30
+)
+
+library(amt)
+make_track(df, x, y, t, all_cols = TRUE) \%>\%
+  steps(keep_cols = "start")
+
+make_track(df, x, y, all_cols = TRUE) \%>\%
+  steps(keep_cols = "end")
+
+make_track(df, x, y, t, all_cols = TRUE) \%>\% track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
+  steps_by_burst(keep_cols = "start")
+
+make_track(df, x, y, t, all_cols = TRUE) \%>\% track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
+  steps_by_burst(keep_cols = NULL)
+
 }

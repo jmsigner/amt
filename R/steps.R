@@ -9,6 +9,7 @@
 #' @param zero_dir `[character(1)='E']` \cr Indicating the zero direction. Must be either `N`, `E`, `S`, or `W`.
 #' @param clockwise `[logical(1)=FALSE]` \cr Should angles be calculated clock or anti-clockwise?
 #' @param append_last `[logical(1)=TRUE]` \cr If `TRUE` an `NA` is appended at the end of all angles.
+#' @param keep_cols `[character(1)=NULL]{'start', 'end'}` \cr Should columns with attribute information be transfered to steps? If `keep_cols = 'start'` the attributes from the starting point are use, otherwise the columns from the end points are used.
 #' @param ... Further arguments, none implemented
 #'
 #' @return `[numeric]` \cr For `step_lengths()` and `direction_*` a numeric vector. \cr
@@ -204,7 +205,7 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_las
 #' @rdname steps
 #' @details `step_lengths` calculates the step lengths between points a long the path. The last value returned is `NA`, because no observed step is 'started' at the last point. If `lonlat = TRUE`, `step_lengths()` wraps [raster::pointDistance()].
 #' @examples
-#' # stel_lengths ------------------------------------------------------------
+#' # step_lengths ------------------------------------------------------------
 #' xy <- data_frame(
 #'   x = c(0, 1, 2),
 #'   y = c(0, 1, 2)
@@ -213,6 +214,37 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_las
 #'
 #' step_lengths(xy, lonlat = FALSE)
 #' step_lengths(xy, lonlat = TRUE) # in m, but coords are assumed in degrees
+#'
+#'
+#' # creating steps ----------------------------------------------------------
+#'
+#' # Create some dummy data
+#' library(lubridate)
+#' df <- data_frame(
+#'   x = runif(10),
+#'   y = runif(10),
+#'   a = runif(10),
+#'   t = now() + hours(c(1:2, 5:6, 9:10, 14:17)),
+#'   b = 3,
+#'   c = a + 30
+#' )
+#'
+#' library(amt)
+#' make_track(df, x, y, t, all_cols = TRUE) %>%
+#'   steps(keep_cols = "start")
+#'
+#' make_track(df, x, y, all_cols = TRUE) %>%
+#'   steps(keep_cols = "end")
+#'
+#' make_track(df, x, y, t, all_cols = TRUE) %>%
+#'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
+#'   steps_by_burst(keep_cols = "start")
+#'
+#' make_track(df, x, y, t, all_cols = TRUE) %>%
+#'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
+#'   steps_by_burst(keep_cols = NULL)
+#'
+
 
 
 
@@ -258,11 +290,16 @@ steps_by_burst <- function(x, ...) {
 
 #' @rdname steps
 #' @export
-steps_by_burst.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
+steps_by_burst.track_xyt <- function(x, lonlat = FALSE,
+                                     degrees = TRUE,
+                                     keep_cols = NULL, ...) {
 
   togo <- cumsum(rle(x$burst_)$lengths)
-  ss <- suppressWarnings(steps(x, lonlat = lonlat, ...))
-  ss <- tibble::add_column(ss, burst_ = x$burst_[-1], .before = 1)
+  ss <- suppressWarnings(steps(x, lonlat = lonlat, keep_cols = keep_cols, ...))
+
+  if (!"burst_" %in% names(ss)) {
+    ss <- tibble::add_column(ss, burst_ = x$burst_[-1], .before = 1)
+  }
 
   if (!degrees) {
     ss$ta_ <- ss$ta_ * pi / 180
@@ -284,9 +321,11 @@ steps <- function(x, ...) {
 
 #' @export
 #' @rdname steps
-steps.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
+steps.track_xy <- function(x, lonlat = FALSE,
+                           keep_cols = NULL,
+                           degrees = TRUE, ...) {
   n <- nrow(x)
-  xx <- steps_base(x, n, lonlat = lonlat)
+  xx <- steps_base(x, n, lonlat = lonlat, keep_cols = keep_cols)
 
   if (!degrees) {
     xx$ta_ <- xx$ta_ * pi / 180
@@ -300,12 +339,14 @@ steps.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, ...) {
 #' @export
 #' @param diff_time_units `[character(1)='auto']` \cr The unit for time differences, see `?difftime`.
 #' @rdname steps
-steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, diff_time_units = "auto", ...) {
+steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE,
+                            keep_cols = NULL,
+                            diff_time_units = "auto", ...) {
   n <- nrow(x)
   if ("burst_" %in% names(x)) {
     warning("burst's are ignored, use steps_by_burst instead.")
   }
-  xx <- steps_base(x, n, lonlat)
+  xx <- steps_base(x, n, lonlat, keep_cols = keep_cols)
   xx$t1_ <- x$t_[-n]
   xx$t2_ <- x$t_[-1]
   xx$dt_ <- difftime(xx$t2_,  xx$t1_, units = diff_time_units)
@@ -320,7 +361,7 @@ steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE, diff_time_units =
 }
 
 
-steps_base <- function(x, n, lonlat, degrees, zero_dir) {
+steps_base <- function(x, n, lonlat, degrees, zero_dir, keep_cols) {
   out <- data_frame(
     x1_ = x$x_[-n],
     x2_ = x$x_[-1],
@@ -329,6 +370,19 @@ steps_base <- function(x, n, lonlat, degrees, zero_dir) {
     sl_ = step_lengths(x, lonlat = lonlat, append_last = FALSE),
     ta_ = direction_rel(x, lonlat = lonlat, degrees = TRUE, zero_dir = "E", append_last = FALSE)
   )
+
+  if (!is.null(keep_cols)) {
+
+    if (keep_cols == "start") {
+      out <- dplyr::bind_cols(
+        out,
+        x[-n, base::setdiff(names(x), c("x_", "y_", if (is(x, "track_xyt")) "t_"))])
+    } else  {
+      out <- dplyr::bind_cols(
+        out,
+        x[-1, base::setdiff(names(x), c("x_", "y_", if (is(x, "track_xyt")) "t_"))])
+    }
+  }
   out
 }
 
