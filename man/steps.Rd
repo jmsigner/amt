@@ -60,7 +60,7 @@ steps(x, ...)
 
 \item{lonlat}{\code{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geographic distances are calculated.}
 
-\item{keep_cols}{\code{[character(1)=NULL]{'start', 'end'}} \cr Should columns with attribute information be transfered to steps? If \code{keep_cols = 'start'} the attributes from the starting point are use, otherwise the columns from the end points are used.}
+\item{keep_cols}{\code{[character(1)=NULL]{'start', 'end', 'both'}} \cr Should columns with attribute information be transfered to steps? If \code{keep_cols = 'start'} the attributes from the starting point are use, otherwise the columns from the end points are used.}
 
 \item{diff_time_units}{\code{[character(1)='auto']} \cr The unit for time differences, see \code{?difftime}.}
 }
@@ -196,10 +196,12 @@ make_track(df, x, y, t, all_cols = TRUE) \%>\%
 make_track(df, x, y, all_cols = TRUE) \%>\%
   steps(keep_cols = "end")
 
-make_track(df, x, y, t, all_cols = TRUE) \%>\% track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
+make_track(df, x, y, t, all_cols = TRUE) \%>\%
+  track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
   steps_by_burst(keep_cols = "start")
 
-make_track(df, x, y, t, all_cols = TRUE) \%>\% track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
+make_track(df, x, y, t, all_cols = TRUE) \%>\%
+  track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
   steps_by_burst(keep_cols = NULL)
 
 }

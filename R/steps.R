@@ -9,7 +9,7 @@
 #' @param zero_dir `[character(1)='E']` \cr Indicating the zero direction. Must be either `N`, `E`, `S`, or `W`.
 #' @param clockwise `[logical(1)=FALSE]` \cr Should angles be calculated clock or anti-clockwise?
 #' @param append_last `[logical(1)=TRUE]` \cr If `TRUE` an `NA` is appended at the end of all angles.
-#' @param keep_cols `[character(1)=NULL]{'start', 'end'}` \cr Should columns with attribute information be transfered to steps? If `keep_cols = 'start'` the attributes from the starting point are use, otherwise the columns from the end points are used.
+#' @param keep_cols `[character(1)=NULL]{'start', 'end', 'both'}` \cr Should columns with attribute information be transfered to steps? If `keep_cols = 'start'` the attributes from the starting point are use, otherwise the columns from the end points are used.
 #' @param ... Further arguments, none implemented
 #'
 #' @return `[numeric]` \cr For `step_lengths()` and `direction_*` a numeric vector. \cr
@@ -307,7 +307,7 @@ steps_by_burst.track_xyt <- function(x, lonlat = FALSE,
 
   ss[head(togo, -1) + 1, "ta_"] <- NA
   ss <- ss[-togo, ]
-  class(ss) <- c("steps", class(x)[-(1:2)])
+  class(ss) <- c("steps_xyt", "steps_xy", class(x)[-(1:2)])
   attr(ss, "crs_") <- attr(x, "crs_")
   ss
 }
@@ -331,7 +331,7 @@ steps.track_xy <- function(x, lonlat = FALSE,
     xx$ta_ <- xx$ta_ * pi / 180
   }
 
-  class(xx) <- c("steps", class(x)[-1])
+  class(xx) <- c("steps_xy", class(x)[-1])
   attr(xx, "crs_") <- attr(x, "crs_")
   xx
 }
@@ -355,7 +355,7 @@ steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE,
     xx$ta_ <- xx$ta_ * pi / 180
   }
 
-  class(xx) <- c("steps", class(x)[-(1:2)])
+  class(xx) <- c("steps_xyt", "steps_xy", class(x)[-(1:2)])
   attr(xx, "crs_") <- attr(x, "crs_")
   xx
 }
@@ -377,10 +377,20 @@ steps_base <- function(x, n, lonlat, degrees, zero_dir, keep_cols) {
       out <- dplyr::bind_cols(
         out,
         x[-n, base::setdiff(names(x), c("x_", "y_", if (is(x, "track_xyt")) "t_"))])
-    } else  {
+    } else if (keep_cols == "end")  {
       out <- dplyr::bind_cols(
         out,
         x[-1, base::setdiff(names(x), c("x_", "y_", if (is(x, "track_xyt")) "t_"))])
+    } else if (keep_cols == "both") {
+
+      c_start <- x[-n, base::setdiff(names(x), c("x_", "y_", if (is(x, "track_xyt")) "t_"))]
+      base::names(c_start) <- paste0(base::names(c_start), "_start")
+      c_end <- x[-1, base::setdiff(names(x), c("x_", "y_", if (is(x, "track_xyt")) "t_"))]
+      base::names(c_end) <- paste0(base::names(c_end), "_end")
+
+      out <- dplyr::bind_cols(
+        out, c_start, c_end
+      )
     }
   }
   out
@@ -396,51 +406,51 @@ steps_transfer_attr <- function(from, to) {
 }
 
 #' @export
-`[.steps` <- function(x, i, j, drop = FALSE) {
+`[.steps_xy` <- function(x, i, j, drop = FALSE) {
   xx <- NextMethod()
   steps_transfer_attr(x, xx)
 }
 
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
-arrange.steps <- function(.data, ..., .dots) {
+arrange.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-filter.steps <- function(.data, ..., .dots) {
+filter.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-group_by.steps <- function(.data, ..., .dots) {
+group_by.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-mutate.steps <- function(.data, ..., .dots) {
+mutate.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-select.steps <- function(.data, ..., .dots) {
+select.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 #' @export
-summarise.steps <- function(.data, ..., .dots) {
+summarise.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }
 
 
 #' @export
-summarize.steps <- function(.data, ..., .dots) {
+summarize.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)
 }

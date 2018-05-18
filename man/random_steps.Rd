@@ -2,12 +2,12 @@
 % Please edit documentation in R/random_steps.R
 \name{random_steps}
 \alias{random_steps}
-\alias{random_steps.steps}
+\alias{random_steps.steps_xy}
 \title{Generate Random Steps}
 \usage{
 random_steps(x, ...)
 
-\method{random_steps}{steps}(x, n_control = 10, sl_distr = "gamma",
+\method{random_steps}{steps_xy}(x, n_control = 10, sl_distr = "gamma",
   ta_distr = "vonmises", random.error = 0.001, ...)
 }
 \arguments{

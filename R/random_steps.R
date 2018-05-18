@@ -18,7 +18,8 @@ random_steps <- function(x, ...) {
 
 #' @export
 #' @rdname random_steps
-random_steps.steps <- function(x, n_control = 10, sl_distr = "gamma", ta_distr = "vonmises", random.error = 0.001,
+random_steps.steps_xy <- function(x, n_control = 10, sl_distr = "gamma",
+                               ta_distr = "vonmises", random.error = 0.001,
                                ...) {
   if (any(is.na(x$sl_)) || any(is.na(x$ta_))) {
     x <- x[!is.na(x$sl_) & !is.na(x$ta_), ]
@@ -76,7 +77,11 @@ random_steps_base <- function(x, n_control, sl, ta) {
   x$step_id_ <- 1:ns
   has_burst <- "burst_" %in% names(x)
 
-  vars <- c("step_id_", "case_", "x1_", "y1_", "x2_", "y2_", "t1_", "t2_", "dt_")
+  vars <- c("step_id_", "case_", "x1_", "y1_", "x2_", "y2_")
+  if (is(x, "steps_xyt")) {
+    vars <- c(vars, "t1_", "t2_", "dt_")
+  }
+
   if (has_burst) {
     vars <- c("burst_", vars)
   }
