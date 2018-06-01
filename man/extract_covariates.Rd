@@ -4,7 +4,7 @@
 \alias{extract_covariates}
 \alias{extract_covariates.track_xy}
 \alias{extract_covariates.random_points}
-\alias{extract_covariates.steps}
+\alias{extract_covariates.steps_xy}
 \title{Extract covariate values}
 \usage{
 extract_covariates(x, ...)
@@ -13,7 +13,7 @@ extract_covariates(x, ...)
 
 \method{extract_covariates}{random_points}(x, covariates, ...)
 
-\method{extract_covariates}{steps}(x, covariates, where = "end", ...)
+\method{extract_covariates}{steps_xy}(x, covariates, where = "end", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}

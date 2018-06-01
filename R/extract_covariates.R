@@ -36,7 +36,7 @@ extract_covariates.random_points <- function(x, covariates, ...) {
 
 #' @export
 #' @rdname extract_covariates
-extract_covariates.steps <- function(x, covariates, where = "end", ...) {
+extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
   if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
     if (where == "both") {
       x_start <- raster::extract(covariates, x[, c("x1_", "y1_")], df = TRUE)[, -1, drop = FALSE]
