@@ -33,10 +33,17 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
     stop("0 length steps are not possible, consider adding a random error")
   }
 
-  list(
-    name = distr,
-    fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE, lower = 0)
-  )
+  if (distr == "gamma") {
+    list(
+      name = distr,
+      fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE, lower = 0)
+    )
+  } else if (distr == "unif") {
+    list(
+      name = distr,
+      fit = list(min = min(x), max = max(x))
+    )
+  }
 
 }
 
