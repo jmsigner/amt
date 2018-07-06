@@ -64,12 +64,18 @@ as_move <- function(x, ...) {
 #' @export
 #' @rdname coercion
 as_move.track_xy <- function(x, ...) {
+  if (is.null(get_crs(x))) {
+    stop("move requires a projected track.")
+  }
   move::move(x = x$x_, y = x$y_, proj = get_crs(x), ...)
 }
 
 #' @export
 #' @rdname coercion
 as_move.track_xyt <- function(x, ...) {
+  if (is.null(get_crs(x))) {
+    stop("move requires a projected track.")
+  }
   move::move(x = x$x_, y = x$y_, time = x$t_, proj = get_crs(x), ...)
 }
 
