@@ -6,6 +6,7 @@
 \alias{movement_kernel}
 \alias{sim_ud}
 \alias{simulate_ud}
+\alias{simulate_tud}
 \title{Simulate UD from fitted SSF}
 \usage{
 habitat_kernel(coef, resources, exp = TRUE)
@@ -13,6 +14,8 @@ habitat_kernel(coef, resources, exp = TRUE)
 movement_kernel(scale, shape, template, quant = 0.99)
 
 simulate_ud(movement_kernel, habitat_kernel, start, n = 100000L)
+
+simulate_tud(movement_kernel, habitat_kernel, start, n = 100, n_rep = 5000)
 }
 \arguments{
 \item{coef}{\code{[list]} \cr Vector with coeffiecients, not yet implemented.}
@@ -35,6 +38,8 @@ the maximum movement distance.}
 \item{start}{\code{[numeric(2)]} \cr Starting point of the simulation.}
 
 \item{n}{\code{[integer(1)=1e5]} \cr The number of simulation steps.}
+
+\item{n_rep}{\code{[integer(1)=5e3]{>0}} \cr The number of times the animal walks of the final position. The mean of all replicates is returned.}
 }
 \value{
 The habitat kernel, as \code{RasterLayer}.
@@ -50,6 +55,8 @@ distribution.
 The habitat kernel is calculated by multiplying resources with their corresponding coefficients from the fitted (i)SSF.
 
 \strong{\code{simulate_ud()}:} simulates a utilization distribution (UD) from a fitted Step-Selection Function.
+
+\strong{\code{simulate_tud()}:} Is a conviencience wrapper arround \code{simulate_ud} to simulate transistion UDs (i.e., starting at the same position many times and only simulate for a short time).
 }
 \note{
 This functions are still experimental and should be used with care. If in doubt, please contact the author.

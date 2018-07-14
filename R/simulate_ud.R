@@ -5,6 +5,10 @@
 #' The habitat kernel is calculated by multiplying resources with their corresponding coefficients from the fitted (i)SSF.
 #'
 #' @param resources `[RasterLayer, RasterStack]` \cr The resources.
+#' @param movement_kernel `[RasterLayer]` \cr The movement kernel.
+#' @param habitat_kernel `[RasterLayer]` \cr The habitat kernel.
+#' @param start `[numeric(2)]` \cr Starting point of the simulation.
+#' @param n `[integer(1)=1e5]` \cr The number of simulation steps.
 #' @references
 #' \insertRef{avgar2016}{amt}
 #' \insertRef{signer2017}{amt}
@@ -16,10 +20,6 @@
 
 NULL
 
-#' @param movement_kernel `[RasterLayer]` \cr The movement kernel.
-#' @param habitat_kernel `[RasterLayer]` \cr The habitat kernel.
-#' @param start `[numeric(2)]` \cr Starting point of the simulation.
-#' @param n `[integer(1)=1e5]` \cr The number of simulation steps.
 #' @details  **`simulate_ud()`:** simulates a utilization distribution (UD) from a fitted Step-Selection Function.
 #' @rdname sim_ud
 #' @export
@@ -54,3 +54,18 @@ simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
 
 }
 
+#' @param n_rep `[integer(1)=5e3]{>0}` \cr The number of times the animal walks of the final position. The mean of all replicates is returned.
+#' @details  **`simulate_tud()`:** Is a conviencience wrapper arround `simulate_ud` to simulate transistion UDs (i.e., starting at the same position many times and only simulate for a short time).
+#' @rdname sim_ud
+#' @export
+
+simulate_tud <- function(movement_kernel, habitat_kernel, start, n = 100, n_rep = 5e3) {
+  tud <- habitat_kernel
+  tud <- raster::setValues(tud, 0)
+  for(i in 1:n_rep) {
+    tud <- tud +
+      simulate_ud(movement_kernel,
+                  habitat_kernel, start, n = n)
+  }
+  tud <- raster::getValues(tud) / sum(getValues(tud))
+}
