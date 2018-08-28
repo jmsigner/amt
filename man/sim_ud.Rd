@@ -56,7 +56,7 @@ The habitat kernel is calculated by multiplying resources with their correspondi
 
 \strong{\code{simulate_ud()}:} simulates a utilization distribution (UD) from a fitted Step-Selection Function.
 
-\strong{\code{simulate_tud()}:} Is a conviencience wrapper arround \code{simulate_ud} to simulate transistion UDs (i.e., starting at the same position many times and only simulate for a short time).
+\strong{\code{simulate_tud()}:} Is a conviencience wrapper arround \code{simulate_ud} to simulate transition UDs (i.e., starting at the same position many times and only simulate for a short time).
 }
 \note{
 This functions are still experimental and should be used with care. If in doubt, please contact the author.

@@ -48,12 +48,12 @@ has_crs.track_xy <- function(x, ...) {
 # steps -------------------------------------------------------------------
 
 #' @export
-get_crs.steps <- function(x, ...) {
+get_crs.steps_xy <- function(x, ...) {
   attr(x, "crs", ...)
 }
 
 #' @export
-has_crs.steps <- function(x, ...) {
+has_crs.steps_xy <- function(x, ...) {
   !is.null(attr(x, "crs", ...))
 }
 

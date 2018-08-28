@@ -30,12 +30,14 @@ Imports:
     Rcpp (>= 0.12.7),
     rgeos,
     rlang,
+    sf,
     sp,
     survival,
     stats,
     tibble,
     tidyr,
-    utils
+    utils,
+    velox
 Suggests: 
   adehabitatLT,
   bcpa,

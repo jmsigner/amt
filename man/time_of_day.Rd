@@ -3,7 +3,7 @@
 \name{time_of_day}
 \alias{time_of_day}
 \alias{time_of_day.track_xyt}
-\alias{time_of_day.steps}
+\alias{time_of_day.steps_xyt}
 \title{Time of the day when a fix was taken}
 \usage{
 time_of_day(x, ...)
@@ -11,8 +11,8 @@ time_of_day(x, ...)
 \method{time_of_day}{track_xyt}(x, solar.dep = 6,
   include.crepuscule = FALSE, ...)
 
-\method{time_of_day}{steps}(x, solar.dep = 6, include.crepuscule = FALSE,
-  where = "end", ...)
+\method{time_of_day}{steps_xyt}(x, solar.dep = 6,
+  include.crepuscule = FALSE, where = "end", ...)
 }
 \arguments{
 \item{x}{\code{[track_xyt,steps_xyt]}\cr A track or steps.}

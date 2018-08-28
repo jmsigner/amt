@@ -5,6 +5,8 @@
 \alias{extract_covariates.track_xy}
 \alias{extract_covariates.random_points}
 \alias{extract_covariates.steps_xy}
+\alias{extract_covariates_along}
+\alias{extract_covariates_along.steps_xy}
 \title{Extract covariate values}
 \usage{
 extract_covariates(x, ...)
@@ -14,6 +16,10 @@ extract_covariates(x, ...)
 \method{extract_covariates}{random_points}(x, covariates, ...)
 
 \method{extract_covariates}{steps_xy}(x, covariates, where = "end", ...)
+
+extract_covariates_along(x, ...)
+
+\method{extract_covariates_along}{steps_xy}(x, covariates, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}
@@ -31,10 +37,22 @@ the end of a step. or \code{end}.}
 Extract the covariate values at relocations, or at the beginning or end of
 steps.
 }
+\details{
+\code{extract_covariates_along} extracts the covariates along a straight line between the start and the end point of a (random) step. It returns a list, which in most cases will have to be processed further.
+}
 \examples{
 data(deer)
 data(sh_forest)
 deer \%>\% extract_covariates(sh_forest)
 deer \%>\% steps \%>\% extract_covariates(sh_forest)
 deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
+data(deer) # relocation
+data("sh_forest") # env covar
+
+p1 <- deer \%>\% steps() \%>\% random_steps() \%>\%
+  extract_covariates(sh_forest) \%>\% # extract at the endpoint
+  mutate(for_path = extract_covariates_along(., sh_forest))  \%>\%
+  # 1 = forest, lets calc the fraction of forest along the path
+  mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
+
 }

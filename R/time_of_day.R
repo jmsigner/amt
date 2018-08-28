@@ -32,7 +32,7 @@ time_of_day.track_xyt <- function(x, solar.dep = 6, include.crepuscule = FALSE, 
 
 #' @export
 #' @rdname time_of_day
-time_of_day.steps <- function(x, solar.dep = 6, include.crepuscule = FALSE, where = "end", ...) {
+time_of_day.steps_xyt <- function(x, solar.dep = 6, include.crepuscule = FALSE, where = "end", ...) {
     if (where == "both") {
       x["tod_start_"] <- time_of_day_base(x, x[["t1_"]], solar.dep = solar.dep, include.crepuscule = include.crepuscule, end = FALSE, ...)
       x["tod_end_"] <- time_of_day_base(x, x[["t2_"]], solar.dep = solar.dep, include.crepuscule = include.crepuscule, end = TRUE, ...)

@@ -3,7 +3,7 @@
 \name{coercion}
 \alias{coercion}
 \alias{as_sp}
-\alias{as_sp.steps}
+\alias{as_sp.steps_xy}
 \alias{as_move}
 \alias{as_move.track_xy}
 \alias{as_move.track_xyt}
@@ -18,7 +18,7 @@
 \usage{
 as_sp(x, ...)
 
-\method{as_sp}{steps}(x, end = TRUE, ...)
+\method{as_sp}{steps_xy}(x, end = TRUE, ...)
 
 as_move(x, ...)
 

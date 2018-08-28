@@ -39,17 +39,19 @@ extract_covariates.random_points <- function(x, covariates, ...) {
 extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
   if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
     if (where == "both") {
-      x_start <- raster::extract(covariates, x[, c("x1_", "y1_")], df = TRUE)[, -1, drop = FALSE]
+      x_start <- raster::extract(covariates, as.matrix(x[, c("x1_", "y1_")]),
+                                 df = TRUE)[, -1, drop = FALSE]
       names(x_start) <- paste0(names(x_start), "_start")
-      x_end <- raster::extract(covariates, x[, c("x2_", "y2_")], df = TRUE)[, -1, drop = FALSE]
+      x_end <- raster::extract(covariates, as.matrix(x[, c("x2_", "y2_")]),
+                               df = TRUE)[, -1, drop = FALSE]
       names(x_end) <- paste0(names(x_end), "_end")
       x_all <- cbind(x_start, x_end)
       x[names(x_all)] <- x_all
     } else {
       x[names(covariates)] <- if (where == "end") {
-        raster::extract(covariates, x[, c("x2_", "y2_")])
+        raster::extract(covariates, as.matrix(x[, c("x2_", "y2_")]))
       } else if (where == "start") {
-        raster::extract(covariates, x[, c("x1_", "y1_")])
+        raster::extract(covariates, as.matrix(x[, c("x1_", "y1_")]))
       }
     }
     x
@@ -64,5 +66,40 @@ extract_covar_base <- function(x, covars) {
     x
   } else {
     stop("no raster")
+  }
+}
+
+
+# extract covariates along ------------------------------------------------
+
+
+#' @rdname extract_covariates
+#' @details `extract_covariates_along` extracts the covariates along a straight line between the start and the end point of a (random) step. It returns a list, which in most cases will have to be processed further.
+#' @export
+#' @examples
+#' data(deer) # relocation
+#' data("sh_forest") # env covar
+#'
+#' p1 <- deer %>% steps() %>% random_steps() %>%
+#'   extract_covariates(sh_forest) %>% # extract at the endpoint
+#'   mutate(for_path = extract_covariates_along(., sh_forest))  %>%
+#'   # 1 = forest, lets calc the fraction of forest along the path
+#'   mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
+#'
+extract_covariates_along <- function(x, ...) {
+  UseMethod("extract_covariates_along", x)
+}
+
+#' @export
+#' @rdname extract_covariates
+extract_covariates_along.steps_xy <- function(x, covariates, ...) {
+  if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
+    wkt <- with(x, paste0("LINESTRING (", x1_, " ", y1_, ",", x2_, " ", y2_, ")"))
+    ll <- sf::st_as_sfc(wkt)
+    v <- velox::velox(r)
+    l2 <- v$extract(sp = ll)
+    return(l2)
+  } else {
+    stop("covariates: need to be a Raster*.")
   }
 }

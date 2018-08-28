@@ -41,7 +41,7 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
   } else if (distr == "unif") {
     list(
       name = distr,
-      fit = list(min = min(x), max = max(x))
+      fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE, lower = 0)
     )
   }
 
