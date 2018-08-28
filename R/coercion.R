@@ -26,10 +26,10 @@ as_sp.track_xy <- function(x, ...) {
 #' @export
 #' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @rdname coercion
-as_sp.steps <- function(x, end = TRUE, ...) {
+as_sp.steps_xy <- function(x, end = TRUE, ...) {
   if (end) {
     sp::SpatialPoints(
-      coords = x[, c("x2_", "y2_")],
+      coords = as.matrix(x[, c("x2_", "y2_")]),
       proj4string = if (!is.null(attributes(x)$crs_)) {
         attributes(x)$crs_
       } else {
@@ -38,7 +38,7 @@ as_sp.steps <- function(x, end = TRUE, ...) {
     )
   } else {
     sp::SpatialPoints(
-      coords = x[, c("x1_", "y1_")],
+      coords = as.matrix(x[, c("x1_", "y1_")]),
       proj4string = if (!is.null(attributes(x)$crs_)) {
         attributes(x)$crs_
       } else {

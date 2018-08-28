@@ -55,7 +55,7 @@ simulate_ud <- function(movement_kernel, habitat_kernel, start, n = 1e5L) {
 }
 
 #' @param n_rep `[integer(1)=5e3]{>0}` \cr The number of times the animal walks of the final position. The mean of all replicates is returned.
-#' @details  **`simulate_tud()`:** Is a conviencience wrapper arround `simulate_ud` to simulate transistion UDs (i.e., starting at the same position many times and only simulate for a short time).
+#' @details  **`simulate_tud()`:** Is a conviencience wrapper arround `simulate_ud` to simulate transition UDs (i.e., starting at the same position many times and only simulate for a short time).
 #' @rdname sim_ud
 #' @export
 
@@ -67,5 +67,6 @@ simulate_tud <- function(movement_kernel, habitat_kernel, start, n = 100, n_rep 
       simulate_ud(movement_kernel,
                   habitat_kernel, start, n = n)
   }
-  tud <- raster::getValues(tud) / sum(getValues(tud))
+  tud <- raster::setValues(tud, raster::getValues(tud) /
+                             sum(raster::getValues(tud)))
 }
