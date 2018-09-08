@@ -96,7 +96,7 @@ extract_covariates_along.steps_xy <- function(x, covariates, ...) {
   if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
     wkt <- with(x, paste0("LINESTRING (", x1_, " ", y1_, ",", x2_, " ", y2_, ")"))
     ll <- sf::st_as_sfc(wkt)
-    v <- velox::velox(r)
+    v <- velox::velox(covariates)
     l2 <- v$extract(sp = ll)
     return(l2)
   } else {
