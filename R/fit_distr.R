@@ -43,6 +43,11 @@ fit_sl_dist_base <- function(x, na.rm = TRUE, distr = "gamma", ...) {
       name = distr,
       fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE, lower = 0)
     )
+  } else if (distr == "exp") {
+    list(
+      name = distr,
+      fit = fitdistrplus::fitdist(x, distr, keepdata = FALSE)
+    )
   }
 
 }
