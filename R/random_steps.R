@@ -66,7 +66,7 @@ random_steps_base <- function(x, n_control, sl, ta) {
   # control points
   xy_cc <- x[case_for_control, ]
   xy_cc["x2_"] <- xy_cc$x1_ + slr * cos(tar)
-  xy_cc["y2_"] <- xy_cc$y2_ + slr * sin(tar)
+  xy_cc["y2_"] <- xy_cc$y1_ + slr * sin(tar)
 
   xy_cc$case_ <- FALSE
   xy_cc$step_id_ <- rep(1:ns, each = n_control)
