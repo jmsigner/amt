@@ -18,7 +18,7 @@
 #'   stamp, default is `TRUE`.
 #' @param check_duplicates `[logical(1)=FALSE]` \cr Should it be checked if there are
 #'   duplicated time stamp, default is `FALSE`.
-#' @param all_cols `[logical(1)=FALSE]` \cr Should all columns be carried over to the track object, default is `FALSE`.
+# #' @param all_cols `[logical(1)=FALSE]` \cr Should all columns be carried over to the track object, default is `FALSE`.
 #' @param x,y `[numeric]` \cr The x and y coordinates.
 #' @param t `[POSIXct]` \cr The time stamp.
 #' @return If `t` was provided an object of class `track_xyt` is returned
@@ -27,7 +27,7 @@
 #' @name track
 
 mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
-                     check_duplicates = FALSE, all_cols = FALSE) {
+                     check_duplicates = FALSE) {
 
 
   if (missing(.x) | missing(.y)) {
@@ -85,16 +85,16 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
     class(out) <- c("track_xyt", "track_xy", class(out))
   }
 
-  if (all_cols) {
-    # cont here
-    rest <- setdiff(names(tbl),
-                    c(quo_name(.x), quo_name(.y), if (!missing(.t)) quo_name(.t)))
-    rest <- rlang::parse_quosures(rest)
-    out <- dplyr::bind_cols(
-      out,
-      dplyr::select(tbl, !!!rest)
-    )
-  }
+#  if (all_cols) {
+#    # cont here
+#    rest <- setdiff(names(tbl),
+#                    c(quo_name(.x), quo_name(.y), if (!missing(.t)) quo_name(.t)))
+#    rest <- rlang::parse_quosures(rest)
+#    out <- dplyr::bind_cols(
+#      out,
+#      dplyr::select(tbl, !!!rest)
+#    )
+#  }
 
   if (!is.null(crs)) {
     if (!is(crs, "CRS")) {

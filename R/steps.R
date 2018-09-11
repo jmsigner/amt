@@ -230,17 +230,15 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_las
 #' )
 #'
 #' library(amt)
-#' make_track(df, x, y, t, all_cols = TRUE) %>%
-#'   steps(keep_cols = "start")
+#' make_track(df, x, y, t, a, b, c) %>% steps(keep_cols = "start")
 #'
-#' make_track(df, x, y, all_cols = TRUE) %>%
-#'   steps(keep_cols = "end")
+#' make_track(df, x, y, a = a, b = b, c = c) %>% steps(keep_cols = "end")
 #'
-#' make_track(df, x, y, t, all_cols = TRUE) %>%
+#' make_track(df, x, y, t, a, b, c) %>%
 #'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
 #'   steps_by_burst(keep_cols = "start")
 #'
-#' make_track(df, x, y, t, all_cols = TRUE) %>%
+#' make_track(df, x, y, t, a, b, c) %>%
 #'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
 #'   steps_by_burst(keep_cols = NULL)
 #'
