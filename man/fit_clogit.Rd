@@ -24,5 +24,5 @@ fit_issf(data, formula, more = NULL, summary_only = FALSE, ...)
 \item{...}{Additional arguments, passed to \code{survival::clogit}.}
 }
 \description{
-This function is a wrapper around \code{stats::glm}, making it usable in a piped workflow.
+This function is a wrapper around \code{survival::clogit}, making it usable in a piped workflow.
 }

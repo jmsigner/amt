@@ -1,6 +1,6 @@
 #' Fit a conditional logistic regression
 #'
-#' This function is a wrapper around `stats::glm`, making it usable in a piped workflow.
+#' This function is a wrapper around `survival::clogit`, making it usable in a piped workflow.
 #'
 #' @param data `[data.frame]` \cr The data used to fit a model.
 #' @param formula `[formula]` \cr The model formula.

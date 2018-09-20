@@ -193,9 +193,15 @@ fit_ta_dist <- function(.tbl, x, ...){
 fit_ta_dist_base <- function(x, na.rm = TRUE, distr = "vonmises", ...) {
   if (is.list(x)) x <- unlist(x, use.names = FALSE, recursive = TRUE)
   if (na.rm) x <- x[!is.na(x)]
+  if (!is(x, "units")) {
+    stop(x, "x is not of class 'units'.")
+  }
+
+  # make sure we have radians
+  x <- units::set_units(x, "radians")
 
   if (distr == "vonmises") {
-    x <- circular::as.circular(x, type = "angles", units = "degrees", template = "none",
+    x <- circular::as.circular(x, type = "angles", units = "radians", template = "none",
                                modulo = "asis", zero = 0, rotation = "counter")
     fit <- circular::mle.vonmises(x, ...)
     list(

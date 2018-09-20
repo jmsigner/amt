@@ -1,7 +1,7 @@
 Package: amt
 Type: Package
 Title: Animal Movement Tools
-Version: 0.0.4.9000
+Version: 0.0.5.9000
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"))
 Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource and step-selection functions), and simulation of space-use from fitted step-selection functions.
 License: GPL-3
@@ -36,6 +36,7 @@ Imports:
     stats,
     tibble,
     tidyr,
+    units,
     utils,
     velox
 Suggests: 

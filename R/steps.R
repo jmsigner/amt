@@ -131,8 +131,16 @@ direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_
   )
   a <- if (clockwise)  (360 - a) %% 360 else a
   a <- if (full_circle) a else ifelse(a > 180, (360 - a) * -1, a)
-  a * if (degrees) 1 else pi / 180
+
+  a <- units::set_units(a, "degrees")
+
+  if (degrees) {
+    a
+  } else {
+    units::set_units(a, "radians")
+  }
 }
+
 
 # Directions rel ----------------------------------------------------------
 #' @rdname steps
@@ -191,7 +199,12 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_las
   p <- c(NA, diff_rcpp(p)) %% (2 * pi)
   #p <- ifelse(p <= (-pi), p + 2 * pi, p)
   p <- ifelse( p > pi, p - 2 * pi, p)
-  p * if (degrees) 180 / pi else 1
+  p <- units::set_units(p, "radians")
+  if (degrees) {
+    units::set_units(p, "degrees")
+  } else {
+    p
+  }
 }
 
 
@@ -230,15 +243,17 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_las
 #' )
 #'
 #' library(amt)
-#' make_track(df, x, y, t, a, b, c) %>% steps(keep_cols = "start")
+#' make_track(df, x, y, t, all_cols = TRUE) %>%
+#'   steps(keep_cols = "start")
 #'
-#' make_track(df, x, y, a = a, b = b, c = c) %>% steps(keep_cols = "end")
+#' make_track(df, x, y, all_cols = TRUE) %>%
+#'   steps(keep_cols = "end")
 #'
-#' make_track(df, x, y, t, a, b, c) %>%
+#' make_track(df, x, y, t, all_cols = TRUE) %>%
 #'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
 #'   steps_by_burst(keep_cols = "start")
 #'
-#' make_track(df, x, y, t, a, b, c) %>%
+#' make_track(df, x, y, t, all_cols = TRUE) %>%
 #'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
 #'   steps_by_burst(keep_cols = NULL)
 #'
@@ -325,8 +340,8 @@ steps.track_xy <- function(x, lonlat = FALSE,
   n <- nrow(x)
   xx <- steps_base(x, n, lonlat = lonlat, keep_cols = keep_cols)
 
-  if (!degrees) {
-    xx$ta_ <- xx$ta_ * pi / 180
+  if (degrees) {
+    xx$ta_ <- units::set_units(xx$ta_, "degrees")
   }
 
   class(xx) <- c("steps_xy", class(x)[-1])
@@ -349,8 +364,8 @@ steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE,
   xx$t2_ <- x$t_[-1]
   xx$dt_ <- difftime(xx$t2_,  xx$t1_, units = diff_time_units)
 
-  if (!degrees) {
-    xx$ta_ <- xx$ta_ * pi / 180
+  if (degrees) {
+    xx$ta_ <- units::set_units(xx$ta_, "degrees")
   }
 
   class(xx) <- c("steps_xyt", "steps_xy", class(x)[-(1:2)])
@@ -366,7 +381,7 @@ steps_base <- function(x, n, lonlat, degrees, zero_dir, keep_cols) {
     y1_ = x$y_[-n],
     y2_ = x$y_[-1],
     sl_ = step_lengths(x, lonlat = lonlat, append_last = FALSE),
-    ta_ = direction_rel(x, lonlat = lonlat, degrees = TRUE, zero_dir = "E", append_last = FALSE)
+    ta_ = direction_rel(x, lonlat = lonlat, degrees = FALSE, zero_dir = "E", append_last = FALSE)
   )
 
   if (!is.null(keep_cols)) {

@@ -44,29 +44,37 @@ random_steps_base <- function(x, n_control, sl, ta) {
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(1:ns, each = n_control)
 
+  tar <- if (ta$name == "vonmises") {
+    mu <- circular::as.circular(0, type = "angles", units = "radians", template = "none",
+                                modulo = "asis", zero = 0, rotation = "counter")
+    # turn angles for new stps
+    rta <- as.vector(circular::rvonmises(ns * n_control, mu = mu, kappa = ta$fit$kappa))
+    rta <- rta %% (2 * pi)
+    ifelse(rta > pi, rta - (2 * pi), rta)
+  } else if (ta$name == "unif") {
+    stats::runif(ns * n_control, -pi, pi)  # turning angles for new stps
+  } else {
+    stop("ta dist not implemented")
+  }
+
+  tar <- units::set_units(tar, "radians")
+
   slr <-  if (sl$name %in% c("gamma", "unif", "exp")) {
     do.call(paste0("r", sl$fit$distname), c(list(n = ns * n_control), as.list(sl$fit$estimate)))
   } else {
     stop("sl dist not implemented")
   }
 
-  tar <- if (ta$name == "vonmises") {
-    mu <- circular::as.circular(0, type = "angles", units = "degrees", template = "none",
-                                modulo = "asis", zero = 0, rotation = "counter")
-    # turn angles for new stps
-    rta <- as.vector(circular::rvonmises(ns * n_control, mu = mu, kappa = ta$fit$kappa))
-    rta <- (rta + x[case_for_control, ]$ta_) %% 360
-    ifelse(rta > 180, rta - 360, rta)
-  } else if (ta$name == "unif") {
-    x[case_for_control, ]$ta_ + stats::runif(ns * n_control, -pi, pi)  # turning angles for new stps
-  } else {
-    stop("ta dist not implemented")
-  }
 
   # control points
   xy_cc <- x[case_for_control, ]
-  xy_cc["x2_"] <- xy_cc$x1_ + slr * cos(tar)
-  xy_cc["y2_"] <- xy_cc$y1_ + slr * sin(tar)
+
+  abs_angle_current <- units::set_units(
+    atan2(x$y2_ - x$y1_, x$x2_ - x$x1_)[case_for_control], "radians")
+  abs_angle_previous <- abs_angle_current - x[case_for_control, ]$ta_
+
+  xy_cc["x2_"] <- xy_cc$x1_ + slr * units::drop_units(cos(abs_angle_previous + tar))
+  xy_cc["y2_"] <- xy_cc$y1_ + slr * units::drop_units(sin(abs_angle_previous + tar))
 
   xy_cc$case_ <- FALSE
   xy_cc$step_id_ <- rep(1:ns, each = n_control)
