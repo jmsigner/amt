@@ -107,15 +107,34 @@ bbox <- function(x, ...) {
 
 #' @export
 #' @rdname bbox
-bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL, ...) {
-  bbx <- rgeos::gEnvelope(as_sp(x))
-  if (!is.null(buffer)) {
-    bbx <- rgeos::gEnvelope(rgeos::gBuffer(bbx, width = buffer))
+bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...) {
+
+  if (sf && !spatial) {
+    warning("spatial has precedence over sf.")
   }
+
+  # bounds
+  bbx <- c(min(x$x_), max(x$x_), min(x$y_), max(x$y_))
+
+  if (!is.null(buffer)) {
+    bbx <- bbx + buffer * c(-1, 1, -1, 1)
+  }
+
+  coords <- cbind(
+    x = c(bbx[1], bbx[1], bbx[2], bbx[2], bbx[1]),
+    y = c(bbx[3], bbx[4], bbx[4], bbx[3], bbx[3])
+  )
+
+  p <- sf::st_polygon(list(coords))
+
   if (spatial) {
-    bbx
-  } else {
-    sp::bbox(bbx)
+    if (sf) {
+      p
+    } else {
+      sf::as_Spatial(sf::st_geometry(p))
+    }
+ } else {
+    sf::st_bbox(p)
   }
 }
 
