@@ -1,3 +1,9 @@
+# amt 0.0.6.0
+
+## major changes
+- random_steps now uses `units` to be explicit about the turning angle.
+- `bbox` is also available for steps and can return objects of `sf`.
+
 # amt 0.0.5.0
 ## major changes
 - `random_steps` gained a new distribution for random steps (exponential).
