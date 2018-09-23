@@ -12,3 +12,4 @@
 as_rad <- function(x) {
   x * pi/180
 }
+

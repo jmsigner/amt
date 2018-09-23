@@ -143,26 +143,6 @@ sl_distr.random_steps <- function (x, ...) {
   sl_distr(attributes(x)$sl_)
 }
 
-#' Plot step-length distribution
-#'
-#' @param x `[fit_clogit]` \cr A fitted step selection.
-#' @template dots_none
-#' @export
-plot_sl <- function(x, ...) {
-  UseMethod("plot_sl", x)
-}
-
-#' @export
-plot_sl.fit_clogit <- function(x, n = 1000, ...) {
-  xx <- sl_params(x)
-  to <- qgamma(0.99, shape = xx[1], scale = xx[2])
-  xs <- seq(0, to, length.out = n)
-  plot(xs, ys <- dgamma(xs, shape = xx[1], scale = xx[2]), type = "l",
-       ylab = "Probablility",
-       xlab = "Distance")
-
-  invisible(data.frame(sl = xs, d = ys))
-}
 
 # turning angles ----------------------------------------------------------
 #' Fit a statistical distribution to the turn angles of a track
