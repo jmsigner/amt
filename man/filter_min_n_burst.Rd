@@ -10,7 +10,7 @@ filter_min_n_burst(x, ...)
 \method{filter_min_n_burst}{track_xy}(x, min_n = 3, ...)
 }
 \arguments{
-\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented.}
 

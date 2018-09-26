@@ -10,7 +10,7 @@ centroid(x, ...)
 \method{centroid}{track_xy}(x, spatial = FALSE, ...)
 }
 \arguments{
-\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented.}
 

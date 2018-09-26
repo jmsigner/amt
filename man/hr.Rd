@@ -38,7 +38,7 @@ hr_mcp(x, ...)
 \method{hr_mcp}{track_xy}(x, levels = 0.95, ...)
 }
 \arguments{
-\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented.}
 

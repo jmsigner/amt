@@ -80,8 +80,8 @@ random_points.mcp <- function(x, n = 100, type = "random", ...) {
 
 #' @export
 #' @rdname random_points
-random_points.kde <- function(x, n = 100, type = "random", ...) {
-  as_track(sp::spsample(hr_isopleths(x), n = n, type = type, ...))
+random_points.SpatialPolygons <- function(x, n = 100, type = "random", ...) {
+  as_track(sp::spsample(x, n = n, type = type, ...))
 }
 
 #' @export
@@ -91,15 +91,16 @@ random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, type =
   if (hr == "mcp") {
     hr <- hr_mcp(x, levels = level, ...)
   } else if (hr == "kde") {
-    hr <- hr_kde(x, levels = level, ...)
+    hr <- hr_kde(x, ...) %>% hr_isopleths(level = level)
   } else {
     stop("Only mcp and kde home ranges are currently implemented.")
   }
 
-  rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = type)
+  rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = type, level = level)
 
   n <- nrow(x)
   n_rnd <- nrow(rnd_pts)
+
 
   xx <- data_frame(
     case_ = c(rep(TRUE, n), rep(FALSE, n_rnd)),

@@ -3,7 +3,7 @@
 \name{random_points}
 \alias{random_points}
 \alias{random_points.mcp}
-\alias{random_points.kde}
+\alias{random_points.SpatialPolygons}
 \alias{random_points.track_xy}
 \title{Generate random points}
 \usage{
@@ -11,13 +11,13 @@ random_points(x, ...)
 
 \method{random_points}{mcp}(x, n = 100, type = "random", ...)
 
-\method{random_points}{kde}(x, n = 100, type = "random", ...)
+\method{random_points}{SpatialPolygons}(x, n = 100, type = "random", ...)
 
 \method{random_points}{track_xy}(x, level = 1, hr = "mcp", factor = 10,
   type = "random", ...)
 }
 \arguments{
-\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{mk_track} or \code{track}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{\code{[any]}\cr None implemented.}
 

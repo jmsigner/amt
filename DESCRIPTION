@@ -12,6 +12,7 @@ Depends:
 Imports:
     broom,
     circular,
+    ctmm,
     dplyr (>= 0.7.0),
     fitdistrplus,
     FNN,
@@ -25,6 +26,8 @@ Imports:
     magrittr,
     maptools,
     methods,
+    move,
+    progress,
     purrr,
     raster,
     Rcpp (>= 0.12.7),
@@ -42,9 +45,7 @@ Imports:
 Suggests: 
   adehabitatLT,
   bcpa,
-  ctmm,
   devtools,
-  move,
   moveHMM,
   spacetime,
   testthat,
