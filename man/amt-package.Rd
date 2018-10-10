@@ -11,4 +11,10 @@ Manage and analyze animal movement data. The functionality of 'amt' includes met
 \author{
 \strong{Maintainer}: Johannes Signer \email{jsigner@gwdg.de}
 
+Other contributors:
+\itemize{
+  \item Bjoern Reineking [contributor]
+  \item Scott LaPoint [data contributor]
+}
+
 }
