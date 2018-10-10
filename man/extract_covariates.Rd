@@ -26,11 +26,11 @@ extract_covariates_along(x, ...)
 
 extract_covariates_var_time(x, ...)
 
-\method{extract_covariates_var_time}{track_xyt}(x, covariates, when, max_time,
-  name_covar, ...)
+\method{extract_covariates_var_time}{track_xyt}(x, covariates, when = "any",
+  max_time, name_covar = "time_var_covar", ...)
 
-\method{extract_covariates_var_time}{steps_xyt}(x, covariates, when,
-  where = "end", ...)
+\method{extract_covariates_var_time}{steps_xyt}(x, covariates, when = "any",
+  max_time, name_covar = "time_var_covar", where = "end", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}
@@ -76,5 +76,75 @@ p1 <- deer \%>\% steps() \%>\% random_steps() \%>\%
   mutate(for_path = extract_covariates_along(., sh_forest))  \%>\%
   # 1 = forest, lets calc the fraction of forest along the path
   mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
+
+# Simulate some dummy data
+# Hourly data for 10 days: 24 * 10
+set.seed(123)
+path <- data.frame(x = cumsum(rnorm(240)),
+              y = cumsum(rnorm(240)),
+              t = lubridate::ymd("2018-01-01") + hours(0:239))
+
+# dummy env data
+rs <- raster::raster(xmn = -50, xmx = 50, ymn = -50, ymx = 50, res = 1)
+
+# create dummy covars for each day
+rs <- raster::stack(lapply(1:10, function(i)
+  raster::setValues(rs, runif(1e4, i - 1, i))))
+
+# Env covariates are always taken at noon
+rs <- raster::setZ(rs, lubridate::ymd_hm("2018-01-01 12:00") + days(0:9))
+
+# Allow up to 2 hours after
+trk \%>\% extract_covariates_var_time(rs, max_time = hours(2), when = "after") \%>\%
+  print(n = 25)
+trk \%>\% extract_covariates_var_time(rs, max_time = hours(2), when = "before") \%>\%
+  print(n = 25)
+trk \%>\% extract_covariates_var_time(rs, max_time = hours(2), when = "any") \%>\%
+  print(n = 25)
+
+# We can use different time scales
+trk \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(2), when = "any", name_covar = "env_2h") \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(4), when = "any", name_covar = "env_4h") \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(6), when = "any", name_covar = "env_6h") \%>\%
+  print(n = 25)
+
+# We can use different time scales: after
+trk \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(2), when = "after", name_covar = "env_2h") \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(4), when = "after", name_covar = "env_4h") \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(6), when = "after", name_covar = "env_6h") \%>\%
+  print(n = 25)
+
+# We can use different time scales: before
+trk \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(2), when = "before", name_covar = "env_2h") \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(4), when = "before", name_covar = "env_4h") \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(6), when = "before", name_covar = "env_6h") \%>\%
+  print(n = 25)
+
+# The same works also for steps
+trk \%>\%
+  steps() \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(2), when = "before", name_covar = "env_2h") \%>\%
+  print(n = 25)
+
+# also with start and end
+trk \%>\%
+  steps() \%>\%
+  extract_covariates_var_time(
+    rs, max_time = hours(2), when = "before", name_covar = "env_2h",
+    where = "both") \%>\%
+  print(n = 25)
 
 }

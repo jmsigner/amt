@@ -25,8 +25,7 @@ od(x, ...)
 
 \item{trast}{\code{[RasterLayer]} \cr A template raster for the extent and resolution of the result.}
 
-\item{model}{\code{[character(1)="bm"]{"bm","ou","ouf","auto"}} \cr The autocorrelation model that should be fit to the data. \code{bm} corresponds to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process. The option \code{auto} fits all three processes from above and then performs AIC-based model selection.
-local convex hulls.}
+\item{model}{\code{[character(1)="bm"]{"bm","ou","ouf"}} \cr The autocorrelation model that should be fit to the data. \code{bm} corresponds to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process.}
 
 \item{res.space}{\code{[numeric(1)=10]} \cr Number of grid point along each axis, relative to the average diffusion (per median timestep) from a stationary point. See also \code{help(ctmm::occurrence)}.}
 
