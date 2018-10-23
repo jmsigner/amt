@@ -27,6 +27,10 @@ summarize_sampling_rate <- function(x, ...) {
 #' @export
 summarize_sampling_rate.track_xyt <- function(x, time_unit = "auto", summarize = TRUE, as_tibble = TRUE, ...) {
 
+  if (nrow(x) < 2) {
+    stop("summarize_sampling_rate: at least 2 relocations per unit are needed.")
+  }
+
   t_diff <- diff(as.numeric(x$t_))
   m_t_diff <- median(t_diff)
 
