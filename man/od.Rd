@@ -16,7 +16,7 @@ rolling_od(x, ...)
 od(x, ...)
 
 \method{od}{track_xyt}(x, trast, model = "auto", res.space = 10,
-  res.time = 10)
+  res.time = 10, ...)
 }
 \arguments{
 \item{x}{\code{[track_xyt]} \cr A track created with \code{make_track} that includes time.}
@@ -35,10 +35,6 @@ od(x, ...)
 }
 \description{
 \code{od} is a wrapper around \code{ctmm::occurrence}. See \code{help(ctmm::occurrence)} for more details. \code{rolling_od} estimates occurences distributions for a subset of a track.
-}
-\examples{
-
-
 }
 \references{
 Fleming, C. H., Fagan, W. F., Mueller, T., Olson, K. A., Leimgruber, P., & Calabrese, J. M. (2016). Estimating where and how animals travel: an optimal framework for path reconstruction from autocorrelated tracking data. Ecology.

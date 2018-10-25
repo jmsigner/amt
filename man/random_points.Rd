@@ -44,20 +44,15 @@ data(deer)
 # track_xyt ---------------------------------------------------------------
 # Default settings
 rp1 <- random_points(deer)
-rp2 <- random_points(deer, hr = "kde") # we need a larger template raster for kde
 
 \dontrun{
 plot(rp1)
-plot(rp2)
 }
 
-# rp2 does not make sense, because the `trast` is to small.
-# this can be overcome by increasing the trast manually.
-trast <- raster(bbox(deer, buffer = 2000), res = 30)
+trast <- raster(bbox(deer, buffer = 5000), res = 30)
 rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
 
  \dontrun{
-plot(rp2)
 plot(rp3)
 }
 

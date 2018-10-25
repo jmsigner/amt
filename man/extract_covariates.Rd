@@ -83,6 +83,7 @@ set.seed(123)
 path <- data.frame(x = cumsum(rnorm(240)),
               y = cumsum(rnorm(240)),
               t = lubridate::ymd("2018-01-01") + hours(0:239))
+trk <- make_track(path, x, y, t)
 
 # dummy env data
 rs <- raster::raster(xmn = -50, xmx = 50, ymn = -50, ymx = 50, res = 1)

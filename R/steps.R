@@ -4,8 +4,7 @@
 #'
 #' @template track_xy_star
 #' @param lonlat `[logical(1)=TRUE]` \cr Should geographical or planar coordinates be used? If `TRUE` geographic distances are calculated.
-#' @param degrees `[logical(1)=TRUE]` \cr Should turn angles be calculated in degrees or radians? If `TRUE` angles are returned in degrees, otherwise in radians.
-#' @param full_circle `[logical(1)=FALSE]` \cr If `TRUE` angles are returned between 0 and 360 degrees or 0 and $2pi$ (depending on the value of `degrees`), otherwise angles are between -180 and 180 or $-pi$ and $pi$.
+#' @param full_circle `[logical(1)=FALSE]` \cr If `TRUE` angles are returned between 0 and $2pi$, otherwise angles are between $-pi$ and $pi$.
 #' @param zero_dir `[character(1)='E']` \cr Indicating the zero direction. Must be either `N`, `E`, `S`, or `W`.
 #' @param clockwise `[logical(1)=FALSE]` \cr Should angles be calculated clock or anti-clockwise?
 #' @param append_last `[logical(1)=TRUE]` \cr If `TRUE` an `NA` is appended at the end of all angles.
@@ -32,26 +31,24 @@ direction_abs <- function(x, ...) {
 #' @rdname steps
 #' @examples
 #'
-# directions --------------------------------------------------------------
-#'
-#' # Absolute directions
-#'
+
 #' xy <- data_frame(
 #'   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
 #'   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
-#' trk <- mk_track(xy, x, y)
+#' trk <- make_track(xy, x, y)
 #'
 #' # append last
 #' direction_abs(trk, append_last = TRUE)
 #' direction_abs(trk, append_last = FALSE)
 #'
 #' # degrees
-#' direction_abs(trk, degrees = FALSE)
-#' direction_abs(trk, degrees = TRUE)
+#' direction_abs(trk) %>% as_degree
 #'
-#' # full circle or not
-#' direction_abs(trk, degrees = TRUE, full_circle = TRUE)
-#' direction_abs(trk, degrees = TRUE, full_circle = FALSE)
+#' # full circle or not: check
+#' direction_abs(trk, full_circle = TRUE)
+#' direction_abs(trk, full_circle = FALSE)
+#' direction_abs(trk, full_circle = TRUE) %>% as_degree()
+#' direction_abs(trk, full_circle = FALSE) %>% as_degree()
 #'
 #' # direction of 0
 #' direction_abs(trk, full_circle = TRUE, zero_dir = "N")
@@ -71,19 +68,18 @@ direction_abs <- function(x, ...) {
 #' # adehabitatLT
 #' df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
 #' df[[1]]$abs.angle
-#' amt::direction_abs(trk, degrees = FALSE, full_circle = FALSE)
+#' amt::direction_abs(trk)
 #'
 #' # bcpa
 #' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(1:10))
 #' bcpa::GetVT(df)$Phi
-#' direction_abs(trk, degrees = FALSE, full_circle = FALSE, append_last = FALSE)
+#' direction_abs(trk, full_circle = FALSE, append_last = FALSE)
 #'
 #' # move
 #' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:10),
 #'  proj = sp::CRS("+init=epsg:4326"))
 #' move::angle(m)
-#' direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N",
-#'   clockwise = TRUE, append_na = FALSE, lonlat = TRUE)
+#' direction_abs(trk, lonlat = TRUE, zero_dir = "E") %>% as_degree()
 #'
 #' # trajectories
 #' t1 <- trajectories::Track(
@@ -91,15 +87,15 @@ direction_abs <- function(x, ...) {
 #'   lubridate::now(tzone = "UTC") + lubridate::hours(1:10), data = data.frame(1:10)))
 #'
 #' t1[["direction"]]
-#' direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",
-#'   clockwise = TRUE, append_last = FALSE)
+#' direction_abs(trk, full_circle = TRUE, zero_dir = "N",
+#'   clockwise = TRUE, append_last = FALSE) %>% as_degree
 #'
 #' # moveHMM (only rel. ta)
 #' df <- data.frame(ID = 1, x = xy$x, y = xy$y)
-#' moveHMM::prepData(df, type = "UTM")
+#' moveHMM::prepData(df, type = "UTM")$angle
+#' direction_rel(trk)
 
-
-direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_dir = "E",
+direction_abs.track_xy <- function(x, full_circle = FALSE, zero_dir = "E",
                                    clockwise = FALSE,
                                    append_last = TRUE, lonlat = FALSE, ...) {
   zero_dir <- toupper(zero_dir)
@@ -113,32 +109,25 @@ direction_abs.track_xy <- function(x, degrees = TRUE, full_circle = FALSE, zero_
 
   # angles
   a <- if (!lonlat) {
-    atan2(diff_y(x), diff_x(x)) * 180 / pi
+    atan2(diff_y(x), diff_x(x))
   } else {
     xx <- sp::coordinates(as_sp(x))
-    c((450 + ((360 - geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]))) %% 360) %% 360, NA)
+    #c((450 + ((360 - geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]))) %% 360) %% 360, NA) * pi / 180
+    c(geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]), NA) * pi / 180
   }
-
 
   # remove last NA
   a <- if (append_last) a else a[-length(a)]
-  a <- ifelse(a < 0, 360 + a, a)
+  a <- ifelse(a < 0, 2 * pi + a, a)
   a <- switch(zero_dir,
          "East" = a,  # to avoid partial matching with EXPR
-         "S" = (450 + a) %% 360,
-         "W" = (540 + a) %% 360,
-         "N" = (630 + a) %% 360
+         "S" = (2.5 * pi + a) %% (2 * pi),
+         "W" = (3 * pi + a) %% (2 * pi),
+         "N" = (3.5 * pi + a) %% (2 * pi)
   )
-  a <- if (clockwise)  (360 - a) %% 360 else a
-  a <- if (full_circle) a else ifelse(a > 180, (360 - a) * -1, a)
-
-  a <- units::set_units(a, "degrees")
-
-  if (degrees) {
-    a
-  } else {
-    units::set_units(a, "radians")
-  }
+  a <- if (clockwise)  (2 * pi - a) %% (2 * pi) else a
+  a <- if (full_circle) a else ifelse(a > pi, (2 * pi - a) * -1, a)
+  a
 }
 
 
@@ -191,20 +180,14 @@ direction_rel <- function(x, ...) {
 # direction_rel -----------------------------------------------------------
 #' trk
 #'
-direction_rel.track_xy <- function(x, lonlat = FALSE, degrees = TRUE, append_last = TRUE,
+direction_rel.track_xy <- function(x, lonlat = FALSE, append_last = TRUE,
                                    zero_dir = "E", ...) {
 
-  p <- direction_abs(x, degrees = FALSE, lonlat = lonlat, full_circle = FALSE,
+  p <- direction_abs(x, lonlat = lonlat, full_circle = FALSE,
                      zero_dir = zero_dir, clockwise = FALSE, append_last = append_last)
   p <- c(NA, diff_rcpp(p)) %% (2 * pi)
-  #p <- ifelse(p <= (-pi), p + 2 * pi, p)
   p <- ifelse( p > pi, p - 2 * pi, p)
-  p <- units::set_units(p, "radians")
-  if (degrees) {
-    units::set_units(p, "degrees")
-  } else {
-    p
-  }
+  p
 }
 
 
@@ -304,7 +287,6 @@ steps_by_burst <- function(x, ...) {
 #' @rdname steps
 #' @export
 steps_by_burst.track_xyt <- function(x, lonlat = FALSE,
-                                     degrees = TRUE,
                                      keep_cols = NULL, ...) {
 
   togo <- cumsum(rle(x$burst_)$lengths)
@@ -314,9 +296,6 @@ steps_by_burst.track_xyt <- function(x, lonlat = FALSE,
     ss <- tibble::add_column(ss, burst_ = x$burst_[-1], .before = 1)
   }
 
-  if (!degrees) {
-    ss$ta_ <- ss$ta_ * pi / 180
-  }
 
   ss[head(togo, -1) + 1, "ta_"] <- NA
   ss <- ss[-togo, ]
@@ -335,14 +314,9 @@ steps <- function(x, ...) {
 #' @export
 #' @rdname steps
 steps.track_xy <- function(x, lonlat = FALSE,
-                           keep_cols = NULL,
-                           degrees = TRUE, ...) {
+                           keep_cols = NULL, ...) {
   n <- nrow(x)
   xx <- steps_base(x, n, lonlat = lonlat, keep_cols = keep_cols)
-
-  if (degrees) {
-    xx$ta_ <- units::set_units(xx$ta_, "degrees")
-  }
 
   class(xx) <- c("steps_xy", class(x)[-1])
   attr(xx, "crs_") <- attr(x, "crs_")
@@ -352,7 +326,7 @@ steps.track_xy <- function(x, lonlat = FALSE,
 #' @export
 #' @param diff_time_units `[character(1)='auto']` \cr The unit for time differences, see `?difftime`.
 #' @rdname steps
-steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE,
+steps.track_xyt <- function(x, lonlat = FALSE,
                             keep_cols = NULL,
                             diff_time_units = "auto", ...) {
   n <- nrow(x)
@@ -364,24 +338,20 @@ steps.track_xyt <- function(x, lonlat = FALSE, degrees = TRUE,
   xx$t2_ <- x$t_[-1]
   xx$dt_ <- difftime(xx$t2_,  xx$t1_, units = diff_time_units)
 
-  if (degrees) {
-    xx$ta_ <- units::set_units(xx$ta_, "degrees")
-  }
-
   class(xx) <- c("steps_xyt", "steps_xy", class(x)[-(1:2)])
   attr(xx, "crs_") <- attr(x, "crs_")
   xx
 }
 
 
-steps_base <- function(x, n, lonlat, degrees, zero_dir, keep_cols) {
+steps_base <- function(x, n, lonlat, zero_dir, keep_cols) {
   out <- data_frame(
     x1_ = x$x_[-n],
     x2_ = x$x_[-1],
     y1_ = x$y_[-n],
     y2_ = x$y_[-1],
     sl_ = step_lengths(x, lonlat = lonlat, append_last = FALSE),
-    ta_ = direction_rel(x, lonlat = lonlat, degrees = FALSE, zero_dir = "E", append_last = FALSE)
+    ta_ = direction_rel(x, lonlat = lonlat, ero_dir = "E", append_last = FALSE)
   )
 
   if (!is.null(keep_cols)) {

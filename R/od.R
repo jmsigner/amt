@@ -12,9 +12,6 @@
 #' @template dots_none
 #' @references Fleming, C. H., Fagan, W. F., Mueller, T., Olson, K. A., Leimgruber, P., & Calabrese, J. M. (2016). Estimating where and how animals travel: an optimal framework for path reconstruction from autocorrelated tracking data. Ecology.
 #' @name od
-#' @examples
-#'
-#'
 
 #' @export
 rolling_od <- function(x, ...) {
@@ -48,7 +45,7 @@ od <- function(x, ...) {
 
 #' @export
 #' @rdname od
-od.track_xyt <- function(x, trast, model = "auto", res.space = 10, res.time = 10) {
+od.track_xyt <- function(x, trast, model = "auto", res.space = 10, res.time = 10, ...) {
 
   if (!has_crs(x)) {
     stop("x, needs a cooridnate reference system (crs).")

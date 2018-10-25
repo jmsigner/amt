@@ -57,8 +57,6 @@ random_steps_base <- function(x, n_control, sl, ta) {
     stop("ta dist not implemented")
   }
 
-  tar <- units::set_units(tar, "radians")
-
   slr <-  if (sl$name %in% c("gamma", "unif", "exp")) {
     do.call(paste0("r", sl$fit$distname), c(list(n = ns * n_control), as.list(sl$fit$estimate)))
   } else {
@@ -69,12 +67,11 @@ random_steps_base <- function(x, n_control, sl, ta) {
   # control points
   xy_cc <- x[case_for_control, ]
 
-  abs_angle_current <- units::set_units(
-    atan2(x$y2_ - x$y1_, x$x2_ - x$x1_)[case_for_control], "radians")
+  abs_angle_current <- atan2(x$y2_ - x$y1_, x$x2_ - x$x1_)[case_for_control]
   abs_angle_previous <- abs_angle_current - x[case_for_control, ]$ta_
 
-  xy_cc["x2_"] <- xy_cc$x1_ + slr * units::drop_units(cos(abs_angle_previous + tar))
-  xy_cc["y2_"] <- xy_cc$y1_ + slr * units::drop_units(sin(abs_angle_previous + tar))
+  xy_cc["x2_"] <- xy_cc$x1_ + slr * cos(abs_angle_previous + tar)
+  xy_cc["y2_"] <- xy_cc$y1_ + slr * sin(abs_angle_previous + tar)
 
   xy_cc$case_ <- FALSE
   xy_cc$step_id_ <- rep(1:ns, each = n_control)
