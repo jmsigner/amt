@@ -12,6 +12,8 @@
 \alias{as_ltraj.track_xyt}
 \alias{as_bcpa}
 \alias{as_bcpa.track_xyt}
+\alias{as_telemetry}
+\alias{as_telemetry.track_xyt}
 \alias{as_moveHMM}
 \alias{as_moveHMM.track_xy}
 \title{Coerce a track to other formats.}
@@ -35,6 +37,10 @@ as_ltraj(x, ...)
 as_bcpa(x, ...)
 
 \method{as_bcpa}{track_xyt}(x, ...)
+
+as_telemetry(x, ...)
+
+\method{as_telemetry}{track_xyt}(x, ...)
 
 as_moveHMM(x, ...)
 
@@ -65,6 +71,8 @@ d <- as_bcpa(deer)
 bcpa1 <- bcpa::WindowSweep(d, "Theta", K = 2, windowsize = 50)
 plot(bcpa1, type = "flat", clusterwidth = 1)
 }
+data(deer)
+as_ctmm(deer)
 # Fit HMM with two states
 data(deer)
 dm <- as_moveHMM(deer)

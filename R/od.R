@@ -45,21 +45,26 @@ od <- function(x, ...) {
 
 #' @export
 #' @rdname od
-od.track_xyt <- function(x, trast, model = "auto", res.space = 10, res.time = 10, ...) {
+od.track_xyt <- function(x, trast, model = "bm", res.space = 10, res.time = 10, ...) {
 
   if (!has_crs(x)) {
     stop("x, needs a cooridnate reference system (crs).")
+  }
+
+  if (is.na(raster::projection(trast))) {
+    stop("trast, needs a cooridnate reference system (crs).")
   }
 
   if (!model %in% c("bm", "ou", "ouf")) {
     stop("Unknown model selected.")
   }
 
-  m <- move::move(x=x$x_, y=x$y_,
-                  time = x$t_, proj = amt::get_crs(x),
-                  data = data.frame(individual.local.identifier = rep("1", nrow(x))))
-
-  suppressWarnings(suppressMessages(dat <- ctmm::as.telemetry(m)))
+#  m <- move::move(x=x$x_, y=x$y_,
+#                  time = x$t_, proj = amt::get_crs(x),
+#                  data = data.frame(individual.local.identifier = rep("1", nrow(x))))
+#
+#  suppressWarnings(suppressMessages(dat <- ctmm::as.telemetry(m)))
+  suppressWarnings(suppressMessages(dat <- as_telemetry(x)))
 
   g <- ctmm::ctmm.guess(dat, interactive = FALSE)
 
@@ -76,7 +81,7 @@ od.track_xyt <- function(x, trast, model = "auto", res.space = 10, res.time = 10
   krige <- ctmm::occurrence(dat, CTMM = mod, res.space = res.space, res.time = res.time)
 
   r <- 1 - ctmm::raster(krige, DF = "CDF")
-  r <- raster::projectRaster(r, crs = amt::get_crs(x), res = krige$dr)
+  r <- raster::projectRaster(r, to = trast)
   r <- raster::resample(r, trast)
   v <- raster::getValues(r)
   v[is.na(v)] <- 0

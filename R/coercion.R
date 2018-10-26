@@ -134,22 +134,25 @@ as_bcpa.track_xyt <- function(x, ...) {
   bcpa::GetVT(x, ...)
 }
 
-# as_ctmm -----------------------------------------------------------------
-# TODO
-# #' @export
-# #' @rdname coercion
-# #' @examples
-# #' data(deer)
-# #' as_ctmm(deer)
-# as_ctmm <- function(x, ...) {
-#   UseMethod("as_ctmm", x)
-# }
-#
-# #' @export
-# #' @rdname coercion
-# as_ctmm.track_xyt <- function(x, ...) {
-#   ctmm::as.telemetry(as_move(x, ...))
-# }
+# as_telemetry -----------------------------------------------------------------
+#' @export
+#' @rdname coercion
+#' @examples
+#' data(deer)
+#' as_ctmm(deer)
+as_telemetry <- function(x, ...) {
+  UseMethod("as_telemetry", x)
+}
+
+#' @export
+#' @rdname coercion
+as_telemetry.track_xyt <- function(x, ...) {
+  if (!amt::has_crs(x)) {
+    stop("track needs to havea CRS.")
+  }
+  x <- transform_coords(x, sp::CRS("+init=epsg:4326"))
+  ctmm::as.telemetry(data.frame(lon = x$x_, lat = x$y_, timestamp = x$t_))
+}
 
 
 # as_moveHMM --------------------------------------------------------------

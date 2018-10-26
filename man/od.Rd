@@ -15,7 +15,7 @@ rolling_od(x, ...)
 
 od(x, ...)
 
-\method{od}{track_xyt}(x, trast, model = "auto", res.space = 10,
+\method{od}{track_xyt}(x, trast, model = "bm", res.space = 10,
   res.time = 10, ...)
 }
 \arguments{
