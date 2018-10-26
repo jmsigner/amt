@@ -25,7 +25,7 @@ bbox <- function(x, ...) {
 #' @rdname bbox
 bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...) {
   bbx <- c(min(x$x_), max(x$x_), min(x$y_), max(x$y_))
-  bbox_base(bbx, spatial, buffer, sf)
+  bbox_base(bbx, spatial, buffer, sf, x)
 }
 
 #' @export
@@ -35,10 +35,10 @@ bbox.steps_xy <- function(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...) {
            max(c(max(x$x1_), max(x$x2_))),
            min(c(min(x$y1_), min(x$y2_))),
            max(c(max(x$y1_), max(x$y2_))))
-  bbox_base(bbx, spatial, buffer, sf)
+  bbox_base(bbx, spatial, buffer, sf, x)
 }
 
-bbox_base <- function(bbx, spatial, buffer, sf) {
+bbox_base <- function(bbx, spatial, buffer, sf, x) {
   if (sf && !spatial) {
     warning("spatial has precedence over sf.")
   }
@@ -53,13 +53,17 @@ bbox_base <- function(bbx, spatial, buffer, sf) {
     y = c(bbx[3], bbx[4], bbx[4], bbx[3], bbx[3])
   )
 
-  p <- sf::st_polygon(list(coords))
+  p <- sf::st_sfc(sf::st_polygon(list(coords)))
+
+  if (has_crs(x)) {
+    p <- sf::st_set_crs(p, as.character(get_crs(x)))
+  }
 
   if (spatial) {
     if (sf) {
       p
     } else {
-      sf::as_Spatial(sf::st_geometry(p))
+      sf::as_Spatial(p)
     }
   } else {
     sf::st_bbox(p)
