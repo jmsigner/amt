@@ -8,9 +8,11 @@
 \usage{
 bbox(x, ...)
 
-\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...)
+\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE,
+  ...)
 
-\method{bbox}{steps_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...)
+\method{bbox}{steps_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}

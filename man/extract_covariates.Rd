@@ -26,11 +26,12 @@ extract_covariates_along(x, ...)
 
 extract_covariates_var_time(x, ...)
 
-\method{extract_covariates_var_time}{track_xyt}(x, covariates, when = "any",
-  max_time, name_covar = "time_var_covar", ...)
+\method{extract_covariates_var_time}{track_xyt}(x, covariates,
+  when = "any", max_time, name_covar = "time_var_covar", ...)
 
-\method{extract_covariates_var_time}{steps_xyt}(x, covariates, when = "any",
-  max_time, name_covar = "time_var_covar", where = "end", ...)
+\method{extract_covariates_var_time}{steps_xyt}(x, covariates,
+  when = "any", max_time, name_covar = "time_var_covar",
+  where = "end", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}

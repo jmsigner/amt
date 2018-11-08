@@ -4,7 +4,6 @@
 \alias{track}
 \alias{mk_track}
 \alias{make_track}
-\alias{track}
 \title{Create a \code{track_*}}
 \usage{
 mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,

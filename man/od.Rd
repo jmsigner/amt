@@ -4,14 +4,13 @@
 \alias{od}
 \alias{rolling_od}
 \alias{rolling_od.track_xyt}
-\alias{od}
 \alias{od.track_xyt}
-\title{Occurence Distribution}
+\title{Occurrence Distribution}
 \usage{
 rolling_od(x, ...)
 
 \method{rolling_od}{track_xyt}(x, trast, model = "bm", res.space = 10,
-  res.time = 10, n.points = 5, ...)
+  res.time = 10, n.points = 5, show.progress = TRUE, ...)
 
 od(x, ...)
 
@@ -32,9 +31,11 @@ od(x, ...)
 \item{res.time}{\code{[numeric(1)=10]} \cr Number of temproal grid points per median timestep.}
 
 \item{n.points}{\code{[numeric(1)=5]} \cr This argument is only relevant for \code{rolling_od} and specifies the window size for the od estimation.}
+
+\item{show.progress}{\code{[logical(1)=TRUE]} \cr Indicates if a progress bar is used.}
 }
 \description{
-\code{od} is a wrapper around \code{ctmm::occurrence}. See \code{help(ctmm::occurrence)} for more details. \code{rolling_od} estimates occurences distributions for a subset of a track.
+\code{od} is a wrapper around \code{ctmm::occurrence}. See \code{help(ctmm::occurrence)} for more details. \code{rolling_od} estimates occurrence distributions for a subset of a track.
 }
 \references{
 Fleming, C. H., Fagan, W. F., Mueller, T., Olson, K. A., Leimgruber, P., & Calabrese, J. M. (2016). Estimating where and how animals travel: an optimal framework for path reconstruction from autocorrelated tracking data. Ecology.

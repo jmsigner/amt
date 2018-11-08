@@ -10,15 +10,15 @@
 \alias{step_lengths.track_xy}
 \alias{steps_by_burst}
 \alias{steps_by_burst.track_xyt}
-\alias{steps}
 \alias{steps.track_xy}
 \alias{steps.track_xyt}
 \title{Functions to create and work with steps}
 \usage{
 direction_abs(x, ...)
 
-\method{direction_abs}{track_xy}(x, full_circle = FALSE, zero_dir = "E",
-  clockwise = FALSE, append_last = TRUE, lonlat = FALSE, ...)
+\method{direction_abs}{track_xy}(x, full_circle = FALSE,
+  zero_dir = "E", clockwise = FALSE, append_last = TRUE,
+  lonlat = FALSE, ...)
 
 direction_rel(x, ...)
 
@@ -27,11 +27,13 @@ direction_rel(x, ...)
 
 step_lengths(x, ...)
 
-\method{step_lengths}{track_xy}(x, lonlat = FALSE, append_last = TRUE, ...)
+\method{step_lengths}{track_xy}(x, lonlat = FALSE, append_last = TRUE,
+  ...)
 
 steps_by_burst(x, ...)
 
-\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, keep_cols = NULL, ...)
+\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, keep_cols = NULL,
+  ...)
 
 steps(x, ...)
 

@@ -56,7 +56,7 @@ Suggests:
   Rdpack,
   rmarkdown
 LinkingTo: Rcpp
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
 VignetteBuilder: knitr

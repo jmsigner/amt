@@ -15,7 +15,8 @@ movement_kernel(scale, shape, template, quant = 0.99)
 
 simulate_ud(movement_kernel, habitat_kernel, start, n = 100000L)
 
-simulate_tud(movement_kernel, habitat_kernel, start, n = 100, n_rep = 5000)
+simulate_tud(movement_kernel, habitat_kernel, start, n = 100,
+  n_rep = 5000)
 }
 \arguments{
 \item{coef}{\code{[list]} \cr Vector with coeffiecients, not yet implemented.}

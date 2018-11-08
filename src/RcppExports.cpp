@@ -85,9 +85,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// track_align
-NumericVector track_align(NumericVector t1, NumericVector nt, int time_tol, int type);
-RcppExport SEXP _amt_track_align(SEXP t1SEXP, SEXP ntSEXP, SEXP time_tolSEXP, SEXP typeSEXP) {
+// track_align_cpp
+NumericVector track_align_cpp(NumericVector t1, NumericVector nt, int time_tol, int type);
+RcppExport SEXP _amt_track_align_cpp(SEXP t1SEXP, SEXP ntSEXP, SEXP time_tolSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -95,7 +95,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type nt(ntSEXP);
     Rcpp::traits::input_parameter< int >::type time_tol(time_tolSEXP);
     Rcpp::traits::input_parameter< int >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(track_align(t1, nt, time_tol, type));
+    rcpp_result_gen = Rcpp::wrap(track_align_cpp(t1, nt, time_tol, type));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -166,7 +166,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_amt_rolling_median", (DL_FUNC) &_amt_rolling_median, 2},
     {"_amt_simulate_udf", (DL_FUNC) &_amt_simulate_udf, 6},
     {"_amt_cpp_simulate_ssf", (DL_FUNC) &_amt_cpp_simulate_ssf, 6},
-    {"_amt_track_align", (DL_FUNC) &_amt_track_align, 4},
+    {"_amt_track_align_cpp", (DL_FUNC) &_amt_track_align_cpp, 4},
     {"_amt_mk_reg", (DL_FUNC) &_amt_mk_reg, 4},
     {"_amt_mk_reg_old", (DL_FUNC) &_amt_mk_reg_old, 4},
     {"_amt_duration_acuracy", (DL_FUNC) &_amt_duration_acuracy, 6},

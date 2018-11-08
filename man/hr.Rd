@@ -21,8 +21,8 @@ hr_isopleths(x, ...)
 
 hr_kde(x, ...)
 
-\method{hr_kde}{track_xy}(x, h = hr_kde_ref(x), trast = raster(as_sp(x),
-  nrow = 100, ncol = 100), ...)
+\method{hr_kde}{track_xy}(x, h = hr_kde_ref(x),
+  trast = raster(as_sp(x), nrow = 100, ncol = 100), ...)
 
 hr_kde_ref(x, ...)
 

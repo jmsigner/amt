@@ -17,8 +17,8 @@ distance_to_center(x, ...)
 
 distance_to_centers(x, ...)
 
-\method{distance_to_centers}{track_xy}(x, trast, top_n = 10, square = TRUE,
-  ...)
+\method{distance_to_centers}{track_xy}(x, trast, top_n = 10,
+  square = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}

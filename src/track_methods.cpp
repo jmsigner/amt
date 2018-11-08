@@ -1,8 +1,9 @@
 #include <Rcpp.h>
+#include <stdlib.h>
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector track_align(NumericVector t1, NumericVector nt, int time_tol, int type) {
+NumericVector track_align_cpp(NumericVector t1, NumericVector nt, int time_tol, int type) {
   // Create variables
   int burst = 1;  // burst
   // int i = 0;  // obs
