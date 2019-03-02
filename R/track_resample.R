@@ -45,6 +45,7 @@ filter_min_n_burst <- function(x, ...) {
 #' @export
 #' @rdname filter_min_n_burst
 filter_min_n_burst.track_xy <- function(x, min_n = 3, ...) {
+
   if (!"burst_" %in% names(x)) {
     stop("column 'burst_' not found.")
   }

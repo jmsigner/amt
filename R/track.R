@@ -246,22 +246,26 @@ select.track_xyt <- function(.data, ..., .dots) {
 
 #' @export
 summarise.track_xy <- function(.data, ..., .dots) {
-  track_transfer_attr(.data, NextMethod())
+  NextMethod()
+#  track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
 summarise.track_xyt <- function(.data, ..., .dots) {
-  track_transfer_attr(.data, NextMethod())
+  NextMethod()
+  # track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
 summarize.track_xy <- function(.data, ..., .dots) {
-  track_transfer_attr(.data, NextMethod())
+  NextMethod()
+  # track_transfer_attr(.data, NextMethod())
 }
 
 #' @export
 summarize.track_xyt <- function(.data, ..., .dots) {
-  track_transfer_attr(.data, NextMethod())
+  NextMethod()
+  # track_transfer_attr(.data, NextMethod())
 }
 
 
