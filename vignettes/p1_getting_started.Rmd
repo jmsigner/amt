@@ -13,27 +13,27 @@ vignette: >
 
 ### Creating a track
 
-The basic building blocks of `amt` are tracks. Tracks are `data_frame`s with at least two columns that contain the coordinates: `x_` and `y_`. A track behaves exactly like a `data_frame` (the only difference being that we added an other S3 class).
+The basic building blocks of `amt` are tracks. Tracks are `data_frame`s with at least two columns that contain the coordinates: `x_` and `y_`. A track behaves exactly like a `data_frame` (the only difference being that we added an other S3 class). Below is an example of creating a track with some dummy locations.
 
 ```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
 library(amt)
 df1 <- data_frame(x = 1:3, y = 1:3)
 is.data.frame(df1)
 df1
 
 # Now we can create a track
-tr1 <- mk_track(df1, x, y)
+tr1 <- make_track(df1, x, y)
 is.data.frame(tr1)
 tr1
-
 ```
 
-At the moment there are two types of tracks:
+At the moment `amt` supports two types of tracks:
 
 - `track_xy` is a track that only has coordinates, and
 - `track_xyt` is a track that has a timestamp associated to each coordinate pair.
 
-Whether a `track_xy` or `track_xyt` is created is determined whether or not a timestamp is passed to the function `mk_track`. In the previous example we only passed `x` and `y` coordinates. Hence a `track_xy` was created.
+If a `track_xy` or `track_xyt` is created with the function `make_track`, is determined whether or not a timestamp is passed as a thrid argument (called `.t`) to the function `make_track`. In the previous example we only passed `x` and `y` coordinates. Hence a `track_xy` was created.
 
 
 ```{r}
@@ -53,7 +53,7 @@ From the output above we see that a `track_xyt` is also a `track_xy`. This means
 
 ### Adding additional information
 
-We can also add additional information for each relocation (e.g., the id of the animal, or some other sensor information such as the DOP). Any number of additional named columns can be passed to `mk_track`. By named we mean, that columns should always be passed in the form of `col_name = content` to avoid confusion with coordinates and time stamp. We will extend the dummy example from above, by passing 2 more columns (the id of animal and the age).
+We can also add additional information for each relocation (e.g., the id of the animal, or some other sensor information such as the DOP). Any number of additional named columns can be passed to `make_track`. By named we mean, that columns should always be passed in the form of `column_name = content` to avoid confusion with coordinates and time stamp. We will extend the dummy example from above, by passing 2 more columns (the id of animal and the age).
 
 ```{r}
 df1 <- data_frame(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2), 
@@ -70,9 +70,9 @@ tr4
 
 ### Coordinate refenece system
 
-`mk_track` has one further optional argument (`crs`), which allows the user to set a coordinate reference system (CRS) of the track. The CRS needs to be provided as valid `proj4string`, see the documentation of `sp::CRS` for further details. 
+`make_track` has one further optional argument (`crs`), which allows the user to set a coordinate reference system (CRS) of the track. The CRS needs to be provided as valid `proj4string`, see the documentation of `sp::CRS` for further details. 
 
-### An example with real data
+### An example with one real animal
 
 In the `amt` relocation data of one red deer from northern Germany is included. We will use this data set to to illustrate how to create a track.
 
@@ -114,7 +114,7 @@ sh$month <- lubridate::month(sh$ts)
 Now we can create a track.
 
 ```{r}
-tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month)
+tr1 <- make_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month)
 ```
 
 The column names of the data set already indicate the CRS of the data. We can add this information when creating a track.
@@ -146,7 +146,7 @@ tr2
 ### Utility functions
 #### Basic manipulation
 
-Remember, that `tracks_xy*` behave like regular `data.frames`. This means that we can use all data manipulation verbs that we are used from `base` R or `tidyverse`. For example we an filter a track based on some characteristic. As an example we extract all relocations from May.
+Remember, that a `track_xy*` behaves like regular a `data.frame`. This means that we can use all data manipulation verbs that we are used to from `base` R or the `tidyverse`. For example, we can filter a track based on some characteristic. As an example we extract all relocations from the month May. 
 
 ```{r}
 tr3 <- tr2 %>% filter(month == 5)
@@ -158,7 +158,7 @@ class(tr3)
 
 #### Transforming CRS
 
-If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper around `sp::spTransform`). For illustration we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
+If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper around `sp::spTransform`). For illustration, we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
 
 ```{r}
 transform_coords(tr2, sp::CRS("+init=epsg:4326"))
@@ -172,13 +172,13 @@ Several functions for calculating derived quantities are available. We will star
 tr2 <- tr2 %>% mutate(sl_ = step_lengths(.))
 ```
 
-If we look at a summary of `sl_`
+If we look at a summary of `sl_` we note two things:
 
 ```{r}
 summary(tr2$sl_)
 ```
 
-Note, 1) there is one `NA` for step lengths, this is expected, because we are still in a point representation (i.e., there is no step length for the last relocation). 2) the range is quiet large from 0 to almost 5km. Before looking at step lengths in any further detail, we will have to make sure the sampling rate is more or less regular.
+Note, 1) there is a `NA` for the last step length, this is expected because we are still in a point representation (i.e., there is no step length for the last relocation). 2) the range is fairly large ranging from 0 to almost 5 km. Before looking at step lengths in any further detail, we will have to make sure the sampling rate is more or less regular (i.e., the same time step between any two points).
 
 The function `summarize_sampling_rate` provides an easy way to look at the sampling rate.
 
@@ -186,16 +186,80 @@ The function `summarize_sampling_rate` provides an easy way to look at the sampl
 summarize_sampling_rate(tr2)
 ```
 
+This suggests that a sampling rate for 6 hours might be adequat. We can then use the function `track_resample` to resample the track and only keep relocations that are approximately 6 hours apart (within some tolerance, that can be specified). We will use the function `lubridate::hours` to specify the sampling rate and `lubridate::minutes` to specify the tolerance. Both arguments `rate` and `tolerance` are expected to be a `Period`.
+
+```{r}
+tr3 <- tr2 %>% track_resample(rate = hours(6), tolerance = minutes(20))
+tr3
+```
+
+`tr3` still a track, but with two differenes compared to `tr2`. 1) the number of rows is reduced from `r nrow(tr2)` to `r nrow(tr3)`, because only relocations that are 6 hours +/- the tolerance apart of each other are retained; 2) `tr3` has one new column called `burst_`. A burst is sequence of relocatoins with equal sampling rates. Consider the following hypothetical example: 5 relocations are all 6 hours apart. Then there is a gap of 12 hours because one relocation failed and afterwards then there are an other 10 relocations all 6 hours apart. Then we would consider the first 5 relocations as a burst and the second 10 relocations (after the 12 hour gap) as a second burst.
+
+
 
 ### From tracks to steps
 
-todo
+In many situations we are more interested in steps (that is the animal moving from one relocation to an other, or the straight line between a start and a end point), that in the individual relocatoins. `amt` supports `steps` as an other way to represent movement data. The transition from a track to steps can be done via two functions.
+
+1. `steps`: Takes as an input a track, converts the track to step and calculating some derived quantities (e.g., step lengths, turning angles). The function `steps` to receive a track with regular sampling rates.
+2. `steps_by_burst`: Takes as an input a resampled track (i.e., a track with several bursts) and will calcualte derived quantities per burst.
 
 
 
 ## How to deal with several animals
 
-todo
+Up to now we have only considered situations with one animal. However, in most telemetry studies more than one animal are tracked and we often want to calcuated movement relevant characteristics for several aniamls individually. `amt` does not provide a infrastructure for dealing with several animal, however, `list`-columns from the `tidyverse` can be used to manage many animals. Because a track is just a `data_frame` all `tidyverse` verbs can be used. The general strategy consists of 4 steps:
+
+1. Group a track by one or more grouping variables using the function `group_by`.
+2. Nest a grouped track. This retaains the unique values of the grouping variable(s) and creates a new column called `data`. The data column is a so called `list`-column. This means it is an R list that contains a `data_frame` for each group. 
+3. Now we can perform operations on the grouped data creating a new list columnt. This can be done in a combination with `mutate` and `map` (instead of `map` also `lapply` could be used). 
+4. Select the relevant columns and unnest. With `select` we can select columns of interest and reverse the nesting with the function `unnest`.
+
+As an example we will use a second data set included in `amt` on tracks of four fishers. We will load the data, create a track, resample the tracks individually to 30 min and create a histogram of step lengths (accounting for bursts).
+
+We start by loading the data and creating a track of all individuals together
+
+```{r}
+data("amt_fisher")
+trk <- amt_fisher %>% make_track(x_, y_, t_, id = id)
+```
+Next, we group the track by `id` and nest the track.
+
+```{r}
+trk1 <- trk %>% group_by(id) %>% nest()
+trk1
+```
+
+We now want to resample each track to 30 minutes with a tolerance of 5 minutes and create steps for each animal. For the first animal we would do as follows:
+
+```{r}
+# get the data for the first animal
+x <- trk1$data[[1]]
+
+# apply the data analysis
+x %>% track_resample(rate = minutes(30), tolerance = minutes(5)) %>% steps_by_burst()
+```
+We now want to apply exactly the same logic to all animals. We can do this by using a `map` and save the results to a new column using `mutate`.
+
+```{r}
+trk2 <- trk1 %>% 
+  mutate(steps = map(data, function(x) 
+    x %>% track_resample(rate = minutes(30), tolerance = minutes(5)) %>% steps_by_burst()))
+
+trk2
+```
+
+Finally, we can select `id` and `steps`, unnest the new `data_frame` and create a plot of the step-length distributions.
+
+```{r}
+trk2 %>% select(id, steps) %>% unnest %>% 
+  ggplot(aes(sl_, fill = factor(id))) + geom_density(alpha = 0.4)
+```
+
+
+
+
+
 
 ## Session
 ```{r}

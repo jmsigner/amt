@@ -3,12 +3,18 @@
 \name{summarize_sampling_rate}
 \alias{summarize_sampling_rate}
 \alias{summarize_sampling_rate.track_xyt}
+\alias{summarize_sampling_rate_many}
+\alias{summarize_sampling_rate_many.track_xyt}
 \title{Returns a summary of sampling rates}
 \usage{
 summarize_sampling_rate(x, ...)
 
 \method{summarize_sampling_rate}{track_xyt}(x, time_unit = "auto",
   summarize = TRUE, as_tibble = TRUE, ...)
+
+summarize_sampling_rate_many(x, ...)
+
+\method{summarize_sampling_rate_many}{track_xyt}(x, ...)
 }
 \arguments{
 \item{x}{A \code{track_xyt}.}

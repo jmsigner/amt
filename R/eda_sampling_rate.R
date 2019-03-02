@@ -1,6 +1,5 @@
 #' Returns a summary of sampling rates
 #'
-#'
 #' @param x A `track_xyt`.
 #' @param time_unit A character. The time unit in which the sampling rate is
 #'   calculated. Acceptable values are `sec`, `min`, `hour`, `day`, and `auto`.
@@ -89,3 +88,18 @@ summarize_sampling_rate.track_xyt <- function(x, time_unit = "auto", summarize =
 }
 
 
+
+
+#' @rdname summarize_sampling_rate
+#' @export
+summarize_sampling_rate_many <- function(x, ...) {
+  UseMethod("summarize_sampling_rate_many", x)
+}
+
+#' @rdname summarize_sampling_rate
+#' @export
+summarize_sampling_rate_many.track_xyt <- function(x, ...) {
+  ids <- rlang::enquos(...)
+  x %>% group_by(!!!ids) %>% nest() %>% mutate(ts = map(data, summarize_sampling_rate)) %>%
+    select(!!!ids, ts) %>% unnest()
+}
