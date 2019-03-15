@@ -268,4 +268,3 @@ summarize.track_xyt <- function(.data, ..., .dots) {
   # track_transfer_attr(.data, NextMethod())
 }
 
-

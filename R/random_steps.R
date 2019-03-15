@@ -3,83 +3,83 @@
 #' Function to generate a given number of random steps for each observed step.
 #'
 #' @param x Steps.
-#' @param n_control `[integer(1)=10]{>1}` \cr The number of control steps paired with each observed step.
-#' @param sl_distr `[character(1)='gamma']{'gamma'}` \cr The distribution to be fitted to the empirical distribution of step lengths.
-#' @param ta_distr `[character(1)='vonmises']{'vonmises', 'unif'}` \cr The distribution to be fitted to the empirical distribution of turn angles.
-#' @param random.error `[numeric(1)=0.001]{>0}` \cr Upper limit for a uniformly distributed random error
-#'   (between 0 and `random.error`) to be added to step lengths, to avoid step
-#'   lengths of length 0.
+#' @param n_control `[integer(1)=10]{>1}` \cr The number of control steps paired
+#'   with each observed step.
+#' @param sl_distr `[amt_distr]` \cr The step-length distribution.
+#' @param ta_distr `[amt_distr]` \cr The turn-angle distribution.
+#' @param random.error `[numeric(1)=0.001]{>0}` \cr Upper limit for a uniformly
 #' @template dots_none
 #' @export
 #' @name random_steps
-random_steps <- function(x, ...) {
+random_steps2 <- function(x, ...) {
   UseMethod("random_steps", x)
 }
 
 #' @export
 #' @rdname random_steps
-random_steps.steps_xy <- function(x, n_control = 10, sl_distr = "gamma",
-                               ta_distr = "vonmises", random.error = 0.001,
-                               ...) {
-  if (any(is.na(x$sl_)) || any(is.na(x$ta_))) {
-    x <- x[!is.na(x$sl_) & !is.na(x$ta_), ]
-    warning("Step-lengths or turning angles contained NA, which were removed.")
-  }
-
-  # random.error
-  if (random.error != 0) {
-    x$sl_ <- x$sl_ + stats::runif(nrow(x), 0, random.error)
-  }
-
-  sl <- fit_sl_dist_base(x$sl_, distr = sl_distr)
-  ta <- fit_ta_dist_base(x$ta_, distr = ta_distr)
-  xx <- random_steps_base(x, n_control, sl, ta)
-  attr(xx, "crs_") <- attr(x, "crs_")
-  xx
-}
+random_steps2.steps_xy <- function(
+  x, n_control = 10,
+  sl_distr = fit_distr(sl_, "gamma"),
+  ta_distr = fit_distr(ta_, "vonmises"),
+  include_observed = TRUE,
+  remove_first = TRUE,  ...) {
 
 
-random_steps_base <- function(x, n_control, sl, ta) {
+  ###
+  library(amt)
+  data(deer)
+  x <- steps_by_burst(deer)
+  x <- x[1:3, ]
+  head(deer)
+  xx <- x[1:3, ] %>% random_steps(n_control = 2)
+  head(deer)
+  n_control <- 3
+
+  sl_distr = make_exp_distr(rate = 0.03)
+  ta_distr = make_unif_distr()
+  n_sample_available <- 1e5 # needs to be come an argument
+  ###
+
   # Generate random points
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(1:ns, each = n_control)
 
-  tar <- if (ta$name == "vonmises") {
-    mu <- circular::as.circular(0, type = "angles", units = "radians", template = "none",
-                                modulo = "asis", zero = 0, rotation = "counter")
-    # turn angles for new stps
-    rta <- as.vector(circular::rvonmises(ns * n_control, mu = mu, kappa = ta$fit$kappa))
-    rta <- rta %% (2 * pi)
-    ifelse(rta > pi, rta - (2 * pi), rta)
-  } else if (ta$name == "unif") {
-    stats::runif(ns * n_control, -pi, pi)  # turning angles for new stps
-  } else {
-    stop("ta dist not implemented")
+  slr <- random_numbers(sl_distr, n = n_sample_available) # can become an arg
+  tar <- random_numbers(ta_distr, n = n_sample_available) # can become an arg
+
+  rs <- (random_steps_cpp(n_control, x$x1_, x$y1_, x$x2_ , x$y2_, slr, tar, include_obs = 1, sl_obs = x$sl_,
+                          ta_obs = x$ta_))
+
+  rs
+  x
+  as.matrix(x)
+      as.matrix(x[, c("x1_", "y1_", "x2_", "y2_", "ta_")])
+      x
+
+  if (include_obs) {
+    rbind(
+      x
+
+    )
+
+  }
+  if (include_case) {
+
   }
 
-  slr <-  if (sl$name %in% c("gamma", "unif", "exp")) {
-    do.call(paste0("r", sl$fit$distname), c(list(n = ns * n_control), as.list(sl$fit$estimate)))
-  } else {
-    stop("sl dist not implemented")
+  if (stripped_down) {
+    return(rs)
   }
 
-
-  # control points
-  xy_cc <- x[case_for_control, ]
-
-  abs_angle_current <- atan2(x$y2_ - x$y1_, x$x2_ - x$x1_)[case_for_control]
-  abs_angle_previous <- abs_angle_current - x[case_for_control, ]$ta_
-
-  xy_cc["x2_"] <- xy_cc$x1_ + slr * cos(abs_angle_previous + tar)
-  xy_cc["y2_"] <- xy_cc$y1_ + slr * sin(abs_angle_previous + tar)
-
-  xy_cc$case_ <- FALSE
+  rs$case_ <- FALSE
   xy_cc$step_id_ <- rep(1:ns, each = n_control)
-  xy_cc$sl_ <- slr
-  xy_cc$ta_ <- tar
+  xy_cc
 
   x$case_ <- TRUE
   x$step_id_ <- 1:ns
+  x
+
+
   has_burst <- "burst_" %in% names(x)
 
   vars <- c("step_id_", "case_", "x1_", "y1_", "x2_", "y2_")
@@ -93,20 +93,24 @@ random_steps_base <- function(x, n_control, sl, ta) {
 
   # shuffle attributes in non_vars
   v1 <- base::setdiff(names(x), vars)
-  #xy_cc <- xy_cc %>% mutate_at(v1, function(x) sample(unique(x), length(x), TRUE))
-  #message("shuffling non standard columns")
-
+  # xy_cc <- xy_cc %>% mutate_at(v1, function(x) sample(unique(x), length(x), TRUE))
+  # message("shuffling non standard columns")
   vars <- c(vars, v1)
 
-
-  #out <- bind_rows(x, xy_cc) %>% arrange(quo("step_id_")) %>% select(.dots = vars)
-  suppressWarnings(out <- bind_rows(x, xy_cc) %>% arrange(!!quo(step_id_)) %>% select(vars))
+  suppressWarnings(out <- dplyr::bind_rows(x, xy_cc))
+  out
+  library(rlang)
+  out <- dplyr::arrange(out, !!quo(step_id_))
+  out <- dplyr::select(out, vars)
 
   class(out) <- c("random_steps", class(out))
   attributes(out)$sl_ <- sl
   attributes(out)$ta_ <- ta
   attributes(out)$n_control_ <- n_control
   out
+
+  attr(xx, "crs_") <- attr(x, "crs_")
+  xx
 }
 
 rsteps_transfer_attr <- function(from, to) {
