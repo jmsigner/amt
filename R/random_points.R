@@ -97,7 +97,7 @@ random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, type =
   n_rnd <- nrow(rnd_pts)
 
 
-  xx <- data_frame(
+  xx <- tibble(
     case_ = c(rep(TRUE, n), rep(FALSE, n_rnd)),
     x_ = c(x$x_, rnd_pts$x_),
     y_ = c(x$y_, rnd_pts$y_)

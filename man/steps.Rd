@@ -73,7 +73,7 @@ steps(x, ...)
 }
 \examples{
 
-xy <- data_frame(
+xy <- tibble(
   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
 trk <- make_track(xy, x, y)
@@ -136,7 +136,7 @@ df <- data.frame(ID = 1, x = xy$x, y = xy$y)
 moveHMM::prepData(df, type = "UTM")$angle
 direction_rel(trk)
 # How do results compare to other packages
-xy <- data_frame(
+xy <- tibble(
   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
 trk <- mk_track(xy, x, y)
@@ -161,7 +161,7 @@ moveHMM::prepData(df, type = "UTM")
 trk
 
 # step_lengths ------------------------------------------------------------
-xy <- data_frame(
+xy <- tibble(
   x = c(0, 1, 2),
   y = c(0, 1, 2)
 )
@@ -170,33 +170,5 @@ xy <- mk_track(xy, x, y)
 step_lengths(xy, lonlat = FALSE)
 step_lengths(xy, lonlat = TRUE) # in m, but coords are assumed in degrees
 
-
-# creating steps ----------------------------------------------------------
-
-# Create some dummy data
-library(lubridate)
-df <- data_frame(
-  x = runif(10),
-  y = runif(10),
-  a = runif(10),
-  t = now() + hours(c(1:2, 5:6, 9:10, 14:17)),
-  b = 3,
-  c = a + 30
-)
-
-library(amt)
-make_track(df, x, y, t, all_cols = TRUE) \%>\%
-  steps(keep_cols = "start")
-
-make_track(df, x, y, all_cols = TRUE) \%>\%
-  steps(keep_cols = "end")
-
-make_track(df, x, y, t, all_cols = TRUE) \%>\%
-  track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
-  steps_by_burst(keep_cols = "start")
-
-make_track(df, x, y, t, all_cols = TRUE) \%>\%
-  track_resample(rate = hours(1), tolerance = minutes(5)) \%>\%
-  steps_by_burst(keep_cols = NULL)
 
 }

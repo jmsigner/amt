@@ -1,24 +1,27 @@
 Package: amt
 Type: Package
 Title: Animal Movement Tools
-Version: 0.0.5.9000
+Version: 0.0.6
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"), 
   person("Bjoern", "Reineking", role = "ctb"), 
+  person("Ulrike", "Schlaegel", role = "ctb"), 
   person("Scott", "LaPoint", role = "dtc"))
 Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource and step-selection functions), and simulation of space-use from fitted step-selection functions.
 License: GPL-3
 Encoding: UTF-8 
 LazyData: true
 Depends:
-    R (>= 2.10),
+    R (>= 3.5),
 Imports:
     broom,
+    checkmate,
     circular,
     ctmm,
     dplyr (>= 0.7.0),
     fitdistrplus,
     FNN,
     geosphere,
+    glue,
     graphics,
     grDevices,
     KernSmooth,
@@ -28,7 +31,6 @@ Imports:
     magrittr,
     maptools,
     methods,
-    move,
     progress,
     purrr,
     raster,
@@ -41,14 +43,15 @@ Imports:
     stats,
     tibble,
     tidyr,
-    units,
     utils,
     velox
 Suggests: 
   adehabitatLT,
+  ggplot2,
   bcpa,
   devtools,
   moveHMM,
+  move,
   spacetime,
   testthat,
   trajectories,
@@ -56,7 +59,7 @@ Suggests:
   Rdpack,
   rmarkdown
 LinkingTo: Rcpp
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
 VignetteBuilder: knitr

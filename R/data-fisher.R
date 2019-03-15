@@ -2,7 +2,7 @@
 #'
 #' This file includes spatial data from 4 fisher (Martes pennanti). These location data were collected via a 105g GPS tracking collar (manufactured by E-obs GmbH) and programmed to record the animal's location every 10 minutes, continuously. The data usage is permitted for exploratory purposes. For other purposes please get in contact (Scott LaPoint).
 #'
-#' @format A `data_frame` with 32400 rows and 3 variables:
+#' @format A `tibble` with 32400 rows and 5 variables:
 #' \describe{
 #'   \item{id}{id of the animal}
 #'   \item{x_}{the x-coordinate}

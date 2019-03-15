@@ -6,12 +6,12 @@ hr_area <- function(x, ...) {
 
 #' @export
 hr_area.mcp <- function(x, ...) {
-  as_data_frame(x$mcp)
+  as_tibble(x$mcp)
 }
 
 #' @export
 hr_area.locoh <- function(x, ...) {
-  as_data_frame(x$locoh)
+  as_tibble(x$locoh)
 }
 
 #' @export

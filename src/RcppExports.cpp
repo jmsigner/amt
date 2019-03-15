@@ -86,13 +86,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // track_align_cpp
-NumericVector track_align_cpp(NumericVector t1, NumericVector nt, int time_tol, int type);
+NumericVector track_align_cpp(IntegerVector t1, IntegerVector nt, int time_tol, int type);
 RcppExport SEXP _amt_track_align_cpp(SEXP t1SEXP, SEXP ntSEXP, SEXP time_tolSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type t1(t1SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type nt(ntSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type t1(t1SEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type nt(ntSEXP);
     Rcpp::traits::input_parameter< int >::type time_tol(time_tolSEXP);
     Rcpp::traits::input_parameter< int >::type type(typeSEXP);
     rcpp_result_gen = Rcpp::wrap(track_align_cpp(t1, nt, time_tol, type));
@@ -127,22 +127,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// duration_acuracy
-NumericVector duration_acuracy(NumericVector x_, NumericVector y_, NumericVector t_, NumericVector dop, NumericVector dim, int duration_accuracy);
-RcppExport SEXP _amt_duration_acuracy(SEXP x_SEXP, SEXP y_SEXP, SEXP t_SEXP, SEXP dopSEXP, SEXP dimSEXP, SEXP duration_accuracySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y_(y_SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type t_(t_SEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type dop(dopSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type dim(dimSEXP);
-    Rcpp::traits::input_parameter< int >::type duration_accuracy(duration_accuracySEXP);
-    rcpp_result_gen = Rcpp::wrap(duration_acuracy(x_, y_, t_, dop, dim, duration_accuracy));
-    return rcpp_result_gen;
-END_RCPP
-}
 // track_immobility
 NumericVector track_immobility(NumericVector t, NumericVector x, NumericVector y, double period, double tol);
 RcppExport SEXP _amt_track_immobility(SEXP tSEXP, SEXP xSEXP, SEXP ySEXP, SEXP periodSEXP, SEXP tolSEXP) {
@@ -169,7 +153,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_amt_track_align_cpp", (DL_FUNC) &_amt_track_align_cpp, 4},
     {"_amt_mk_reg", (DL_FUNC) &_amt_mk_reg, 4},
     {"_amt_mk_reg_old", (DL_FUNC) &_amt_mk_reg_old, 4},
-    {"_amt_duration_acuracy", (DL_FUNC) &_amt_duration_acuracy, 6},
     {"_amt_track_immobility", (DL_FUNC) &_amt_track_immobility, 5},
     {NULL, NULL, 0}
 };

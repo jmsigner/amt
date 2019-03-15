@@ -13,7 +13,7 @@ distance_to_center(x, ...)
 
 \method{distance_to_center}{track_xy}(x, trast, square = TRUE, ...)
 
-\method{distance_to_center}{numeric}(cent, trast, square = TRUE, ...)
+\method{distance_to_center}{numeric}(x, trast, square = TRUE, ...)
 
 distance_to_centers(x, ...)
 
@@ -28,8 +28,6 @@ distance_to_centers(x, ...)
 \item{trast}{\code{[RasterLayer]} \cr A template.}
 
 \item{square}{\code{[logical(1)]} \cr Should the distance be squared?}
-
-\item{cent}{\code{[numeric(2)]} \cr The center.}
 
 \item{top_n}{\code{[integer(1)]} \cr To how many centers should the distance be
 calculated?}

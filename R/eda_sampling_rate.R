@@ -69,7 +69,7 @@ summarize_sampling_rate.track_xyt <- function(x, time_unit = "auto", summarize =
   if (summarize) {
     t_diff_s <- summary(t_diff)
     if (as_tibble) {
-      data_frame(
+      tibble(
         min = t_diff_s[1],
         q1 = t_diff_s[2],
         median = t_diff_s[3],
@@ -86,8 +86,6 @@ summarize_sampling_rate.track_xyt <- function(x, time_unit = "auto", summarize =
   }
 
 }
-
-
 
 
 #' @rdname summarize_sampling_rate

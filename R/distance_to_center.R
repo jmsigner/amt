@@ -8,7 +8,6 @@
 #' the distance to the centroid is calculated and in the second case the
 #' distance to the raster cell with the most relocations.
 #' @template track_xy_star
-#' @param cent `[numeric(2)]` \cr The center.
 #' @param trast `[RasterLayer]` \cr A template.
 #' @param square `[logical(1)]` \cr Should the distance be squared?
 #' @param top_n `[integer(1)]` \cr To how many centers should the distance be
@@ -42,11 +41,11 @@ distance_to_center.track_xy <- function(x, trast, square = TRUE, ...) {
 
 #' @export
 #' @rdname dist_cent
-distance_to_center.numeric <- function(cent, trast, square = TRUE, ...) {
+distance_to_center.numeric <- function(x, trast, square = TRUE, ...) {
   if (missing(trast)) {
     stop("trast required")
   }
-  r <- raster::distanceFromPoints(trast, cent)^if(square) 2 else 1
+  r <- raster::distanceFromPoints(trast, x)^if(square) 2 else 1
   names(r) <- "dist_cent"
   r
 }

@@ -14,6 +14,7 @@ Manage and analyze animal movement data. The functionality of 'amt' includes met
 Other contributors:
 \itemize{
   \item Bjoern Reineking [contributor]
+  \item Ulrike Schlaegel [contributor]
   \item Scott LaPoint [data contributor]
 }
 

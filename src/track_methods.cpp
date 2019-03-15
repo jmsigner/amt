@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericVector track_align_cpp(NumericVector t1, NumericVector nt, int time_tol, int type) {
+NumericVector track_align_cpp(IntegerVector t1, IntegerVector nt, int time_tol, int type) {
   // Create variables
   int burst = 1;  // burst
   // int i = 0;  // obs
@@ -193,65 +193,63 @@ NumericVector mk_reg_old(NumericVector relocs_time, int time_dist, int time_tol,
 }
 
 
-// [[Rcpp::export]]
-NumericVector duration_acuracy(NumericVector x_, NumericVector y_, NumericVector t_,
-                               NumericVector dop, NumericVector dim, int duration_accuracy) {
-
-  int i, j, k, n = x_.size();
-
-  NumericVector out(n);
-
-  for (i = 1; i < n; i++) {
-    // forward
-    // bring j into the right position
-    for (j = i; (j < n) && std::abs(t_[j] - t_[i]) <= duration_accuracy; j++) ;
-
-    int better = 0; // this indicates a better point
-    int fix_sl = pow(x_[i] - x_[i-1], 2) + pow(y_[i] - y_[i - 1], 2);
-
-
-    if (j > i) {
-      for (k = i + 1; k < j; k++) {
-        if (dop[i] < dop[k]) {
-          better = 1;
-          break;
-        } else if (dim[k] > dim[i]) {
-          better = 1;
-          break;
-        } /*else if (pow(x_[k] - x_[i-1], 2) + pow(y_[k] - y_[i - 1], 2) < fix_sl) {
-          better = 1;
-          break;
-        } */
-      }
-    }
-
-    if (better == 0) {
-      // backward
-      // bring j into the right position
-      for (j = i; (j >= 0) && std::abs(t_[i] - t_[j]) <= duration_accuracy; j--) ;
-      if (j < i) {
-        for (k = i - 1; k > j; k--) {
-          if (dop[i] < dop[k]) {
-            better = 1;
-            break;
-          } else if (dim[k] > dim[i]) {
-            better = 1;
-            break;
-          }
-          /*else if (pow(x_[k] - x_[i-1], 2) + pow(y_[k] - y_[i - 1], 2) < fix_sl) {
-            better =k;
-            break;
-          }
-           */
-        }
-      }
-    }
-    out[i] = better;
-  }
-  return out;
-}
-#include <Rcpp.h>
-using namespace Rcpp;
+//// 
+//NumericVector duration_acuracy(NumericVector x_, NumericVector y_, NumericVector t_,
+//                               NumericVector dop, NumericVector dim, int duration_accuracy) {
+//
+//  int i, j, k, n = x_.size();
+//
+//  NumericVector out(n);
+//
+//  for (i = 1; i < n; i++) {
+//    // forward
+//    // bring j into the right position
+//    for (j = i; (j < n) && std::abs(t_[j] - t_[i]) <= duration_accuracy; j++) ;
+//
+//    int better = 0; // this indicates a better point
+//    int fix_sl = pow(x_[i] - x_[i-1], 2) + pow(y_[i] - y_[i - 1], 2);
+//
+//
+//    if (j > i) {
+//      for (k = i + 1; k < j; k++) {
+//        if (dop[i] < dop[k]) {
+//          better = 1;
+//          break;
+//        } else if (dim[k] > dim[i]) {
+//          better = 1;
+//          break;
+//        } /*else if (pow(x_[k] - x_[i-1], 2) + pow(y_[k] - y_[i - 1], 2) < fix_sl) {
+//          better = 1;
+//          break;
+//        } */
+//      }
+//    }
+//
+//    if (better == 0) {
+//      // backward
+//      // bring j into the right position
+//      for (j = i; (j >= 0) && std::abs(t_[i] - t_[j]) <= duration_accuracy; j--) ;
+//      if (j < i) {
+//        for (k = i - 1; k > j; k--) {
+//          if (dop[i] < dop[k]) {
+//            better = 1;
+//            break;
+//          } else if (dim[k] > dim[i]) {
+//            better = 1;
+//            break;
+//          }
+//          /*else if (pow(x_[k] - x_[i-1], 2) + pow(y_[k] - y_[i - 1], 2) < fix_sl) {
+//            better =k;
+//            break;
+//          }
+//           */
+//        }
+//      }
+//    }
+//    out[i] = better;
+//  }
+//  return out;
+//}
 
 // [[Rcpp::export]]
 NumericVector track_immobility(NumericVector t, NumericVector x, NumericVector y, double period, double tol) {

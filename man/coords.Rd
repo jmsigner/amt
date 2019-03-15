@@ -12,7 +12,7 @@ coords(x, ...)
 \item{...}{Further arguments, none implemented.}
 }
 \value{
-\code{[data_frame]} \cr The coordinates.
+\code{[tibble]} \cr The coordinates.
 }
 \description{
 Coordinates of a track.

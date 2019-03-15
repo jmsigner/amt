@@ -6,7 +6,7 @@
 #' @importFrom lubridate hours minutes seconds now days weeks
 #' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd var
 #' @importFrom tidyr nest unnest
-#' @importFrom tibble as_data_frame data_frame tibble tribble is_tibble as_tibble
+#' @importFrom tibble tibble tribble is_tibble as_tibble
 #' @importFrom utils data head tail
 #' @importFrom sp CRS
 #' @importFrom methods is
@@ -22,7 +22,7 @@ methods::setOldClass(c("random_points", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("steps", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("random_steps", "tbl_df"))
 
-utils::globalVariables(c("burst_", "step_id_", "t_", ".data")) # to omit CRAN notes
+utils::globalVariables(c("burst_", "step_id_", "t_", ".data", "ts")) # to omit CRAN notes
 
 #' @useDynLib amt
 
@@ -90,9 +90,6 @@ tidyr::nest
 
 #' @export
 tidyr::unnest
-
-#' @export
-tibble::data_frame
 
 #' @export
 tibble::tibble

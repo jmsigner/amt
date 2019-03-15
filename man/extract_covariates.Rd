@@ -50,11 +50,11 @@ the end of a step. or \code{end}.}
 for \code{extract_covariates_var_time} whether to look before, after or in both
 direction (\code{any}) for the temporally closest environmental raster.}
 
-\item{name_covar}{\code{[character(1)="time_var_covar"]} \cr The name of the new column.}
-
-\item{max_diff}{\code{[Period(1)]} \cr The maximum time difference between a relocation
+\item{max_time}{\code{[Period(1)]} \cr The maximum time difference between a relocation
 and the corresponding raster. If no rasters are within the specified max.
 distance \code{NA} is returned.}
+
+\item{name_covar}{\code{[character(1)="time_var_covar"]} \cr The name of the new column.}
 }
 \description{
 Extract the covariate values at relocations, or at the beginning or end of

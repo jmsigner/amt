@@ -18,7 +18,7 @@
 #'
 #' @format A `RasterLAyer` \describe{ \item{1}{forest} \item{2}{non-forest} }
 #' @source JRC
-#' @references A. Pekkarinen, L. Reithmaier, P. Strobl (2007): “Pan-European
+#' @references A. Pekkarinen, L. Reithmaier, P. Strobl (2007): Pan-European
 #'   Forest/Non-Forest mapping with Landsat ETM+ and CORINE Land Cover 2000
 #'   data.
 "sh_forest"

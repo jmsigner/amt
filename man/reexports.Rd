@@ -24,7 +24,6 @@
 \alias{strata}
 \alias{nest}
 \alias{unnest}
-\alias{data_frame}
 \alias{tibble}
 \alias{\%>\%}
 \alias{Surv}
@@ -50,7 +49,7 @@ below to see their documentation.
 
   \item{survival}{\code{\link[survival]{clogit}}, \code{\link[survival]{strata}}, \code{\link[survival]{Surv}}}
 
-  \item{tibble}{\code{\link[tibble]{data_frame}}, \code{\link[tibble]{tibble}}}
+  \item{tibble}{\code{\link[tibble]{tibble}}}
 
   \item{tidyr}{\code{\link[tidyr]{nest}}, \code{\link[tidyr]{unnest}}}
 }}

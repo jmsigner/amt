@@ -15,7 +15,7 @@ sh_forest
 Forest cover for the home range of one red deer in northern Germany.
 }
 \references{
-A. Pekkarinen, L. Reithmaier, P. Strobl (2007): “Pan-European
+A. Pekkarinen, L. Reithmaier, P. Strobl (2007): Pan-European
 Forest/Non-Forest mapping with Landsat ETM+ and CORINE Land Cover 2000
 data.
 }

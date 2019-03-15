@@ -100,7 +100,7 @@ points.track_xy <- function(x, ...) {
 #'
 #' @template track_xy_star
 #' @template dots_none
-#' @return `[data_frame]` \cr The coordinates.
+#' @return `[tibble]` \cr The coordinates.
 #' @export
 #' @examples
 #' data(deer)

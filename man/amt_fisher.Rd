@@ -4,7 +4,7 @@
 \name{amt_fisher}
 \alias{amt_fisher}
 \title{GPS tracks from four fishers}
-\format{A \code{data_frame} with 32400 rows and 3 variables:
+\format{A \code{tibble} with 32400 rows and 5 variables:
 \describe{
 \item{id}{id of the animal}
 \item{x_}{the x-coordinate}

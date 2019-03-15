@@ -13,10 +13,11 @@ vignette: >
 
 ### Creating a track
 
-The basic building blocks of `amt` are tracks. Tracks are `data_frame`s with at least two columns that contain the coordinates: `x_` and `y_`. A track behaves exactly like a `data_frame` (the only difference being that we added an other S3 class). Below is an example of creating a track with some dummy locations.
+The basic building blocks of `amt` are tracks. Tracks are `tibble`s with at least two columns that contain the coordinates: `x_` and `y_`. A track behaves exactly like a `tibble` (the only difference being that we added an other S3 class). Below is an example of creating a track with some dummy locations.
 
 ```{r, warning=FALSE, message=FALSE}
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 library(amt)
 df1 <- data_frame(x = 1:3, y = 1:3)
 is.data.frame(df1)
@@ -255,9 +256,6 @@ Finally, we can select `id` and `steps`, unnest the new `data_frame` and create 
 trk2 %>% select(id, steps) %>% unnest %>% 
   ggplot(aes(sl_, fill = factor(id))) + geom_density(alpha = 0.4)
 ```
-
-
-
 
 
 

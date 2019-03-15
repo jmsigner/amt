@@ -37,10 +37,6 @@ mk_reg_old <- function(relocs_time, time_dist, time_tol, start) {
     .Call('_amt_mk_reg_old', PACKAGE = 'amt', relocs_time, time_dist, time_tol, start)
 }
 
-duration_acuracy <- function(x_, y_, t_, dop, dim, duration_accuracy) {
-    .Call('_amt_duration_acuracy', PACKAGE = 'amt', x_, y_, t_, dop, dim, duration_accuracy)
-}
-
 track_immobility <- function(t, x, y, period, tol) {
     .Call('_amt_track_immobility', PACKAGE = 'amt', t, x, y, period, tol)
 }

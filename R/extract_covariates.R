@@ -111,7 +111,7 @@ extract_covariates_along.steps_xy <- function(x, covariates, ...) {
 #' @param when `[character(1)="any"]{"any", "before", "after"}` \cr Specifies for
 #'  for `extract_covariates_var_time` whether to look before, after or in both
 #'  direction (`any`) for the temporally closest environmental raster.
-#' @param max_diff `[Period(1)]` \cr The maximum time difference between a relocation
+#' @param max_time `[Period(1)]` \cr The maximum time difference between a relocation
 #'  and the corresponding raster. If no rasters are within the specified max.
 #'  distance `NA` is returned.
 #' @param name_covar `[character(1)="time_var_covar"]` \cr The name of the new column.

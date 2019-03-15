@@ -32,7 +32,7 @@ direction_abs <- function(x, ...) {
 #' @examples
 #'
 
-#' xy <- data_frame(
+#' xy <- tibble(
 #'   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
 #'   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
 #' trk <- make_track(xy, x, y)
@@ -136,7 +136,7 @@ direction_abs.track_xy <- function(x, full_circle = FALSE, zero_dir = "E",
 #' @export
 #' @examples
 #' # How do results compare to other packages
-#' xy <- data_frame(
+#' xy <- tibble(
 #'   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
 #'   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
 #' trk <- mk_track(xy, x, y)
@@ -202,7 +202,7 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, append_last = TRUE,
 #' @details `step_lengths` calculates the step lengths between points a long the path. The last value returned is `NA`, because no observed step is 'started' at the last point. If `lonlat = TRUE`, `step_lengths()` wraps [raster::pointDistance()].
 #' @examples
 #' # step_lengths ------------------------------------------------------------
-#' xy <- data_frame(
+#' xy <- tibble(
 #'   x = c(0, 1, 2),
 #'   y = c(0, 1, 2)
 #' )
@@ -212,35 +212,6 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, append_last = TRUE,
 #' step_lengths(xy, lonlat = TRUE) # in m, but coords are assumed in degrees
 #'
 #'
-#' # creating steps ----------------------------------------------------------
-#'
-#' # Create some dummy data
-#' library(lubridate)
-#' df <- data_frame(
-#'   x = runif(10),
-#'   y = runif(10),
-#'   a = runif(10),
-#'   t = now() + hours(c(1:2, 5:6, 9:10, 14:17)),
-#'   b = 3,
-#'   c = a + 30
-#' )
-#'
-#' library(amt)
-#' make_track(df, x, y, t, all_cols = TRUE) %>%
-#'   steps(keep_cols = "start")
-#'
-#' make_track(df, x, y, all_cols = TRUE) %>%
-#'   steps(keep_cols = "end")
-#'
-#' make_track(df, x, y, t, all_cols = TRUE) %>%
-#'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
-#'   steps_by_burst(keep_cols = "start")
-#'
-#' make_track(df, x, y, t, all_cols = TRUE) %>%
-#'   track_resample(rate = hours(1), tolerance = minutes(5)) %>%
-#'   steps_by_burst(keep_cols = NULL)
-#'
-
 
 
 
@@ -345,7 +316,7 @@ steps.track_xyt <- function(x, lonlat = FALSE,
 
 
 steps_base <- function(x, n, lonlat, zero_dir, keep_cols) {
-  out <- data_frame(
+  out <- tibble(
     x1_ = x$x_[-n],
     x2_ = x$x_[-1],
     y1_ = x$y_[-n],
