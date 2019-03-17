@@ -40,7 +40,7 @@ plot_sl_base <- function(x, n, upper_quantile, plot, ...) {
   xs <- seq(0, to, length.out = n)
   if (plot) {
     plot(xs, ys <- dgamma(xs, shape = xx[1], scale = xx[2]), type = "l",
-         ylab = "Probablility",
+         ylab = "Probability",
          xlab = "Distance")
   }
   invisible(data.frame(sl = xs, d = ys))
