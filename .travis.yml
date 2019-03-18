@@ -2,7 +2,7 @@
 language: r
 r: devel
 cache: packages
-warnings_are_errors: false
+warnings_are_errors: true
 sudo: required
 r_check_args: "--as-cran"
 
@@ -15,20 +15,32 @@ r_packages:
 - devtools
 - ade4
 
-
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev gsl-bin libgsl2 libgsl-dev
   - Rscript -e 'update.packages(ask = FALSE)'
+  - source travis/before-install.sh
+
+addons:
+  apt:
+    packages:
+      - gcc
+      - g++
+      - clang
+
+r:
+  - oldrel
+  - release
+  - devel
+
+env:
+  - COMPILER=gcc
+  - COMPILER=clang
+
+
 
 notifications:
   email:
   on_success: change
   on_failure: change
-
-# Sample .travis.yml for R projects
-
-
-
-
