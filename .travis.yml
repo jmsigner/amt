@@ -20,7 +20,7 @@ before_install:
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev gsl-bin libgsl2 libgsl-dev
   - Rscript -e 'update.packages(ask = FALSE)'
-  - source travis/before-install.sh
+  - source travis/before_install.sh
 
 addons:
   apt:
