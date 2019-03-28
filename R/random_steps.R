@@ -17,11 +17,14 @@ random_steps2 <- function(x, ...) {
 
 #' @export
 #' @rdname random_steps
-random_steps2.steps_xy <- function(
+random_steps.steps_xy <- function(
   x, n_control = 10,
   sl_distr = fit_distr(sl_, "gamma"),
   ta_distr = fit_distr(ta_, "vonmises"),
+  rand_sl = random_numbers(sl_distr, n = 1e5),
+  rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE,
+  include_
   remove_first = TRUE,  ...) {
 
 
@@ -37,15 +40,14 @@ random_steps2.steps_xy <- function(
 
   sl_distr = make_exp_distr(rate = 0.03)
   ta_distr = make_unif_distr()
-  n_sample_available <- 1e5 # needs to be come an argument
-  ###
-
-  # Generate random points
-  ns <- nrow(x)  # number of steps
-  case_for_control <- rep(1:ns, each = n_control)
 
   slr <- random_numbers(sl_distr, n = n_sample_available) # can become an arg
   tar <- random_numbers(ta_distr, n = n_sample_available) # can become an arg
+
+  ###
+  # Generate random points
+  ns <- nrow(x)  # number of steps
+  case_for_control <- rep(1:ns, each = n_control)
 
   rs <- (random_steps_cpp(n_control, x$x1_, x$y1_, x$x2_ , x$y2_, slr, tar, include_obs = 1, sl_obs = x$sl_,
                           ta_obs = x$ta_))
@@ -61,23 +63,13 @@ random_steps2.steps_xy <- function(
       x
 
     )
+    rs$case_ <- FALSE
+    xy_cc$step_id_ <- rep(1:ns, each = n_control)
+    xy_cc
 
-  }
-  if (include_case) {
-
-  }
-
-  if (stripped_down) {
-    return(rs)
-  }
-
-  rs$case_ <- FALSE
-  xy_cc$step_id_ <- rep(1:ns, each = n_control)
-  xy_cc
-
-  x$case_ <- TRUE
-  x$step_id_ <- 1:ns
-  x
+    x$case_ <- TRUE
+    x$step_id_ <- 1:ns
+    x
 
 
   has_burst <- "burst_" %in% names(x)
@@ -90,6 +82,10 @@ random_steps2.steps_xy <- function(
   if (has_burst) {
     vars <- c("burst_", vars)
   }
+
+  }
+
+
 
   # shuffle attributes in non_vars
   v1 <- base::setdiff(names(x), vars)
