@@ -1,3 +1,42 @@
+# Version 0.0.6.0
+# Round 1
+## Test environments
+* local Ubuntu 18.04.2 LTS, R 3.5.2
+* win-builder (devel and release)
+* travis-ci: release and devel
+* appveyor
+* r-hub: fedora-clang-devel
+
+### What changed
+- I was requested to address a warning message (https://cran.r-project.org/web/checks/check_results_amt.html). Which is now fixed.
+- Added new methods to estimate SSF with temporally varying covariates.
+
+## minor changes
+- Several typos are fixed
+- Updated dependencies to dplyr.
+
+
+### R CMD check results
+There were no ERRORs or WARNINGs.
+
+- There was one NOTE on the `fedora-clang-devel` plattform:
+
+```
+* checking dependencies in R code ... NOTE
+Namespaces in Imports field not imported from:
+  ‘Rcpp’ ‘magrittr’
+  All declared Imports should be used.
+```
+
+Both packages (`Rcpp` and `magrittr`) are used. I export the pipe operator (`%>%`) from `magrittr` and use `Rcpp` for source compiled code.
+
+
+## Downstream dependencies
+There are no downstream dependencies.
+
+
+----
+
 # Version 0.0.5.0
 # Round 1
 ## Test environments

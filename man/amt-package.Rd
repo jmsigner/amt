@@ -8,6 +8,13 @@
 \description{
 Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource and step-selection functions), and simulation of space-use from fitted step-selection functions.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/jmsigner/amt}
+}
+
+}
 \author{
 \strong{Maintainer}: Johannes Signer \email{jsigner@gwdg.de}
 

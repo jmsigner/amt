@@ -32,7 +32,6 @@ Imports:
     magrittr,
     maptools,
     methods,
-    progress,
     purrr,
     raster,
     Rcpp (>= 0.12.7),
