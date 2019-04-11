@@ -40,6 +40,11 @@ summary.fit_clogit <- function(object, ...) {
   base::summary(object$model, ...)
 }
 
+#' @export
+AIC.fit_clogit <- function(object, ...) {
+  stats::AIC(object$model, ...)
+}
+
 
 #' @rdname fit_clogit
 #' @export
