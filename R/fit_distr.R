@@ -6,7 +6,7 @@
 #'
 #' @param .tbl `[track_xy,track_xyt]` \cr A track.
 #' @param x `[expression]` \cr The name of the column containing step lengths, usually `sl_`.
-#' @param distr `[character(1)]` \cr Name of the distribution, currently only `gamma`-distribution is supported.
+#' @param distr `[character(1)]{'gamma', 'exp', 'unif'}` \cr Name of the distribution, currently only `gamma`, `unif`, and `exponential` distributions are supported.
 #' @param na.rm `[logical(1)]` \cr Should `NA` be removed?
 #' @template dots_none
 #' @name fit_sl_dist
@@ -149,7 +149,7 @@ sl_distr.random_steps <- function (x, ...) {
 #'
 #' @param .tbl `[track_xy,track_xyt]` \cr A track.
 #' @param x `[expression]` \cr The name of the column containing turn angles, usually `ta_`.
-#' @param distr `[character(1)]` \cr Name of the distribution, currently only `vonmises`-distribution is supported.
+#' @param distr `[character(1)]{'vonmises', 'unif'}` \cr Name of the distribution, currently only `vonmises` and `uniform` distribution is supported.
 #' @param na.rm `[logical(1)]` \cr Should `NA` be removed?
 #'
 #' @template dots_none
