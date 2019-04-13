@@ -126,6 +126,11 @@ arrange.random_steps <- function(.data, ..., .dots) {
 }
 
 #' @export
+count.random_steps <- function(.data, ..., .dots) {
+  NextMethod()
+}
+
+#' @export
 filter.random_steps <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)

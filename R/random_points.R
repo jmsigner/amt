@@ -137,6 +137,11 @@ arrange.random_points <- function(.data, ..., .dots) {
 }
 
 #' @export
+count.random_points <- function(.data, ..., .dots) {
+  xx <- NextMethod()
+}
+
+#' @export
 filter.random_points <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rp_transfer_attr(.data, xx)

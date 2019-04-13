@@ -190,6 +190,16 @@ arrange.track_xyt <- function(.data, ..., .dots) {
 }
 
 #' @export
+count.track_xy <- function(.data, ..., .dots) {
+  NextMethod()
+}
+
+#' @export
+count.track_xyt <- function(.data, ..., .dots) {
+  NextMethod()
+}
+
+#' @export
 filter.track_xy <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
 }
