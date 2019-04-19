@@ -2,6 +2,7 @@
 
 ## new features
 - Added a dplyr count method for track, steps, random_steps and random_points
+- Added a AIC method for `fit_(i)ssf`.
 
 
 
