@@ -220,6 +220,11 @@ group_by.track_xyt <- function(.data, ..., .dots) {
 }
 
 #' @export
+nest.track_xyt <- function(.data, ..., .dots) {
+  NextMethod()
+}
+
+#' @export
 ungroup.track_xy <- function(x, ..., .dots) {
   x <- track_transfer_attr(x, NextMethod())
   class(x) <- class(x)[class(x) != "grouped_df"]

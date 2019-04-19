@@ -395,6 +395,11 @@ mutate.steps_xy <- function(.data, ..., .dots) {
 }
 
 #' @export
+nest.steps_xy <- function(.data, ..., .dots) {
+  NextMethod()
+}
+
+#' @export
 select.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
   steps_transfer_attr(.data, xx)

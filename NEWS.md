@@ -1,5 +1,11 @@
-# amt 0.0.6.0
+# amt 0.0.7
 
+## new features
+- Added a dplyr count method for track, steps, random_steps and random_points
+
+
+
+# amt 0.0.6.0
 ## major changes
 - random_points with kde home ranges now work with different home range levels. 
 - random_steps now uses `units` to be explicit about the turning angle.
