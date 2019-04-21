@@ -29,6 +29,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// random_steps_cpp
+NumericMatrix random_steps_cpp(const int n_rand_steps, const NumericVector start_x, const NumericVector start_y, const NumericVector end_x, const NumericVector end_y, const NumericVector rand_sl, const NumericVector rand_ta, const int include_obs, const NumericVector sl_obs, const NumericVector ta_obs);
+RcppExport SEXP _amt_random_steps_cpp(SEXP n_rand_stepsSEXP, SEXP start_xSEXP, SEXP start_ySEXP, SEXP end_xSEXP, SEXP end_ySEXP, SEXP rand_slSEXP, SEXP rand_taSEXP, SEXP include_obsSEXP, SEXP sl_obsSEXP, SEXP ta_obsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n_rand_steps(n_rand_stepsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type start_x(start_xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type start_y(start_ySEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type end_x(end_xSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type end_y(end_ySEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type rand_sl(rand_slSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type rand_ta(rand_taSEXP);
+    Rcpp::traits::input_parameter< const int >::type include_obs(include_obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type sl_obs(sl_obsSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type ta_obs(ta_obsSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_steps_cpp(n_rand_steps, start_x, start_y, end_x, end_y, rand_sl, rand_ta, include_obs, sl_obs, ta_obs));
+    return rcpp_result_gen;
+END_RCPP
+}
+// random_steps_cpp_one_step
+NumericMatrix random_steps_cpp_one_step(const int n_rand_steps, const double start_x, const double start_y, const double rel_angle, const NumericVector rand_sl, const NumericVector rand_ta);
+RcppExport SEXP _amt_random_steps_cpp_one_step(SEXP n_rand_stepsSEXP, SEXP start_xSEXP, SEXP start_ySEXP, SEXP rel_angleSEXP, SEXP rand_slSEXP, SEXP rand_taSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const int >::type n_rand_steps(n_rand_stepsSEXP);
+    Rcpp::traits::input_parameter< const double >::type start_x(start_xSEXP);
+    Rcpp::traits::input_parameter< const double >::type start_y(start_ySEXP);
+    Rcpp::traits::input_parameter< const double >::type rel_angle(rel_angleSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type rand_sl(rand_slSEXP);
+    Rcpp::traits::input_parameter< const NumericVector >::type rand_ta(rand_taSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_steps_cpp_one_step(n_rand_steps, start_x, start_y, rel_angle, rand_sl, rand_ta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rolling_mean
 NumericVector rolling_mean(NumericVector x, int win);
 RcppExport SEXP _amt_rolling_mean(SEXP xSEXP, SEXP winSEXP) {
@@ -146,6 +182,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_amt_diff_rcpp", (DL_FUNC) &_amt_diff_rcpp, 1},
     {"_amt_within_rcpp", (DL_FUNC) &_amt_within_rcpp, 3},
+    {"_amt_random_steps_cpp", (DL_FUNC) &_amt_random_steps_cpp, 10},
+    {"_amt_random_steps_cpp_one_step", (DL_FUNC) &_amt_random_steps_cpp_one_step, 6},
     {"_amt_rolling_mean", (DL_FUNC) &_amt_rolling_mean, 2},
     {"_amt_rolling_median", (DL_FUNC) &_amt_rolling_median, 2},
     {"_amt_simulate_udf", (DL_FUNC) &_amt_simulate_udf, 6},

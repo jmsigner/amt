@@ -83,9 +83,10 @@ time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
       stop("dawn or dusk can not contain NA's, try adjusting the `solar.dep`")
     }
     names <- c("night", "dawn", "day", "dusk", "night")
-    names[apply(cbind(tt, dawn, sunr, suns, dusk), 1, function(x) base::findInterval(x[1], x[2:5])) + 1]
+    xx <- names[apply(cbind(tt, dawn, sunr, suns, dusk), 1, function(x) base::findInterval(x[1], x[2:5])) + 1]
   } else {
     names <- c("night", "day", "night")
-    names[apply(cbind(tt, sunr, suns), 1, function(x) base::findInterval(x[1], x[2:3])) + 1]
+    xx <- names[apply(cbind(tt, sunr, suns), 1, function(x) base::findInterval(x[1], x[2:3])) + 1]
+    factor(xx, levels = c("day", "night"))
   }
 }

@@ -11,102 +11,74 @@
 #' @template dots_none
 #' @export
 #' @name random_steps
-random_steps2 <- function(x, ...) {
+random_steps <- function(x, ...) {
   UseMethod("random_steps", x)
 }
 
 #' @export
 #' @rdname random_steps
+random_steps.numeric <- function(
+  start, n_control = 10,
+  rel_angle = 0,
+  rand_sl = random_numbers(make_exp_distr(), n = 1e5),
+  rand_ta = random_numbers(make_unif_distr(), n = 1e5)) {
+
+  rs <- random_steps_cpp_one_step(
+    n_control,  # number of controll steps
+    start[1], start[2],
+    rel_angle,
+    rand_sl, rand_ta)
+  rs
+}
+
+
+#' @export
+#' @rdname random_steps
 random_steps.steps_xy <- function(
   x, n_control = 10,
-  sl_distr = fit_distr(sl_, "gamma"),
-  ta_distr = fit_distr(ta_, "vonmises"),
+  sl_distr = fit_distr(x$sl_, "gamma"),
+  ta_distr = fit_distr(x$ta_, "vonmises"),
   rand_sl = random_numbers(sl_distr, n = 1e5),
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE,
-  include_
   remove_first = TRUE,  ...) {
 
-
-  ###
-  library(amt)
-  data(deer)
-  x <- steps_by_burst(deer)
-  x <- x[1:3, ]
-  head(deer)
-  xx <- x[1:3, ] %>% random_steps(n_control = 2)
-  head(deer)
-  n_control <- 3
-
-  sl_distr = make_exp_distr(rate = 0.03)
-  ta_distr = make_unif_distr()
-
-  slr <- random_numbers(sl_distr, n = n_sample_available) # can become an arg
-  tar <- random_numbers(ta_distr, n = n_sample_available) # can become an arg
-
-  ###
   # Generate random points
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(1:ns, each = n_control)
 
-  rs <- (random_steps_cpp(n_control, x$x1_, x$y1_, x$x2_ , x$y2_, slr, tar, include_obs = 1, sl_obs = x$sl_,
-                          ta_obs = x$ta_))
+  stps <- which(!is.na(x$ta_))
+  x$step_id_ <- 1:nrow(x)
+  x$case_ <- TRUE
 
-  rs
-  x
-  as.matrix(x)
-      as.matrix(x[, c("x1_", "y1_", "x2_", "y2_", "ta_")])
-      x
+  # This could be moved to c++
+  xx <- lapply(stps, function(i) {
+    random_steps(c(x$x1_[i], x$y1_[i]), n_control = n_control,
+                 rel_angle = x$ta_[i],
+                 rand_sl = rand_sl, rand_ta = rand_ta)})
+ xx <- do.call(rbind, xx)
 
-  if (include_obs) {
-    rbind(
-      x
+ for_rand <- x[rep(stps, each = n_control), ]
+ for_rand$case_ <- FALSE
 
-    )
-    rs$case_ <- FALSE
-    xy_cc$step_id_ <- rep(1:ns, each = n_control)
-    xy_cc
+ for_rand$x2_ <- xx[, "x2_"]
+ for_rand$y2_ <- xx[, "y2_"]
 
-    x$case_ <- TRUE
-    x$step_id_ <- 1:ns
-    x
+ for_rand$sl_ <- xx[, "sl_"]
+ for_rand$ta_ <- xx[, "ta_"]
+  x <- x[stps, ]
 
+ out <- dplyr::bind_rows(x, for_rand)
+ out <- dplyr::arrange(out, step_id_)
+ out
 
-  has_burst <- "burst_" %in% names(x)
+ class(out) <- c("random_steps", class(out))
+ attributes(out)$sl_ <- sl_distr
+ attributes(out)$ta_ <- ta_distr
+ attributes(out)$n_control_ <- n_control
+ attr(out, "crs_") <- attr(x, "crs_")
 
-  vars <- c("step_id_", "case_", "x1_", "y1_", "x2_", "y2_")
-  if (is(x, "steps_xyt")) {
-    vars <- c(vars, "t1_", "t2_", "dt_")
-  }
-
-  if (has_burst) {
-    vars <- c("burst_", vars)
-  }
-
-  }
-
-
-
-  # shuffle attributes in non_vars
-  v1 <- base::setdiff(names(x), vars)
-  # xy_cc <- xy_cc %>% mutate_at(v1, function(x) sample(unique(x), length(x), TRUE))
-  # message("shuffling non standard columns")
-  vars <- c(vars, v1)
-
-  suppressWarnings(out <- dplyr::bind_rows(x, xy_cc))
-  out
-  library(rlang)
-  out <- dplyr::arrange(out, !!quo(step_id_))
-  out <- dplyr::select(out, vars)
-
-  class(out) <- c("random_steps", class(out))
-  attributes(out)$sl_ <- sl
-  attributes(out)$ta_ <- ta
-  attributes(out)$n_control_ <- n_control
-  out
-
-  attr(xx, "crs_") <- attr(x, "crs_")
-  xx
+ out
 }
 
 rsteps_transfer_attr <- function(from, to) {
