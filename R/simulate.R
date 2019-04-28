@@ -11,15 +11,15 @@ simulate <- function(
   verbose = FALSE) {
 
   ##
-  if (FALSE) {
+  if (FALSE) { # debug
     object <- xx
     fun = function(x, map, t) {
       x %>% extract_covariates(map) %>%
         time_of_day() %>% mutate(log_sl = log(sl_))
     }
-    start_t = x1$t1_[1]
+    start_t = deer$t_[1]
     dt = hours(6)
-    map = resources
+    map = sh_forest
     start_xy = unlist(deer[1, c("x_", "y_")])
     n_steps = 1000
     n_control = 200
@@ -86,8 +86,22 @@ simulate <- function(
     xyz <- stats::model.matrix.default(
       terms(ff, keep.order = TRUE), data = xy, na.action = na.pass)
 
-    w <- as.matrix(xyz[, names(coefs)]) %*% coefs
+    if (verbose) {
+      cat("Formula: ", as.character(ff), "\n")
+      cat("Names of coefficients: ", names(coefs), "\n")
+      cat("Names of model matrix: ", colnames(xyz), "\n")
+    }
 
+    if (FALSE) { # possible fix
+      cn <- names(coefs)
+      mmn <- colnames(xyz)
+      prob <- strsplit(cn[!cn %in% mmn], ":")[[1]]
+      pp <- grepl(prob[1], mmn, fixed = TRUE) & grepl(prob[2], mmn, fixed = TRUE)
+      mmn[pp] <-  paste0(rev(strsplit(mmn[pp], ":")[[1]]), collapse = ":")
+      colnames(xyz) <- mmn
+    }
+
+    w <- as.matrix(xyz[, names(coefs)]) %*% coefs
     w <- exp(w - max(w, na.rm = TRUE))
 
     if (any(is.infinite(w[, 1]))) {
@@ -95,34 +109,6 @@ simulate <- function(
     }
 
     w[is.na(w)] <- 0
-
-    ## s
-    if (FALSE) {
-      class(xyz)
-      head(xy)
-
-      ggplot() +
-        geom_segment(aes(x1_, y1_, xend = x2_, yend = y2_), xy) +
-        geom_segment(aes(x1_, y1_, xend = x2_, yend = y2_), xy[198, ], col = "red")
-
-      cbind(xy, w = w)[196:200, ]
-
-      ff
-      ft <- terms.formula(ff, keep.order = FALSE)
-
-      ff
-      attr(ft, "term.labels")
-      names(coefs)
-      hist(w)
-      range(w)
-      which(w == 1)
-      table(w)
-      xyz[22, ]
-
-      (selected <- try(sample.int(length(w), 1, prob = w)))
-    }
-
-    ## e
 
     selected <- try(sample.int(length(w), 1, prob = w))
     if (inherits(selected, "try-error")) {
