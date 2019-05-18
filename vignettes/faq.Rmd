@@ -81,6 +81,6 @@ trk2
 ## Session
 
 ```{r}
-sessioninfo::session_info()
+sessionInfo()
 ```
 

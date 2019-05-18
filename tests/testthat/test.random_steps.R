@@ -2,9 +2,14 @@ library(amt)
 
 context("random steps")
 
-# Set up some dummy data
+data(deer)
 
-tad <- make_unif_distr()
-sld <- make_exp_distr()
+trk1 <- deer %>% make_track(x_, y_, t_)
+sl <- fit_sl_dist(trk1 %>% steps(), sl_)
 
-random_steps(1, tad, sld)
+test_that("step length is correctly estimated", {
+  expect_equal(trk1 %>% steps() %>% fit_sl_dist(sl_) %>% sl_distr(), "gamma")
+  expect_equal(trk1 %>% steps() %>% fit_sl_dist() %>% sl_distr(), "gamma")
+  expect_equal(trk1 %>% steps() %>% fit_sl_dist(distr = "unif") %>% sl_distr(), "unif")
+  expect_equal(trk1 %>% steps() %>% fit_sl_dist(distr = "exp") %>% sl_distr(), "exp")
+})

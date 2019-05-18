@@ -7,7 +7,11 @@
 #'   with each observed step.
 #' @param sl_distr `[amt_distr]` \cr The step-length distribution.
 #' @param ta_distr `[amt_distr]` \cr The turn-angle distribution.
-#' @param random.error `[numeric(1)=0.001]{>0}` \cr Upper limit for a uniformly
+#' @param start `[numeric(2)]` \cr The position of the start location (x and y coordinate).
+#' @param rel_angle `[numeric(1) = 0]{-pi < rel_angle < pi}` \cr Relative turing angle for the first step.
+#' @param  rand_sl `[numeric]` \cr Numeric vector with random step lengths an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., gamma or exponential).
+#' @param  rand_ta `[numeric]` \cr Numeric vector with relative turning angles an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., von Mises or uniform).
+#' @param include_observed `[logical(1) = TRUE]` \cr Indicates if observed steps are to be included in the result.
 #' @template dots_none
 #' @export
 #' @name random_steps
@@ -40,8 +44,7 @@ random_steps.steps_xy <- function(
   ta_distr = fit_distr(x$ta_, "vonmises"),
   rand_sl = random_numbers(sl_distr, n = 1e5),
   rand_ta = random_numbers(ta_distr, n = 1e5),
-  include_observed = TRUE,
-  remove_first = TRUE,  ...) {
+  include_observed = TRUE, ...) {
 
   # Generate random points
   ns <- nrow(x)  # number of steps
@@ -70,7 +73,6 @@ random_steps.steps_xy <- function(
 
  out <- dplyr::bind_rows(x, for_rand)
  out <- dplyr::arrange(out, step_id_)
- out
 
  class(out) <- c("random_steps", class(out))
  attributes(out)$sl_ <- sl_distr
@@ -79,6 +81,7 @@ random_steps.steps_xy <- function(
  attr(out, "crs_") <- attr(x, "crs_")
 
  out
+
 }
 
 rsteps_transfer_attr <- function(from, to) {

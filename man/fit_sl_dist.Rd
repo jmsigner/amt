@@ -5,14 +5,14 @@
 \alias{fit_sl_dist_base}
 \title{Fit a statistical distribution to step lengths.}
 \usage{
-fit_sl_dist(.tbl, x, ...)
+fit_sl_dist(.tbl, x = sl_, ...)
 
 fit_sl_dist_base(x, na.rm = TRUE, distr = "gamma", ...)
 }
 \arguments{
 \item{.tbl}{\code{[track_xy,track_xyt]} \cr A track.}
 
-\item{x}{\code{[expression]} \cr The name of the column containing step lengths, usually \code{sl_}.}
+\item{x}{\code{[expression = sl_]} \cr The name of the column containing step lengths, usually \code{sl_}.}
 
 \item{...}{Further arguments, none implemented.}
 

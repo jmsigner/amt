@@ -4,12 +4,12 @@
 \alias{fit_distr}
 \title{Fit distribution to data}
 \usage{
-fit_distr(x, name, na.rm = TRUE)
+fit_distr(x, dist_name, na.rm = TRUE)
 }
 \arguments{
 \item{x}{\code{[numeric(>1)]} \cr The observed data.}
 
-\item{name}{\code{[character(1)]{"exp", "gamma", "vonmises"}} \cr The name of the
+\item{dist_name}{\code{[character(1)]{"exp", "gamma", "unif", "vonmises"}} \cr The name of the
 distribution.}
 
 \item{na.rm}{\code{[logical(1)=TRUE]} \cr Indicating whether \code{NA} should be
