@@ -212,3 +212,97 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
     }
   )
 }
+
+
+# Adjust parameters -------------------------------------------------------
+
+#' Adjust distributional parameters
+
+#' @export
+#' @param x `[amt_distr]` \cr A distribution object.
+#' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
+#' @rdname distributions
+adjust_distr <- function(x, ...) {
+  UseMethod("adjust_distr")
+}
+
+#' @export
+#' @rdname adjust_distr
+#'
+adjust_distr.gamma_distr <- function(
+  x, shape = NULL, scale = NULL,
+  coefs, model_data, ...
+) {
+
+  # Adjust shape
+  new_shape <- if (!is.null(shape)) {
+    adj <- x$params$shape + adjust_base(shape, coefs, model_data)
+    if (adj < 0) {
+      warning("Adjusted shape is < 0, it was set to 0.")
+      adj <- 0
+    }
+    adj
+  } else {
+    x$params$shape
+  }
+
+  # Adjust scale
+  new_scale <- if (!is.null(scale)) {
+    modifier <- adjust_base(scale, coefs, model_data)
+    adj <- 1 / ((1 / x$params$scale) - modifier)
+    if (adj < 0) {
+      warning("Adjusted scale is < 0, it was set to 0.")
+      adj <- 0
+    }
+    adj
+  } else {
+    x$params$scale
+  }
+
+  make_gamma_distr(shape = new_shape, scale = new_scale)
+}
+
+#' @export
+#' @rdname adjust_distr
+#'
+
+adjust_distr.vonmises_distr <- function(
+  x, kappa = NULL,
+  coefs, model_data, ...
+) {
+  # Adjust shape
+  new_kappa <- if (!is.null(kappa)) {
+    adj <- x$params$kappa + adjust_base(kappa, coefs, model_data)
+    if (adj < 0) {
+      warning("Adjusted kappa is < 0, it was set to 0.")
+      adj <- 0
+    }
+    adj
+  } else {
+    x$params$shape
+  }
+  make_vonmises_distr(kappa = new_kappa)
+}
+
+adjust_base <- function(formula, coefs, model_data) {
+  # check input classes
+  checkmate::assert_formula(formula)
+  checkmate::assert_numeric(coefs, names = "named")
+  checkmate::assert_data_frame(model_data, nrows = 1)
+
+  # check that there is only 1 first order term
+  aterms <- terms(formula)
+  tl <- attr(aterms, "term.labels")
+  name_ <- tl[which(attr(terms(formula), "order") == 1)]
+
+  if (length(name_ ) > 1) {
+    stop("More than one first order term")
+  }
+
+  # Remove intercept
+  attr(aterms, "intercept") <- 0
+
+  mm <- cbind(name_ = 1, model_data)
+  names(mm)[1] <- name_
+  model.matrix(aterms, mm) %*% cc[tl]
+}
