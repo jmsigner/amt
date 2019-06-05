@@ -1,0 +1,246 @@
+---
+title: "Simulate movement (possibly from iSSFs)"
+author: "Johannes Signer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fitting a Step-Selection Function}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+set.seed(20161113)
+devtools::load_all("~/Documents/r_r-packages/amt/")
+```
+
+
+
+
+## Background and setup
+
+```{r}
+library(raster)
+library(devtools)
+library(amt)
+library(tictoc)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+set.seed(123)
+```
+
+
+
+The aim of this document is to illustrate how one can simulate animal movement, with parameters estimated from an integrated Step Selection Function (iSSF).
+
+I will use a dummy landscape with a large forest patch in the middle.
+
+```{r}
+r <- raster(xmn = 0, xmx = 100, ymn = 0, ymx = 100, res = 1)
+r[] <- 0
+r[25:75, 25:75] <- 1
+raster::plot(r)
+names(r) <- c("forest")
+```
+
+
+## Simulations
+
+ The function to simulate movement is called `simulate_movement`. The most imporant arguments of `simulate_movement` are:
+
+ - `habitat_kernel`: speciefies how habitat selection takes place
+ - `movement_kernel`: specifies the movement of the animal.
+ - `map`: a raster (stack) of resources.
+ - `fun`: a function that is executed at each time step to calculate derived quantities, such as extracting the habitat at the current position or the determines the whether a step is during day or night. `fun` can be specified by the user. This makes it very flexible.
+
+### Habitat kernel
+ to come
+
+### Movement kernel
+
+ A movement kernel consists of two components: the step-length distribution and the turn-angle distribution. Both distribution need to be specified in terms of `amt`-distributions. This is just an object oriented wrapper around the standard R distributions. For example for an exponential distribution we can use
+
+```{r}
+d1 <- make_exp_distr(rate = 0.5)
+```
+
+
+more to come
+
+## Examples
+
+### Random walk
+
+```{r}
+start <- c(50, 50)
+cc <- c("forest_end" = 0)
+res1 <- simulate_movement(
+  habitat_kernel = make_habitat_kernel(~ forest_end, cc),
+  make_movement_kernel(make_exp_distr(rate = 0.2), make_unif_distr()),
+  fun = function(x, map) {
+    x %>% extract_covariates(map, where = "both") %>%
+      mutate(log_sl = log(sl_))
+  },
+  start_t = lubridate::now(),
+  dt = hours(1),
+  map = r,
+  start_xy = start,
+  n_steps = 200,
+  n_choices = 200, edge = "torus")
+
+raster::plot(r)
+points(res1[, 1:2])
+```
+
+### Selection for forest
+
+```{r}
+
+
+cc <- c("forest_end" = 3)
+
+set.seed(123)
+
+tic()
+res1 <- simulate_movement(
+  habitat_kernel = make_habitat_kernel(~ forest_end, cc),
+  movement_kernel = make_movement_kernel(make_exp_distr(rate = 0.2), make_unif_distr()),
+  fun = function(x, map) {
+    x %>% extract_covariates(map, where = "both") %>%
+      mutate(log_sl = log(sl_))
+  },
+  start_t = ymd_hms("2019-01-01 00:00:00"),
+  dt = hours(1),
+  map = r,
+  start_xy = start,
+  n_steps = 1000,
+  n_choices = 200, 
+  edge = "torus")
+toc()
+
+raster::plot(r)
+points(res1[, 1:2])
+```
+
+
+### Different movement speed inside and outside forest
+
+```{r}
+
+
+cc <- c("forest_end" = 0, "sl_:forest_start" = 1.5, "sl_" = 0)
+
+tic()
+res1 <- simulate_movement(
+  habitat_kernel = make_habitat_kernel(~ forest_end, cc),
+  make_movement_kernel(adjustable_distribution(
+    make_exp_distr(rate = 0.5),
+    rate = ~ sl_ | sl_:forest_start, cc),
+    make_unif_distr()),
+  fun = function(x, map) {
+    x %>% extract_covariates(map, where = "both") %>%
+      mutate(log_sl = log(sl_))
+  },
+  start_t = ymd_hms("2019-01-01 00:00:00"),
+  dt = hours(1),
+  map = r,
+  start_xy = c(25, 25),
+  n_steps = 1000,
+  n_choices = 200, 
+  edge = "torus")
+toc()
+
+raster::plot(r)
+points(res1[, 1:2])
+```
+
+To check validity, lets overlay the observed step-length distributions with the expected ones.
+
+```{r}
+
+
+
+expected <- bind_rows(
+  map2(c(0.5, 2), 0:1,
+       ~ tibble(forest_start = .y, x = seq(0.1, 10, len = 5e3), y = dexp(x, .x))))
+
+res1 %>% extract_covariates(r, where = "both") %>%
+  ggplot(aes(sl_)) + geom_histogram(aes(y = ..density..)) +
+  facet_wrap(~ forest_start) +
+  geom_path(aes(x, y), expected, col = "red", lty = 2)
+```
+
+
+### Different movement speeds and directionality depending on time of day
+
+Now the animal moves more directed during night than during day. For simplicity night is defined as the period between 6 pm to 6 am.
+
+
+```{r}
+
+
+cc <- c("forest_end" = 0, "forest_end:nigth" = 4, "cos_ta" = 0, "cos_ta:night" = 2,
+        "sl_" = 0, "sl_:night" = -1.3)
+
+res1 <- simulate_movement(
+  habitat_kernel = make_habitat_kernel(~ forest_end, cc),
+  make_movement_kernel(
+    adjustable_distribution(make_exp_distr(rate = 2), rate = ~ sl_ | sl_:night, cc),
+    adjustable_distribution(make_vonmises_distr(kappa = 0.5), kappa = ~ cos_ta | cos_ta:night, cc)),
+  fun = function(x, map) {
+    x %>% extract_covariates(map, where = "both") %>%
+      mutate(cos_ta = cos(ta_), night = !(hour(t1_) %in% 6:18))
+  },
+  start_t = lubridate::now(),
+  dt = hours(1),
+  map = r,
+  start_xy = c(25, 25),
+  n_steps = 100,
+  n_choices = 200)
+
+raster::plot(r)
+points(res1[, 1:2])
+```
+
+Let's plot steps in different colors for day and night.
+
+```{r}
+res1 %>% mutate(night = !hour(t1_) %in% 6:12) %>%
+  ggplot(aes(x1_, y1_, xend = x2_, yend = y2_, col = night)) +
+  geom_segment() + geom_point() + coord_equal()
+
+```
+
+
+Lets have a look at the turn angle distribution for day and night.
+
+```{r}
+res1 %>% mutate(night = !hour(t1_) %in% 6:12) %>%
+  ggplot(aes(ta_)) + geom_histogram() + facet_grid(~ night)
+
+```
+
+
+And the step lengt distribution for day and night.
+
+```{r}
+
+
+res1 %>% mutate(night = !hour(t1_) %in% 6:12) %>%
+  ggplot(aes(sl_)) + geom_histogram() + facet_grid(~ night)
+
+```
+
+## Real data example
+to come
+
+
+## Session
+
+```{r}
+sessioninfo::session_info()
+```
+
