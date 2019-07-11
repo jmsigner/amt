@@ -214,53 +214,122 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 }
 
 
-# Adjust parameters -------------------------------------------------------
+# Adjustable distributions ------------------------------------------------
 
 #' Adjust distributional parameters
 
 #' @export
 #' @param x `[amt_distr]` \cr A distribution object.
-#' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
-#' @rdname distributions
-adjust_distr <- function(x, ...) {
-  UseMethod("adjust_distr")
+#' @name adjustable_distributions
+
+adjustable_distribution <- function(x, ...) {
+  UseMethod("adjustable_distribution")
+}
+
+check_formula <- function(f, coefs, rm_intercept = FALSE) {
+  checkmate::assert_formula(f, null.ok = TRUE)
+  if (!is.null(f)) {
+    f <- Formula::as.Formula(f)
+    if (rm_intercept) {
+      if(attr(terms(f), "intercept")) {
+        f <- update(f, ~ . -1)
+      }
+    }
+    if(!all(attr(terms(f), "term.labels") %in% names(coefs))) {
+      stop("Some terms do not have a coefficient")
+    }
+  }
+  f
 }
 
 #' @export
-#' @rdname adjust_distr
+#' @param shape `[formula = NULL]` \cr A formula to adjust the shape parameter.
+#' @param scale `[formula = NULL]` \cr A formula to adjust the scale parameter.
+#' @param coefs `[names vector]` \cr Coefficients for the adjustment (names must match the formula).
+#' @rdname adjustable_distributions
 #'
-adjust_distr.gamma_distr <- function(
-  x, shape = NULL, scale = NULL,
-  coefs, model_data, ...
-) {
-
-  # Adjust shape
-  new_shape <- if (!is.null(shape)) {
-    adj <- x$params$shape + adjust_base(shape, coefs, model_data)
-    if (adj < 0) {
-      warning("Adjusted shape is < 0, it was set to 0.")
-      adj <- 0
-    }
-    adj
-  } else {
-    x$params$shape
-  }
-
-  # Adjust scale
-  new_scale <- if (!is.null(scale)) {
-    modifier <- adjust_base(scale, coefs, model_data)
-    adj <- 1 / ((1 / x$params$scale) - modifier)
-    if (adj < 0) {
-      warning("Adjusted scale is < 0, it was set to 0.")
-      adj <- 0
-    }
-    adj
-  } else {
-    x$params$scale
-  }
-
-  make_gamma_distr(shape = new_shape, scale = new_scale)
+adjustable_distribution.gamma_distr <- function(x, shape = NULL, scale = NULL, coefs) {
+  checkmate::assert_vector(coefs, names = "named")
+  scale <- check_formula(scale, coefs)
+  shape <- check_formula(shape, coefs)
+  xx <- list(dist = x, shape = shape, scale = scale,
+             coefs = coefs)
+  class(xx) <- c("adjustable_gamma_distr", "adjustable_distr", class(x))
 }
+
+#' @export
+#' @param rate `[formula = NULL]` \cr A formula to adjust the rate parameter.
+#' @rdname adjustable_distributions
+adjustable_distribution.exp_distr <- function(x, rate = NULL, coefs) {
+  checkmate::assert_vector(coefs, names = "named")
+  rate <- check_formula(rate, coefs)
+  xx <- list(dist = x, rate = rate, coefs = coefs)
+  class(xx) <- c("adjustable_exp_distr", "adjustable_distr", class(x))
+  xx
+}
+
+#' @export
+#' @param kappa `[formula = NULL]` \cr A formula to adjust the kappa parameter.
+#' @rdname adjustable_distributions
+adjustable_distribution.vonmises_distr <- function(x, kappa = NULL, coefs) {
+  checkmate::assert_vector(coefs, names = "named")
+  kappa <- check_formula(kappa, coefs)
+  xx <- list(dist = x, kappa = kappa, coefs = coefs)
+  class(xx) <- c("adjustable_von_mises_distr", "adjustable_distr", class(x))
+  xx
+}
+
+
+
+
+
+# # Adjust parameters -------------------------------------------------------
+#
+# #' Adjust distributional parameters
+#
+# #' @export
+# #' @param x `[amt_distr]` \cr A distribution object.
+# #' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
+# #' @rdname distributions
+# adjust_distr <- function(x, ...) {
+#   UseMethod("adjust_distr")
+# }
+#
+# #' @export
+# #' @rdname adjust_distr
+# #'
+# adjust_distr.gamma_distr <- function(
+#   x, shape = NULL, scale = NULL,
+#   coefs, model_data, ...
+# ) {
+#
+#   # Adjust shape
+#   new_shape <- if (!is.null(shape)) {
+#     adj <- x$params$shape + adjust_base(shape, coefs, model_data)
+#     if (adj < 0) {
+#       warning("Adjusted shape is < 0, it was set to 0.")
+#       adj <- 0
+#     }
+#     adj
+#   } else {
+#     x$params$shape
+#   }
+#
+#   # Adjust scale
+#   new_scale <- if (!is.null(scale)) {
+#     modifier <- adjust_base(scale, coefs, model_data)
+#     adj <- 1 / ((1 / x$params$scale) - modifier)
+#     if (adj < 0) {
+#       warning("Adjusted scale is < 0, it was set to 0.")
+#       adj <- 0
+#     }
+#     adj
+#   } else {
+#     x$params$scale
+#   }
+#
+#  make_gamma_distr(shape = new_shape, scale = new_scale)
+#
 
 #' @export
 #' @rdname adjust_distr
