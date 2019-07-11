@@ -85,6 +85,62 @@ hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
   h
 }
 
+
+#' `hr_kde_pi` wraps `KernSmooth::dpik` to select bandwidth for kernel density estimation the plug-in-the-equation method in two dimensions.
+#' This function calcualtes bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
+#' @template track_xy_star
+#' @template rescale
+#' @param correct Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.
+#' @param ... additional arguments passed to \code{KernSmooth::dpik}.
+#' @return The bandwidth, the standardization method and correction.
+#' @seealso \code{KernSmooth::dpik}
+#' @export
+#' @references Gitzen, R. A., Millspaugh, J. J., & Kernohan, B. J. (2006). Bandwidth selection for fixed-kernel analysis of animal utilization distributions. _Journal of Wildlife Management_, 70(5), 1334-1344.
+hr_kde_pi <- function(x, ...) {
+  UseMethod("hr_kde_pi", x)
+}
+
+#' @export
+#' @rdname hr
+hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
+
+
+  if (!rescale %in% c("unitvar", "xvar", "none")) {
+    stop("rhrHpi: scale: not one of unitvar, xvar or none")
+  }
+
+  xs <- x[, 1]
+  ys <- x[, 2]
+
+  if (rescale == "unitvar") {
+    # standardize x and y by unit variance
+    xs <- xs / sd(xs)
+    ys <- ys / sd(ys)
+
+  } else if (rescale == "xvar") {
+    # standardize x and y by
+    ys <- (ys / sd(ys)) * sd(xs)
+  }
+
+  hx <- KernSmooth::dpik(xs, ...)
+  hy <- KernSmooth::dpik(ys, ...)
+
+  h <- c(hx, hy)
+
+  if (rescale == "unitvar") {
+    h <- KernSmooth::dpik(xs, ...)
+    h <- h * c(sd(x[, 1]), sd(x[, 2]))
+  }
+
+  # Gitzen et al. 2006 suggested that if bandwidth is estimated for each coordinate seperately, to correct it x^(5/6)
+  if (correct) {
+    h <- h^(5/6)
+  }
+
+  h
+}
+
+
 #' @export
 #' @method plot kde
 plot.kde <- function(x, y = NULL, ...) {
