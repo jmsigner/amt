@@ -109,8 +109,8 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
     stop("rhrHpi: scale: not one of unitvar, xvar or none")
   }
 
-  xs <- x[, 1]
-  ys <- x[, 2]
+  xs <- dplyr::pull(x, "x_")
+  ys <- dplyr::pull(x, "y_")
 
   if (rescale == "unitvar") {
     # standardize x and y by unit variance
@@ -139,6 +139,164 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
 
   h
 }
+
+#' @param range numeric vector with different candidate h values.
+#' @param which_min A character indicating if the \code{global} or \code{local} minimum should be searched for.
+
+#' @details `hr_kde_lscv` calcualtes least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
+
+#' @return \code{vector} of length two
+#' @export
+#' @references Seaman, D. E., & Powell, R. A. (1996). An evaluation of the accuracy of kernel density estimators for home range analysis. _Ecology, 77(7)_, 2075-2085.
+#'
+
+hr_kde_lscv <- function(
+  x,
+  range= do.call(seq, as.list(c(hr_kde_ref(x) * c(0.1, 2), length.out=100))),
+  which_min = "global", rescale = "none",
+  trast = raster(as_sp(x), nrow = 100, ncol = 100)) {
+
+  if (!rescale %in% c("unitvar", "xvar", "none")) {
+    stop("scale: not one of unit, sd or none")
+  }
+
+  xs <- dplyr::pull(x, "x_")
+  ys <- dplyr::pull(x, "y_")
+
+  if (rescale == "unitvar") {
+    ## standardize x and y by unit variance
+    xs <- xs / sd(xs)
+    ys <- ys / sd(ys)
+
+  } else if (rescale == "xvar") {
+    ## standardize x and y by
+    ys <- (ys / sd(ys)) * sd(xs)
+  }
+
+
+  ## reference bandwidth
+  converged <- TRUE
+  res <- lscv(cbind(xs, ys), range)
+
+  if (which_min == "global") {
+    h <- range[which.min(res)]
+  } else {
+    h <- range[max(local_minima(res))]
+  }
+
+  ## Did h converge?
+  if (range[1] == h | range[length(range)] == h) {
+    converged <- FALSE
+    warning("hr_kde_lscv: lscv did not converge.")
+  }
+
+  ## prepare return
+  if (rescale == "unitvar") {
+    h <- h * c(sd(xy[, 1]), sd(xy[, 2]))
+  } else {
+    h <- c(h, h)
+  }
+  list(h = h, converged = converged,
+       res = res, which_min = which_min, rescale = rescale, range = range)
+}
+
+## Helper function from: http://stackoverflow.com/questions/6836409/finding-local-maxima-and-minima
+local_minima <- function(x) {
+  ## Use -Inf instead if x is numeric (non-integer)
+  y <- diff(c(.Machine$integer.max, x)) < 0L
+  rle(y)$lengths
+  y <- cumsum(rle(y)$lengths)
+  y <- y[seq.int(1L, length(y), 2L)]
+  if (x[[1]] == x[[2]]) {
+    y <- y[-1]
+  }
+  y
+}
+
+lscv <- function(x, hs) {
+  n <- nrow(x)
+  f <- sp::spDists(x)
+  f <- f[lower.tri(f)]
+  sapply(hs, function(h) {
+    out <- sum(exp(-f^2 / (4 * h^2)) - 4 * exp(-f^2 / (2 * h^2)))
+    1.0 / (pi * h^2 * n) + (2 * out -3 * n)/(pi * 4. * h^2 * n^2);
+  })
+}
+
+
+# TODO
+# #' `hr_kde_rescaled` uses two dimensional reference bandwidth to select a bandwidth for kernel density estimation, to find the smallest value for bandwidth (h) that results in n
+# #' (usually n=1) contiguous polygons at a given level.
+# #' This implementation uses a bisection algorithm to the find the smallest value
+# #' value for the kernel bandwidth within \code{range} that produces an home-range
+# #' isopleth at \code{level} consisting of \code{n} polygons. Note, no difference is
+# #' is made between the two dimensions.
+# #'
+# #' @template track_xy_star
+# #' @param range Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.
+# #' @param numOfParts Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.
+# #' @param tol Numeric scalar, indicating which difference of to stop.
+# #' @param maxIt Numeric scalar, indicating the maximum number of acceptable iterations.
+# #' @export
+# #' @references Kie, John G. "A rule-based ad hoc method for selecting a bandwidth in kernel home-range analyses." Animal Biotelemetry 1.1 (2013): 1-12.
+# #'
+#
+# hr_kde_rescaled <- function(x, ...) {
+#   UseMethod("hr_kde_rescaled", x)
+# }
+
+# #' @export
+# #' @rdname hr
+# hr_kde_rescaled.track_xy <- function(
+#   x,
+#   range = hr_kde_href(x) * c(0.01, 1),
+#   trast = raster(as_sp(x), nrow = 100, ncol = 100),
+#   num_of_parts = 1, level = 0.95,
+#   tol = 0.1,
+#   max_iter = 500) {
+#
+#   ###
+#
+#   ###
+#
+#   # Input checks
+#   checkmate::assert_numeric(range, lower = 0, len = 2)
+#   checkmate::assert_class(trast, "RasterLayer")
+#
+#   if (length(levels) > 1) {
+#     levels <- levels[1]
+#     warning("hr_kde_scaled: only first element of levels was used")
+#   }
+#
+#   hmin <-min(range)
+#   hmax <- max(range)
+#   hcur <- mean(range)
+#   success <- FALSE
+#
+#   for (i in 1:maxIt) {
+#     if (i > 1) {
+#       hcur <- hnew
+#     }
+#     tmpEst <- hr_isopleths(hr_kde(x, h = hcur, trast = trast, levels = levels))
+#     allPolys <- slot(slot(tmpEst, "polygons")[[1]], "Polygons")
+#     nHoles <- sum(!sapply(allPolys, slot, "hole"))
+#
+#     if (nHoles <= numOfParts) {
+#       ## decrease h
+#       hmax <- hcur
+#     } else {
+#       ## increase h
+#       hmin <- hcur
+#     }
+#     hnew <- mean(c(hmax, hmin))
+#     if (abs(hcur - hnew) <= tol && nHoles <= numOfParts) {
+#       success=TRUE
+#       break
+#     }
+#   }
+#   return(list(h=hcur, success=success, niter = i))
+# }
+
 
 
 #' @export
