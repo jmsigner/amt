@@ -5,7 +5,7 @@ hr_isopleths <- function (x, ...) {
 }
 
 #' @export
-hr_isopleths.RasterLayer <- function (x, level = 0.95, ...) {
+hr_isopleths.RasterLayer <- function (x, level = 0.95, as_sf = TRUE, ...) {
   con <- raster::rasterToContour(cumulative_ud(x), levels = level)
   b <- sp::coordinates(con)
 
@@ -22,7 +22,7 @@ hr_isopleths.RasterLayer <- function (x, level = 0.95, ...) {
         sp::Polygons(list(sp::Polygon(rbind(x[[i]], x[[i]][1, ])[, 1:2])), i)))
       if (any((tm <- rgeos::gIntersects(bb, byid = TRUE))[upper.tri(tm)])) {
 
-        # some polys intersect find out which and set as wholes
+        # some polygons intersect find out which and set as wholes
         pos <- expand.grid(b=1:length(bb), s = 1:length(bb))
         holes <- rep(FALSE, length(bb))
 
@@ -48,14 +48,16 @@ hr_isopleths.RasterLayer <- function (x, level = 0.95, ...) {
 
   ## Set proj4string
   sp::proj4string(con) <- raster::projection(x)
-  return(con)
+
   df <- data.frame(level = level,
                    area = rgeos::gArea(con, byid = TRUE))
   row.names(df) <- 1:length(level)
   con <- sp::SpatialPolygonsDataFrame(con, df)
+
+  if (as_sf) {
+    con <- sf::st_as_sf(con)
+  }
   con
-
-
 }
 
 #' @export
