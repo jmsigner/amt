@@ -1,21 +1,61 @@
 #' @rdname hr
 #' @export
-hr_locoh_k <- function(x, ...) {
-  UseMethod("hr_locoh_k", x)
+hr_locoh <- function(x, ...) {
+  UseMethod("hr_locoh", x)
 }
 
 
 #' @export
 #' @rdname hr
-hr_locoh_k.track_xy <- function(x, n = 10, levels = 0.95, rand_buffer = 1e-5, ...) {
+hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer = 1e-5, ...) {
 
-  aa <- FNN::get.knn(x[, c("x_", "y_")], k = n)$nn.index
+  ## type
+  if (!type %in% c("a", "k", "r")) {
+    stop(paste0("rhrLocoh: incorrect type"))
+  }
+
+  n <- as.numeric(n)
+  if (is.na(n)) {
+    stop(paste("rhrLocoh: n should be numeric, not ", n))
+  }
+
+  no <- 1:nrow(x)
+  if (type == "k") {
+    if (n > nrow(x)) {
+      n <- nrow(x)
+      warning(paste0("Locoh, type k, n > number of points, set n to number of points (", n, ")"))
+    }
+    ## 1. calc dist
+    ## 2. order by dist
+    ## 3. take n nearest
+    aa <- FNN::get.knn(x[, c("x_", "y_")], k = n)$nn.index
+  } else if (type == "r") {
+    ## 1. calc dist
+    ## 2. take all pts with dist <= n
+    aa <- lapply(no, function(i)
+      no[sqrt((x$x_ - x$x_[i])^2 + (x$y_ - x$y_[i])^2) <= n])
+  } else if (type == "a") {
+    # 1. calc dist
+    # 2. order by dist
+    # 3. take cum dist
+    # 4. take points where cumist <= n
+    aa <- lapply(no, function(i) {
+      di <- sqrt((x$x_ - x$y_[i])^2 + (x$y_ - x$y_[i])^2)
+      no[order(di)][cumsum(di[order(di)]) <= n]
+    })
+  }
+
   xysp <- sp::SpatialPointsDataFrame(x[, c("x_", "y_")], data=data.frame(id=1:nrow(x)))
-
-  zz <- lapply(1:nrow(aa), function(x) xysp[aa[x, ], ])
+  zz <- lapply(1:length(aa), function(i) xysp[aa[[i]], ])
   mcps <- lapply(zz, function(x) rgeos::gBuffer(rgeos::gConvexHull(x), width = rand_buffer))
-
   mcpAreas <- sapply(mcps, rgeos::gArea)
+
+ # Slower, so stay with sp
+ #  xysp <- sf::st_as_sf(x, coords = c("x_", "y_"))
+ #  mcps <- mutate(xysp,
+ #    mcps =  purrr::map(aa, ~  sf::st_buffer(sf::st_convex_hull(sf::st_union(xysp[.x, ])),
+ #                                            dist = rand_buffer)))
+ #  mcps1 <- mutate(mcps, area = purrr::map_dbl(mcps, sf::st_area))
 
   mcpAreasOrder <- order(mcpAreas)
 
