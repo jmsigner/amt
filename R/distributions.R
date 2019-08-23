@@ -257,6 +257,7 @@ adjustable_distribution.gamma_distr <- function(x, shape = NULL, scale = NULL, c
   class(xx) <- c("adjustable_gamma_distr", "adjustable_distr", class(x))
 }
 
+
 #' @export
 #' @param rate `[formula = NULL]` \cr A formula to adjust the rate parameter.
 #' @rdname adjustable_distributions
