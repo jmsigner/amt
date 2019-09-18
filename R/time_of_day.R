@@ -100,6 +100,11 @@ time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
     }
     res[!idx] <- xx
   }
-  res
+
+  if (include.crepuscule) {
+    factor(res, levels = c("day", "dusk", "night", "dawn"))
+  } else {
+    factor(res, levels = c("day", "night"))
+  }
 
 }

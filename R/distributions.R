@@ -235,9 +235,9 @@ check_formula <- function(f, coefs, rm_intercept = FALSE) {
         f <- update(f, ~ . -1)
       }
     }
-    if(!all(attr(terms(f), "term.labels") %in% names(coefs))) {
-      stop("Some terms do not have a coefficient")
-    }
+#    if(!all(attr(terms(f), "term.labels") %in% names(coefs))) {
+#      stop("Some terms do not have a coefficient")
+#    }
   }
   f
 }
@@ -255,6 +255,7 @@ adjustable_distribution.gamma_distr <- function(x, shape = NULL, scale = NULL, c
   xx <- list(dist = x, shape = shape, scale = scale,
              coefs = coefs)
   class(xx) <- c("adjustable_gamma_distr", "adjustable_distr", class(x))
+  xx
 }
 
 

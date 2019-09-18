@@ -10,8 +10,18 @@
 movement_kernel <- function(scale, shape, template, quant = 0.99) {
     dist <- ceiling(qgamma(quant, scale = scale, shape = shape))
     mk <- mk_base(dist, raster::res(template)[1])
-    mk <- mk_gamma(mk, shape= shape, scale = scale)
+    mk <- mk_gamma(mk, shape = shape, scale = scale)
     attributes(mk)$abt <- list(scale = scale, shape = shape,
+                               dist = dist,
+                               quant = quant)
+    mk
+}
+
+movement_kernel_exp <- function(rate, template, quant = 0.99) {
+    dist <- ceiling(qexp(quant, rate = rate))
+    mk <- mk_base(dist, raster::res(template)[1])
+    mk <- mk_exp(mk, rate = rate)
+    attributes(mk)$abt <- list(rate = rate,
                                dist = dist,
                                quant = quant)
     mk
@@ -42,3 +52,7 @@ mk_gamma <- function(mk, shape, scale) {
   raster::setValues(mk, dgamma(d,  shape = shape, scale = scale) / (2 * pi * d))
 }
 
+mk_exp <- function(mk, rate) {
+  d <- raster::getValues(mk)
+  raster::setValues(mk, dexp(d,  rate = rate) / (2 * pi * d))
+}

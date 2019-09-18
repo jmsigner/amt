@@ -10,6 +10,7 @@ adjust_distribution.amt_distr <- function(x, ...) {
   x
 }
 
+
 adjust_distribution.adjustable_exp_distr <- function(x, covars) {
   if (!is.null(x$rate)) {
     # change rate
@@ -22,9 +23,9 @@ adjust_distribution.adjustable_exp_distr <- function(x, covars) {
     mod2_covar <- gsub(paste0(mod1_coef, ":"), "",  mod2_coef)
 
     # check names match
-    if (!all(mod2_covar %in% names(covars))) {
-      stop("Some coefficients not found in covariates")
-    }
+    # if (!all(mod2_covar %in% names(covars))) {
+    #   stop("Some coefficients not found in covariates")
+    # }
 
     covars <- unlist(covars[1, ], use.names = TRUE)
     new_rate <- tentative_rate +
@@ -33,6 +34,58 @@ adjust_distribution.adjustable_exp_distr <- function(x, covars) {
   } else {
     x$dist
   }
+}
+
+adjust_distribution.adjustable_gamma_distr <- function(x, covars) {
+  new_shape <- if (!is.null(x$shape)) {
+    # change rate
+    tentative_shape <- x$dist$params$shape
+
+    # mod sl
+    modifiers <- attr(x$shape, "rhs")
+    mod1_coef <- trimws(strsplit(deparse(modifiers[[1]]), "\\+")[[1]])
+    mod2_coef <- trimws(strsplit(deparse(modifiers[[2]]), "\\+")[[1]])
+    mod2_covar <- gsub(paste0(mod1_coef, ":"), "",  mod2_coef)
+
+    # # check names match
+    # if (!all(mod2_covar %in% names(covars))) {
+    #   stop(
+    #     paste0(
+    #       "Some coefficients (",
+    #       paste(mod2_coef[!mod2_covar %in% names(covars)], collpase = ", "),
+    #       ") not found in covariates"))
+    # }
+    covars <- unlist(covars[1, mod2_covar], use.names = TRUE)
+
+    tentative_shape +
+      x$coefs[mod1_coef] + sum(x$coefs[mod2_coef] * covars[mod2_covar])
+  } else {
+    x$dist$params$shape
+  }
+
+  # for scale
+  new_scale <- if (!is.null(x$scale)) {
+    # change rate
+    tentative_scale <- x$dist$params$scale
+
+    # mod sl
+    modifiers <- attr(x$scale, "rhs")
+    mod1_coef <- trimws(strsplit(deparse(modifiers[[1]]), "\\+")[[1]])
+    mod2_coef <- trimws(strsplit(deparse(modifiers[[2]]), "\\+")[[1]])
+    mod2_covar <- gsub(paste0(mod1_coef, ":"), "",  mod2_coef)
+
+    # check names match
+    # if (!all(mod2_covar %in% names(covars))) {
+    #   stop("Some coefficients not found in covariates")
+    # }
+
+    covars <- unlist(covars[1, ], use.names = TRUE)
+    1 / ((1 / tentative_scale) -
+           x$coefs[mod1_coef] + sum(x$coefs[mod2_coef] * covars[mod2_covar]))
+  } else {
+    x$dist$params$scale
+  }
+  make_gamma_distr(shape = new_shape, scale = new_scale)
 }
 
 adjust_distribution.vonmises_distr <- function(x, covars) {
@@ -63,7 +116,7 @@ adjust_distribution.vonmises_distr <- function(x, covars) {
 make_habitat_kernel <- function(f, coefs) {
   checkmate::assert_vector(coefs, names = "named")
   f <- check_formula(f, coefs)
-  x <- list(f = f, coefs = coefs[attr(terms(f), "term.labels")])
+  x <- list(f = f, coefs = coefs)
   class(x) <-  c("amt_habitat_kernel", class(x))
   x
 }
@@ -87,6 +140,7 @@ simulate_movement <- function(
   },
   start_xy = c(0, 0),
   start_angle = runif(1, -pi, pi),
+  start_sl = runif(1, 0.1, 100),
   start_t = now(),
   dt = hours(3),
   n_steps = 1000,
@@ -101,6 +155,8 @@ simulate_movement <- function(
   res$t1_ <- time_stamps <- seq(start_t, by = lubridate::as.difftime(dt), len = n_steps)
   res$t2_ <- res$t1_ + dt
   res[1, c("x1_", "y1_")] <- start_xy
+  res[1, c("sl_", "ta_")] <- c(start_sl, start_angle)
+  attr(res, "crs_") <- sp::CRS(raster::projection(map))
   class(res) <- c("steps_xyt", "steps_xy", "tbl_df", "tbl", "data.frame")
 
   rel_angle <- start_angle
