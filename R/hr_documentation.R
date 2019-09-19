@@ -23,35 +23,32 @@
 #' @name hr
 #' @examples
 #' data(deer)
-#'
+#' mini_deer <- deer[1:100, ]
 #'
 #' # MCP ---------------------------------------------------------------------
-#' mcp1 <- hr_mcp(deer)
+#' mcp1 <- hr_mcp(mini_deer)
 #' hr_area(mcp1)
 #'
 #' # calculated MCP at different levels
-#' mcp1 <- hr_mcp(deer, levels = seq(0.3, 1, 0.1))
+#' mcp1 <- hr_mcp(mini_deer, levels = seq(0.3, 1, 0.1))
 #' hr_area(mcp1)
 #'
 #' # CRS are inherited
-#' get_crs(deer)
-#' mcps <- hr_mcp(deer, levels = c(0.5, 0.95, 1))
+#' get_crs(mini_deer)
+#' mcps <- hr_mcp(mini_deer, levels = c(0.5, 0.95, 1))
 #' has_crs(mcps)
 #'
 #' # Local Convex Hull (LoCoH) -----------------------------------------------
-#' locoh1 <- hr_locoh(deer)
+#' locoh1 <- hr_locoh(mini_deer)
 #' hr_area(locoh1)
 #'
 #' # calculated Locoh at different levels
-#' locoh <- hr_locoh(deer, levels = seq(0.3, 1, 0.1))
+#' locoh <- hr_locoh(mini_deer, levels = seq(0.3, 1, 0.1))
 #' hr_area(locoh)
 #'
-#' # CRS are inherited
-#' get_crs(deer)
-#' get_crs(locoh1)
 #'
 #' # Kernel density estimaiton (KDE) -----------------------------------------
-#' kde1 <- hr_kde(deer)
+#' kde1 <- hr_kde(mini_deer)
 #' hr_area(kde1)
 #' get_crs(kde1)
 

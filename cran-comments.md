@@ -13,7 +13,14 @@
 
 ### R CMD check results
 
-There were no errors, warnings or notes.
+There were no errors or warnings.
+
+There was one note using win builder: 
+
+```
+* checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
+Maintainer: 'Johannes Signer <jsigner@gwdg.de>'
+```
 
 # Version 0.0.6.0
 ## Round 1
