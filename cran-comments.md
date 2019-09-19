@@ -1,5 +1,22 @@
+# Version 0.0.7.0
+## Round 1
+
+### Test envionments
+- local: Ubuntu 18.04.2 LTS, R 3.6.1
+- win builder
+- travis-ci: release and devel
+- appveyor
+
+### What changed
+
+- I was requested to fix warnings, error that were introduced by updates in the tidyr package. 
+
+### R CMD check results
+
+There were no errors, warnings or notes.
+
 # Version 0.0.6.0
-# Round 1
+## Round 1
 ## Test environments
 * local Ubuntu 18.04.2 LTS, R 3.5.2
 * win-builder (devel and release)

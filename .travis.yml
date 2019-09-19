@@ -18,7 +18,7 @@ r_packages:
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev gsl-bin libgsl2 libgsl-dev
+  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev gsl-bin libgsl2 libgsl-dev libgsl23 libgslcblas0
   - Rscript -e 'update.packages(ask = FALSE)'
 
 r:
@@ -27,8 +27,6 @@ r:
 
 env:
   - COMPILER=gcc
-
-
 
 notifications:
   email:
