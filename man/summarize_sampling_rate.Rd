@@ -14,7 +14,7 @@ summarize_sampling_rate(x, ...)
 
 summarize_sampling_rate_many(x, ...)
 
-\method{summarize_sampling_rate_many}{track_xyt}(x, ...)
+\method{summarize_sampling_rate_many}{track_xyt}(x, cols, ...)
 }
 \arguments{
 \item{x}{A \code{track_xyt}.}
@@ -30,6 +30,8 @@ sampling intervals are returned.}
 
 \item{as_tibble}{A logical. Should result be returned as \code{tibble} or as
 \code{table}.}
+
+\item{cols}{\code{[character(>= 1)]} \cr Indicating columns to be used as grouping variables.}
 }
 \value{
 Depending on \code{summarize} and \code{as_tibble}, a vector, table or tibble.
@@ -40,5 +42,10 @@ Returns a summary of sampling rates
 \examples{
 data(deer)
 amt::summarize_sampling_rate(deer)
+
+data(amt_fisher)
+# Add the month
+amt_fisher \%>\% mutate(yday = lubridate::yday(t_)) \%>\%
+summarize_sampling_rate_many(c("id", "yday"))
 
 }

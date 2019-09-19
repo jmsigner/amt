@@ -95,9 +95,16 @@ summarize_sampling_rate_many <- function(x, ...) {
 }
 
 #' @rdname summarize_sampling_rate
+#' @param cols `[character(>= 1)]` \cr Indicating columns to be used as grouping variables.
 #' @export
-summarize_sampling_rate_many.track_xyt <- function(x, ...) {
-  ids <- rlang::enquos(...)
-  x %>% group_by(!!!ids) %>% nest() %>% mutate(ts = map(data, summarize_sampling_rate)) %>%
-    select(!!!ids, ts) %>% unnest()
+#' @examples
+#' data(amt_fisher)
+#' # Add the month
+#' amt_fisher %>% mutate(yday = lubridate::yday(t_)) %>%
+#' summarize_sampling_rate_many(c("id", "yday"))
+#'
+summarize_sampling_rate_many.track_xyt <- function(x, cols, ...) {
+  ##ids <- rlang::enquos(...)
+  x %>% nest(data = -{{ cols }}) %>% mutate(ts = map(data, summarize_sampling_rate)) %>%
+    select(cols, ts) %>% unnest(cols = ts)
 }
