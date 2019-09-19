@@ -4,7 +4,6 @@
 \name{reexports}
 \alias{reexports}
 \alias{arrange}
-\alias{count}
 \alias{filter}
 \alias{group_by}
 \alias{select}
@@ -36,7 +35,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{arrange}}, \code{\link[dplyr]{count}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{summarize}}, \code{\link[dplyr]{ungroup}}, \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{ungroup}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{pull}}}
+  \item{dplyr}{\code{\link[dplyr]{arrange}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{summarize}}, \code{\link[dplyr]{ungroup}}, \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{ungroup}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{pull}}}
 
   \item{lubridate}{\code{\link[lubridate]{hours}}, \code{\link[lubridate]{minutes}}, \code{\link[lubridate]{seconds}}, \code{\link[lubridate]{days}}, \code{\link[lubridate]{weeks}}}
 

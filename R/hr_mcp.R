@@ -24,12 +24,6 @@ hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
   mcp
 }
 
-
-
-
-# @param x A data.frame or matrix with the x and y coords
-# @param l id for the resulting poly
-# @return Polygon
 chull_mcp <- function(x) {
   x <- as.matrix(x)
   ch <- grDevices::chull(x)

@@ -177,7 +177,6 @@ track <- function(x, y, t, ..., crs = NULL) {
 
 # dplyr methods -----------------------------------------------------------
 
-
 #' @export
 arrange.track_xy <- function(.data, ..., .dots) {
   x <- NextMethod()
@@ -187,16 +186,6 @@ arrange.track_xy <- function(.data, ..., .dots) {
 #' @export
 arrange.track_xyt <- function(.data, ..., .dots) {
   track_transfer_attr(.data, NextMethod())
-}
-
-#' @export
-count.track_xy <- function(.data, ..., .dots) {
-  NextMethod()
-}
-
-#' @export
-count.track_xyt <- function(.data, ..., .dots) {
-  NextMethod()
 }
 
 #' @export

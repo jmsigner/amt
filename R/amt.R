@@ -1,6 +1,5 @@
 #' @importFrom dplyr arrange filter group_by select summarize summarise ungroup
 #' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars n
-#' @importFrom dplyr count
 #' @importFrom graphics plot legend
 #' @importFrom grDevices adjustcolor
 #' @importFrom lazyeval lazy_dots lazy
@@ -34,10 +33,10 @@ utils::globalVariables(c("burst_", "step_id_", "t_", ".data", "ts")) # to omit C
 
 #' @export
 dplyr::arrange
-#' @export
-dplyr::count
+
 #' @export
 dplyr::filter
+
 #' @export
 dplyr::group_by
 #' @export

@@ -39,11 +39,11 @@
 #' has_crs(mcps)
 #'
 #' # Local Convex Hull (LoCoH) -----------------------------------------------
-#' locoh1 <- hr_locoh_k(deer)
+#' locoh1 <- hr_locoh(deer)
 #' hr_area(locoh1)
 #'
-#' # calculated MCP at different levels
-#' locoh <- hr_locoh_k(deer, levels = seq(0.3, 1, 0.1))
+#' # calculated Locoh at different levels
+#' locoh <- hr_locoh(deer, levels = seq(0.3, 1, 0.1))
 #' hr_area(locoh)
 #'
 #' # CRS are inherited

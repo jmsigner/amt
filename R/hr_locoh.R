@@ -6,6 +6,7 @@ hr_locoh <- function(x, ...) {
 
 
 #' @export
+#' @param type `k`, `r` or `a`. Type of LoCoH.
 #' @rdname hr
 hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer = 1e-5, ...) {
 

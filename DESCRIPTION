@@ -1,7 +1,7 @@
 Package: amt
 Type: Package
 Title: Animal Movement Tools
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"), 
   person("Bjoern", "Reineking", role = "ctb"), 
   person("Ulrike", "Schlaegel", role = "ctb"), 
@@ -42,7 +42,7 @@ Imports:
     survival,
     stats,
     tibble,
-    tidyr,
+    tidyr (>= 1.0.0),
     utils,
     velox
 Suggests: 
@@ -52,6 +52,7 @@ Suggests:
   devtools,
   moveHMM,
   move,
+  sessioninfo,
   spacetime,
   testthat,
   trajectories,

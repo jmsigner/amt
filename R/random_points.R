@@ -70,7 +70,13 @@ random_points.default <- function(x, ...) {
 #' @export
 #' @rdname random_points
 random_points.mcp <- function(x, n = 100, type = "random", ...) {
-  as_track(sp::spsample(hr_isopleths(x), n = n, type = type, ...))
+  as_track(sf::st_sample(hr_isopleths(x), size = n, type = type, ...))
+}
+
+#' @export
+#' @rdname random_points
+random_points.sf <- function(x, n = 100, type = "random", ...) {
+  as_track(sf::st_sample(x, size = n, type = type, ...))
 }
 
 #' @export
@@ -90,6 +96,7 @@ random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, type =
   } else {
     stop("Only mcp and kde home ranges are currently implemented.")
   }
+
 
   rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = type, level = level)
 
@@ -134,11 +141,6 @@ rp_transfer_attr <- function(from, to) {
 arrange.random_points <- function(.data, ..., .dots) {
   xx <- NextMethod()
   rp_transfer_attr(.data, xx)
-}
-
-#' @export
-count.random_points <- function(.data, ..., .dots) {
-  NextMethod()
 }
 
 #' @export

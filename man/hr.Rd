@@ -9,8 +9,11 @@
 \alias{hr_kde.track_xy}
 \alias{hr_kde_ref}
 \alias{hr_kde_ref.track_xy}
-\alias{hr_locoh_k}
-\alias{hr_locoh_k.track_xy}
+\alias{hr_kde_pi}
+\alias{hr_kde_pi.track_xy}
+\alias{hr_kde_lscv}
+\alias{hr_locoh}
+\alias{hr_locoh.track_xy}
 \alias{hr_mcp}
 \alias{hr_mcp.track_xy}
 \title{Home ranges}
@@ -28,9 +31,17 @@ hr_kde_ref(x, ...)
 
 \method{hr_kde_ref}{track_xy}(x, rescale = "none", ...)
 
-hr_locoh_k(x, ...)
+hr_kde_pi(x, ...)
 
-\method{hr_locoh_k}{track_xy}(x, n = 10, levels = 0.95,
+\method{hr_kde_pi}{track_xy}(x, rescale = "none", correct = TRUE, ...)
+
+hr_kde_lscv(x, range = do.call(seq, as.list(c(hr_kde_ref(x) * c(0.1, 2),
+  length.out = 100))), which_min = "global", rescale = "none",
+  trast = raster(as_sp(x), nrow = 100, ncol = 100))
+
+hr_locoh(x, ...)
+
+\method{hr_locoh}{track_xy}(x, n = 10, type = "k", levels = 0.95,
   rand_buffer = 1e-05, ...)
 
 hr_mcp(x, ...)
@@ -48,14 +59,27 @@ hr_mcp(x, ...)
 
 \item{rescale}{\code{[character(1)]} \cr Rescaling method for reference bandwidth calucation. Must be one of "unitvar", "xvar", or "none".}
 
+\item{correct}{Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.}
+
+\item{range}{numeric vector with different candidate h values.}
+
+\item{which_min}{A character indicating if the \code{global} or \code{local} minimum should be searched for.}
+
 \item{n}{\code{[integer(1)]} \cr The number of neighbors used when calculating
 local convex hulls.}
+
+\item{type}{\code{k}, \code{r} or \code{a}. Type of LoCoH.}
 
 \item{levels}{\code{[numeric]} \cr The isopleth levels used for calculating home
 ranges. Should be \code{0 < level < 1}.}
 
 \item{rand_buffer}{\code{[numeric(1)]} \cr Random buffer to avoid polygons with
 area 0 (if coordinates are numerically identical).}
+}
+\value{
+The bandwidth, the standardization method and correction.
+
+\code{vector} of length two
 }
 \description{
 Functions to calculate animal home ranges from a \code{track_xy*}, and to work
@@ -66,6 +90,8 @@ area of an home range, \code{hr_isopleths} returns the isopleth as a
 }
 \details{
 The implementation of the reference bandwidth calculation is based on Worton (1989). If variances differ greatly, it is advaisable to rescale the data using \code{rescale = "unitvar"} the data is suspected to multimodal other bandwidth estimation methods may be more suitable.
+
+\code{hr_kde_lscv} calcualtes least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
 }
 \examples{
 data(deer)
@@ -85,11 +111,11 @@ mcps <- hr_mcp(deer, levels = c(0.5, 0.95, 1))
 has_crs(mcps)
 
 # Local Convex Hull (LoCoH) -----------------------------------------------
-locoh1 <- hr_locoh_k(deer)
+locoh1 <- hr_locoh(deer)
 hr_area(locoh1)
 
-# calculated MCP at different levels
-locoh <- hr_locoh_k(deer, levels = seq(0.3, 1, 0.1))
+# calculated Locoh at different levels
+locoh <- hr_locoh(deer, levels = seq(0.3, 1, 0.1))
 hr_area(locoh)
 
 # CRS are inherited
@@ -103,4 +129,11 @@ get_crs(kde1)
 }
 \references{
 Worton, B. J. (1989). Kernel methods for estimating the utilization distribution in home-range studies. \emph{Ecology, 70(1)}, 164-168.
+
+Gitzen, R. A., Millspaugh, J. J., & Kernohan, B. J. (2006). Bandwidth selection for fixed-kernel analysis of animal utilization distributions. \emph{Journal of Wildlife Management}, 70(5), 1334-1344.
+
+Seaman, D. E., & Powell, R. A. (1996). An evaluation of the accuracy of kernel density estimators for home range analysis. \emph{Ecology, 77(7)}, 2075-2085.
+}
+\seealso{
+\code{KernSmooth::dpik}
 }

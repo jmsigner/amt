@@ -18,3 +18,13 @@ as_track.SpatialPoints <- function(x, ...) {
   xx <- sp::coordinates(x)
   track(x = xx[, 1], y = xx[, 2], crs = sp::proj4string(x))
 }
+
+
+
+#' @export
+#' @rdname as_track
+as_track.sfc_POINT <- function(x, ...) {
+  xx <- sf::st_coordinates(x)
+  track(x = xx[, 1], y = xx[, 2], crs = sf::st_crs(x))
+}
+

@@ -88,13 +88,11 @@ hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
 
 #' `hr_kde_pi` wraps `KernSmooth::dpik` to select bandwidth for kernel density estimation the plug-in-the-equation method in two dimensions.
 #' This function calcualtes bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
-#' @template track_xy_star
-#' @template rescale
 #' @param correct Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.
-#' @param ... additional arguments passed to \code{KernSmooth::dpik}.
 #' @return The bandwidth, the standardization method and correction.
 #' @seealso \code{KernSmooth::dpik}
 #' @export
+#' @rdname hr
 #' @references Gitzen, R. A., Millspaugh, J. J., & Kernohan, B. J. (2006). Bandwidth selection for fixed-kernel analysis of animal utilization distributions. _Journal of Wildlife Management_, 70(5), 1334-1344.
 hr_kde_pi <- function(x, ...) {
   UseMethod("hr_kde_pi", x)
@@ -140,6 +138,8 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
   h
 }
 
+#' Use least square cross validation (lscv) to estimate bandwidth for kernel home-range estimation.
+
 #' @param range numeric vector with different candidate h values.
 #' @param which_min A character indicating if the \code{global} or \code{local} minimum should be searched for.
 
@@ -147,6 +147,7 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
 
 #' @return \code{vector} of length two
 #' @export
+#' @rdname hr
 #' @references Seaman, D. E., & Powell, R. A. (1996). An evaluation of the accuracy of kernel density estimators for home range analysis. _Ecology, 77(7)_, 2075-2085.
 #'
 
@@ -192,7 +193,7 @@ hr_kde_lscv <- function(
 
   ## prepare return
   if (rescale == "unitvar") {
-    h <- h * c(sd(xy[, 1]), sd(xy[, 2]))
+    h <- h * c(sd(x[, 1]), sd(x[, 2]))
   } else {
     h <- c(h, h)
   }
@@ -222,82 +223,6 @@ lscv <- function(x, hs) {
     1.0 / (pi * h^2 * n) + (2 * out -3 * n)/(pi * 4. * h^2 * n^2);
   })
 }
-
-
-# TODO
-# #' `hr_kde_rescaled` uses two dimensional reference bandwidth to select a bandwidth for kernel density estimation, to find the smallest value for bandwidth (h) that results in n
-# #' (usually n=1) contiguous polygons at a given level.
-# #' This implementation uses a bisection algorithm to the find the smallest value
-# #' value for the kernel bandwidth within \code{range} that produces an home-range
-# #' isopleth at \code{level} consisting of \code{n} polygons. Note, no difference is
-# #' is made between the two dimensions.
-# #'
-# #' @template track_xy_star
-# #' @param range Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.
-# #' @param numOfParts Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.
-# #' @param tol Numeric scalar, indicating which difference of to stop.
-# #' @param maxIt Numeric scalar, indicating the maximum number of acceptable iterations.
-# #' @export
-# #' @references Kie, John G. "A rule-based ad hoc method for selecting a bandwidth in kernel home-range analyses." Animal Biotelemetry 1.1 (2013): 1-12.
-# #'
-#
-# hr_kde_rescaled <- function(x, ...) {
-#   UseMethod("hr_kde_rescaled", x)
-# }
-
-# #' @export
-# #' @rdname hr
-# hr_kde_rescaled.track_xy <- function(
-#   x,
-#   range = hr_kde_href(x) * c(0.01, 1),
-#   trast = raster(as_sp(x), nrow = 100, ncol = 100),
-#   num_of_parts = 1, level = 0.95,
-#   tol = 0.1,
-#   max_iter = 500) {
-#
-#   ###
-#
-#   ###
-#
-#   # Input checks
-#   checkmate::assert_numeric(range, lower = 0, len = 2)
-#   checkmate::assert_class(trast, "RasterLayer")
-#
-#   if (length(levels) > 1) {
-#     levels <- levels[1]
-#     warning("hr_kde_scaled: only first element of levels was used")
-#   }
-#
-#   hmin <-min(range)
-#   hmax <- max(range)
-#   hcur <- mean(range)
-#   success <- FALSE
-#
-#   for (i in 1:maxIt) {
-#     if (i > 1) {
-#       hcur <- hnew
-#     }
-#     tmpEst <- hr_isopleths(hr_kde(x, h = hcur, trast = trast, levels = levels))
-#     allPolys <- slot(slot(tmpEst, "polygons")[[1]], "Polygons")
-#     nHoles <- sum(!sapply(allPolys, slot, "hole"))
-#
-#     if (nHoles <= numOfParts) {
-#       ## decrease h
-#       hmax <- hcur
-#     } else {
-#       ## increase h
-#       hmin <- hcur
-#     }
-#     hnew <- mean(c(hmax, hmin))
-#     if (abs(hcur - hnew) <= tol && nHoles <= numOfParts) {
-#       success=TRUE
-#       break
-#     }
-#   }
-#   return(list(h=hcur, success=success, niter = i))
-# }
-
-
 
 #' @export
 #' @method plot kde

@@ -63,8 +63,7 @@ has_crs.steps_xy <- function(x, ...) {
 
 #' @export
 get_crs.hr <- function(x, ...) {
-  attr(x, "crs", ...)
-  sp::proj4string(hr_isopleths(x))
+  sf::st_crs(hr_isopleths(x))
 }
 
 #' @export

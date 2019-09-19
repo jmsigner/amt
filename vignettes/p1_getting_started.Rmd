@@ -19,7 +19,7 @@ The basic building blocks of `amt` are tracks. Tracks are `tibble`s with at leas
 library(dplyr)
 library(ggplot2)
 library(amt)
-df1 <- data_frame(x = 1:3, y = 1:3)
+df1 <- tibble(x = 1:3, y = 1:3)
 is.data.frame(df1)
 df1
 
@@ -44,8 +44,8 @@ class(tr1)
 To create a `track_xyt` we could do the following
 
 ```{r}
-df1 <- data_frame(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2))
-tr2 <- mk_track(df1, x, y, t)
+df1 <- tibble(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2))
+tr2 <- make_track(df1, x, y, t)
 class(tr2)
 ```
 
@@ -57,15 +57,15 @@ From the output above we see that a `track_xyt` is also a `track_xy`. This means
 We can also add additional information for each relocation (e.g., the id of the animal, or some other sensor information such as the DOP). Any number of additional named columns can be passed to `make_track`. By named we mean, that columns should always be passed in the form of `column_name = content` to avoid confusion with coordinates and time stamp. We will extend the dummy example from above, by passing 2 more columns (the id of animal and the age).
 
 ```{r}
-df1 <- data_frame(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2), 
+df1 <- tibble(x = 1:3, y = 1:3, t = lubridate::ymd("2017-01-01") + lubridate::days(0:2), 
                   id = 1, age = 4)
 
 # first we only create a track_xy
-tr3 <- mk_track(df1, x, y, id = id, age = age)
+tr3 <- make_track(df1, x, y, id = id, age = age)
 tr3
 
 # now lets create a track_xyt
-tr4 <- mk_track(df1, x, y, t, id = id, age = age)
+tr4 <- make_track(df1, x, y, t, id = id, age = age)
 tr4
 ```
 
@@ -121,7 +121,7 @@ tr1 <- make_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month)
 The column names of the data set already indicate the CRS of the data. We can add this information when creating a track.
 
 ```{r}
-tr1 <- mk_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month, 
+tr1 <- make_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month, 
                 crs = sp::CRS("+init=epsg:31467"))
 ```
 
@@ -137,7 +137,7 @@ tr2 <- sh %>% filter(complete.cases(.)) %>%
     month = lubridate::month(ts)
   ) %>% 
   filter(!duplicated(ts)) %>% 
-  mk_track(x_epsg31467, y_epsg31467, ts, id = id, month = month, 
+  make_track(x_epsg31467, y_epsg31467, ts, id = id, month = month, 
            crs = sp::CRS("+init=epsg:31467"))
 tr2
 ```
@@ -227,7 +227,7 @@ trk <- amt_fisher %>% make_track(x_, y_, t_, id = id)
 Next, we group the track by `id` and nest the track.
 
 ```{r}
-trk1 <- trk %>% group_by(id) %>% nest()
+trk1 <- trk %>% nest(data = -"id")
 trk1
 ```
 
@@ -253,7 +253,7 @@ trk2
 Finally, we can select `id` and `steps`, unnest the new `data_frame` and create a plot of the step-length distributions.
 
 ```{r}
-trk2 %>% select(id, steps) %>% unnest %>% 
+trk2 %>% select(id, steps) %>% unnest(cols = "steps") %>% 
   ggplot(aes(sl_, fill = factor(id))) + geom_density(alpha = 0.4)
 ```
 
@@ -261,6 +261,6 @@ trk2 %>% select(id, steps) %>% unnest %>%
 
 ## Session
 ```{r}
-sessionInfo()
+sessioninfo::session_info()
 ```
 

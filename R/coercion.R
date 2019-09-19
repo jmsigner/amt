@@ -148,6 +148,7 @@ as_telemetry.track_xyt <- function(x, ...) {
   }
   x <- transform_coords(x, sp::CRS("+init=epsg:4326"))
   ctmm::as.telemetry(data.frame(lon = x$x_, lat = x$y_, timestamp = x$t_))
+
 }
 
 
