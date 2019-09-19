@@ -17,8 +17,12 @@ r_packages:
 
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
-  - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev gsl-bin libgsl2 libgsl-dev
+  - sudo apt-get update -qq
+  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev libgsl0-dev bwidget
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install gcc
+  - mkdir ~/.R
   - Rscript -e 'update.packages(ask = FALSE)'
 
 r:
@@ -27,8 +31,6 @@ r:
 
 env:
   - COMPILER=gcc
-
-
 
 notifications:
   email:
