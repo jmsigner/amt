@@ -19,17 +19,13 @@ adjust_distribution.adjustable_exp_distr <- function(x, covars) {
     # mod sl
     modifiers <- attr(x$rate, "rhs")
     mod1_coef <- trimws(strsplit(deparse(modifiers[[1]]), "\\+")[[1]])
-    mod2_coef <- trimws(strsplit(deparse(modifiers[[2]]), "\\+")[[1]])
-    mod2_covar <- gsub(paste0(mod1_coef, ":"), "",  mod2_coef)
 
-    # check names match
-    # if (!all(mod2_covar %in% names(covars))) {
-    #   stop("Some coefficients not found in covariates")
-    # }
+    ff <- as.formula(paste("~", deparse(modifiers[[2]])))
+    mm <- model.matrix(ff, covars)
+    cc <- x$coefs[names(x$coefs) %in% colnames(mm)]
 
-    covars <- unlist(covars[1, ], use.names = TRUE)
     new_rate <- tentative_rate +
-      x$coefs[mod1_coef] + sum(x$coefs[mod2_coef] * covars[mod2_covar])
+      x$coefs[mod1_coef] + sum(cc * mm[, names(cc)])
     make_exp_distr(rate = new_rate)
   } else {
     x$dist
@@ -73,6 +69,8 @@ adjust_distribution.adjustable_gamma_distr <- function(x, covars) {
     mod1_coef <- trimws(strsplit(deparse(modifiers[[1]]), "\\+")[[1]])
     mod2_coef <- trimws(strsplit(deparse(modifiers[[2]]), "\\+")[[1]])
     mod2_covar <- gsub(paste0(mod1_coef, ":"), "",  mod2_coef)
+
+    # TODO: add design matrix here (see exponential for reference)
 
     # check names match
     # if (!all(mod2_covar %in% names(covars))) {
@@ -216,6 +214,7 @@ simulate_movement <- function(
           rand_sl = random_numbers(sld),
           rand_ta = random_numbers(tad))
 
+
         # not yet optimal
         xy_try <- as.data.frame(xy_try)
         attr(xy_try, "crs_") <- sp::CRS(raster::projection(map))
@@ -243,6 +242,9 @@ simulate_movement <- function(
     }
     xyz <- stats::model.matrix(
       terms(habitat_kernel$f, keep.order = TRUE), data = xy, na.action = na.pass)
+
+    habitat_kernel$coefs <-
+      habitat_kernel$coefs[names(habitat_kernel$coefs) %in% names(xyz)]
 
     w <- as.matrix(xyz[, names(habitat_kernel$coefs)]) %*% habitat_kernel$coefs
     w <- try(exp(w - max(w, na.rm = TRUE)))
