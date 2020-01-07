@@ -121,6 +121,108 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mod
+int mod(int a, int b);
+RcppExport SEXP _amt_mod(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type a(aSEXP);
+    Rcpp::traits::input_parameter< int >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(mod(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dispersal_kernel
+NumericMatrix dispersal_kernel(int cur_x, int cur_y, int nc, int nr, NumericMatrix dk, NumericVector coefs, double init_dir, int standardize, IntegerVector first_order_terms, IntegerVector second_order_terms, NumericMatrix hab, NumericMatrix other_covars, IntegerVector other_covars_indicator, int stop);
+RcppExport SEXP _amt_dispersal_kernel(SEXP cur_xSEXP, SEXP cur_ySEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP dkSEXP, SEXP coefsSEXP, SEXP init_dirSEXP, SEXP standardizeSEXP, SEXP first_order_termsSEXP, SEXP second_order_termsSEXP, SEXP habSEXP, SEXP other_covarsSEXP, SEXP other_covars_indicatorSEXP, SEXP stopSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type cur_x(cur_xSEXP);
+    Rcpp::traits::input_parameter< int >::type cur_y(cur_ySEXP);
+    Rcpp::traits::input_parameter< int >::type nc(ncSEXP);
+    Rcpp::traits::input_parameter< int >::type nr(nrSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type dk(dkSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type coefs(coefsSEXP);
+    Rcpp::traits::input_parameter< double >::type init_dir(init_dirSEXP);
+    Rcpp::traits::input_parameter< int >::type standardize(standardizeSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type first_order_terms(first_order_termsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type second_order_terms(second_order_termsSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type hab(habSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type other_covars(other_covarsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type other_covars_indicator(other_covars_indicatorSEXP);
+    Rcpp::traits::input_parameter< int >::type stop(stopSEXP);
+    rcpp_result_gen = Rcpp::wrap(dispersal_kernel(cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop));
+    return rcpp_result_gen;
+END_RCPP
+}
+// simulate_track
+NumericMatrix simulate_track(int cur_x, int cur_y, int nc, int nr, NumericMatrix dk, NumericVector coefs, double init_dir, int standardize, IntegerVector first_order_terms, IntegerVector second_order_terms, NumericMatrix hab, NumericMatrix other_covars, IntegerVector other_covars_indicator, int stop, int n);
+RcppExport SEXP _amt_simulate_track(SEXP cur_xSEXP, SEXP cur_ySEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP dkSEXP, SEXP coefsSEXP, SEXP init_dirSEXP, SEXP standardizeSEXP, SEXP first_order_termsSEXP, SEXP second_order_termsSEXP, SEXP habSEXP, SEXP other_covarsSEXP, SEXP other_covars_indicatorSEXP, SEXP stopSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type cur_x(cur_xSEXP);
+    Rcpp::traits::input_parameter< int >::type cur_y(cur_ySEXP);
+    Rcpp::traits::input_parameter< int >::type nc(ncSEXP);
+    Rcpp::traits::input_parameter< int >::type nr(nrSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type dk(dkSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type coefs(coefsSEXP);
+    Rcpp::traits::input_parameter< double >::type init_dir(init_dirSEXP);
+    Rcpp::traits::input_parameter< int >::type standardize(standardizeSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type first_order_terms(first_order_termsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type second_order_terms(second_order_termsSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type hab(habSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type other_covars(other_covarsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type other_covars_indicator(other_covars_indicatorSEXP);
+    Rcpp::traits::input_parameter< int >::type stop(stopSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(simulate_track(cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop, n));
+    return rcpp_result_gen;
+END_RCPP
+}
+// add
+int add(int x, int y, int z);
+RcppExport SEXP _amt_add(SEXP xSEXP, SEXP ySEXP, SEXP zSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type y(ySEXP);
+    Rcpp::traits::input_parameter< int >::type z(zSEXP);
+    rcpp_result_gen = Rcpp::wrap(add(x, y, z));
+    return rcpp_result_gen;
+END_RCPP
+}
+// simulate_4
+NumericMatrix simulate_4(int n_steps, int n_steps2);
+RcppExport SEXP _amt_simulate_4(SEXP n_stepsSEXP, SEXP n_steps2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    Rcpp::traits::input_parameter< int >::type n_steps2(n_steps2SEXP);
+    rcpp_result_gen = Rcpp::wrap(simulate_4(n_steps, n_steps2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// simulate_5
+NumericMatrix simulate_5(int n_steps, int start, int nc, int nr, NumericMatrix hab, NumericMatrix dk);
+RcppExport SEXP _amt_simulate_5(SEXP n_stepsSEXP, SEXP startSEXP, SEXP ncSEXP, SEXP nrSEXP, SEXP habSEXP, SEXP dkSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n_steps(n_stepsSEXP);
+    Rcpp::traits::input_parameter< int >::type start(startSEXP);
+    Rcpp::traits::input_parameter< int >::type nc(ncSEXP);
+    Rcpp::traits::input_parameter< int >::type nr(nrSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type hab(habSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type dk(dkSEXP);
+    rcpp_result_gen = Rcpp::wrap(simulate_5(n_steps, start, nc, nr, hab, dk));
+    return rcpp_result_gen;
+END_RCPP
+}
 // track_align_cpp
 NumericVector track_align_cpp(IntegerVector t1, IntegerVector nt, int time_tol, int type);
 RcppExport SEXP _amt_track_align_cpp(SEXP t1SEXP, SEXP ntSEXP, SEXP time_tolSEXP, SEXP typeSEXP) {
@@ -188,6 +290,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_amt_rolling_median", (DL_FUNC) &_amt_rolling_median, 2},
     {"_amt_simulate_udf", (DL_FUNC) &_amt_simulate_udf, 6},
     {"_amt_cpp_simulate_ssf", (DL_FUNC) &_amt_cpp_simulate_ssf, 6},
+    {"_amt_mod", (DL_FUNC) &_amt_mod, 2},
+    {"_amt_dispersal_kernel", (DL_FUNC) &_amt_dispersal_kernel, 14},
+    {"_amt_simulate_track", (DL_FUNC) &_amt_simulate_track, 15},
+    {"_amt_add", (DL_FUNC) &_amt_add, 3},
+    {"_amt_simulate_4", (DL_FUNC) &_amt_simulate_4, 2},
+    {"_amt_simulate_5", (DL_FUNC) &_amt_simulate_5, 6},
     {"_amt_track_align_cpp", (DL_FUNC) &_amt_track_align_cpp, 4},
     {"_amt_mk_reg", (DL_FUNC) &_amt_mk_reg, 4},
     {"_amt_mk_reg_old", (DL_FUNC) &_amt_mk_reg_old, 4},
