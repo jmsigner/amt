@@ -133,7 +133,7 @@ dispersal_kernel <- function(
     init.dir, standardize, stop
   )
 
-  k <- dispersal_kernel(
+  k <- dispersal_kernel_cpp(
     cur_x = p$start[1], cur_y = p$start[2], nc = p$nc, nr = p$nr,
     dk = p$dk, coefs = p$coefs,
     standardize = p$standardize,

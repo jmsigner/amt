@@ -18,7 +18,7 @@ fit_sl_dist_base(x, na.rm = TRUE, distr = "gamma", ...)
 
 \item{na.rm}{\code{[logical(1)]} \cr Should \code{NA} be removed?}
 
-\item{distr}{\code{[character(1)]{'gamma', 'exp', 'unif'}} \cr Name of the distribution, currently only \code{gamma}, \code{unif}, and \code{exponential} distributions are supported.}
+\item{distr}{\code{[character(1)]} \cr Name of the distribution, currently only \code{gamma}-distribution is supported.}
 }
 \description{
 Fit a statistical distribution to step lengths.

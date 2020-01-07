@@ -33,28 +33,24 @@ cpp_simulate_ssf <- function(n_steps, start, nc, nr, mk, hk) {
     .Call('_amt_cpp_simulate_ssf', PACKAGE = 'amt', n_steps, start, nc, nr, mk, hk)
 }
 
-mod <- function(a, b) {
-    .Call('_amt_mod', PACKAGE = 'amt', a, b)
+dispersal_kernel_cpp <- function(cur_x, cur_y, nc, nr, dk, coefs, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop) {
+    .Call('_amt_dispersal_kernel_cpp', PACKAGE = 'amt', cur_x, cur_y, nc, nr, dk, coefs, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop)
 }
 
-dispersal_kernel <- function(cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop) {
-    .Call('_amt_dispersal_kernel', PACKAGE = 'amt', cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop)
+atan2_north_cpp <- function(y, x) {
+    .Call('_amt_atan2_north_cpp', PACKAGE = 'amt', y, x)
 }
 
-simulate_track <- function(cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop, n) {
-    .Call('_amt_simulate_track', PACKAGE = 'amt', cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop, n)
+get_angle_cpp <- function(xy, dir = 0) {
+    .Call('_amt_get_angle_cpp', PACKAGE = 'amt', xy, dir)
 }
 
-add <- function(x, y, z) {
-    .Call('_amt_add', PACKAGE = 'amt', x, y, z)
+get_angle_cpp1 <- function(xy, dir = 0) {
+    .Call('_amt_get_angle_cpp1', PACKAGE = 'amt', xy, dir)
 }
 
-simulate_4 <- function(n_steps, n_steps2) {
-    .Call('_amt_simulate_4', PACKAGE = 'amt', n_steps, n_steps2)
-}
-
-simulate_5 <- function(n_steps, start, nc, nr, hab, dk) {
-    .Call('_amt_simulate_5', PACKAGE = 'amt', n_steps, start, nc, nr, hab, dk)
+get_angle_cpp2 <- function(xy, dir = 0) {
+    .Call('_amt_get_angle_cpp2', PACKAGE = 'amt', xy, dir)
 }
 
 track_align_cpp <- function(t1, nt, time_tol, type) {
