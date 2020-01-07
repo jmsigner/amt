@@ -9,18 +9,9 @@ get_angle <- function(xy, dir = 0, take_cosine = TRUE) {
 }
 
 prep_and_check_simulations_to_rcpp <- function(
-  formula, coefs, habitat, other_vars = NULL, start, max.dist,
+  formula, coefs, habitat, other.vars = NULL, start, max.dist,
   init.dir = amt::as_rad(45), standardize = TRUE, stop, n = 1
 ) {
-
-  ##
-  # formula <- f
-  # coefs <- coefs
-  # habitat <- h
-  # other_vars = NULL
-  # start <- c(100, 100)
-  # max.dist <- 10
-  ##
 
   checkmate::assert_formula(formula)
   checkmate::assert_named(coefs)
@@ -38,7 +29,7 @@ prep_and_check_simulations_to_rcpp <- function(
   all_terms <- unique(do.call(c, strsplit(trms, ":")))
 
   data_names <- c("sl_", "log_sl_", "cos_ta_")
-  other_vars_indicator <- c(0, 0)
+  other.vars_indicator <- c(0, 0)
 
   # habitat
   if (is.null(habitat)) {
@@ -54,14 +45,14 @@ prep_and_check_simulations_to_rcpp <- function(
   res <- raster::res(habitat)[1]
 
   # other
-  if (!is.null(other_vars)) {
-    data_names <- c(data_names, colnames(other_vars))
-    other_vars_indicator[2] <- 1
-    if (!is(other_vars, "matrix")) {
-      other_vars <- as.matrix(other_vars)
+  if (!is.null(other.vars)) {
+    data_names <- c(data_names, colnames(other.vars))
+    other.vars_indicator[2] <- 1
+    if (!is(other.vars, "matrix")) {
+      other.vars <- as.matrix(other.vars)
     }
   } else {
-    other_vars <- matrix(NA, nrow = n, 1)
+    other.vars <- matrix(NA, nrow = n, 1)
   }
 
   first_order <- sapply(strsplit(trms, ":"), "[", 1)
@@ -92,7 +83,7 @@ prep_and_check_simulations_to_rcpp <- function(
   nc <- ncol(habitat)
   nr <- nrow(habitat)
   hab1 <- (raster::getValues(habitat))
-  other_vars_indicator[1] <- 1
+  other.vars_indicator[1] <- 1
 
   # Start as cells
   start[1] <- raster::colFromX(habitat, start[1]) - 1
@@ -107,35 +98,38 @@ prep_and_check_simulations_to_rcpp <- function(
     first_order_terms = first_order_terms - 1,
     second_order_terms = second_order_terms - 1,
     hab = hab1,
-    other_covars = other_vars,
-    other_covars_indicator = other_vars_indicator,
+    other_covars = other.vars,
+    other_covars_indicator = other.vars_indicator,
     data_names = data_names,
     stop = stop
   )
 }
 
-dispersal_kernel_1 <- function(
-  formula, coefs, habitat = NULL, other_vars = NULL, start, max.dist,
+#' Create a dispersal kernel
+#'
+#' @param formula `[formula]` \cr The formula for the dispersal kernel.
+#' @param coefs `[named numeric]{>1}` \cr Coefficients for the terms in the formula. Names of the coefficients must match the name of the terms.
+#' @param habitat `[RasterLayer]` \cr The habitat matrix / landscape.
+#' @param other.vars `[data.frame = NULL]` \cr Possible other covariates.
+#' @param start `[numeric(2)]` \cr Coordinates of the start position.
+#' @param max.dist `[numeric(1)]` \cr The maximum distance of the dispersal kernel.
+#' @param init.dir `[numeric(1)]` \cr The initial direction in rad.
+#' @param standardize `[logical(1) = TRUE]` \cr Should the result be standardized.
+#' @param raster `[logical(1) = TRUE]` \cr Should a `RasterLayer` be returned.
+#' @param stop `[integer(1)=1]{0,1}` \cr What happens when the animal steps out of the landscape.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+dispersal_kernel <- function(
+  formula, coefs, habitat = NULL, other.vars = NULL, start, max.dist,
   init.dir = amt::as_rad(45), standardize = TRUE, raster = TRUE, stop = 0) {
-
-
-  ##
-  # formula = f
-  # coefs = coefs
-  # habitat = h
-  # other_vars = data.frame(tod = 1)
-  # start = start
-  # max.dist = 150
-  # init.dir = amt::as_rad(180)
-  # raster = TRUE
-  # standardize = TRUE
-  # stop= 0
-  # ##
 
 
   # Prepare params
   p <- prep_and_check_simulations_to_rcpp(
-    formula, coefs, habitat, other_vars, start, max.dist,
+    formula, coefs, habitat, other.vars, start, max.dist,
     init.dir, standardize, stop
   )
 
@@ -169,7 +163,7 @@ dispersal_kernel_1 <- function(
     formula = formula,
     coefs = coefs,
     habitat = habitat,
-    other_vars = other_vars,
+    other.vars = other.vars,
     start = start,
     max.dist = max.dist,
     init.dir = init.dir,
@@ -184,13 +178,23 @@ dispersal_kernel_1 <- function(
 }
 
 
-simulate_xy_R1 <- function(obj, n = 100, other_vars = NULL) {
+#' Simulate a trajectory
+#'
+#' @param obj A dispersal kernel.
+#' @param n Number of time steps.
+#' @param other.vars Other covariates (for each time step).
+#'
+#' @return
+#' @export
+#'
+#' @examples
+simulate_xy <- function(obj, n = 100, other.vars = NULL) {
 
    if (!is(obj, "dispersal_kernel")) {
      stop("obj is no dispersal kernel")
    }
    p <- obj$prep_dk
-   if (is.null(obj$other_vars)) {
+   if (is.null(obj$other.vars)) {
      p$other_covars <- matrix(NA, nrow = n, ncol = 1)
    }
 
@@ -237,18 +241,26 @@ simulate_xy_R1 <- function(obj, n = 100, other_vars = NULL) {
    out
  }
 
-simulate_ud <- function(obj, n = 1e3, other_vars = NULL) {
+#' Simulate a UD from a dispersal kernel
+#'
+#' @param obj A dispersal kernel
+#' @param n Number of time steps
+#' @param other.vars other covariates for each time step.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+simulate_ud <- function(obj, n = 1e3, other.vars = NULL) {
 
    if (!is(obj, "dispersal_kernel")) {
      stop("obj is no dispersal kernel")
    }
    p <- obj$prep_dk
-   if (is.null(obj$other_vars)) {
+   if (is.null(obj$other.vars)) {
      p$other_covars <- matrix(NA, nrow = n, ncol = 1)
    }
-
    ud <- obj$habitat
-
    x <- p$start[1]
    y <- p$start[2]
    dk <- p$dk
@@ -286,13 +298,13 @@ simulate_ud <- function(obj, n = 1e3, other_vars = NULL) {
 
 
 # #### OLD
-# simulate_xy <- function(x, n = 100, other_vars = NULL) {
+# simulate_xy <- function(x, n = 100, other.vars = NULL) {
 #
 #   if (!is(x, "dispersal_kernel")) {
 #     stop("x is no dispersal kernel")
 #   }
 #   p <- x$prep_dk
-#   if (is.null(x$other_vars)) {
+#   if (is.null(x$other.vars)) {
 #     p$other_covars <- matrix(NA, nrow = n, ncol = 1)
 #   }
 #
@@ -319,13 +331,13 @@ simulate_ud <- function(obj, n = 1e3, other_vars = NULL) {
 #
 # }
 #
-#  simulate_xy_R <- function(obj, n = 100, other_vars = NULL) {
+#  simulate_xy_R <- function(obj, n = 100, other.vars = NULL) {
 #
 #    if (!is(obj, "dispersal_kernel")) {
 #      stop("obj is no dispersal kernel")
 #    }
 #    p <- obj$prep_dk
-#    if (is.null(obj$other_vars)) {
+#    if (is.null(obj$other.vars)) {
 #      p$other_covars <- matrix(NA, nrow = n, ncol = 1)
 #    }
 #
