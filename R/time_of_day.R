@@ -47,45 +47,64 @@ time_of_day.steps_xyt <- function(x, solar.dep = 6, include.crepuscule = FALSE, 
     x
 }
 
-# dist_to_twilight <- function(x, solar.dep = 6) {
-#   x <- deer
-#   time_of_day(x, solar.dep = 6, include.crepuscule = FALSE)
-#
-#   if (suppressWarnings(has_crs(x))) {
-#     pts <- sp::spTransform(as_sp(x, end = end), sp::CRS("+init=epsg:4326"))
-#   } else {
-#     stop("No CRS found.")
-#   }
-#
-#   sunr <- as.numeric(maptools::sunriset(pts, t, direction = "sunrise", POSIXct.out = TRUE)$time)
-#   suns <- as.numeric(maptools::sunriset(pts, t, direction = "sunset", POSIXct.out = TRUE)$time)
-#
-#   tt <- as.numeric(t)
-#
-# }
 
 time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
-  if (suppressWarnings(has_crs(x))) {
-    pts <- sp::spTransform(as_sp(x, end = end), sp::CRS("+init=epsg:4326"))
-  } else {
-    stop("No CRS found.")
+
+  # Remove NA coordinates, so we can propagate NA's
+  idx <- if (is(x, "track_xy")) {
+    is.na(x[["x_"]]) | is.na(x[["y_"]]) | is.na(t)
+  } else if (is(x, "steps_xy")) {
+    if (end) {
+      is.na(x[["x2_"]]) | is.na(x[["y2_"]]) | is.na(t)
+    } else {
+      is.na(x[["x1_"]]) | is.na(x[["y1_"]]) | is.na(t)
+    }
   }
+  res <- rep(NA, length(idx))
 
-  sunr <- as.numeric(maptools::sunriset(pts, t, direction = "sunrise", POSIXct.out = TRUE)$time)
-  suns <- as.numeric(maptools::sunriset(pts, t, direction = "sunset", POSIXct.out = TRUE)$time)
 
-  tt <- as.numeric(t)
+  if (any(!idx)) {
+
+    x <- x[!idx, ]
+    t <- t[!idx]
+
+    if (suppressWarnings(has_crs(x))) {
+      pts <- sp::spTransform(as_sp(x, end = end), sp::CRS("+init=epsg:4326"))
+    } else {
+      stop("No CRS found.")
+    }
+
+    sunr <- as.numeric(maptools::sunriset(pts, t, direction = "sunrise",
+                                          POSIXct.out = TRUE)$time)
+    suns <- as.numeric(maptools::sunriset(pts, t, direction = "sunset",
+                                          POSIXct.out = TRUE)$time)
+    tt <- as.numeric(t)
+    if (include.crepuscule) {
+      dawn <- as.numeric(maptools::crepuscule(
+        pts, t, direction = "dawn",
+        solarDep = solar.dep, POSIXct.out = TRUE)$time)
+      dusk <- as.numeric(maptools::crepuscule(
+        pts, t, direction = "dusk", solarDep = solar.dep,
+        POSIXct.out = TRUE)$time)
+      if (anyNA(c(dawn, dusk))) {
+        stop("dawn or dusk can not contain NA's, try adjusting the `solar.dep`")
+      }
+      names <- c("night", "dawn", "day", "dusk", "night")
+      xx <- names[apply(cbind(tt, dawn, sunr, suns, dusk), 1,
+                        function(x) base::findInterval(x[1], x[2:5])) + 1]
+    } else {
+      names <- c("night", "day", "night")
+      xx <- names[apply(cbind(tt, sunr, suns), 1,
+                        function(x) base::findInterval(x[1], x[2:3])) + 1]
+      factor(xx, levels = c("day", "night"))
+    }
+    res[!idx] <- xx
+  }
 
   if (include.crepuscule) {
-    dawn <- as.numeric(maptools::crepuscule(pts, t, direction = "dawn", solarDep = solar.dep, POSIXct.out = TRUE)$time)
-    dusk <- as.numeric(maptools::crepuscule(pts, t, direction = "dusk", solarDep = solar.dep, POSIXct.out = TRUE)$time)
-    if (anyNA(c(dawn, dusk))) {
-      stop("dawn or dusk can not contain NA's, try adjusting the `solar.dep`")
-    }
-    names <- c("night", "dawn", "day", "dusk", "night")
-    names[apply(cbind(tt, dawn, sunr, suns, dusk), 1, function(x) base::findInterval(x[1], x[2:5])) + 1]
+    factor(res, levels = c("day", "dusk", "night", "dawn"))
   } else {
-    names <- c("night", "day", "night")
-    names[apply(cbind(tt, sunr, suns), 1, function(x) base::findInterval(x[1], x[2:3])) + 1]
+    factor(res, levels = c("day", "night"))
   }
+
 }

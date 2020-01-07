@@ -11,3 +11,5 @@ man-roxygen/*
 ^\.travis\.yml$
 ^appveyor\.yml$
 travis/*
+vignettes/rsconnect/*
+dev/*

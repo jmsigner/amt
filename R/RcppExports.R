@@ -9,6 +9,14 @@ within_rcpp <- function(x, a, b) {
     .Call('_amt_within_rcpp', PACKAGE = 'amt', x, a, b)
 }
 
+random_steps_cpp <- function(n_rand_steps, start_x, start_y, end_x, end_y, rand_sl, rand_ta, include_obs, sl_obs, ta_obs) {
+    .Call('_amt_random_steps_cpp', PACKAGE = 'amt', n_rand_steps, start_x, start_y, end_x, end_y, rand_sl, rand_ta, include_obs, sl_obs, ta_obs)
+}
+
+random_steps_cpp_one_step <- function(n_rand_steps, start_x, start_y, rel_angle, rand_sl, rand_ta) {
+    .Call('_amt_random_steps_cpp_one_step', PACKAGE = 'amt', n_rand_steps, start_x, start_y, rel_angle, rand_sl, rand_ta)
+}
+
 rolling_mean <- function(x, win) {
     .Call('_amt_rolling_mean', PACKAGE = 'amt', x, win)
 }
@@ -23,6 +31,30 @@ simulate_udf <- function(n_steps, start, nc, nr, mk, hk) {
 
 cpp_simulate_ssf <- function(n_steps, start, nc, nr, mk, hk) {
     .Call('_amt_cpp_simulate_ssf', PACKAGE = 'amt', n_steps, start, nc, nr, mk, hk)
+}
+
+mod <- function(a, b) {
+    .Call('_amt_mod', PACKAGE = 'amt', a, b)
+}
+
+dispersal_kernel <- function(cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop) {
+    .Call('_amt_dispersal_kernel', PACKAGE = 'amt', cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop)
+}
+
+simulate_track <- function(cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop, n) {
+    .Call('_amt_simulate_track', PACKAGE = 'amt', cur_x, cur_y, nc, nr, dk, coefs, init_dir, standardize, first_order_terms, second_order_terms, hab, other_covars, other_covars_indicator, stop, n)
+}
+
+add <- function(x, y, z) {
+    .Call('_amt_add', PACKAGE = 'amt', x, y, z)
+}
+
+simulate_4 <- function(n_steps, n_steps2) {
+    .Call('_amt_simulate_4', PACKAGE = 'amt', n_steps, n_steps2)
+}
+
+simulate_5 <- function(n_steps, start, nc, nr, hab, dk) {
+    .Call('_amt_simulate_5', PACKAGE = 'amt', n_steps, start, nc, nr, hab, dk)
 }
 
 track_align_cpp <- function(t1, nt, time_tol, type) {

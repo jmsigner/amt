@@ -3,7 +3,7 @@ valid_ta_distr <- function(...) {
 }
 
 valid_sl_distr <- function(...) {
-  c("exp", "gamma")
+  c("exp", "gamma", "unif")
 }
 
 valid_distr <- function(...) {
@@ -13,7 +13,7 @@ valid_distr <- function(...) {
 
 valid_distr_params <- function(dist_name, params) {
   if (dist_name == "vonmises") {
-    return(c("kappa", "mu") %in% names(params))
+    return(all(c("kappa", "mu") %in% names(params)))
   } else if (dist_name == "unif") {
     return(all(c("min", "max") %in% names(params)))
   } else if (dist_name == "exp") {
@@ -138,11 +138,13 @@ random_numbers <- function(x, n = 100, ...) {
 #' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
 #' @rdname distributions
 random_numbers.vonmises_distr <- function(x, n = 100, ...) {
-  mu <- circular::as.circular(
-    x$mu, type = "angles", units = "radians",  template = "none",
-    modulo = "asis", zero = 0, rotation = "counter")
 
-  x <- do.call(circular::rvonmises, c(list(n = n), x$params))
+  # mu <- circular::as.circular(
+  #   x$params$mu, type = "angles", units = "radians",  template = "none",
+  #   modulo = "asis", zero = 0, rotation = "counter")
+
+  suppressWarnings(
+    x <- do.call(circular::rvonmises, c(list(n = n), x$params)))
 
   # turn angles for new stps
   x <- x %% (2 * pi)
@@ -166,7 +168,7 @@ random_numbers.amt_distr <- function(x, n = 100, ...) {
 #' and the von Mises distribution (`vonmises`).
 #'
 #' @param x `[numeric(>1)]` \cr The observed data.
-#' @param name `[character(1)]{"exp", "gamma", "vonmises"}` \cr The name of the
+#' @param dist_name `[character(1)]{"exp", "gamma", "unif", "vonmises"}` \cr The name of the
 #'   distribution.
 #' @param na.rm `[logical(1)=TRUE]` \cr Indicating whether `NA` should be
 #'   removed before fitting the distribution.
@@ -179,18 +181,20 @@ random_numbers.amt_distr <- function(x, n = 100, ...) {
 #' set.seed(123)
 #' dat <- rexp(1e3, 2)
 #' fit_distr(dat, "exp")
-fit_distr <- function(x, name, na.rm = TRUE) {
+fit_distr <- function(x, dist_name, na.rm = TRUE) {
 
   checkmate::check_numeric(x)
-  checkmate::check_character(name, len = 1)
-  stopifnot(name %in% valid_distr())
+  checkmate::check_character(dist_name, len = 1)
+  if(!dist_name %in% valid_distr()) {
+    stop("Distribution is currently not supported.")
+  }
 
   if (na.rm) {
     x <- x[!is.na(x)]
   }
 
   # TODO: also save SE?
-  switch(name,
+  switch(dist_name,
     gamma = {
       fit <- fitdistrplus::fitdist(x, "gamma", keepdata = FALSE, lower = 0)
       make_gamma_distr(shape = fit$estimate["shape"], scale = 1 / fit$estimate["rate"])
@@ -207,4 +211,169 @@ fit_distr <- function(x, name, na.rm = TRUE) {
       make_vonmises_distr(kappa = fit$kappa)
     }
   )
+}
+
+
+# Adjustable distributions ------------------------------------------------
+
+#' Adjust distributional parameters
+
+#' @export
+#' @param x `[amt_distr]` \cr A distribution object.
+#' @name adjustable_distributions
+
+adjustable_distribution <- function(x, ...) {
+  UseMethod("adjustable_distribution")
+}
+
+check_formula <- function(f, coefs, rm_intercept = FALSE) {
+  checkmate::assert_formula(f, null.ok = TRUE)
+  if (!is.null(f)) {
+    f <- Formula::as.Formula(f)
+    if (rm_intercept) {
+      if(attr(terms(f), "intercept")) {
+        f <- update(f, ~ . -1)
+      }
+    }
+#    if(!all(attr(terms(f), "term.labels") %in% names(coefs))) {
+#      stop("Some terms do not have a coefficient")
+#    }
+  }
+  f
+}
+
+#' @export
+#' @param shape `[formula = NULL]` \cr A formula to adjust the shape parameter.
+#' @param scale `[formula = NULL]` \cr A formula to adjust the scale parameter.
+#' @param coefs `[names vector]` \cr Coefficients for the adjustment (names must match the formula).
+#' @rdname adjustable_distributions
+#'
+adjustable_distribution.gamma_distr <- function(x, shape = NULL, scale = NULL, coefs) {
+  checkmate::assert_vector(coefs, names = "named")
+  scale <- check_formula(scale, coefs)
+  shape <- check_formula(shape, coefs)
+  xx <- list(dist = x, shape = shape, scale = scale,
+             coefs = coefs)
+  class(xx) <- c("adjustable_gamma_distr", "adjustable_distr", class(x))
+  xx
+}
+
+
+#' @export
+#' @param rate `[formula = NULL]` \cr A formula to adjust the rate parameter.
+#' @rdname adjustable_distributions
+adjustable_distribution.exp_distr <- function(x, rate = NULL, coefs) {
+  checkmate::assert_vector(coefs, names = "named")
+  rate <- check_formula(rate, coefs)
+  xx <- list(dist = x, rate = rate, coefs = coefs)
+  class(xx) <- c("adjustable_exp_distr", "adjustable_distr", class(x))
+  xx
+}
+
+#' @export
+#' @param kappa `[formula = NULL]` \cr A formula to adjust the kappa parameter.
+#' @rdname adjustable_distributions
+adjustable_distribution.vonmises_distr <- function(x, kappa = NULL, coefs) {
+  checkmate::assert_vector(coefs, names = "named")
+  kappa <- check_formula(kappa, coefs)
+  xx <- list(dist = x, kappa = kappa, coefs = coefs)
+  class(xx) <- c("adjustable_von_mises_distr", "adjustable_distr", class(x))
+  xx
+}
+
+
+
+
+
+# # Adjust parameters -------------------------------------------------------
+#
+# #' Adjust distributional parameters
+#
+# #' @export
+# #' @param x `[amt_distr]` \cr A distribution object.
+# #' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
+# #' @rdname distributions
+# adjust_distr <- function(x, ...) {
+#   UseMethod("adjust_distr")
+# }
+#
+# #' @export
+# #' @rdname adjust_distr
+# #'
+# adjust_distr.gamma_distr <- function(
+#   x, shape = NULL, scale = NULL,
+#   coefs, model_data, ...
+# ) {
+#
+#   # Adjust shape
+#   new_shape <- if (!is.null(shape)) {
+#     adj <- x$params$shape + adjust_base(shape, coefs, model_data)
+#     if (adj < 0) {
+#       warning("Adjusted shape is < 0, it was set to 0.")
+#       adj <- 0
+#     }
+#     adj
+#   } else {
+#     x$params$shape
+#   }
+#
+#   # Adjust scale
+#   new_scale <- if (!is.null(scale)) {
+#     modifier <- adjust_base(scale, coefs, model_data)
+#     adj <- 1 / ((1 / x$params$scale) - modifier)
+#     if (adj < 0) {
+#       warning("Adjusted scale is < 0, it was set to 0.")
+#       adj <- 0
+#     }
+#     adj
+#   } else {
+#     x$params$scale
+#   }
+#
+#  make_gamma_distr(shape = new_shape, scale = new_scale)
+#
+
+#' @export
+#' @rdname adjust_distr
+#'
+
+adjust_distr.vonmises_distr <- function(
+  x, kappa = NULL,
+  coefs, model_data, ...
+) {
+  # Adjust shape
+  new_kappa <- if (!is.null(kappa)) {
+    adj <- x$params$kappa + adjust_base(kappa, coefs, model_data)
+    if (adj < 0) {
+      warning("Adjusted kappa is < 0, it was set to 0.")
+      adj <- 0
+    }
+    adj
+  } else {
+    x$params$shape
+  }
+  make_vonmises_distr(kappa = new_kappa)
+}
+
+adjust_base <- function(formula, coefs, model_data) {
+  # check input classes
+  checkmate::assert_formula(formula)
+  checkmate::assert_numeric(coefs, names = "named")
+  checkmate::assert_data_frame(model_data, nrows = 1)
+
+  # check that there is only 1 first order term
+  aterms <- terms(formula)
+  tl <- attr(aterms, "term.labels")
+  name_ <- tl[which(attr(terms(formula), "order") == 1)]
+
+  if (length(name_ ) > 1) {
+    stop("More than one first order term")
+  }
+
+  # Remove intercept
+  attr(aterms, "intercept") <- 0
+
+  mm <- cbind(name_ = 1, model_data)
+  names(mm)[1] <- name_
+  model.matrix(aterms, mm) %*% cc[tl]
 }

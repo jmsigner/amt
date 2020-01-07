@@ -21,6 +21,7 @@ Imports:
     dplyr (>= 0.7.0),
     fitdistrplus,
     FNN,
+    Formula,
     geosphere,
     glue,
     graphics,

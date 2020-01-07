@@ -5,8 +5,8 @@
 #' Fit a statistical distribution to step lengths.
 #'
 #' @param .tbl `[track_xy,track_xyt]` \cr A track.
-#' @param x `[expression]` \cr The name of the column containing step lengths, usually `sl_`.
-#' @param distr `[character(1)]{'gamma', 'exp', 'unif'}` \cr Name of the distribution, currently only `gamma`, `unif`, and `exponential` distributions are supported.
+#' @param x `[expression = sl_]` \cr The name of the column containing step lengths, usually `sl_`.
+#' @param distr `[character(1)]` \cr Name of the distribution, currently only `gamma`-distribution is supported.
 #' @param na.rm `[logical(1)]` \cr Should `NA` be removed?
 #' @template dots_none
 #' @name fit_sl_dist
@@ -18,7 +18,7 @@
 #' stps <- steps_by_burst(deer)
 #' fit_sl_dist(stps, sl_)
 
-fit_sl_dist <- function(.tbl, x, ...){
+fit_sl_dist <- function(.tbl, x = sl_, ...){
   fit_sl_dist_base(.tbl[deparse(substitute(x))], ...)
 }
 

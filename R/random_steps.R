@@ -3,12 +3,15 @@
 #' Function to generate a given number of random steps for each observed step.
 #'
 #' @param x Steps.
-#' @param n_control `[integer(1)=10]{>1}` \cr The number of control steps paired with each observed step.
-#' @param sl_distr `[character(1)='gamma']{'gamma'}` \cr The distribution to be fitted to the empirical distribution of step lengths.
-#' @param ta_distr `[character(1)='vonmises']{'vonmises', 'unif'}` \cr The distribution to be fitted to the empirical distribution of turn angles.
-#' @param random.error `[numeric(1)=0.001]{>0}` \cr Upper limit for a uniformly distributed random error
-#'   (between 0 and `random.error`) to be added to step lengths, to avoid step
-#'   lengths of length 0.
+#' @param n_control `[integer(1)=10]{>1}` \cr The number of control steps paired
+#'   with each observed step.
+#' @param sl_distr `[amt_distr]` \cr The step-length distribution.
+#' @param ta_distr `[amt_distr]` \cr The turn-angle distribution.
+#' @param start `[numeric(2)]` \cr The position of the start location (x and y coordinate).
+#' @param rel_angle `[numeric(1) = 0]{-pi < rel_angle < pi}` \cr Relative turing angle for the first step.
+#' @param  rand_sl `[numeric]` \cr Numeric vector with random step lengths an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., gamma or exponential).
+#' @param  rand_ta `[numeric]` \cr Numeric vector with relative turning angles an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., von Mises or uniform).
+#' @param include_observed `[logical(1) = TRUE]` \cr Indicates if observed steps are to be included in the result.
 #' @template dots_none
 #' @export
 #' @name random_steps
@@ -18,95 +21,67 @@ random_steps <- function(x, ...) {
 
 #' @export
 #' @rdname random_steps
-random_steps.steps_xy <- function(x, n_control = 10, sl_distr = "gamma",
-                               ta_distr = "vonmises", random.error = 0.001,
-                               ...) {
-  if (any(is.na(x$sl_)) || any(is.na(x$ta_))) {
-    x <- x[!is.na(x$sl_) & !is.na(x$ta_), ]
-    warning("Step-lengths or turning angles contained NA, which were removed.")
-  }
+random_steps.numeric <- function(
+  start, n_control = 10,
+  rel_angle = 0,
+  rand_sl = random_numbers(make_exp_distr(), n = 1e5),
+  rand_ta = random_numbers(make_unif_distr(), n = 1e5)) {
 
-  # random.error
-  if (random.error != 0) {
-    x$sl_ <- x$sl_ + stats::runif(nrow(x), 0, random.error)
-  }
-
-  sl <- fit_sl_dist_base(x$sl_, distr = sl_distr)
-  ta <- fit_ta_dist_base(x$ta_, distr = ta_distr)
-  xx <- random_steps_base(x, n_control, sl, ta)
-  attr(xx, "crs_") <- attr(x, "crs_")
-  xx
+  rs <- random_steps_cpp_one_step(
+    n_control,  # number of controll steps
+    start[1], start[2],
+    rel_angle,
+    rand_sl, rand_ta)
+  rs
 }
 
 
-random_steps_base <- function(x, n_control, sl, ta) {
+#' @export
+#' @rdname random_steps
+random_steps.steps_xy <- function(
+  x, n_control = 10,
+  sl_distr = fit_distr(x$sl_, "gamma"),
+  ta_distr = fit_distr(x$ta_, "vonmises"),
+  rand_sl = random_numbers(sl_distr, n = 1e5),
+  rand_ta = random_numbers(ta_distr, n = 1e5),
+  include_observed = TRUE, ...) {
+
   # Generate random points
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(1:ns, each = n_control)
 
-  tar <- if (ta$name == "vonmises") {
-    mu <- circular::as.circular(0, type = "angles", units = "radians", template = "none",
-                                modulo = "asis", zero = 0, rotation = "counter")
-    # turn angles for new stps
-    rta <- as.vector(circular::rvonmises(ns * n_control, mu = mu, kappa = ta$fit$kappa))
-    rta <- rta %% (2 * pi)
-    ifelse(rta > pi, rta - (2 * pi), rta)
-  } else if (ta$name == "unif") {
-    stats::runif(ns * n_control, -pi, pi)  # turning angles for new stps
-  } else {
-    stop("ta dist not implemented")
-  }
-
-  slr <-  if (sl$name %in% c("gamma", "unif", "exp")) {
-    do.call(paste0("r", sl$fit$distname), c(list(n = ns * n_control), as.list(sl$fit$estimate)))
-  } else {
-    stop("sl dist not implemented")
-  }
-
-
-  # control points
-  xy_cc <- x[case_for_control, ]
-
-  abs_angle_current <- atan2(x$y2_ - x$y1_, x$x2_ - x$x1_)[case_for_control]
-  abs_angle_previous <- abs_angle_current - x[case_for_control, ]$ta_
-
-  xy_cc["x2_"] <- xy_cc$x1_ + slr * cos(abs_angle_previous + tar)
-  xy_cc["y2_"] <- xy_cc$y1_ + slr * sin(abs_angle_previous + tar)
-
-  xy_cc$case_ <- FALSE
-  xy_cc$step_id_ <- rep(1:ns, each = n_control)
-  xy_cc$sl_ <- slr
-  xy_cc$ta_ <- tar
-
+  stps <- which(!is.na(x$ta_))
+  x$step_id_ <- 1:nrow(x)
   x$case_ <- TRUE
-  x$step_id_ <- 1:ns
-  has_burst <- "burst_" %in% names(x)
 
-  vars <- c("step_id_", "case_", "x1_", "y1_", "x2_", "y2_")
-  if (is(x, "steps_xyt")) {
-    vars <- c(vars, "t1_", "t2_", "dt_")
-  }
+  # This could be moved to c++
+  xx <- lapply(stps, function(i) {
+    random_steps(c(x$x1_[i], x$y1_[i]), n_control = n_control,
+                 rel_angle = x$ta_[i],
+                 rand_sl = rand_sl, rand_ta = rand_ta)})
+ xx <- do.call(rbind, xx)
 
-  if (has_burst) {
-    vars <- c("burst_", vars)
-  }
+ for_rand <- x[rep(stps, each = n_control), ]
+ for_rand$case_ <- FALSE
 
-  # shuffle attributes in non_vars
-  v1 <- base::setdiff(names(x), vars)
-  #xy_cc <- xy_cc %>% mutate_at(v1, function(x) sample(unique(x), length(x), TRUE))
-  #message("shuffling non standard columns")
+ for_rand$x2_ <- xx[, "x2_"]
+ for_rand$y2_ <- xx[, "y2_"]
 
-  vars <- c(vars, v1)
+ for_rand$sl_ <- xx[, "sl_"]
+ for_rand$ta_ <- xx[, "ta_"]
+  x <- x[stps, ]
 
+ out <- dplyr::bind_rows(x, for_rand)
+ out <- dplyr::arrange(out, step_id_)
 
-  #out <- bind_rows(x, xy_cc) %>% arrange(quo("step_id_")) %>% select(.dots = vars)
-  suppressWarnings(out <- bind_rows(x, xy_cc) %>% arrange(!!quo(step_id_)) %>% select(vars))
+ class(out) <- c("random_steps", class(out))
+ attributes(out)$sl_ <- sl_distr
+ attributes(out)$ta_ <- ta_distr
+ attributes(out)$n_control_ <- n_control
+ attr(out, "crs_") <- attr(x, "crs_")
 
-  class(out) <- c("random_steps", class(out))
-  attributes(out)$sl_ <- sl
-  attributes(out)$ta_ <- ta
-  attributes(out)$n_control_ <- n_control
-  out
+ out
+
 }
 
 rsteps_transfer_attr <- function(from, to) {

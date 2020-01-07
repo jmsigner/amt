@@ -242,7 +242,7 @@ extract_covar_var_time_base <- function(
   }
   max_diff <- lubridate::period_to_seconds(max_diff)
   t_covar <- as.numeric(as.POSIXct(raster::getZ(covariates)))
-  t_obs <- as.numeric(t)
+  t_obs <- as.numeric(as.POSIXct(t))
 
   # Fun to find closest point
   which_rast <- function(t_diffs, where, max_diff) {

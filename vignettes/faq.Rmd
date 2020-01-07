@@ -1,0 +1,86 @@
+---
+title: "Frequently Asked Questions"
+author: "Johannes Signer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fitting a Step-Selection Function}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+set.seed(20161113)
+```
+
+
+## Working with tracks
+
+### Q1: How to work with `extract_covariates_var_time()` with multiple animals:
+
+Simulate some data: 10 animals over a year with monhtly covariates. Note the covariates do not influence movement during the simulaitons. This purely for illustration. 
+
+```{r}
+library(raster)
+library(lubridate)
+library(amt)
+
+set.seed(123)
+
+trks <- tibble(
+  id = 1:10, 
+  trk = map(1:10, ~ tibble(x = cumsum(rnorm(100)), y = cumsum(rnorm(100)), 
+                           ts = ymd_hm("2019-01-01 00:00") + hours(0:99)))
+)
+
+dat <- unnest(trks)
+
+```
+
+Next lets create some covariates.
+
+```{r}
+r <- stack(map(1:15, 
+    ~ raster(xmn = -100, xmx = 100, ymn = -100, ymx = 100, 
+             res = 1, vals = runif(4e4, ., . + 1))))
+
+r <- setZ(r, ymd_hm("2019-01-01 00:00") + hours(seq(0, by = 10, len = 15)))
+```
+
+We have now 10 animals, each with 100 relocations (one per hour) and one env covariate which changes every 10 hours. 
+Now we can extract the covariates at the end of each step within an time window (specified with `max_time`). 
+
+
+```{r}
+trk <- make_track(dat, x, y, ts, id = id)
+
+# For one animal
+trk %>% filter(id == 1) %>% 
+  extract_covariates_var_time(r, max_time = hours(10 * 24)) -> t1
+
+t1$time_var_covar
+
+```
+Now lets do the the same for an animal at once:
+
+```{r}
+trk %>% group_by(id) %>% 
+  nest() %>% 
+  mutate(data = map(data, ~ .x %>% extract_covariates_var_time(r, max_time = hours(10 * 24)))) %>% 
+  unnest() -> trk2
+
+trk2
+
+```
+
+
+
+
+## Session
+
+```{r}
+sessionInfo()
+```
+

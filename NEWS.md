@@ -17,6 +17,8 @@
 - random_points with kde home ranges now work with different home range levels. 
 - random_steps now uses `units` to be explicit about the turning angle.
 - `bbox` is also available for steps and can return objects of `sf`.
+- `time_of_day` propgagates `NA` in coordinates.
+- `time_of_day` returns factor with levels set correctly. 
 
 
 
