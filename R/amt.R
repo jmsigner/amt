@@ -9,6 +9,7 @@
 #' @importFrom tibble tibble tribble is_tibble as_tibble
 #' @importFrom utils data head tail
 #' @importFrom sp CRS
+#' @importFrom stats dexp qexp terms
 #' @importFrom methods is
 #' @importFrom purrr map
 #' @importFrom rlang quo quos enquo quo_name

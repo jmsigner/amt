@@ -139,7 +139,7 @@ dispersal_kernel <- function(
     standardize = p$standardize,
     first_order_terms = p$first_order_terms,
     second_order_terms = p$second_order_terms,
-    hab = p$hab,
+    habitat = p$hab,
     other_covars = p$other_covars,
     other_covars_indicator = p$other_covars_indicator,
     stop = p$stop
@@ -221,7 +221,7 @@ simulate_xy <- function(obj, n = 100, other.vars = NULL) {
        standardize = p$standardize,
        first_order_terms = p$first_order_terms,
        second_order_terms = p$second_order_terms,
-       hab = p$hab,
+       habitat = p$hab,
        other_covars = p$other_covars,
        other_covars_indicator = p$other_covars_indicator,
        stop = p$stop
@@ -251,7 +251,7 @@ simulate_xy <- function(obj, n = 100, other.vars = NULL) {
 #' @export
 #'
 #' @examples
-simulate_ud <- function(obj, n = 1e3, other.vars = NULL) {
+simulate_ud_from_dk <- function(obj, n = 1e3, other.vars = NULL) {
 
    if (!is(obj, "dispersal_kernel")) {
      stop("obj is no dispersal kernel")
@@ -274,7 +274,7 @@ simulate_ud <- function(obj, n = 1e3, other.vars = NULL) {
        standardize = p$standardize,
        first_order_terms = p$first_order_terms,
        second_order_terms = p$second_order_terms,
-       hab = p$hab,
+       habitat = p$hab,
        other_covars = p$other_covars,
        other_covars_indicator = p$other_covars_indicator,
        stop = p$stop
@@ -284,7 +284,7 @@ simulate_ud <- function(obj, n = 1e3, other.vars = NULL) {
      xn <- k[next_pixel, 1]
      yn <- k[next_pixel, 2]
 
-     cells[i] <- cellFromXY(ud, cbind(xn, yn))
+     cells[i] <- raster::cellFromXY(ud, cbind(xn, yn))
      ta <- atan2_north_cpp(yn -  y, xn - x)
      dk[, "cos_ta_"] <- get_angle_cpp2(dk[, 1:2], dir = ta)
      x <- xn
