@@ -118,10 +118,8 @@ prep_and_check_simulations_to_rcpp <- function(
 #' @param raster `[logical(1) = TRUE]` \cr Should a `RasterLayer` be returned.
 #' @param stop `[integer(1)=1]{0,1}` \cr What happens when the animal steps out of the landscape.
 #'
-#' @return
 #' @export
 #'
-#' @examples
 dispersal_kernel <- function(
   formula, coefs, habitat = NULL, other.vars = NULL, start, max.dist,
   init.dir = amt::as_rad(45), standardize = TRUE, raster = TRUE, stop = 0) {
@@ -184,10 +182,8 @@ dispersal_kernel <- function(
 #' @param n Number of time steps.
 #' @param other.vars Other covariates (for each time step).
 #'
-#' @return
 #' @export
 #'
-#' @examples
 simulate_xy <- function(obj, n = 100, other.vars = NULL) {
 
    if (!is(obj, "dispersal_kernel")) {
@@ -247,12 +243,9 @@ simulate_xy <- function(obj, n = 100, other.vars = NULL) {
 #' @param n Number of time steps
 #' @param other.vars other covariates for each time step.
 #'
-#' @return
 #' @export
 #'
-#' @examples
 simulate_ud_from_dk <- function(obj, n = 1e3, other.vars = NULL) {
-
    if (!is(obj, "dispersal_kernel")) {
      stop("obj is no dispersal kernel")
    }

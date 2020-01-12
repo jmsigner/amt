@@ -25,8 +25,7 @@ random_steps.numeric <- function(
   start, n_control = 10,
   rel_angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e5),
-  rand_ta = random_numbers(make_unif_distr(), n = 1e5)) {
-
+  rand_ta = random_numbers(make_unif_distr(), n = 1e5), ...) {
   rs <- random_steps_cpp_one_step(
     n_control,  # number of controll steps
     start[1], start[2],

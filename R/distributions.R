@@ -203,6 +203,10 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
       fit <- fitdistrplus::fitdist(x, "exp", keepdata = FALSE)
       make_exp_distr(rate = fit$estimate["rate"])
     },
+    unif = {
+      fit <- fitdistrplus::fitdist(x, "unif", keepdata = FALSE)
+      make_unif_distr(min = min(x), max = max(x))
+    },
     vonmises = {
       xx <- circular::as.circular(
         x, type = "angles", units = "radians", template = "none",
@@ -214,3 +218,96 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 }
 
 
+
+
+# Utility functions -------------------------------------------------------
+
+#' Name of step-length distribution and turn-angle distribution
+#'
+#' @param x Random steps or fitted model
+#' @param ... None implemented.
+#'
+#' @export
+#' @name distr_name
+sl_distr_name <- function(x, ...) {
+  UseMethod("sl_distr_name")
+}
+
+
+#' @export
+#' @rdname distr_name
+sl_distr_name.random_steps <- function(x, ...) {
+  attr(x, "sl_")$name
+}
+
+#' @export
+#' @rdname distr_name
+sl_distr_name.fit_clogit <- function(x, ...) {
+  x$sl_$name
+}
+
+#' @export
+#' @rdname distr_name
+ta_distr_name <- function(x, ...) {
+  UseMethod("ta_distr_name")
+}
+
+#' @export
+#' @rdname distr_name
+ta_distr_name <- function(x, ...) {
+  UseMethod("ta_distr_name")
+}
+
+#' @export
+#' @rdname distr_name
+ta_distr_name.random_steps <- function(x, ...) {
+  attr(x, "ta_")$name
+}
+
+#' @export
+#' @rdname distr_name
+ta_distr_name.fit_clogit <- function(x, ...) {
+  x$ta_$name
+}
+
+#' Get parameters from a (fitted) distribution
+#'
+#' @param x `[amt_distr]`\cr A (fitted) distribution
+#' @param ... None
+#'
+#' @name params
+#' @export
+#'
+sl_distr_params <- function(x, ...) {
+  UseMethod("sl_distr_params")
+}
+
+#' @rdname params
+#' @export
+sl_distr_params.random_steps <- function(x, ...) {
+  attr(x, "sl_")$params
+}
+
+#' @rdname params
+#' @export
+sl_distr_params.fit_clogit <- function(x, ...) {
+  x$sl_$params
+}
+
+#' @rdname params
+#' @export
+ta_distr_params <- function(x, ...) {
+  UseMethod("ta_distr_params")
+}
+
+#' @rdname params
+#' @export
+ta_distr_params.random_steps <- function(x, ...) {
+  attr(x, "ta_")$params
+}
+
+#' @rdname params
+#' @export
+ta_distr_params.fit_clogit <- function(x, ...) {
+  x$ta_$params
+}

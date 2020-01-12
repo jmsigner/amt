@@ -10,7 +10,7 @@ random_steps(x, ...)
 
 \method{random_steps}{numeric}(start, n_control = 10, rel_angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e+05),
-  rand_ta = random_numbers(make_unif_distr(), n = 1e+05))
+  rand_ta = random_numbers(make_unif_distr(), n = 1e+05), ...)
 
 \method{random_steps}{steps_xy}(x, n_control = 10,
   sl_distr = fit_distr(x$sl_, "gamma"), ta_distr = fit_distr(x$ta_,

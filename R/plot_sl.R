@@ -35,13 +35,17 @@ plot_sl.random_steps <- function(x, n = 1000, upper_quantile = 0.99, plot = TRUE
 }
 
 plot_sl_base <- function(x, n, upper_quantile, plot, ...) {
-  xx <- sl_params(x)
-  to <- qgamma(upper_quantile, shape = xx[1], scale = xx[2])
-  xs <- seq(0, to, length.out = n)
-  if (plot) {
-    plot(xs, ys <- dgamma(xs, shape = xx[1], scale = xx[2]), type = "l",
-         ylab = "Probability",
-         xlab = "Distance")
+  xx <- sl_distr_params(x)
+  if (sl_distr_name(x) == "gamma") {
+    to <- qgamma(upper_quantile, shape = xx$shape, scale = xx$scale)
+    xs <- seq(0, to, length.out = n)
+    if (plot) {
+      plot(xs, ys <- dgamma(xs, shape = xx$shape, scale = xx$scale), type = "l",
+           ylab = "Probability",
+           xlab = "Distance")
+    }
+    invisible(data.frame(sl = xs, d = ys))
+  } else {
+    stop ("distr not implemented")
   }
-  invisible(data.frame(sl = xs, d = ys))
 }
