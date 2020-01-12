@@ -7,10 +7,10 @@
 \title{Create a \code{track_*}}
 \usage{
 mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
-  check_duplicates = FALSE)
+  check_duplicates = FALSE, all_cols = FALSE)
 
 make_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
-  check_duplicates = FALSE)
+  check_duplicates = FALSE, all_cols = FALSE)
 
 track(x, y, t, ..., crs = NULL)
 }
@@ -34,6 +34,8 @@ stamp, default is \code{TRUE}.}
 
 \item{check_duplicates}{\code{[logical(1)=FALSE]} \cr Should it be checked if there are
 duplicated time stamp, default is \code{FALSE}.}
+
+\item{all_cols}{\code{[logical(1)=FALSE]} \cr Should all columns be carried over to the track object, default is \code{FALSE}.}
 
 \item{x, y}{\code{[numeric]} \cr The x and y coordinates.}
 
