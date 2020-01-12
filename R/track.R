@@ -209,8 +209,10 @@ group_by.track_xyt <- function(.data, ..., .dots) {
 }
 
 #' @export
-nest.track_xyt <- function(.data, ..., .dots) {
-  NextMethod()
+nest.track_xy <- function(.data, ..., .dots) {
+ x <-  NextMethod()
+ class(x) <- c("tbl_df", "tbl", "data.frame")
+ x
 }
 
 #' @export
