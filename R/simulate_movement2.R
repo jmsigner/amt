@@ -137,7 +137,7 @@ dispersal_kernel <- function(
     standardize = p$standardize,
     first_order_terms = p$first_order_terms,
     second_order_terms = p$second_order_terms,
-    habitat = p$hab,
+    hab = p$hab,
     other_covars = p$other_covars,
     other_covars_indicator = p$other_covars_indicator,
     stop = p$stop
@@ -211,13 +211,13 @@ simulate_xy <- function(obj, n = 100, other.vars = NULL) {
    for (i in 1:n) {
      out$x1[i] <- x
      out$y1[i] <- y
-     k <- dispersal_kernel(
+     k <- dispersal_kernel_cpp(
        cur_x = x, cur_y = y, nc = p$nc, nr = p$nr,
        dk = p$dk, coefs = p$coefs,
        standardize = p$standardize,
        first_order_terms = p$first_order_terms,
        second_order_terms = p$second_order_terms,
-       habitat = p$hab,
+       hab = p$hab,
        other_covars = p$other_covars,
        other_covars_indicator = p$other_covars_indicator,
        stop = p$stop
@@ -261,13 +261,13 @@ simulate_ud_from_dk <- function(obj, n = 1e3, other.vars = NULL) {
    cells <- rep(NA, n)
 
    for (i in 1:n) {
-     k <- dispersal_kernel(
+     k <- dispersal_kernel_cpp(
        cur_x = x, cur_y = y, nc = p$nc, nr = p$nr,
        dk = p$dk, coefs = p$coefs,
        standardize = p$standardize,
        first_order_terms = p$first_order_terms,
        second_order_terms = p$second_order_terms,
-       habitat = p$hab,
+       hab = p$hab,
        other_covars = p$other_covars,
        other_covars_indicator = p$other_covars_indicator,
        stop = p$stop
