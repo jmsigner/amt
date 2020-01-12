@@ -8,7 +8,7 @@
 \usage{
 random_steps(x, ...)
 
-\method{random_steps}{numeric}(start, n_control = 10, rel_angle = 0,
+\method{random_steps}{numeric}(x, n_control = 10, rel_angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e+05),
   rand_ta = random_numbers(make_unif_distr(), n = 1e+05), ...)
 
@@ -22,8 +22,6 @@ random_steps(x, ...)
 \item{x}{Steps.}
 
 \item{...}{Further arguments, none implemented.}
-
-\item{start}{\code{[numeric(2)]} \cr The position of the start location (x and y coordinate).}
 
 \item{n_control}{\code{[integer(1)=10]{>1}} \cr The number of control steps paired
 with each observed step.}

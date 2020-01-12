@@ -7,7 +7,6 @@
 #'   with each observed step.
 #' @param sl_distr `[amt_distr]` \cr The step-length distribution.
 #' @param ta_distr `[amt_distr]` \cr The turn-angle distribution.
-#' @param start `[numeric(2)]` \cr The position of the start location (x and y coordinate).
 #' @param rel_angle `[numeric(1) = 0]{-pi < rel_angle < pi}` \cr Relative turing angle for the first step.
 #' @param  rand_sl `[numeric]` \cr Numeric vector with random step lengths an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., gamma or exponential).
 #' @param  rand_ta `[numeric]` \cr Numeric vector with relative turning angles an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., von Mises or uniform).
@@ -22,13 +21,13 @@ random_steps <- function(x, ...) {
 #' @export
 #' @rdname random_steps
 random_steps.numeric <- function(
-  start, n_control = 10,
+  x, n_control = 10,
   rel_angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e5),
   rand_ta = random_numbers(make_unif_distr(), n = 1e5), ...) {
   rs <- random_steps_cpp_one_step(
     n_control,  # number of controll steps
-    start[1], start[2],
+    x[1], x[2],
     rel_angle,
     rand_sl, rand_ta)
   rs
