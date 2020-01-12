@@ -35,7 +35,7 @@ trks <- tibble(
                            ts = ymd_hm("2019-01-01 00:00") + hours(0:99)))
 )
 
-dat <- unnest(trks)
+dat <- unnest(trks, cols = trk)
 
 ```
 
@@ -66,10 +66,10 @@ t1$time_var_covar
 Now lets do the the same for an animal at once:
 
 ```{r}
-trk %>% group_by(id) %>% 
-  nest() %>% 
+trk %>% 
+  nest(data = -c(id)) %>% 
   mutate(data = map(data, ~ .x %>% extract_covariates_var_time(r, max_time = hours(10 * 24)))) %>% 
-  unnest() -> trk2
+  unnest(cols = data) -> trk2
 
 trk2
 
