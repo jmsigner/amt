@@ -11,7 +11,7 @@
 #' @importFrom sp CRS
 #' @importFrom stats dexp qexp terms
 #' @importFrom methods is
-#' @importFrom purrr map
+#' @importFrom purrr map map_int
 #' @importFrom rlang quo quos enquo quo_name
 #' @importFrom raster raster
 #' @import survival
@@ -70,6 +70,8 @@ lubridate::days
 lubridate::weeks
 #' @export
 purrr::map
+#' @export
+purrr::map_int
 #' @export
 survival::clogit
 #' @export

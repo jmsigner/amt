@@ -20,6 +20,7 @@
 \alias{days}
 \alias{weeks}
 \alias{map}
+\alias{map_int}
 \alias{clogit}
 \alias{strata}
 \alias{nest}
@@ -41,7 +42,7 @@ below to see their documentation.
 
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
 
-  \item{purrr}{\code{\link[purrr]{map}}}
+  \item{purrr}{\code{\link[purrr]{map}}, \code{\link[purrr]{map_int}}}
 
   \item{raster}{\code{\link[raster]{raster}}}
 
