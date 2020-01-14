@@ -69,6 +69,20 @@ od.track_xyt <- function(x, trast,
 }
 
 
+
+#' Title
+#'
+#' @template track_xyt
+#' @param model `[character(1)="bm"]{"iid", "bm","ou","ouf", "auto"}` \cr The autocorrelation model that should be fit to the data. `iid` corresponds to uncorrelcated independent data, `bm` to Brownian motion, `ou` to an Ornstein-Uhlenbeck process, `ouf` to an Ornstein-Uhlenbeck forage process. `auto` will use model selection with AICc to find the best model.
+#' @param ... Additional parameters passed to `ctmm::ctmm.fit` or `ctmm::ctmm.select` for `model = "auto"`
+#'
+#' @return A `ctmm` object.
+#' @export
+#'
+#' @examples
+#' data(deer)
+#' m1 <- fit_ctmm(deer, "iid")
+#' summary(m1)
 fit_ctmm <- function(x, model, ...) {
 
   if (!model %in% c("iid", "bm", "ou", "ouf", "auto")) {
