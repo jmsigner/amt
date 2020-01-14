@@ -70,7 +70,7 @@ od.track_xyt <- function(x, trast,
 
 
 
-#' Title
+#' Fit a continuous time movement model with `ctmm`
 #'
 #' @template track_xyt
 #' @param model `[character(1)="bm"]{"iid", "bm","ou","ouf", "auto"}` \cr The autocorrelation model that should be fit to the data. `iid` corresponds to uncorrelcated independent data, `bm` to Brownian motion, `ou` to an Ornstein-Uhlenbeck process, `ouf` to an Ornstein-Uhlenbeck forage process. `auto` will use model selection with AICc to find the best model.

@@ -1,5 +1,5 @@
 # simulate data
-library(amt)
+set.seed(123)
 dat <- tibble(x = cumsum(rnorm(30)),
               y = cumsum(rnorm(30)),
               t = lubridate::ymd("2020-01-01") + days(1:30))
