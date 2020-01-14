@@ -144,7 +144,7 @@ as_telemetry <- function(x, ...) {
 #' @rdname coercion
 as_telemetry.track_xyt <- function(x, ...) {
   if (!amt::has_crs(x)) {
-    stop("track needs to havea CRS.")
+    stop("track needs to have a CRS.")
   }
   x <- transform_coords(x, sp::CRS("+init=epsg:4326"))
   ctmm::as.telemetry(data.frame(lon = x$x_, lat = x$y_, timestamp = x$t_))

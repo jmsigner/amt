@@ -46,40 +46,17 @@ od <- function(x, ...) {
 
 #' @export
 #' @rdname od
-od.track_xyt <- function(x, trast, model = "bm", res.space = 10, res.time = 10, ...) {
-
-  if (!has_crs(x)) {
-    stop("x, needs a cooridnate reference system (crs).")
-  }
+od.track_xyt <- function(x, trast,
+                         model = fit_ctmm(x, "bm"),
+                         res.space = 10, res.time = 10, ...) {
 
   if (is.na(raster::projection(trast))) {
     stop("trast, needs a cooridnate reference system (crs).")
   }
 
-  if (!model %in% c("bm", "ou", "ouf")) {
-    stop("Unknown model selected.")
-  }
+  d1 <- ctmm_fit_mod(x, model, ...)
 
-#  m <- move::move(x=x$x_, y=x$y_,
-#                  time = x$t_, proj = amt::get_crs(x),
-#                  data = data.frame(individual.local.identifier = rep("1", nrow(x))))
-#
-#  suppressWarnings(suppressMessages(dat <- ctmm::as.telemetry(m)))
-  suppressWarnings(suppressMessages(dat <- as_telemetry(x)))
-
-  g <- ctmm::ctmm.guess(dat, interactive = FALSE)
-
-  mod <- if (model == "bm") {
-    m_bm = ctmm::ctmm.fit(dat, ctmm::ctmm(tau = Inf))
-  } else if (model == "ou") {
-    m_ou = ctmm::ctmm.fit(dat, ctmm::ctmm(tau = g$tau[1]))
-  } else if (model == "ouf") {
-    m_ouf = ctmm::ctmm.fit(dat, ctmm::ctmm(tau = g$tau[1:2]))
-  } else {
-    stop("Unknown model selected")
-  }
-
-  krige <- ctmm::occurrence(dat, CTMM = mod, res.space = res.space, res.time = res.time)
+  krige <- ctmm::occurrence(d1$dat, CTMM = d1$mod, res.space = res.space, res.time = res.time)
 
   r <- 1 - ctmm::raster(krige, DF = "CDF")
   r <- raster::projectRaster(r, to = trast)
@@ -89,4 +66,31 @@ od.track_xyt <- function(x, trast, model = "bm", res.space = 10, res.time = 10, 
   r <- raster::setValues(r, v)
   attr(r, "model") <- model
   r
+}
+
+
+fit_ctmm <- function(x, model, ...) {
+
+  if (!model %in% c("iid", "bm", "ou", "ouf", "auto")) {
+    stop("Unknown model selected.")
+  }
+
+  suppressWarnings(suppressMessages(dat <- as_telemetry(x)))
+
+  g <- ctmm::ctmm.guess(dat, interactive = FALSE)
+
+  mod <- if (model == "iid") {
+    ctmm::ctmm.fit(dat, ctmm::ctmm(tau = NULL), ...)
+  } else if (model == "bm") {
+    ctmm::ctmm.fit(dat, ctmm::ctmm(tau = Inf), ...)
+  } else if (model == "ou") {
+    ctmm::ctmm.fit(dat, ctmm::ctmm(tau = g$tau[1]), ...)
+  } else if (model == "ouf") {
+    ctmm::ctmm.fit(dat, ctmm::ctmm(tau = g$tau[1:2]), ...)
+  } else if (model == "auto") {
+    ctmm::ctmm.select(dat, g, ...)
+  } else {
+    stop("Unknown model selected")
+  }
+  mod
 }
