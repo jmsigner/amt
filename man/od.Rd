@@ -14,8 +14,8 @@ rolling_od(x, ...)
 
 od(x, ...)
 
-\method{od}{track_xyt}(x, trast, model = "bm", res.space = 10,
-  res.time = 10, ...)
+\method{od}{track_xyt}(x, trast, model = fit_ctmm(x, "bm"),
+  res.space = 10, res.time = 10, ...)
 }
 \arguments{
 \item{x}{\code{[track_xyt]} \cr A track created with \code{make_track} that includes time.}
