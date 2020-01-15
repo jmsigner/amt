@@ -53,10 +53,7 @@ od.track_xyt <- function(x, trast,
   if (is.na(raster::projection(trast))) {
     stop("trast, needs a cooridnate reference system (crs).")
   }
-
-  d1 <- ctmm_fit_mod(x, model, ...)
-
-  krige <- ctmm::occurrence(d1$dat, CTMM = d1$mod, res.space = res.space, res.time = res.time)
+  krige <- ctmm::occurrence(as_telemetry(x), CTMM = model, res.space = res.space, res.time = res.time)
 
   r <- 1 - ctmm::raster(krige, DF = "CDF")
   r <- raster::projectRaster(r, to = trast)
