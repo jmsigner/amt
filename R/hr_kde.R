@@ -6,7 +6,7 @@ hr_kde <- function(x, ...) {
 
 #' @export
 #' @rdname hr
-hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = raster(as_sp(x), nrow = 100, ncol = 100), ...) {
+hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), ...) {
 
   # ---------------------------------------------------------------------------- #
   # Check bandwidth
