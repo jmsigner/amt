@@ -24,7 +24,7 @@ hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"),
   }
 
   suppressMessages(suppressWarnings(dat <- as_telemetry(x)))
-  ud <- akde(dat, model)
+  ud <- ctmm::akde(dat, model)
 
   r <- 1 - ctmm::raster(ud, DF = "CDF")
   r <- raster::projectRaster(r, to = trast)

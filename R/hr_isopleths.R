@@ -75,3 +75,9 @@ hr_isopleths.kde <- function (x, level = 0.95, ...) {
   iso <- hr_isopleths(x$ud, level = level, ...)
   iso
 }
+
+#' @export
+hr_isopleths.akde <- function (x, level = 0.95, ...) {
+  iso <- hr_isopleths(x$ud, level = level, ...)
+  iso
+}
