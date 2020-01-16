@@ -43,7 +43,7 @@ hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), ...) {
     h = h,
     ud = kde
   )
-  class(res) <- c("kde", "hr", class(res))
+  class(res) <- c("kde", "hr_prob", "hr", class(res))
   res
 }
 

@@ -97,7 +97,7 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer 
   }
 
   out <- list(locoh = qq2)
-  class(out) <- c("locoh", "hr", "list")
+  class(out) <- c("locoh", "hr_geom", "hr", "list")
   out
 
 }

@@ -20,7 +20,7 @@ hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
   mcps <- sf::st_as_sfc(mcps, crs = as.character(get_crs(x)))
   mcps <- sf::st_sf(mcps, area = sf::st_area(mcps))
   mcp <- list(mcp = mcps)
-  class(mcp) <- c("mcp", "hr")
+  class(mcp) <- c("mcp", "hr_geom", "hr")
   mcp
 }
 

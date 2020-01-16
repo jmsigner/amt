@@ -34,7 +34,7 @@ hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"),
   r <- raster::setValues(r, v)
 
   res <- list(ud = r, model = model)
-  class(res) <- c("akde", "hr", class(res))
+  class(res) <- c("akde", "hr_prob", "hr", class(res))
   res
 }
 
