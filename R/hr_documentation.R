@@ -20,6 +20,7 @@
 #' @param rescale `[character(1)]` \cr Rescaling method for reference bandwidth calucation. Must be one of "unitvar", "xvar", or "none".
 #' @template dots_none
 #' @references Worton, B. J. (1989). Kernel methods for estimating the utilization distribution in home-range studies. _Ecology, 70(1)_, 164-168.
+#'
 #' @name hr
 #' @examples
 #' data(deer)
