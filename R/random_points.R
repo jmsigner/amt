@@ -180,13 +180,11 @@ select.random_points <- function(.data, ..., .dots) {
 
 #' @export
 summarize.random_points <- function(.data, ..., .dots) {
-  xx <- NextMethod()
-  rp_transfer_attr(.data, xx)
+  NextMethod()
 }
 
 #' @export
 summarise.random_points <- function(.data, ..., .dots) {
-  xx <- NextMethod()
-  rp_transfer_attr(.data, xx)
+  NextMethod()
 }
 

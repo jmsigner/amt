@@ -124,13 +124,11 @@ select.random_steps <- function(.data, ..., .dots) {
 
 #' @export
 summarise.random_steps <- function(.data, ..., .dots) {
-  xx <- NextMethod()
-  rsteps_transfer_attr(.data, xx)
+  NextMethod()
 }
 
 
 #' @export
 summarize.random_steps <- function(.data, ..., .dots) {
-  xx <- NextMethod()
-  rsteps_transfer_attr(.data, xx)
+  NextMethod()
 }
