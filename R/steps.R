@@ -385,7 +385,13 @@ filter.steps_xy <- function(.data, ..., .dots) {
 #' @export
 group_by.steps_xy <- function(.data, ..., .dots) {
   xx <- NextMethod()
-  steps_transfer_attr(.data, xx)
+  xx <- steps_transfer_attr(.data, xx)
+
+  # Add grouped_df
+  cl <- class(xx)
+  lcl <- length(cl)
+  class(xx) <- c(cl[1:(lcl - 3)], "grouped_df", cl[(lcl - 3):lcl])
+  xx
 }
 
 #' @export
