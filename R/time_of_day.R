@@ -91,15 +91,19 @@ time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
       }
       names <- c("night", "dawn", "day", "dusk", "night")
       xx <- names[apply(cbind(tt, dawn, sunr, suns, dusk), 1,
-                        function(x) base::findInterval(x[1], x[2:5])) + 1]
+                        function(x) if(any(is.na(x))) NA else base::findInterval(x[1], x[2:5])) + 1]
     } else {
       names <- c("night", "day", "night")
       xx <- names[apply(cbind(tt, sunr, suns), 1,
-                        function(x) base::findInterval(x[1], x[2:3])) + 1]
-      factor(xx, levels = c("day", "night"))
+                        function(x) if(any(is.na(x))) NA else base::findInterval(x[1], x[2:3])) + 1]
+    }
+
+    if (any(is.na(xx))) {
+      message("For some points NA was returned for sunrise/sunset. Maybe high latitude during summer/winter?")
     }
     res[!idx] <- xx
   }
+
 
   if (include.crepuscule) {
     factor(res, levels = c("day", "dusk", "night", "dawn"))
