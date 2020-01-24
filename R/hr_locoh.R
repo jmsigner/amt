@@ -12,19 +12,19 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer 
 
   ## type
   if (!type %in% c("a", "k", "r")) {
-    stop(paste0("rhrLocoh: incorrect type"))
+    stop(paste0("hr_loch: incorrect type"))
   }
 
   n <- as.numeric(n)
   if (is.na(n)) {
-    stop(paste("rhrLocoh: n should be numeric, not ", n))
+    stop(paste("hr_locoh: n should be numeric, not ", n))
   }
 
   no <- 1:nrow(x)
   if (type == "k") {
     if (n > nrow(x)) {
       n <- nrow(x)
-      warning(paste0("Locoh, type k, n > number of points, set n to number of points (", n, ")"))
+      warning(paste0("hr_locoh, type k, n > number of points, set n to number of points (", n, ")"))
     }
     ## 1. calc dist
     ## 2. order by dist
@@ -47,16 +47,18 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer 
   }
 
   xysp <- sp::SpatialPointsDataFrame(x[, c("x_", "y_")], data=data.frame(id=1:nrow(x)))
-  zz <- lapply(1:length(aa), function(i) xysp[aa[[i]], ])
+  zz <- lapply(1:nrow(aa), function(i) xysp[aa[i, ], ])
   mcps <- lapply(zz, function(x) rgeos::gBuffer(rgeos::gConvexHull(x), width = rand_buffer))
   mcpAreas <- sapply(mcps, rgeos::gArea)
 
- # Slower, so stay with sp
- #  xysp <- sf::st_as_sf(x, coords = c("x_", "y_"))
- #  mcps <- mutate(xysp,
- #    mcps =  purrr::map(aa, ~  sf::st_buffer(sf::st_convex_hull(sf::st_union(xysp[.x, ])),
- #                                            dist = rand_buffer)))
- #  mcps1 <- mutate(mcps, area = purrr::map_dbl(mcps, sf::st_area))
+
+  #With SF
+  # Slower, so stay with sp
+  #  xysp <- sf::st_as_sf(x, coords = c("x_", "y_"))
+  #  mcps <- mutate(xysp,
+  #    mcps =  purrr::map(aa, ~  sf::st_buffer(sf::st_convex_hull(sf::st_union(xysp[.x, ])),
+  #                                            dist = rand_buffer)))
+  #  mcps1 <- mutate(mcps, area = purrr::map_dbl(mcps, sf::st_area))
 
   mcpAreasOrder <- order(mcpAreas)
 
