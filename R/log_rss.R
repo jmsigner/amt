@@ -32,6 +32,7 @@
 #'
 #' @examples
 #'
+#' ############
 #' ##Fit an RSF, then calculate log-RSS to visualize results.
 #'
 #' #Load packages
@@ -73,7 +74,16 @@
 #'   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
 #'   theme_bw()
 #'
+#' ##End RSF example
+#' ############
+#'
+#' ############
 #' ##Fit an SSF, then calculate log-RSS to visualize results.
+#'
+#' #Load packages
+#' library(amt)
+#' library(dplyr)
+#' library(ggplot2)
 #'
 #' #Load data
 #' data("deer")
@@ -109,6 +119,9 @@
 #'   ylab("log-RSS") +
 #'   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
 #'   theme_bw()
+#'
+#' ##End SSF example
+#' ############
 #'
 #'
 log_rss <- function(object, ...){

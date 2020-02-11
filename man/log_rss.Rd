@@ -40,6 +40,7 @@ the terms in the model formula exactly.
 }
 \examples{
 
+############
 ##Fit an RSF, then calculate log-RSS to visualize results.
 
 #Load packages
@@ -81,7 +82,16 @@ ggplot(logRSS$df, aes(x = lu_x1, y = log_rss)) +
   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
   theme_bw()
 
+##End RSF example
+############
+
+############
 ##Fit an SSF, then calculate log-RSS to visualize results.
+
+#Load packages
+library(amt)
+library(dplyr)
+library(ggplot2)
 
 #Load data
 data("deer")
@@ -117,6 +127,9 @@ ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
   ylab("log-RSS") +
   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
   theme_bw()
+
+##End SSF example
+############
 
 
 }
