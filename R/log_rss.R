@@ -73,12 +73,54 @@
 #'   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
 #'   theme_bw()
 #'
-#' @export
-log_rss <- function(object, x1, x2){
+#' ##Fit an SSF, then calculate log-RSS to visualize results.
+#'
+#' #Load data
+#' data("deer")
+#' data("sh_forest")
+#'
+#' #Prepare data for SSF
+#' ssf_data <- deer %>%
+#'   steps_by_burst() %>%
+#'   random_steps(n = 15) %>%
+#'   extract_covariates(sh_forest) %>%
+#'   mutate(forest = factor(sh.forest, levels = 1:2,
+#'                     labels = c("forest", "non-forest")),
+#'   cos_ta = cos(ta_),
+#'   log_sl = log(sl_))
+#'
+#' #Fit an SSF (note model = TRUE necessary for predict() to work)
+#' m2 <- ssf_data %>%
+#'   fit_clogit(case_ ~ forest + strata(step_id_), model = TRUE)
+#'
+#' #Calculate log-RSS
+#' #data.frame of x1s
+#' x1 <- data.frame(forest = factor(c("forest", "non-forest")))
+#' #data.frame of x2
+#' x2 <- data.frame(forest = factor("forest", levels = levels(ssf_data$forest)))
+#' #Calculate
+#' logRSS <- log_rss(object = m2, x1 = x1, x2 = x2)
+#'
+#' #Plot
+#' ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
+#'   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
+#'   geom_point(size = 3) +
+#'   xlab(expression("Forest Cover " * (x[1]))) +
+#'   ylab("log-RSS") +
+#'   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
+#'   theme_bw()
+#'
+#'
+log_rss <- function(object, ...){
   #Check inputs
   if(!inherits(object, c("fit_logit", "fit_clogit"))){
     stop("'object' should be an object of class 'fit_logit' or 'fit_clogit'.")
   }
+  UseMethod("log_rss", object)
+}
+
+#' @export
+log_rss.fit_logit <- function(object, x1, x2){
   if(!inherits(x1, "data.frame")){
     stop("'x1' should be an object of class 'data.frame'.")
   }
@@ -93,8 +135,47 @@ log_rss <- function(object, x1, x2){
   }
 
   #Calculate y_x
-  y_x1 <- predict(object$model, newdata = x1, type = "link")
-  y_x2 <- predict(object$model, newdata = x2, type = "link")
+  y_x1 <- stats::predict.glm(object$model, newdata = x1, type = "link")
+  y_x2 <- stats::predict.glm(object$model, newdata = x2, type = "link")
+
+  #Include values of x1 in return data.frame
+  df <- x1
+  names(df) <- paste0(names(x1), "_x1")
+  #Calculate log_rss
+  df$log_rss <- unname(y_x1 - y_x2)
+
+  #Compose the list to return
+  res <- list(df = df,
+              x1 = x1,
+              x2 = x2)
+
+  #Set the S3 class (could be used for plotting method later)
+  class(res) <- c("log_rss", class(res))
+
+  #Return log_rss
+  return(res)
+}
+
+#' @export
+log_rss.fit_clogit <- function(object, x1, x2){
+  if(!inherits(x1, "data.frame")){
+    stop("'x1' should be an object of class 'data.frame'.")
+  }
+  if(!inherits(x2, "data.frame")){
+    stop("'x2' should be an object of class 'data.frame'.")
+  }
+
+  #Check rows of x2
+  if(nrow(x2) != 1L){
+    stop(paste0("The data.frame provided as 'x2' should have exactly 1 row.\n",
+                "  See ?log_rss for more details."))
+  }
+
+  #Calculate correction due to sample-centered means (see ?survival:::predict.coxph for details)
+  uncenter <- sum(coef(object$model) * object$model$means, na.rm=TRUE)
+  #Calculate y_x
+  y_x1 <- survival:::predict.coxph(object$model, newdata = x1, type = "lp", reference = "sample") + uncenter
+  y_x2 <- survival:::predict.coxph(object$model, newdata = x2, type = "lp", reference = "sample") + uncenter
 
   #Include values of x1 in return data.frame
   df <- x1
