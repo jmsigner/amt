@@ -131,7 +131,6 @@ ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
 ##End SSF example
 ############
 
-
 }
 \references{
 Avgar, T., Lele, S.R., Keim, J.L., & Boyce, M.S.. (2017). Relative Selection
@@ -142,4 +141,6 @@ Strength: Quantifying effect size in habitat‐ and step‐selection inference.
 See Avgar \emph{et al.}
 (\href{https://doi.org/10.1002/ece3.3122}{2017}) for details about relative
 selection strength.
+
+Default plotting method available: \code{\link{plot.log_rss}()}
 }
