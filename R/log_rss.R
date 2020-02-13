@@ -354,8 +354,9 @@ plot.log_rss <- function(object, x_var1 = "guess", x_var2 = "guess", ...){
   #Now plot
   if (plot_type == "p"){
     #If plotting points, we can plot them all at once
+      #Note, fill = color for the case where x1 is a factor
     graphics::plot(x = object$df[[x_var1_x1]], y = object$df$log_rss,
-                   type = plot_type, col = object$df$color,
+                   type = plot_type, col = object$df$color, fill = object$df$color,
                    xlab = x_var1, ylab = "log-RSS",
                    main = expression("log-RSS(" * x[1] * " vs. " * x[2]*")"))
   } else {
