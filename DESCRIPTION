@@ -4,6 +4,7 @@ Title: Animal Movement Tools
 Version: 0.0.8
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"), 
   person("Bjoern", "Reineking", role = "ctb"), 
+  person("Brian", "Smith", role = "ctb"), 
   person("Ulrike", "Schlaegel", role = "ctb"), 
   person("Scott", "LaPoint", role = "dtc"))
 Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource and step-selection functions), and simulation of space-use from fitted step-selection functions.
