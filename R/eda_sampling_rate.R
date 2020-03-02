@@ -68,14 +68,11 @@ summarize_sampling_rate.track_xyt <- function(x, time_unit = "auto", summarize =
 
   if (summarize) {
     t_diff_s <- summary(t_diff)
+    names(t_diff_s) <- c("min", "q1", "median", "mean", "q3", "max")
+
     if (as_tibble) {
       tibble(
-        min = t_diff_s[1],
-        q1 = t_diff_s[2],
-        median = t_diff_s[3],
-        mean = t_diff_s[4],
-        q3 = t_diff_s[5],
-        max = t_diff_s[6],
+        !!! t_diff_s,
         sd = sd(t_diff),
         n = length(t_diff),
         unit = opt_time
