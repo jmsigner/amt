@@ -78,6 +78,7 @@ extract_covar_base <- function(x, covars) {
 #' @details `extract_covariates_along` extracts the covariates along a straight line between the start and the end point of a (random) step. It returns a list, which in most cases will have to be processed further.
 #' @export
 #' @examples
+#' \dontrun{
 #' data(deer) # relocation
 #' data("sh_forest") # env covar
 #'
@@ -86,6 +87,7 @@ extract_covar_base <- function(x, covars) {
 #'   mutate(for_path = extract_covariates_along(., sh_forest))  %>%
 #'   # 1 = forest, lets calc the fraction of forest along the path
 #'   mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
+#' }
 #'
 extract_covariates_along <- function(x, ...) {
   UseMethod("extract_covariates_along", x)
@@ -97,8 +99,10 @@ extract_covariates_along.steps_xy <- function(x, covariates, ...) {
   if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
     wkt <- with(x, paste0("LINESTRING (", x1_, " ", y1_, ",", x2_, " ", y2_, ")"))
     ll <- sf::st_as_sfc(wkt)
-    v <- velox::velox(covariates)
-    l2 <- v$extract(sp = ll)
+    # Remove dependency on velox
+    # v <- velox::velox(covariates)
+    # l2 <- v$extract(sp = ll)
+    l2 <- raster::extract(covariates, sf::as_Spatial(ll))
     return(l2)
   } else {
     stop("covariates: need to be a Raster*.")

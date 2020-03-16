@@ -8,12 +8,14 @@
 \usage{
 log_rss(object, ...)
 
-\method{log_rss}{fit_logit}(object, x1, x2)
+\method{log_rss}{fit_logit}(object, x1, x2, ...)
 
-\method{log_rss}{fit_clogit}(object, x1, x2)
+\method{log_rss}{fit_clogit}(object, x1, x2, ...)
 }
 \arguments{
 \item{object}{\code{[fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.}
+
+\item{...}{Further arguments, none implemented.}
 
 \item{x1}{\code{[data.frame]} \cr A \code{data.frame} representing the habitat values
 at location x_1. Must contain all fitted covariates as expected by

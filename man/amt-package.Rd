@@ -21,6 +21,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Bjoern Reineking [contributor]
+  \item Brian Smith [contributor]
   \item Ulrike Schlaegel [contributor]
   \item Scott LaPoint [data contributor]
 }

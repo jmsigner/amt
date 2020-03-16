@@ -9,6 +9,7 @@
 #' @param x2 `[data.frame]` \cr A 1-row `data.frame` representing the single
 #' hypothetical location of x_2. Must contain all fitted covariates as expected
 #' by `predict()`.
+#' @template dots_none
 #'
 #' @details This function assumes that the user would like to compare relative
 #' selection strengths from at least one proposed location (`x1`) to exactly
@@ -136,7 +137,7 @@ log_rss <- function(object, ...){
 
 #' @rdname log_rss
 #' @export
-log_rss.fit_logit <- function(object, x1, x2){
+log_rss.fit_logit <- function(object, x1, x2, ...){
   if(!inherits(x1, "data.frame")){
     stop("'x1' should be an object of class 'data.frame'.")
   }
@@ -175,7 +176,7 @@ log_rss.fit_logit <- function(object, x1, x2){
 
 #' @rdname log_rss
 #' @export
-log_rss.fit_clogit <- function(object, x1, x2){
+log_rss.fit_clogit <- function(object, x1, x2, ...) {
   if(is.null(object$model$model)){
     stop(paste("Please refit your step selection model with the argument 'model = TRUE'.\n"),
          "  The predict() method from package 'survival' requires that you store the model.\n",

@@ -1,4 +1,4 @@
-#' @importFrom dplyr arrange filter group_by select summarize summarise ungroup
+#' @importFrom dplyr arrange filter group_by select summarize summarise ungroup rename
 #' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars n
 #' @importFrom graphics plot legend
 #' @importFrom grDevices adjustcolor
