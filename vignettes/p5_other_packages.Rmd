@@ -1,0 +1,65 @@
+---
+title: "Interface to other packages with `amt`"
+author: "Johannes Signer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Interface to other packages with `amt`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+## About
+
+This vignette briefly introduces how one can coerce `amt track_xy*` to other commonly used packages. At the moment this vignette shows methods to coerece to `adehabitatHR`, `ctmm`, and `move`.
+
+## Getting the data ready
+
+First we load the required libraries and the relocation data (called `deer`)
+
+```{r}
+library(amt)
+data("deer")
+deer
+```
+
+## `adehbatit*`
+
+```{r}
+adehabitatLT_ltraj <- as_ltraj(deer)
+adehabitatLT_ltraj
+```
+
+
+## `ctmm`
+
+With the function `as_telemetry` a `track_xyt` can be coerced to a `telemetry` object used in `ctmm`.
+
+```{r}
+ctmm_obj <- as_telemetry(deer)
+class(ctmm_obj)
+```
+
+
+## `move`
+
+```{r}
+move_obj <- as_move(deer)
+move_obj
+
+```
+
+## To `sf` and `sp`
+
+
+## Session
+```{r}
+sessioninfo::session_info()
+```
+
+

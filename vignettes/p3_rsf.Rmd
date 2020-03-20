@@ -1,10 +1,10 @@
 ---
-title: "Doing Resource Selection Functions (RSF) with `amt`"
+title: "Resource Selection Functions (RSF) with `amt`"
 author: "Johannes Signer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting started with amt}
+  %\VignetteIndexEntry{Resource Selection Functions (RSF) with `amt`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -130,29 +130,6 @@ rsf1 %>% fit_rsf(case_ ~ forest) %>%
 
 ```
 
-
-
-## Session
-```{r}
-sessioninfo::session_info()
-```
-
-
-
-As a last step, we have to extract the covariates at the end point of each step. We can do this with `extract_covariates`.
-
-```{r, eval =FALSE}
-ssf1 <- ssf1 %>% extract_covariates(sh_forest) 
-```
-
-
-Since the forest layers is coded as `1 = forest` and `2 != forest`, we create a factor with appropriate levels. We also calculate the log of the step length and the cosine of the turn angle, which we may use later for a integrated step selection function.
-
-
-
-## Fitting SSF 
-
-Now all pieces are there to fit a SSF. We will use `fit_clogit`, which is a wrapper around `survival::clogit`.
 
 
 ## Session

@@ -50,17 +50,37 @@ sh_forest
 
 ## Prepare Data for SSF
 
-Before fitting a step selection, the data well need to prepared. First, we change from a point representation to a step representation, using the function `steps_by_burst`, which in contrast to the `steps` function accounts for bursts.
+### Steps
+
+Before fitting a SSF we have to do some data preparation. First, we change from a point representation to a step representation, using the function `steps_by_burst`, which in contrast to the `steps` function accounts for bursts.
 
 ```{r}
 ssf1 <- deer %>% steps_by_burst()
 ```
 
-Next, we generate random steps with the function `random_steps`. This function fits by default a Gamma distribution to the step lengths and a von Mises distribution to the turn angles, and then pairs each observed step with `n` random steps.
+### Control/random steps
+
+The generic function `random_steps` provides a methods for a `track_xy*`, where each observed step is paired with `n_control` control steps (i.e., steps that share the same starting location but have different turn angles and step lenghts). The distributions for drawing step lengths and turning angles are usually obtained by fitting known parametric distribution to the observed step length and turn angles. 
+
+The function `random_steps` has seven arguments. For most use cases the defaults are just fine, but there might situation where the user wants to specify these. The arguments are:  
+
+1. `x`: This is the `track_xy*` for which the random steps are created. That is, for each step in `x` `n_control` random steps are created. 
+2. `n_control`: The number of random steps that should be created.
+3. `sl_distr`: This is the distribution of the step lengths. By default a gamma distribution is fit to the observed step lengths of the `x`. But any `amt_distr` is suitable here. ^[See also `?fit_distr`.]
+4. `ta_distr`: This the turnangle distribution, with the default being a von Mises distribution.
+5. `rand_sl`: These are the random step lengths, by default 1e5 random numbers from the distribution fitted in 3^[Note, this possible because of the [Glivenko-Cantelli theorem](https://en.wikipedia.org/wiki/Glivenko%E2%80%93Cantelli_theorem) and works as long as the sample from the original distribution (the sample you provide here) is large enough.].
+6. `rand_ta`: These are the random turn angles, by default 1e4 random numbers from the distribution fitted in 4.
+7. `include_observed`: This argument is by default `TRUE` and indicates if the observed steps should be included or not.
+
+This is likely the standard case^[And how it was implemented in `amt` up to version 0.0.6. This **should** be backward compatible and not break existing code.] to pair each observed step with 15 random steps. In most situation this will be fine. 
 
 ```{r}
-ssf1 <- ssf1 %>% random_steps(n = 15)
+ssf1 <- ssf1 %>% random_steps(n_control = 15)
 ```
+
+
+
+### Extract covariates
 
 As a last step, we have to extract the covariates at the end point of each step. We can do this with `extract_covariates`.
 
