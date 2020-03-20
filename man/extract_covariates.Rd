@@ -69,6 +69,7 @@ data(sh_forest)
 deer \%>\% extract_covariates(sh_forest)
 deer \%>\% steps \%>\% extract_covariates(sh_forest)
 deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
+\dontrun{
 data(deer) # relocation
 data("sh_forest") # env covar
 
@@ -77,6 +78,7 @@ p1 <- deer \%>\% steps() \%>\% random_steps() \%>\%
   mutate(for_path = extract_covariates_along(., sh_forest))  \%>\%
   # 1 = forest, lets calc the fraction of forest along the path
   mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
+}
 
 # Simulate some dummy data
 # Hourly data for 10 days: 24 * 10

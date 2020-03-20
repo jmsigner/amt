@@ -44,8 +44,7 @@ Imports:
     stats,
     tibble,
     tidyr (>= 1.0.0),
-    utils,
-    velox
+    utils
 Suggests: 
   adehabitatLT,
   ggplot2,
