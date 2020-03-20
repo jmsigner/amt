@@ -6,7 +6,7 @@
 #' @param type `[character(1)]` \cr Argument passed to `sp::spsample type`. The default is `random`.
 #' @param level `[numeric(1)]` \cr Home-range level of the minimum convex polygon, used for generating the background samples.
 #' @param hr `[character(1)]` \cr The home range estimator to be used. Currently only MCP is implemented.
-#' @param factor `[numeric(1)]` Determines the number of random points that are generated. If `factor == 1` the number of presence points is equal to the number of observed points.
+#' @param presence `[track]` \cr The presence points, that will be added to the result.
 #' @param ... `[any]`\cr None implemented.
 #' @note For objects of class `track_xyt` the timestamp (`t_`) is lost.
 #' @name random_points
@@ -69,49 +69,73 @@ random_points.default <- function(x, ...) {
 
 #' @export
 #' @rdname random_points
-random_points.mcp <- function(x, n = 100, type = "random", ...) {
-  as_track(sf::st_sample(hr_isopleths(x), size = n, type = type, ...))
+random_points.hr <- function(x, n = 100, type = "random", presence = NULL, ...) {
+  random_points_base(poly = hr_isopleths(x, ...), presence = presence,
+                     type = type, n = n)
 }
 
 #' @export
 #' @rdname random_points
-random_points.sf <- function(x, n = 100, type = "random", ...) {
-  as_track(sf::st_sample(x, size = n, type = type, ...))
+random_points.sf <- function(x, n = 100, type = "random", presence = NULL, ...) {
+  random_points_base(poly = x, presence = presence,
+                     type = type, n = n)
 }
 
 #' @export
 #' @rdname random_points
-random_points.SpatialPolygons <- function(x, n = 100, type = "random", ...) {
+random_points.SpatialPolygons <- function(x, n = 100, type = "random", presence = NULL, ...) {
   as_track(sp::spsample(x, n = n, type = type, ...))
+  random_points_base(poly = sf::st_as_sf(x), presence = presence,
+                     type = type, n = n)
 }
 
 #' @export
 #' @rdname random_points
-random_points.track_xy <- function(x, level = 1, hr = "mcp", factor = 10, type = "random", ...) {
+random_points.track_xy <- function(x, level = 1, hr = "mcp", n = nrow(x) * 10, type = "random", ...) {
 
   if (hr == "mcp") {
-    hr <- hr_mcp(x, levels = level, ...)
+    hr <- hr_mcp(x, levels = level, ...) %>% hr_isopleths()
   } else if (hr == "kde") {
     hr <- hr_kde(x, ...) %>% hr_isopleths(level = level)
   } else {
     stop("Only mcp and kde home ranges are currently implemented.")
   }
+  random_points_base(poly = hr, presence = x, type = type, n = n)
+}
 
 
-  rnd_pts <- random_points(hr, n = round(nrow(x)) * factor, type = type, level = level)
 
-  n <- nrow(x)
-  n_rnd <- nrow(rnd_pts)
+random_points_base <- function(poly, presence, type, n, ...) {
 
+  rnd_pts <- sf::st_coordinates(
+    sf::st_sample(poly, size = n, type = type, ...))
 
   xx <- tibble(
-    case_ = c(rep(TRUE, n), rep(FALSE, n_rnd)),
-    x_ = c(x$x_, rnd_pts$x_),
-    y_ = c(x$y_, rnd_pts$y_)
+    case_ = FALSE,
+    x_ = rnd_pts[, 1],
+    y_ = rnd_pts[, 2]
   )
+
+  if (!is.null(presence)) {
+    stopifnot(inherits(presence, "track_xy"))
+
+    xx <- dplyr::bind_rows(
+      xx,
+      tibble(
+        case_ = TRUE,
+        x_ = presence$x_,
+        y_ = presence$y_
+      ))
+  }
+
   class(xx) <- c("random_points", class(xx))
   xx
 }
+
+
+
+
+
 
 #' @export
 #' @method plot random_points

@@ -1,0 +1,162 @@
+---
+title: "Doing Resource Selection Functions (RSF) with `amt`"
+author: "Johannes Signer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with amt}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+## About
+
+This vignette briefly introduces how one can fit a Resource-Selection Function (RSF) with the `amt` package. We will be using the example data of one red deer from northern Germany and one covariate: a forest cover map.
+
+## Getting the data ready
+
+First we load the required libraries and the relocation data (called `deer`)
+
+```{r}
+library(amt)
+data("deer")
+deer
+```
+
+In order to continue, we need a regular sampling rate. To check the current sampling rate, we use `summarize_sampling_rate`:
+
+```{r}
+summarize_sampling_rate(deer)
+```
+
+The median sampling rate is 6h, which is what we aimed for.
+
+
+Next, we have to get the environmental covariates. A forest layer is included in the package. Note, that this a regular `RasterLayer`. 
+
+```{r}
+data("sh_forest")
+sh_forest
+```
+
+## Prepare Data for RSF
+
+### Random Points
+
+Before fitting a RSF we have to do some data preparation. We have to generate random points, points that we think the animal could have used. The random points define the availability domain. In `amt` function `random_points` is designed to do just that. The function can be used in 3 different ways, depending to the type of object that is passed to the function call. 
+
+1. A `track_*` (such as the `deer` object) can be passed to the function `random_points`. The function then calculates a home range (the home-range estimator can be controlled with argument `hr`). Within this home range `n` random points are generated. The default value of `n` is ten times the number of present points.
+2. A `hr`-object (i.e., the result of a home-range estimation in `amt`). This allows to generate random points within any home range that was previously estimated in `amt`. Note, that this could be a home range of multiple animals. In this case, the function `random_points` has one additional argument called `presence`. This argument takes a `trk_*` with the presence points and adds these points for convenience to the random points. 
+3. A `SpatialPolygons*`-object or `sf`-object. The latter must contain `POLYGON`s or `MULTIPOLYGON`s as features. This can be useful in situation where a home range needs to be buffered, or when other geographical features are considered as the availability domain. As before, this method for `random_points` also takes the argument `presence` to optionally add the observed points to the output.
+
+Lets now illustrate the three diffferent situations. First we take random points from a `track_xy`
+
+```{r, fig.width=4, fig.height=4}
+r1 <- random_points(deer)
+plot(r1)
+```
+
+With the argument `n` we can controll the number of random points (remember that the default is ten times as many points as we observed points). 
+
+
+```{r, fig.width=4, fig.height=4}
+r1 <- random_points(deer, n = 100)
+plot(r1)
+```
+
+Next, we can create random point within a home range, that we estimated before. 
+
+```{r, fig.width=4, fig.height=4}
+hr <- hr_mcp(deer)
+r1 <- random_points(hr, n = 500)
+plot(r1)
+```
+
+Here, we can also add the observed points: 
+
+```{r, fig.width=4, fig.height=4}
+hr <- hr_mcp(deer)
+r1 <- random_points(hr, n = 500, presence = deer)
+plot(r1)
+```
+
+Finally, we can work with the home range and for example a buffer and then generate random points within the this new polygon. 
+
+
+```{r, fig.width=4, fig.height=4}
+hr <- hr_mcp(deer) %>% hr_isopleths() %>% 
+  sf::st_buffer(dist =3e4) # add a 30km buffer
+r1 <- random_points(hr, n = 500)
+plot(r1)
+```
+
+And of course we can also add observed points again
+
+```{r, fig.width=4, fig.height=4}
+hr <- hr_mcp(deer) %>% hr_isopleths() %>% 
+  sf::st_buffer(dist =3e4) # add a 30km buffer
+r1 <- random_points(hr, n = 500, presence = deer)
+plot(r1)
+```
+
+
+
+Of course we are not restricted to the `sf::st_buffer` function. All geometric operations from the `sf` package can be used to generate arbitrarily complex availability domains. 
+
+
+### Extract covariates
+
+As the next step we have to extract the covariates at point. We can do this with `extract_covariates`.
+
+```{r}
+rsf1 <- deer %>% random_points() %>% 
+  extract_covariates(sh_forest) %>% 
+  mutate(forest = sh.forest == 1)
+```
+
+
+## Fitting RSF
+
+Now all pieces are there to fit a RSF. We will use `fit_rsf`, which is just a wrapper around `stats::glm` with `family = binomial(link = "logit")`.
+
+```{r}
+rsf1 %>% fit_rsf(case_ ~ forest) %>% 
+  summary()
+
+```
+
+
+
+## Session
+```{r}
+sessioninfo::session_info()
+```
+
+
+
+As a last step, we have to extract the covariates at the end point of each step. We can do this with `extract_covariates`.
+
+```{r, eval =FALSE}
+ssf1 <- ssf1 %>% extract_covariates(sh_forest) 
+```
+
+
+Since the forest layers is coded as `1 = forest` and `2 != forest`, we create a factor with appropriate levels. We also calculate the log of the step length and the cosine of the turn angle, which we may use later for a integrated step selection function.
+
+
+
+## Fitting SSF 
+
+Now all pieces are there to fit a SSF. We will use `fit_clogit`, which is a wrapper around `survival::clogit`.
+
+
+## Session
+```{r}
+sessioninfo::session_info()
+```
+
