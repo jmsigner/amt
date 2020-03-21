@@ -38,8 +38,8 @@ random_steps.numeric <- function(
 #' @rdname random_steps
 random_steps.steps_xy <- function(
   x, n_control = 10,
-  sl_distr = fit_distr(x$sl_, "gamma"),
-  ta_distr = fit_distr(x$ta_, "vonmises"),
+  sl_distr = fit_distr(x$sl_, "gamma"), # this arugment could be remove
+  ta_distr = fit_distr(x$ta_, "vonmises"), # this arugment could be remove
   rand_sl = random_numbers(sl_distr, n = 1e5),
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE, ...) {

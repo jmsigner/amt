@@ -36,8 +36,6 @@ random_points(x, ...)
 \item{level}{\code{[numeric(1)]} \cr Home-range level of the minimum convex polygon, used for generating the background samples.}
 
 \item{hr}{\code{[character(1)]} \cr The home range estimator to be used. Currently only MCP is implemented.}
-
-\item{factor}{\code{[numeric(1)]} Determines the number of random points that are generated. If \code{factor == 1} the number of presence points is equal to the number of observed points.}
 }
 \description{
 Functions to generate random points within an animals home range. This is usually the first step for investigating habitat selection via Resource Selection Functions (RSF).

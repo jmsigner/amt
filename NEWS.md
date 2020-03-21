@@ -1,3 +1,18 @@
+# amt 0.0.8
+
+## new features
+- New vignette for RSFs.
+- New functions to calculate RSS.
+- New vignette for interfacing other packages.
+- Added method to interface the `move` packages.
+
+
+## major changes
+- Improved `random_points` by addeing methods for track, hr and spatial objects.
+- Adjusted `random_steps`
+- Removed dependency on `velox`. This makes `extract_covariates_along` slower. 
+
+
 # amt 0.0.7
 
 ## new features

@@ -1,6 +1,6 @@
 #' @importFrom dplyr arrange filter group_by select summarize summarise ungroup rename
 #' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars n
-#' @importFrom graphics plot legend
+#' @importFrom graphics plot legend lines par
 #' @importFrom grDevices adjustcolor
 #' @importFrom lazyeval lazy_dots lazy
 #' @importFrom lubridate hours minutes seconds now days weeks
@@ -9,7 +9,7 @@
 #' @importFrom tibble tibble tribble is_tibble as_tibble
 #' @importFrom utils data head tail
 #' @importFrom sp CRS
-#' @importFrom stats dexp qexp terms
+#' @importFrom stats dexp qexp terms predict
 #' @importFrom methods is
 #' @importFrom purrr map map_int
 #' @importFrom rlang quo quos enquo quo_name
