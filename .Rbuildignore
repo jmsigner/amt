@@ -2,11 +2,13 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^README\.md$
 ^README-.*\.png$
 .RDataTmp
 .RData
 man-roxygen/*
 ^cran-comments.md$
+
 
 ^\.travis\.yml$
 ^appveyor\.yml$
