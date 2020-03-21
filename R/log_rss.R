@@ -30,7 +30,7 @@
 #' @references
 #'
 #' Avgar, T., Lele, S.R., Keim, J.L., & Boyce, M.S.. (2017). Relative Selection
-#' Strength: Quantifying effect size in habitat‐ and step‐selection inference.
+#' Strength: Quantifying effect size in habitat- and step-selection inference.
 #' \emph{Ecology and Evolution}, 7, 5322–5330.
 #'
 #' @examples
