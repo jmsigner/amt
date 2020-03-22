@@ -55,10 +55,10 @@ rp1 <- random_points(deer)
 plot(rp1)
 }
 
+ \dontrun{
 trast <- raster(bbox(deer, buffer = 5000), res = 30)
 rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
 
- \dontrun{
 plot(rp3)
 }
 

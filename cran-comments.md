@@ -1,3 +1,44 @@
+# Version 0.0.8.0
+## Round 1
+
+### Test envionments
+- local: Ubuntu 18.04.2 LTS, R 3.6.3
+- win builder: release and devel
+- travis-ci: release and devel
+- appveyor
+
+### What changed
+
+#### new features
+- New vignette for RSFs.
+- New functions to calculate RSS.
+- New vignette for interfacing other packages.
+- Added method to interface the `move` packages.
+
+#### major changes
+- Improved `random_points` by addeing methods for track, hr and spatial objects.
+- Adjusted `random_steps`
+- Removed dependency on `velox`. This makes `extract_covariates_along` slower. 
+
+### R CMD check results
+
+There were no errors or warnings. There was 1 note.
+
+```
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Johannes Signer <jsigner@gwdg.de>'
+
+New submission
+
+Package was archived on CRAN
+
+CRAN repository db overrides:
+  X-CRAN-Comment: Archived on 2020-03-17 as depends on archived package
+    'velox'.
+```
+
+
+
 # Version 0.0.7.0
 ## Round 1
 

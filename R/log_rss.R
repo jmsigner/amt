@@ -21,8 +21,7 @@
 #' @author Brian Smith
 #' @return Returns a `list` of class `log_rss`.
 #'
-#' @seealso See Avgar \emph{et al.}
-#' (\href{https://doi.org/10.1002/ece3.3122}{2017}) for details about relative
+#' @seealso See Avgar \emph{et al.} 2017 for details about relative
 #' selection strength.
 #'
 #' Default plotting method available: `\link{plot.log_rss}()`
