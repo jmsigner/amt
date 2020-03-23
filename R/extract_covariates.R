@@ -63,7 +63,7 @@ extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
 
 extract_covar_base <- function(x, covars) {
   if (class(covars) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
-    x[names(covars)] <- raster::extract(covars, x[, c("x_", "y_")])
+    x[names(covars)] <- tibble::as_tibble(raster::extract(covars, x[, c("x_", "y_")]))
     x
   } else {
     stop("no raster")
