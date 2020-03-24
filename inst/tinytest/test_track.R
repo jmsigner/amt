@@ -81,11 +81,11 @@ expect_true(is(group_by(tr1, x_), "track_xy"))
 expect_true(is(group_by(tr1, x_), "data.frame"))
 
 # select
-expect_true(is(select(x1, x_, y_), "track_xy"))
-expect_true(is(select(x1, x_, y_), "data.frame"))
-expect_true(is(select(tr1, x_, y_), "track_xyt"))
-expect_true(is(select(tr1, x_, y_), "track_xy"))
-expect_true(is(select(tr1, x_, y_), "data.frame"))
+expect_true(is(dplyr::select(x1, x_, y_), "track_xy"))
+expect_true(is(dplyr::select(x1, x_, y_), "data.frame"))
+expect_true(is(dplyr::select(tr1, x_, y_), "track_xyt"))
+expect_true(is(dplyr::select(tr1, x_, y_), "track_xy"))
+expect_true(is(dplyr::select(tr1, x_, y_), "data.frame"))
 
 # summarise
 expect_true(is(summarise(x1, mean(x_)), "tbl_df"))
