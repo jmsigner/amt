@@ -5,7 +5,7 @@
 #'
 #' @template track_xyt
 #' @param trast `[RasterLayer]` \cr A template raster for the extent and resolution of the result.
-#' @param model `[character(1)="bm"]{"bm","ou","ouf"}` \cr The autocorrelation model that should be fit to the data. `bm` corresponds to Brownian motion, `ou` to an Ornstein-Uhlenbeck process, `ouf` to an Ornstein-Uhlenbeck forage process.
+#' @param model `[An output of fit_ctmm]` \cr The autocorrelation model that should be fit to the data. `bm` corresponds to Brownian motion, `ou` to an Ornstein-Uhlenbeck process, `ouf` to an Ornstein-Uhlenbeck forage process.
 #' @param res.space `[numeric(1)=10]` \cr Number of grid point along each axis, relative to the average diffusion (per median timestep) from a stationary point. See also `help(ctmm::occurrence)`.
 #' @param res.time `[numeric(1)=10]` \cr Number of temproal grid points per median timestep.
 #' @param n.points `[numeric(1)=5]` \cr This argument is only relevant for `rolling_od` and specifies the window size for the od estimation.
@@ -13,6 +13,18 @@
 #' @template dots_none
 #' @references Fleming, C. H., Fagan, W. F., Mueller, T., Olson, K. A., Leimgruber, P., & Calabrese, J. M. (2016). Estimating where and how animals travel: an optimal framework for path reconstruction from autocorrelated tracking data. Ecology.
 #' @name od
+#' @examples
+#'
+#' \dontrun{
+#' data(deer)
+#' mini_deer <- deer[1:100, ]
+#' trast <- make_trast(mini_deer)
+#' md <- od(mini_deer, trast = trast)
+#' raster::plot(md)
+#'
+#' # rolling ud
+#' xx <- rolling_od(mini_deer, trast)
+#' }
 
 #' @export
 rolling_od <- function(x, ...) {
@@ -22,9 +34,10 @@ rolling_od <- function(x, ...) {
 #' @export
 #' @rdname od
 rolling_od.track_xyt <- function(
-  x, trast, model = "bm", res.space = 10, res.time = 10,
+  x, trast, model = fit_ctmm(x, "bm"), res.space = 10, res.time = 10,
   n.points = 5, show.progress = TRUE, ...) {
   res <- list()
+
   if (show.progress) pb <- utils::txtProgressBar(style = 3, max = nrow(x), min = n.points + 1)
   for (i in (n.points + 1):nrow(x)) {
     if (show.progress) utils::setTxtProgressBar(pb, i)

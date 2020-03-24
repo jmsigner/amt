@@ -120,8 +120,7 @@ Strength: Quantifying effect size in habitat- and step-selection inference.
 \emph{Ecology and Evolution}, 7, 5322–5330.
 }
 \seealso{
-See Avgar \emph{et al.}
-(\href{https://doi.org/10.1002/ece3.3122}{2017}) for details about relative
+See Avgar \emph{et al.} 2017 for details about relative
 selection strength.
 
 Default plotting method available: \code{\link{plot.log_rss}()}

@@ -9,8 +9,9 @@
 \usage{
 rolling_od(x, ...)
 
-\method{rolling_od}{track_xyt}(x, trast, model = "bm", res.space = 10,
-  res.time = 10, n.points = 5, show.progress = TRUE, ...)
+\method{rolling_od}{track_xyt}(x, trast, model = fit_ctmm(x, "bm"),
+  res.space = 10, res.time = 10, n.points = 5,
+  show.progress = TRUE, ...)
 
 od(x, ...)
 
@@ -24,7 +25,7 @@ od(x, ...)
 
 \item{trast}{\code{[RasterLayer]} \cr A template raster for the extent and resolution of the result.}
 
-\item{model}{\code{[character(1)="bm"]{"bm","ou","ouf"}} \cr The autocorrelation model that should be fit to the data. \code{bm} corresponds to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process.}
+\item{model}{\code{[An output of fit_ctmm]} \cr The autocorrelation model that should be fit to the data. \code{bm} corresponds to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process.}
 
 \item{res.space}{\code{[numeric(1)=10]} \cr Number of grid point along each axis, relative to the average diffusion (per median timestep) from a stationary point. See also \code{help(ctmm::occurrence)}.}
 
@@ -36,6 +37,19 @@ od(x, ...)
 }
 \description{
 \code{od} is a wrapper around \code{ctmm::occurrence}. See \code{help(ctmm::occurrence)} for more details. \code{rolling_od} estimates occurrence distributions for a subset of a track.
+}
+\examples{
+
+\dontrun{
+data(deer)
+mini_deer <- deer[1:100, ]
+trast <- make_trast(mini_deer)
+md <- od(mini_deer, trast = trast)
+raster::plot(md)
+
+# rolling ud
+xx <- rolling_od(mini_deer, trast)
+}
 }
 \references{
 Fleming, C. H., Fagan, W. F., Mueller, T., Olson, K. A., Leimgruber, P., & Calabrese, J. M. (2016). Estimating where and how animals travel: an optimal framework for path reconstruction from autocorrelated tracking data. Ecology.
