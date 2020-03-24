@@ -47,12 +47,12 @@ extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
                                df = TRUE)[, -1, drop = FALSE]
       names(x_end) <- paste0(names(x_end), "_end")
       x_all <- cbind(x_start, x_end)
-      x[names(x_all)] <- x_all
+      x[names(x_all)] <- as.data.frame(x_all)
     } else {
       x[names(covariates)] <- if (where == "end") {
-        raster::extract(covariates, as.matrix(x[, c("x2_", "y2_")]))
+        as.data.frame(raster::extract(covariates, as.matrix(x[, c("x2_", "y2_")])))
       } else if (where == "start") {
-        raster::extract(covariates, as.matrix(x[, c("x1_", "y1_")]))
+        as.data.frame(raster::extract(covariates, as.matrix(x[, c("x1_", "y1_")])))
       }
     }
     x
@@ -63,7 +63,7 @@ extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
 
 extract_covar_base <- function(x, covars) {
   if (class(covars) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
-    x[names(covars)] <- tibble::as_tibble(raster::extract(covars, x[, c("x_", "y_")]))
+    x[names(covars)] <- as.data.frame(raster::extract(covars, x[, c("x_", "y_")]))
     x
   } else {
     stop("no raster")
