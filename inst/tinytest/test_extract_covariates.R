@@ -30,12 +30,10 @@ expect_equal(ncol(extract_covariates(trk2, r2)), 5)
 expect_equal(ncol(extract_covariates(trk2, rt)), 18)
 
 # Random points
-# rp <- random_points(trk1)
-# hr_mcp(trk1)
-# hr_kde(trk1)
-# make_trast(trk1)
-#
-# hr_locoh(trk1)
+rp <- random_points(trk2)
+expect_equal(ncol(extract_covariates(rp, r1)), 4)
+expect_equal(ncol(extract_covariates(rp, r2)), 5)
+expect_equal(ncol(extract_covariates(rp, rt)), 18)
 
 # steps
 s1 <- trk1 %>% steps()

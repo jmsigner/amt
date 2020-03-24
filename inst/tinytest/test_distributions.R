@@ -1,14 +1,5 @@
 library(amt)
 
-
-tinytest::expect_true("unif" %in% amt:::valid_ta_distr())
-tinytest::expect_true("vonmises" %in% amt:::valid_ta_distr())
-
-expect_true("exp" %in% amt:::valid_sl_distr())
-expect_true("gamma" %in% amt:::valid_sl_distr())
-expect_true("unif" %in% amt:::valid_sl_distr())
-
-
 ed1 <- make_distribution("exp", params = list(rate = 0.5))
 ed2 <- make_exp_distr(0.5)
 

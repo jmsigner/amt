@@ -1,3 +1,4 @@
+library(amt)
 data(fisher)
 set.seed(123)
 mini_fisher <- amt_fisher[sample(nrow(amt_fisher), 150), ]
