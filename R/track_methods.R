@@ -132,7 +132,7 @@ make_trast <- function(x, ...) {
 #' @rdname  helper
 #' @param factor `[numeric(1)=1.5]{>= 1}`\cr Factor by which the extent of the relocationsis extended.
 #' @param res `[numeric(1)]`\cr Resolution of the output raster.
-make_trast.track_xy <- function(x, factor = 1.5, res = extent_max(x) %/% 100, ...) {
+make_trast.track_xy <- function(x, factor = 1.5, res = max(c(extent_max(x) / 100, 1e-9)), ...) {
 
   checkmate::assert_number(factor, lower = 1)
   checkmate::assert_number(res, lower = 1e-10)

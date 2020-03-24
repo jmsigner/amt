@@ -96,8 +96,8 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
     if (!is(crs, "CRS")) {
       stop("crs is no instance of class CRS")
     }
-    attributes(out)$crs_ <- crs
   }
+  attributes(out)$crs_ <- if(is.null(crs)) NA_character_ else crs
 
   out
 }

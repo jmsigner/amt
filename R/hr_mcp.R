@@ -16,8 +16,7 @@ hr_mcp.track_xy <- function(x, levels = 0.95, ...) {
   sqd <- (xy$x_ - mxy[1])^2 + (xy$y_ - mxy[2])^2
   qts <- stats::quantile(sqd, levels)
   mcps <- lapply(qts, function(i) chull_mcp(xy[sqd <= i, ]))
-  class(get_crs(x))
-  mcps <- sf::st_as_sfc(mcps, crs = as.character(get_crs(x)))
+  mcps <- sf::st_as_sfc(mcps, crs = get_crs(x))
   mcps <- sf::st_sf(mcps, area = sf::st_area(mcps))
   mcp <- list(mcp = mcps)
   class(mcp) <- c("mcp", "hr_geom", "hr")
