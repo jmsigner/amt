@@ -193,9 +193,15 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
     x <- x[!is.na(x)]
   }
 
+
   # TODO: also save SE?
   switch(dist_name,
     gamma = {
+      if (any(x == 0)) {
+        sl_min <- min(x[x !=0])
+        x[x == 0] <- sl_min
+        base::message(paste0("Steps with length 0 are present. This will lead to an error when fitting a gamma distribution. 0 step lengths are replaced with the smallest non zero step length, which is: ", sl_min))
+      }
       fit <- fitdistrplus::fitdist(x, "gamma", keepdata = FALSE, lower = 0)
       make_gamma_distr(shape = fit$estimate["shape"], scale = 1 / fit$estimate["rate"])
     },
