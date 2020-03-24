@@ -29,7 +29,7 @@ coords(x, ...)
 make_trast(x, ...)
 
 \method{make_trast}{track_xy}(x, factor = 1.5,
-  res = extent_max(x)\%/\%100, ...)
+  res = max(c(extent_max(x)/100, 1e-09)), ...)
 
 extent_x(x, ...)
 

@@ -15,10 +15,10 @@ as_sp <- function(x, ...) {
 as_sp.track_xy <- function(x, ...) {
   sp::SpatialPoints(
     coords = x[, c("x_", "y_")],
-    proj4string = if (!is.null(attributes(x)$crs_)) {
+    proj4string = if (!is.na(attributes(x)$crs_)) {
       attributes(x)$crs_
     } else {
-      sp::CRS(as.character(NA))
+      sp::CRS(NA_character_)
     }
   )
 }
@@ -98,8 +98,8 @@ as_move.track_xyt <- function(x, id = "id", ...){
     x = x$x_,
     y= x$y_,
     time = x$t_,
-    data= data.frame(x[!names(x) %in% c("x_","y_","t_")]),
-    proj= if(has_crs(x)) get_crs(x) else as.character(NA),
+    data = data.frame(x[!names(x) %in% c("x_","y_","t_")]),
+    proj = get_crs(x),
     animal = if (has_id) as.character(x[[id]]) else "unnamed")
 }
 

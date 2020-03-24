@@ -41,7 +41,7 @@ get_crs.track_xy <- function(x, ...) {
 
 #' @export
 has_crs.track_xy <- function(x, ...) {
-  !is.null(attr(x, "crs", ...))
+  !is.na(attr(x, "crs", ...))
 }
 
 
@@ -54,7 +54,7 @@ get_crs.steps_xy <- function(x, ...) {
 
 #' @export
 has_crs.steps_xy <- function(x, ...) {
-  !is.null(attr(x, "crs", ...))
+  !is.na(attr(x, "crs", ...))
 }
 
 
