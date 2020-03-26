@@ -1,5 +1,17 @@
-# amt 0.0.8
+# amt 0.0.9
+## bug fixes
+- `extract_covariate` now works with new version of tibble for raster stacks.
+- `fit_distr` for gamma distribution, now replaces 0 step length with min setep- length and informs the user with a message. 
 
+## minor changes
+- added citation to the description
+
+## major changes
+- replaced `testthat` with `tinytest`
+
+
+
+# amt 0.0.8
 ## new features
 - New vignette for RSFs.
 - New functions to calculate RSS.
