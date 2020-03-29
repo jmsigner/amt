@@ -8,9 +8,11 @@
 \usage{
 log_rss(object, ...)
 
-\method{log_rss}{fit_logit}(object, x1, x2, ...)
+\method{log_rss}{fit_logit}(object, x1, x2, ci = NA, ci_level = 0.95,
+  n_boot = 1000, ...)
 
-\method{log_rss}{fit_clogit}(object, x1, x2, ...)
+\method{log_rss}{fit_clogit}(object, x1, x2, ci = NA, ci_level = 0.95,
+  n_boot = 1000, ...)
 }
 \arguments{
 \item{object}{\code{[fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.}
@@ -24,6 +26,16 @@ at location x_1. Must contain all fitted covariates as expected by
 \item{x2}{\code{[data.frame]} \cr A 1-row \code{data.frame} representing the single
 hypothetical location of x_2. Must contain all fitted covariates as expected
 by \code{predict()}.}
+
+\item{ci}{\code{[character]} \cr Method for estimating confidence intervals around
+log-RSS. \code{NA} skips calculating CIs. Character string \code{"se"} uses standard error
+method and \code{"boot"} uses empirical bootstrap method.}
+
+\item{ci_level}{\code{[numeric]} \cr Level for confidence interval. Defaults to 0.95
+for a 95\% confidence interval.}
+
+\item{n_boot}{\code{[integer]} \cr Number of bootstrap samples to estimate confidence
+intervals. Ignored if \code{ci != "boot"}.}
 }
 \value{
 Returns a \code{list} of class \code{log_rss}.
@@ -68,13 +80,15 @@ m1 <- rsf_data \%>\%
 x1 <- data.frame(lu = sort(unique(rsf_data$lu)))
 # data.frame of x2 (note factor levels should be same as model data)
 x2 <- data.frame(lu = factor(21, levels = levels(rsf_data$lu)))
-# Calculate
-logRSS <- log_rss(object = m1, x1 = x1, x2 = x2)
+# Calculate (use se method for confidence interval)
+logRSS <- log_rss(object = m1, x1 = x1, x2 = x2, ci = "se")
 
 # Plot
 ggplot(logRSS$df, aes(x = lu_x1, y = log_rss)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
   geom_point() +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.25) +
+  coord_cartesian(ylim = c(-20, 10)) +
   xlab(expression("Land Use Category " * (x[1]))) +
   ylab("log-RSS") +
   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
@@ -102,11 +116,12 @@ x1 <- data.frame(forest = factor(c("forest", "non-forest")))
 # data.frame of x2
 x2 <- data.frame(forest = factor("forest", levels = levels(ssf_data$forest)))
 # Calculate
-logRSS <- log_rss(object = m2, x1 = x1, x2 = x2)
+logRSS <- log_rss(object = m2, x1 = x1, x2 = x2, ci = "se")
 
 # Plot
 ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.25) +
   geom_point(size = 3) +
   xlab(expression("Forest Cover " * (x[1]))) +
   ylab("log-RSS") +

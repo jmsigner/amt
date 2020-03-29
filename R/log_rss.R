@@ -9,6 +9,13 @@
 #' @param x2 `[data.frame]` \cr A 1-row `data.frame` representing the single
 #' hypothetical location of x_2. Must contain all fitted covariates as expected
 #' by `predict()`.
+#' @param ci `[character]` \cr Method for estimating confidence intervals around
+#' log-RSS. `NA` skips calculating CIs. Character string `"se"` uses standard error
+#' method and `"boot"` uses empirical bootstrap method.
+#' @param ci_level `[numeric]` \cr Level for confidence interval. Defaults to 0.95
+#' for a 95\% confidence interval.
+#' @param n_boot `[integer]` \cr Number of bootstrap samples to estimate confidence
+#' intervals. Ignored if `ci != "boot"`.
 #' @template dots_none
 #'
 #' @details This function assumes that the user would like to compare relative
@@ -60,13 +67,15 @@
 #' x1 <- data.frame(lu = sort(unique(rsf_data$lu)))
 #' # data.frame of x2 (note factor levels should be same as model data)
 #' x2 <- data.frame(lu = factor(21, levels = levels(rsf_data$lu)))
-#' # Calculate
-#' logRSS <- log_rss(object = m1, x1 = x1, x2 = x2)
+#' # Calculate (use se method for confidence interval)
+#' logRSS <- log_rss(object = m1, x1 = x1, x2 = x2, ci = "se")
 #'
 #' # Plot
 #' ggplot(logRSS$df, aes(x = lu_x1, y = log_rss)) +
 #'   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
 #'   geom_point() +
+#'   geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.25) +
+#'   coord_cartesian(ylim = c(-20, 10)) +
 #'   xlab(expression("Land Use Category " * (x[1]))) +
 #'   ylab("log-RSS") +
 #'   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
@@ -94,11 +103,12 @@
 #' # data.frame of x2
 #' x2 <- data.frame(forest = factor("forest", levels = levels(ssf_data$forest)))
 #' # Calculate
-#' logRSS <- log_rss(object = m2, x1 = x1, x2 = x2)
+#' logRSS <- log_rss(object = m2, x1 = x1, x2 = x2, ci = "se")
 #'
 #' # Plot
 #' ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
 #'   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
+#'   geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.25) +
 #'   geom_point(size = 3) +
 #'   xlab(expression("Forest Cover " * (x[1]))) +
 #'   ylab("log-RSS") +
@@ -116,23 +126,34 @@ log_rss <- function(object, ...){
 
 #' @rdname log_rss
 #' @export
-log_rss.fit_logit <- function(object, x1, x2, ...){
+log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...){
   if(!inherits(x1, "data.frame")){
     stop("'x1' should be an object of class 'data.frame'.")
   }
   if(!inherits(x2, "data.frame")){
     stop("'x2' should be an object of class 'data.frame'.")
   }
-
   #Check rows of x2
   if(nrow(x2) != 1L){
     stop(paste0("The data.frame provided as 'x2' should have exactly 1 row.\n",
                 "  See ?log_rss for more details."))
   }
+  #Check confidence interval arguments
+  if(!is.na(ci)){
+    if(!(ci %in% c("se", "boot"))){
+      stop("'ci' should be NA or the string \"se\" or \"boot\".")
+    }
+    checkmate::assert_numeric(ci_level, lower = 0, upper = 1, max.len = 1)
+    if(ci == "boot"){
+      checkmate::assert_integerish(n_boot, lower = 1, len = 1)
+    }
+  }
 
   #Calculate y_x
-  y_x1 <- stats::predict.glm(object$model, newdata = x1, type = "link")
-  y_x2 <- stats::predict.glm(object$model, newdata = x2, type = "link")
+  pred_x1 <- stats::predict.glm(object$model, newdata = x1, type = "link", se.fit = TRUE)
+  pred_x2 <- stats::predict.glm(object$model, newdata = x2, type = "link", se.fit = TRUE)
+  y_x1 <- pred_x1$fit
+  y_x2 <- pred_x2$fit
 
   #Include values of x1 in return data.frame
   df <- x1
@@ -140,13 +161,37 @@ log_rss.fit_logit <- function(object, x1, x2, ...){
   #Calculate log_rss
   df$log_rss <- unname(y_x1 - y_x2)
 
+  #Calculate confidence intervals
+  if (!is.na(ci)){
+    if (ci == "se"){ #Standard error method
+      #Combine standard errors
+      logrss_se <- unname(sqrt(pred_x1$se.fit^2 + pred_x2$se.fit^2))
+      #Get critical value
+      p <- 1 - ((1 - ci_level)/2)
+      zstar <- qnorm(p)
+      #Compute bounds
+      df$lwr <- df$log_rss - zstar * logrss_se
+      df$upr <- df$log_rss + zstar * logrss_se
+    }
+    if (ci == "boot"){ #Bootstrap method
+      cat("Generating bootstrapped confidence intervals...\n")
+      boot_res <- bootstrap_logrss.fit_logit(object = object, x1 = x1, x2 = x2,
+                                             ci_level = ci_level, n_boot = n_boot,
+                                             mle = df$log_rss)
+
+      cat(" ... finished bootstrapping.\n")
+      df$lwr <- boot_res$lwr
+      df$upr <- boot_res$upr
+    }
+  }
+
   #Compose the list to return
   res <- list(df = df,
               x1 = x1,
               x2 = x2,
               formula = object$model$formula)
 
-  #Set the S3 class (could be used for plotting method later)
+  #Set the S3 class
   class(res) <- c("log_rss", class(res))
 
   #Return log_rss
@@ -155,7 +200,7 @@ log_rss.fit_logit <- function(object, x1, x2, ...){
 
 #' @rdname log_rss
 #' @export
-log_rss.fit_clogit <- function(object, x1, x2, ...) {
+log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
   if(is.null(object$model$model)){
     stop(paste("Please refit your step selection model with the argument 'model = TRUE'.\n"),
          "  The predict() method from package 'survival' requires that you store the model.\n",
@@ -168,18 +213,37 @@ log_rss.fit_clogit <- function(object, x1, x2, ...) {
   if(!inherits(x2, "data.frame")){
     stop("'x2' should be an object of class 'data.frame'.")
   }
-
   #Check rows of x2
   if(nrow(x2) != 1L){
     stop(paste0("The data.frame provided as 'x2' should have exactly 1 row.\n",
                 "  See ?log_rss for more details."))
   }
+  #Check confidence interval arguments
+  if(!is.na(ci)){
+    if(!(ci %in% c("se", "boot"))){
+      stop("'ci' should be NA or the string \"se\" or \"boot\".")
+    }
+    checkmate::assert_numeric(ci_level, lower = 0, upper = 1, max.len = 1)
+    if(ci == "boot"){
+      checkmate::assert_integerish(n_boot, lower = 1, len = 1)
+    }
+  }
 
   #Calculate correction due to sample-centered means (see ?survival::predict.coxph for details)
   uncenter <- sum(coef(object$model) * object$model$means, na.rm=TRUE)
+  #predict(..., reference = "sample", se.fit = TRUE) will throw error without a "step_id_"
+    #column, even though it isn't using it
+  x1_dummy <- x1
+  x2_dummy <- x2
+  x1_dummy$step_id_ = object$model$model$`strata(step_id_)`[1]
+  x2_dummy$step_id_ = object$model$model$`strata(step_id_)`[1]
   #Calculate y_x
-  y_x1 <- predict(object$model, newdata = x1, type = "lp", reference = "sample") + uncenter
-  y_x2 <- predict(object$model, newdata = x2, type = "lp", reference = "sample") + uncenter
+  pred_x1 <- predict(object$model, newdata = x1_dummy, type = "lp", reference = "sample",
+                  se.fit = TRUE)
+  pred_x2 <- predict(object$model, newdata = x2_dummy, type = "lp", reference = "sample",
+                  se.fit = TRUE)
+  y_x1 <- pred_x1$fit + uncenter
+  y_x2 <- pred_x2$fit + uncenter
 
   #Include values of x1 in return data.frame
   df <- x1
@@ -187,13 +251,37 @@ log_rss.fit_clogit <- function(object, x1, x2, ...) {
   #Calculate log_rss
   df$log_rss <- unname(y_x1 - y_x2)
 
+  #Calculate confidence intervals
+  if (!is.na(ci)){
+    if (ci == "se"){ #Standard error method
+      #Combine standard errors
+      logrss_se <- unname(sqrt(pred_x1$se.fit^2 + pred_x2$se.fit^2))
+      #Get critical value
+      p <- 1 - ((1 - ci_level)/2)
+      zstar <- qnorm(p)
+      #Compute bounds
+      df$lwr <- df$log_rss - zstar * logrss_se
+      df$upr <- df$log_rss + zstar * logrss_se
+    }
+    if (ci == "boot") { #Bootstrap method
+      cat("Generating bootstrapped confidence intervals...\n")
+      boot_res <- bootstrap_logrss.fit_clogit(object = object, x1 = x1, x2 = x2,
+                                              ci_level = ci_level, n_boot = n_boot,
+                                              mle = df$log_rss)
+
+      cat(" ... finished bootstrapping.\n")
+      df$lwr <- boot_res$lwr
+      df$upr <- boot_res$upr
+    }
+  }
+
   #Compose the list to return
   res <- list(df = df,
               x1 = x1,
               x2 = x2,
               formula = object$model$formula)
 
-  #Set the S3 class (could be used for plotting method later)
+  #Set the S3 class
   class(res) <- c("log_rss", class(res))
 
   #Return log_rss
@@ -378,4 +466,145 @@ append_x1 <- function(string){
     string <- paste0(string, "_x1")
     return(string)
   }
+}
+
+#' Bootstrap log-RSS estimate
+#'
+#' Use empirical bootstrap to estimate log-RSS CI
+#'
+#' @details This function is meant for internal use by `log_rss()` and is
+#' not meant to be called by the user.
+#'
+#' @rdname bootstrap_logrss
+bootstrap_logrss <- function(object, ...){
+  UseMethod("bootstrap_logrss", object)
+}
+
+#' @rdname bootstrap_logrss
+bootstrap_logrss.fit_logit <- function(object, x1, x2, ci_level, n_boot, mle){
+  #Perform the bootstrap
+  arr <- replicate(n_boot, boot1.fit_logit(object, x1, x2), simplify = "array")
+  #Lower percentile
+  p_lwr <- (1 - ci_level)/2
+  #Upper percentile
+  p_upr <- 1 - p_lwr
+  #Return sample quantiles
+  q_lwr <- apply(arr, 1, quantile, p_lwr)
+  q_upr <- apply(arr, 1, quantile, p_upr)
+  #Return sample mean
+  boot_mean <- apply(arr, 1, mean)
+  #Distance to lower and upper
+  d_lwr <- q_lwr - boot_mean
+  d_upr <- q_upr - boot_mean
+  #Calculate CI
+  res <- data.frame(lwr = mle + d_lwr,
+                    upr = mle + d_upr)
+  #Return
+  return(res)
+}
+
+#' @rdname bootstrap_logrss
+bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle){
+  #Perform the bootstrap
+  arr <- replicate(n_boot, boot1.fit_clogit(object, x1, x2), simplify = "array")
+  #Lower percentile
+  p_lwr <- (1 - ci_level)/2
+  #Upper percentile
+  p_upr <- 1 - p_lwr
+  #Return sample quantiles
+  q_lwr <- apply(arr, 1, quantile, p_lwr)
+  q_upr <- apply(arr, 1, quantile, p_upr)
+  #Return sample mean
+  boot_mean <- apply(arr, 1, mean)
+  #Distance to lower and upper
+  d_lwr <- q_lwr - boot_mean
+  d_upr <- q_upr - boot_mean
+  #Calculate CI
+  res <- data.frame(lwr = mle + d_lwr,
+                    upr = mle + d_upr)
+  #Return
+  return(res)
+}
+
+
+#' Single bootstrap iteration
+#'
+#' Runs a single iteration of the empirical bootstrap
+#'
+#' @details This function is meant for internal use by `bootstrap_logrss()` and
+#' is not meant to be called by the user.
+#' @rdname boot1
+boot1.fit_logit <- function(object, x1, x2){
+  dat <- object$model$model
+  #If resampling factor levels, missing levels can cause prediction to fail
+  logrss <- NULL
+  i <- 1
+  while(is.null(logrss)){
+    #Resample
+    newdat <- dat[sample(1:nrow(dat), nrow(dat), replace = TRUE), ]
+    #Refit model
+    m <- fit_logit(formula = formula(object$model), data = newdat)
+    try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
+    i <- i + 1
+    #Warn after 25 tries
+    if (i == 25){
+      cat(paste("\n   Warning... Having trouble resampling a valid dataset.",
+                "This may occur if you have very few observations of a level",
+                "of a factor variable."))
+    }
+    #Quit after 50 tries (consider giving user control over this)
+    if (i == 50){
+      stop(paste("Bootstrapping failed. This may occur if you have very few",
+                 "observations of a level of a factor variable."))
+    }
+  }
+  return(logrss)
+}
+
+#' @rdname boot1
+boot1.fit_clogit <- function(object, x1, x2){
+  stop("Bootstrapping is not yet implemented for an object of class clogit.")
+  dat <- object$model$model
+  #Reformat
+  names(dat)[1] <- "case_"
+  dat$case_ <- as.character(dat$case_) == "1"
+  names(dat)[which(names(dat) == "strata(step_id_)")] <- "step_id_"
+  dat$step_id_ <- as.character(dat$step_id_)
+  dat$step_id_ <- unlist(
+    lapply(
+      strsplit(dat$step_id_, "=", fixed = TRUE), getElement, 2))
+  #If resampling factor levels, missing levels can cause prediction to fail
+  logrss <- NULL
+  i <- 1
+  while(is.null(logrss)){
+    #Resample
+    newdat <- dat[sample(1:nrow(dat), nrow(dat), replace = TRUE), ]
+
+    #Reformat
+    names(newdat)[1] <- "case_"
+    newdat$case_ <- as.character(newdat$case_) == "1"
+    names(newdat)[which(names(newdat) == "strata(step_id_)")] <- "step_id_"
+    newdat$step_id_ <- as.character(newdat$step_id_)
+    newdat$step_id_ <- unlist(
+      lapply(
+        strsplit(newdat$step_id_, "=", fixed = TRUE), getElement, 2))
+    attributes(newdat) <- NULL
+    newdat <- as.data.frame(newdat)
+    #Refit model
+    m <- fit_clogit(formula = formula(object$model), data = newdat)
+    try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
+    i <- i + 1
+    #Warn after 25 tries
+    if (i == 25){
+      cat(paste("\n   Warning... Having trouble resampling a valid dataset.",
+                "This may occur if you have very few observations of a level",
+                "of a factor variable."))
+    }
+    #Quit after 50 tries (consider giving user control over this)
+    if (i == 50){
+      stop(paste("Bootstrapping failed. This may occur if you have very few",
+                 "observations of a level of a factor variable."))
+    }
+  }
+  return(logrss)
 }
