@@ -265,6 +265,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
     }
     if (ci == "boot") { #Bootstrap method
       cat("Generating bootstrapped confidence intervals...\n")
+      cat("   Expect this to take some time... \n")
       boot_res <- bootstrap_logrss.fit_clogit(object = object, x1 = x1, x2 = x2,
                                               ci_level = ci_level, n_boot = n_boot,
                                               mle = df$log_rss)
@@ -563,35 +564,16 @@ boot1.fit_logit <- function(object, x1, x2){
 
 #' @rdname boot1
 boot1.fit_clogit <- function(object, x1, x2){
-  stop("Bootstrapping is not yet implemented for an object of class clogit.")
   dat <- object$model$model
-  #Reformat
-  names(dat)[1] <- "case_"
-  dat$case_ <- as.character(dat$case_) == "1"
-  names(dat)[which(names(dat) == "strata(step_id_)")] <- "step_id_"
-  dat$step_id_ <- as.character(dat$step_id_)
-  dat$step_id_ <- unlist(
-    lapply(
-      strsplit(dat$step_id_, "=", fixed = TRUE), getElement, 2))
   #If resampling factor levels, missing levels can cause prediction to fail
   logrss <- NULL
   i <- 1
   while(is.null(logrss)){
     #Resample
-    newdat <- dat[sample(1:nrow(dat), nrow(dat), replace = TRUE), ]
-
-    #Reformat
-    names(newdat)[1] <- "case_"
-    newdat$case_ <- as.character(newdat$case_) == "1"
-    names(newdat)[which(names(newdat) == "strata(step_id_)")] <- "step_id_"
-    newdat$step_id_ <- as.character(newdat$step_id_)
-    newdat$step_id_ <- unlist(
-      lapply(
-        strsplit(newdat$step_id_, "=", fixed = TRUE), getElement, 2))
-    attributes(newdat) <- NULL
-    newdat <- as.data.frame(newdat)
+    newdat <- resample_coxph(dat)
     #Refit model
-    m <- fit_clogit(formula = formula(object$model), data = newdat)
+    rhs <- as.character(formula(object$model))[3]
+    m <- fit_clogit(formula = reformulate(rhs, response = "case_"), data = newdat, model = TRUE)
     try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
     i <- i + 1
     #Warn after 25 tries
@@ -607,4 +589,33 @@ boot1.fit_clogit <- function(object, x1, x2){
     }
   }
   return(logrss)
+}
+
+resample_coxph <- function(mdat){
+  #Reformat
+  names(mdat)[1] <- "case_"
+  mdat$case_ <- as.character(mdat$case_) == "1"
+  names(mdat)[which(names(mdat) == "strata(step_id_)")] <- "step_id_"
+  mdat$step_id_ <- as.character(mdat$step_id_)
+  mdat$step_id_ <- unlist(
+    lapply(
+      strsplit(mdat$step_id_, "=", fixed = TRUE), getElement, 2))
+  #Create new data.frame with just columns to drop attributes
+  dat <- mdat[, 1:ncol(mdat)]
+
+  #Sampling should be stratified
+    #Resample observed steps
+    #Resample random steps for the sampled observed steps
+  n_obs <- sum(dat$case_)
+  new_obs <- sample(x = unique(dat$step_id_), size = n_obs, replace = TRUE)
+  new_dat <- dplyr::bind_rows(lapply(new_obs, function(x){
+    dat_sub <- dat[which(dat$step_id_ == x & !dat$case_), ]
+    dat_obs <- dat[which(dat$step_id_ == x & dat$case_), ]
+    new_avail <- dat_sub[sample(x = 1:nrow(dat_sub), size = nrow(dat_sub),
+                                replace = TRUE),]
+    new_step <- rbind(dat_obs, new_avail)
+    return(new_step)
+  }))
+  #Return
+  return(new_dat)
 }
