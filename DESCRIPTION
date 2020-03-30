@@ -7,7 +7,7 @@ Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigne
   person("Brian", "Smith", role = "ctb"), 
   person("Ulrike", "Schlaegel", role = "ctb"), 
   person("Scott", "LaPoint", role = "dtc"))
-Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource selection functions and step-selection functions <https://doi.org/10.1890/04-0953> and integrated step-selection functions <https://doi.org/10.1111/2041-210X.12528>), and simulation of space-use from fitted step-selection functions <https://doi.org/10.1002/ecs2.1771>.
+Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses (resource selection functions and step-selection functions <doi:10.1890/04-0953> and integrated step-selection functions <doi:10.1111/2041-210X.12528>), and simulation of space-use from fitted step-selection functions <doi:10.1002/ecs2.1771>.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

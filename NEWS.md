@@ -5,10 +5,10 @@
 
 ## minor changes
 - added citation to the description
+- unnamed elements of fitted gamma
 
 ## major changes
 - replaced `testthat` with `tinytest`
-
 
 
 # amt 0.0.8
