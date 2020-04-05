@@ -203,7 +203,7 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
         base::message(paste0("Steps with length 0 are present. This will lead to an error when fitting a gamma distribution. 0 step lengths are replaced with the smallest non zero step length, which is: ", sl_min))
       }
       fit <- fitdistrplus::fitdist(x, "gamma", keepdata = FALSE, lower = 0)
-      make_gamma_distr(shape = fit$estimate["shape"], scale = 1 / fit$estimate["rate"])
+      make_gamma_distr(shape = unname(fit$estimate["shape"]), scale = 1 / unname(fit$estimate["rate"]))
     },
     exp = {
       fit <- fitdistrplus::fitdist(x, "exp", keepdata = FALSE)

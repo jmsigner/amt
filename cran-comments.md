@@ -1,3 +1,40 @@
+# Version 0.0.9.0
+## Round 1
+
+### Test envionments
+- local: Ubuntu 18.04.2 LTS, R 3.6.3
+- win builder: release and devel
+- travis-ci: release and devel
+- appveyor
+
+### What changed
+#### bug fixes
+- `extract_covariate` now works with new version of tibble for raster stacks.
+- `fit_distr` for gamma distribution, now replaces 0 step length with min setep- length and informs the user with a message. 
+#### minor changes
+- added citation to the description
+- unnamed elements of fitted gamma
+
+#### major changes
+- replaced `testthat` with `tinytest`
+
+### R CMD check results
+
+There were no errors or warnings. There was 1 note.
+
+```
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Johannes Signer <jsigner@gwdg.de>'
+
+Days since last update: 4
+
+The Description field contains
+  <https://doi.org/10.1890/04-0953> and integrated step-selection
+  functions <https://doi.org/10.1111/2041-210X.12528>), and simulation of
+  <https://doi.org/10.1002/ecs2.1771>.```
+```
+
+
 # Version 0.0.8.0
 ## Round 1
 
