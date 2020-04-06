@@ -6,7 +6,7 @@ hr_kde <- function(x, ...) {
 
 #' @export
 #' @rdname hr
-hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), ...) {
+hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels = NULL, ...) {
 
   # ---------------------------------------------------------------------------- #
   # Check bandwidth
@@ -41,7 +41,8 @@ hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), ...) {
   sp::proj4string(kde) <- get_crs(x)
   res <- list(
     h = h,
-    ud = kde
+    ud = kde,
+    levels = levels
   )
   class(res) <- c("kde", "hr_prob", "hr", class(res))
   res

@@ -1,7 +1,21 @@
 # Version 0.0.9.0
+
+## Round 2
+
+I was asked to fix the references in the Description to `<doi:prefix/suffix>` which is now done. 
+
+
+### Test environments
+- local: Ubuntu 18.04.2 LTS, R 3.6.3
+- win builder: release and devel
+- travis-ci: release and devel
+- appveyor
+
+There were no errors, warnings or notes.
+
 ## Round 1
 
-### Test envionments
+### Test environments
 - local: Ubuntu 18.04.2 LTS, R 3.6.3
 - win builder: release and devel
 - travis-ci: release and devel

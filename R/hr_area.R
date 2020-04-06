@@ -21,8 +21,8 @@ hr_area.RasterLayer <- function(x, level = 0.95, ...) {
 }
 
 #' @export
-hr_area.kde <- function(x, level = 0.95, ...) {
-  hr_area(x$ud, level = level, ...)
+hr_area.kde <- function(x, ...) {
+  hr_area(x$ud, levels = x$levels, ...)
 }
 
 
