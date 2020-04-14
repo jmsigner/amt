@@ -6,7 +6,7 @@ hr_kde <- function(x, ...) {
 
 #' @export
 #' @rdname hr
-hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels = NULL, ...) {
+hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels = 0.95, ...) {
 
   # ---------------------------------------------------------------------------- #
   # Check bandwidth
@@ -40,6 +40,7 @@ hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels 
 
   sp::proj4string(kde) <- get_crs(x)
   res <- list(
+    estimator = "kde",
     h = h,
     ud = kde,
     levels = levels
@@ -223,10 +224,4 @@ lscv <- function(x, hs) {
     out <- sum(exp(-f^2 / (4 * h^2)) - 4 * exp(-f^2 / (2 * h^2)))
     1.0 / (pi * h^2 * n) + (2 * out -3 * n)/(pi * 4. * h^2 * n^2);
   })
-}
-
-#' @export
-#' @method plot kde
-plot.kde <- function(x, y = NULL, ...) {
-  plot(x$ud)
 }

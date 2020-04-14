@@ -5,14 +5,10 @@ hr_area <- function(x, ...) {
 }
 
 #' @export
-hr_area.mcp <- function(x, ...) {
-  as_tibble(x$mcp)
+hr_area.hr <- function(x, ...) {
+  tibble::as_tibble(sf::st_set_geometry(hr_isopleths(x), NULL))
 }
 
-#' @export
-hr_area.locoh <- function(x, ...) {
-  as_tibble(x$locoh)
-}
 
 #' @export
 hr_area.RasterLayer <- function(x, level = 0.95, ...) {
@@ -20,13 +16,3 @@ hr_area.RasterLayer <- function(x, level = 0.95, ...) {
     sum(x[] <= level) * prod(raster::res(x))
 }
 
-#' @export
-hr_area.kde <- function(x, ...) {
-  hr_area(x$ud, levels = x$levels, ...)
-}
-
-
-#' @export
-hr_area.akde <- function(x, level = 0.95, ...) {
-  hr_area(x$ud, level = level, ...)
-}

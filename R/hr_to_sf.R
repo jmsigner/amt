@@ -3,7 +3,6 @@
 #' @param x A `tibble` with a `list column` with individual home ranges.
 #' @param col The column where the home
 #' @param ... Additional columns that should be transfered to the new `tible`.
-#' @param level `[numeric(1)=0.95]{0-1}` \cr The home-range level.
 #'
 #' @return A `data.frame` with a simple feature column (from the `sf`) package.
 #' @export
@@ -36,7 +35,7 @@ hr_to_sf <- function(x, col, ..., level = 0.95) {
     stop("col can contain only home ranges")
   }
 
-  x1 <- lapply(x1[[1]], hr_isopleths, level = level)
+  x1 <- lapply(x1[[1]], hr_isopleths)
 
   x2 <- dplyr::select(x, !!!cols)
   x2 <- x2[rep(1:nrow(x), sapply(x1, nrow)), ]
