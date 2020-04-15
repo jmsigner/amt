@@ -12,8 +12,6 @@ hr_to_sf(x, col, ..., level = 0.95)
 \item{col}{The column where the home}
 
 \item{...}{Additional columns that should be transfered to the new \code{tible}.}
-
-\item{level}{\code{[numeric(1)=0.95]{0-1}} \cr The home-range level.}
 }
 \value{
 A \code{data.frame} with a simple feature column (from the \code{sf}) package.

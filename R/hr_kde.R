@@ -45,7 +45,7 @@ hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels 
     ud = kde,
     levels = levels
   )
-  class(res) <- c("kde", "hr_prob", "hr", class(res))
+  class(res) <- c("hr_kde", "hr_prob", "hr", class(res))
   res
 }
 
@@ -101,7 +101,6 @@ hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
 #'
 #' @param range Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.
 #' @param numOfParts Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.
-#' @template levels
 #' @param tol Numeric scalar, indicating which difference of to stop.
 #' @param maxIt Numeric scalar, indicating the maximum number of acceptable iterations.
 #' @return \code{list} with the calculated bandwidth, exit status and the number of iteration.
@@ -120,7 +119,7 @@ hr_kde_ref_scaled <- function(
   tol = 0.1,
   max.it = 500L) {
 
-  ## Input checks
+  # Input checks
   checkmate::assert_numeric(range, len = 2)
   checkmate::assert_numeric(
     levels, lower = 0.0001, upper = 0.9999, len = 1, finite = TRUE)

@@ -1,8 +1,8 @@
 #' Different Methods to calculate home-range overlaps
 #'
-#' @param x RhrEst
-#' @param y RhrEst
-#' @template dots
+#' @param x `hr`
+#' @param y `hr`
+#' @template dots_none
 #' @return \code{data.frame} with the isopleth level and area in units of the coordinate reference system.
 #' @name hr_overlaps
 NULL
