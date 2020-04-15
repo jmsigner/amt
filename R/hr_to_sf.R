@@ -25,7 +25,12 @@
 #' }
 #'
 
-hr_to_sf <- function(x, col, ..., level = 0.95) {
+hr_to_sf <- function(x, ...) {
+  UseMethod("hr_to_sf", x)
+}
+
+#' @export
+hr_to_sf.tbl_df <- function(x, col, ...) {
 
   col <- rlang::enquo(col)
   cols <- rlang::enquos(...)
@@ -42,4 +47,29 @@ hr_to_sf <- function(x, col, ..., level = 0.95) {
 
   x1 <- do.call("rbind", lapply(x1, sf::st_as_sf))
   dplyr::bind_cols(x1, x2)
+}
+
+#' @export
+hr_to_sf.list <- function(x, ...) {
+
+  if (!all(sapply(x, is, "hr"))) {
+    stop("Not all elements are hr estimates")
+  }
+
+  nn <- if (is.null(names(x))) 1:length(x) else names(x)
+
+  if (any(nchar(nn) == 0)) {
+    stop("Names must be different from ''")
+  }
+
+  if (any(duplicated(nn))) {
+    stop("Duplicated names are not permitted")
+  }
+
+  x <- lapply(x, hr_isopleths)
+  names <- rep(nn, sapply(x, nrow))
+
+  xx <- do.call("rbind", x)
+  sf::st_as_sf(dplyr::bind_cols(name = names, xx))
+
 }

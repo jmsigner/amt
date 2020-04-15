@@ -45,7 +45,7 @@ hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels 
     ud = kde,
     levels = levels
   )
-  class(res) <- c("hr_kde", "hr_prob", "hr", class(res))
+  class(res) <- c("kde", "hr_prob", "hr", class(res))
   res
 }
 
