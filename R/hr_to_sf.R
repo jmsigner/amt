@@ -6,6 +6,7 @@
 #'
 #' @return A `data.frame` with a simple feature column (from the `sf`) package.
 #' @export
+#' @name hr_to_sf
 #'
 #' @examples
 #'
@@ -30,6 +31,7 @@ hr_to_sf <- function(x, ...) {
 }
 
 #' @export
+#' @rdname hr_to_sf
 hr_to_sf.tbl_df <- function(x, col, ...) {
 
   col <- rlang::enquo(col)

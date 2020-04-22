@@ -2,9 +2,12 @@
 % Please edit documentation in R/hr_to_sf.R
 \name{hr_to_sf}
 \alias{hr_to_sf}
+\alias{hr_to_sf.tbl_df}
 \title{Convert}
 \usage{
 hr_to_sf(x, ...)
+
+\method{hr_to_sf}{tbl_df}(x, col, ...)
 }
 \arguments{
 \item{x}{A \code{tibble} with a \code{list column} with individual home ranges.}

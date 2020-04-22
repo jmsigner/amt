@@ -3,19 +3,20 @@
 \name{hr_overlaps}
 \alias{hr_overlaps}
 \alias{hr_overlap}
+\alias{hr_overlap.hr}
 \alias{hr_ba}
 \title{Different Methods to calculate home-range overlaps}
 \usage{
 hr_overlap(x, ...)
 
+\method{hr_overlap}{hr}(x, y, ...)
+
 hr_ba(x, ...)
 }
 \arguments{
-\item{x}{\code{hr}}
+\item{x, y}{\code{hr} A home-range estimate}
 
 \item{...}{Further arguments, none implemented.}
-
-\item{y}{\code{hr}}
 }
 \value{
 \code{data.frame} with the isopleth level and area in units of the coordinate reference system.

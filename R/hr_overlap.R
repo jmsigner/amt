@@ -1,7 +1,6 @@
 #' Different Methods to calculate home-range overlaps
 #'
-#' @param x `hr`
-#' @param y `hr`
+#' @param x,y `hr` A home-range estimate
 #' @template dots_none
 #' @return \code{data.frame} with the isopleth level and area in units of the coordinate reference system.
 #' @name hr_overlaps
@@ -19,7 +18,8 @@ hr_overlap.default <- function (x, ...) {
 }
 
 #' @export
-hr_overlap.hr <- function(x, y) {
+#' @rdname hr_overlaps
+hr_overlap.hr <- function(x, y, ...) {
 
   if (!inherits(y, "hr")) {
     stop("y is no home-range estimate.")
@@ -31,7 +31,7 @@ hr_overlap.hr <- function(x, y) {
 
 
 #' @export
-hr_overlap.list <- function(x) {
+hr_overlap.list <- function(x, ...) {
 
   # check all elements are hr
   if(!all(sapply(x, inherits, "hr"))) {
@@ -97,12 +97,12 @@ hr_ba <- function (x, ...) {
 }
 
 #' @export
-hr_ba.hr_prob <- function(x, y) {
+hr_ba.hr_prob <- function(x, y, ...) {
   hr_ba(hr_ud(x), hr_ud(y))
 }
 
 #' @export
-hr_ba.RasterLayer <- function(x, y) {
+hr_ba.RasterLayer <- function(x, y, ...) {
 
   if (!is(y, "RasterLayer")) {
     stop("y, is not RasterLayer")
@@ -120,7 +120,7 @@ hr_ba.RasterLayer <- function(x, y) {
 }
 
 #' @export
-hr_ba.list <- function(x) {
+hr_ba.list <- function(x, ...) {
 
   # check all elements are hr
   if(!all(sapply(x, inherits, "hr_prob"))) {

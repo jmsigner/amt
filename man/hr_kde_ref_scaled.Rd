@@ -9,13 +9,19 @@ hr_kde_ref_scaled(x, range = hr_kde_ref(x)[1] * c(0.01, 1),
   tol = 0.1, max.it = 500L)
 }
 \arguments{
+\item{x}{A \code{track_xy*}.}
+
 \item{range}{Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.}
+
+\item{trast}{A tempalte \code{RasterLayer}.}
+
+\item{num.of.parts}{Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.}
+
+\item{levels}{The home range level.}
 
 \item{tol}{Numeric scalar, indicating which difference of to stop.}
 
-\item{numOfParts}{Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.}
-
-\item{maxIt}{Numeric scalar, indicating the maximum number of acceptable iterations.}
+\item{max.it}{Numeric scalar, indicating the maximum number of acceptable iterations.}
 }
 \value{
 \code{list} with the calculated bandwidth, exit status and the number of iteration.

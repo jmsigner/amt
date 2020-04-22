@@ -99,10 +99,13 @@ hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
 #' isopleth at \code{level} consisting of \code{n} polygons. Note, no difference is
 #' is made between the two dimensions.
 #'
+#' @param x A `track_xy*`.
+#' @param trast A tempalte `RasterLayer`.
 #' @param range Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.
-#' @param numOfParts Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.
+#' @param num.of.parts Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.
 #' @param tol Numeric scalar, indicating which difference of to stop.
-#' @param maxIt Numeric scalar, indicating the maximum number of acceptable iterations.
+#' @param max.it Numeric scalar, indicating the maximum number of acceptable iterations.
+#' @param levels The home range level.
 #' @return \code{list} with the calculated bandwidth, exit status and the number of iteration.
 #' @export
 #' @references Kie, John G. "A rule-based ad hoc method for selecting a bandwidth in kernel home-range analyses." Animal Biotelemetry 1.1 (2013): 1-12.
