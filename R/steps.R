@@ -322,7 +322,7 @@ steps_base <- function(x, n, lonlat, zero_dir, keep_cols) {
     y1_ = x$y_[-n],
     y2_ = x$y_[-1],
     sl_ = step_lengths(x, lonlat = lonlat, append_last = FALSE),
-    ta_ = direction_rel(x, lonlat = lonlat, ero_dir = "E", append_last = FALSE)
+    ta_ = direction_rel(x, lonlat = lonlat, zero_dir = "E", append_last = FALSE)
   )
 
   if (!is.null(keep_cols)) {
