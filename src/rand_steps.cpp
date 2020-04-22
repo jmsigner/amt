@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+/*
 // [[Rcpp::export]]
 NumericMatrix random_steps_cpp(
     const int n_rand_steps,
@@ -63,6 +64,7 @@ NumericMatrix random_steps_cpp(
   return X;
 }
 
+ */
 
 // [[Rcpp::export]]
 NumericMatrix random_steps_cpp_one_step(

@@ -9,10 +9,6 @@ within_rcpp <- function(x, a, b) {
     .Call('_amt_within_rcpp', PACKAGE = 'amt', x, a, b)
 }
 
-random_steps_cpp <- function(n_rand_steps, start_x, start_y, end_x, end_y, rand_sl, rand_ta, include_obs, sl_obs, ta_obs) {
-    .Call('_amt_random_steps_cpp', PACKAGE = 'amt', n_rand_steps, start_x, start_y, end_x, end_y, rand_sl, rand_ta, include_obs, sl_obs, ta_obs)
-}
-
 random_steps_cpp_one_step <- function(n_rand_steps, start_x, start_y, rel_angle, rand_sl, rand_ta) {
     .Call('_amt_random_steps_cpp_one_step', PACKAGE = 'amt', n_rand_steps, start_x, start_y, rel_angle, rand_sl, rand_ta)
 }
