@@ -8,7 +8,7 @@
 \usage{
 random_steps(x, ...)
 
-\method{random_steps}{numeric}(x, n_control = 10, rel_angle = 0,
+\method{random_steps}{numeric}(x, n_control = 10, angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e+05),
   rand_ta = random_numbers(make_unif_distr(), n = 1e+05), ...)
 
@@ -26,7 +26,7 @@ random_steps(x, ...)
 \item{n_control}{\code{[integer(1)=10]{>1}} \cr The number of control steps paired
 with each observed step.}
 
-\item{rel_angle}{\code{[numeric(1) = 0]{-pi < rel_angle < pi}} \cr Relative turing angle for the first step.}
+\item{angle}{\code{[numeric(1) = 0]{-pi < rel_angle < pi}} \cr Angle for the first step.}
 
 \item{rand_sl}{\code{[numeric]} \cr Numeric vector with random step lengths an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., gamma or exponential).}
 

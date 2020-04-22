@@ -23,7 +23,7 @@
 hr_akde(x, ...)
 
 \method{hr_akde}{track_xyt}(x, model = fit_ctmm(x, "iid"),
-  trast = make_trast(x), ...)
+  trast = make_trast(x), levels = 0.95, ...)
 
 hr_area(x, ...)
 
@@ -32,7 +32,7 @@ hr_isopleths(x, ...)
 hr_kde(x, ...)
 
 \method{hr_kde}{track_xy}(x, h = hr_kde_ref(x), trast = make_trast(x),
-  levels = NULL, ...)
+  levels = 0.95, ...)
 
 hr_kde_ref(x, ...)
 
@@ -64,10 +64,10 @@ hr_mcp(x, ...)
 
 \item{trast}{\code{[RasterLayer]} \cr A template raster for kernel density home-ranges.}
 
-\item{h}{\code{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
-
 \item{levels}{\code{[numeric]} \cr The isopleth levels used for calculating home
 ranges. Should be \code{0 < level < 1}.}
+
+\item{h}{\code{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
 
 \item{rescale}{\code{[character(1)]} \cr Rescaling method for reference bandwidth calucation. Must be one of "unitvar", "xvar", or "none".}
 

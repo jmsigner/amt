@@ -4,16 +4,14 @@
 \alias{hr_to_sf}
 \title{Convert}
 \usage{
-hr_to_sf(x, col, ..., level = 0.95)
+hr_to_sf(x, ...)
 }
 \arguments{
 \item{x}{A \code{tibble} with a \code{list column} with individual home ranges.}
 
-\item{col}{The column where the home}
-
 \item{...}{Additional columns that should be transfered to the new \code{tible}.}
 
-\item{level}{\code{[numeric(1)=0.95]{0-1}} \cr The home-range level.}
+\item{col}{The column where the home}
 }
 \value{
 A \code{data.frame} with a simple feature column (from the \code{sf}) package.

@@ -1,3 +1,12 @@
+# amt 0.1.0
+## bug fixes
+- `random_steps` uses abs direction as reference instead of relative direction
+
+## updates
+- Streamlined home-range methods
+- Added new convinience functions
+
+
 # amt 0.0.9
 ## bug fixes
 - `extract_covariate` now works with new version of tibble for raster stacks.

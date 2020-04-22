@@ -3,7 +3,6 @@
 #' @param x A `tibble` with a `list column` with individual home ranges.
 #' @param col The column where the home
 #' @param ... Additional columns that should be transfered to the new `tible`.
-#' @param level `[numeric(1)=0.95]{0-1}` \cr The home-range level.
 #'
 #' @return A `data.frame` with a simple feature column (from the `sf`) package.
 #' @export
@@ -26,7 +25,12 @@
 #' }
 #'
 
-hr_to_sf <- function(x, col, ..., level = 0.95) {
+hr_to_sf <- function(x, ...) {
+  UseMethod("hr_to_sf", x)
+}
+
+#' @export
+hr_to_sf.tbl_df <- function(x, col, ...) {
 
   col <- rlang::enquo(col)
   cols <- rlang::enquos(...)
@@ -36,11 +40,36 @@ hr_to_sf <- function(x, col, ..., level = 0.95) {
     stop("col can contain only home ranges")
   }
 
-  x1 <- lapply(x1[[1]], hr_isopleths, level = level)
+  x1 <- lapply(x1[[1]], hr_isopleths)
 
   x2 <- dplyr::select(x, !!!cols)
   x2 <- x2[rep(1:nrow(x), sapply(x1, nrow)), ]
 
   x1 <- do.call("rbind", lapply(x1, sf::st_as_sf))
   dplyr::bind_cols(x1, x2)
+}
+
+#' @export
+hr_to_sf.list <- function(x, ...) {
+
+  if (!all(sapply(x, is, "hr"))) {
+    stop("Not all elements are hr estimates")
+  }
+
+  nn <- if (is.null(names(x))) 1:length(x) else names(x)
+
+  if (any(nchar(nn) == 0)) {
+    stop("Names must be different from ''")
+  }
+
+  if (any(duplicated(nn))) {
+    stop("Duplicated names are not permitted")
+  }
+
+  x <- lapply(x, hr_isopleths)
+  names <- rep(nn, sapply(x, nrow))
+
+  xx <- do.call("rbind", x)
+  sf::st_as_sf(dplyr::bind_cols(name = names, xx))
+
 }

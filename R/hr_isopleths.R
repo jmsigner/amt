@@ -5,8 +5,8 @@ hr_isopleths <- function (x, ...) {
 }
 
 #' @export
-hr_isopleths.RasterLayer <- function (x, level = 0.95, as_sf = TRUE, ...) {
-  con <- raster::rasterToContour(cumulative_ud(x), levels = level)
+hr_isopleths.RasterLayer <- function (x, level, as_sf = TRUE, ...) {
+  con <- raster::rasterToContour(cumulative_ud(x), level = level)
   b <- sp::coordinates(con)
 
   # make sure there are at least 2 points
@@ -67,17 +67,17 @@ hr_isopleths.mcp <- function (x, ...) {
 
 #' @export
 hr_isopleths.locoh <- function (x, ...) {
-  x$locoh
+  sf::st_as_sf(x$locoh)
 }
 
 #' @export
-hr_isopleths.kde <- function (x, level = 0.95, ...) {
-  iso <- hr_isopleths(x$ud, level = level, ...)
+hr_isopleths.kde <- function (x, ...) {
+  iso <- hr_isopleths(x$ud, level = x$levels, ...)
   iso
 }
 
 #' @export
-hr_isopleths.akde <- function (x, level = 0.95, ...) {
-  iso <- hr_isopleths(x$ud, level = level, ...)
+hr_isopleths.akde <- function (x, ...) {
+  iso <- hr_isopleths(x$ud, level = x$levels, ...)
   iso
 }
