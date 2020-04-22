@@ -32,7 +32,7 @@ hr_isopleths(x, ...)
 hr_kde(x, ...)
 
 \method{hr_kde}{track_xy}(x, h = hr_kde_ref(x), trast = make_trast(x),
-  ...)
+  levels = NULL, ...)
 
 hr_kde_ref(x, ...)
 
@@ -66,6 +66,9 @@ hr_mcp(x, ...)
 
 \item{h}{\code{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
 
+\item{levels}{\code{[numeric]} \cr The isopleth levels used for calculating home
+ranges. Should be \code{0 < level < 1}.}
+
 \item{rescale}{\code{[character(1)]} \cr Rescaling method for reference bandwidth calucation. Must be one of "unitvar", "xvar", or "none".}
 
 \item{correct}{Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.}
@@ -78,9 +81,6 @@ hr_mcp(x, ...)
 local convex hulls.}
 
 \item{type}{\code{k}, \code{r} or \code{a}. Type of LoCoH.}
-
-\item{levels}{\code{[numeric]} \cr The isopleth levels used for calculating home
-ranges. Should be \code{0 < level < 1}.}
 
 \item{rand_buffer}{\code{[numeric(1)]} \cr Random buffer to avoid polygons with
 area 0 (if coordinates are numerically identical).}
