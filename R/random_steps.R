@@ -25,6 +25,13 @@ random_steps.numeric <- function(
   angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e5),
   rand_ta = random_numbers(make_unif_distr(), n = 1e5), ...) {
+
+  # Check arguments
+  checkmate::assert_numeric(x, len = 2)
+  checkmate::assert_int(n_control, lower = 1)
+  checkmate::assert_numeric(rand_sl, lower = 0)
+  checkmate::assert_numeric(rand_ta, lower = -pi, upper = pi)
+
   rs <- random_steps_cpp_one_step(
     n_control,  # number of controll steps
     x[1], x[2],
@@ -84,6 +91,24 @@ random_steps.steps_xy <- function(
 
 }
 
+#' @export
+plot.random_steps <- function(x, ...) {
+  plot(0, 0, type = "n",
+       xlim = extendrange(c(x$x1_, x$x2_), f = 0.1),
+       ylim = extendrange(c(x$y1_, x$y2_), f = 0.1))
+  for (i in 1:nrow(x)) {
+    lines(c(x$x1_[i], x$x2_[i]), c(x$y1_[i], x$y2_[i]), lty = 2, col = "grey79")
+  }
+
+  x1 <- x[x$case_, ]
+  for (i in 1:nrow(x1)) {
+    lines(c(x1$x1_[i], x1$x2_[i]), c(x1$y1_[i], x1$y2_[i]))
+    points(x1$x1_[i], x1$y1_[i], pch = 20, cex = 2, col = "red")
+    points(x1$x2_[i], x1$y2_[i], pch = 20, cex = 2, col = "red")
+  }
+}
+
+
 rsteps_transfer_attr <- function(from, to) {
   from <- attributes(from)
   attributes(to)$class <- from$class
@@ -92,6 +117,8 @@ rsteps_transfer_attr <- function(from, to) {
   attributes(to)$crs_ <- from$crs_
   to
 }
+
+
 
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
