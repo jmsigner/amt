@@ -94,17 +94,18 @@ random_steps.steps_xy <- function(
 #' @export
 plot.random_steps <- function(x, ...) {
   plot(0, 0, type = "n",
-       xlim = extendrange(c(x$x1_, x$x2_), f = 0.1),
-       ylim = extendrange(c(x$y1_, x$y2_), f = 0.1))
+       xlim = grDevices::extendrange(c(x$x1_, x$x2_), f = 0.1),
+       ylim = grDevices::extendrange(c(x$y1_, x$y2_), f = 0.1))
   for (i in 1:nrow(x)) {
-    lines(c(x$x1_[i], x$x2_[i]), c(x$y1_[i], x$y2_[i]), lty = 2, col = "grey79")
+    graphics::lines(c(x$x1_[i], x$x2_[i]), c(x$y1_[i], x$y2_[i]), lty = 2,
+                    col = "grey79")
   }
 
   x1 <- x[x$case_, ]
   for (i in 1:nrow(x1)) {
     lines(c(x1$x1_[i], x1$x2_[i]), c(x1$y1_[i], x1$y2_[i]))
-    points(x1$x1_[i], x1$y1_[i], pch = 20, cex = 2, col = "red")
-    points(x1$x2_[i], x1$y2_[i], pch = 20, cex = 2, col = "red")
+    graphics::points(x1$x1_[i], x1$y1_[i], pch = 20, cex = 2, col = "red")
+    graphics::points(x1$x2_[i], x1$y2_[i], pch = 20, cex = 2, col = "red")
   }
 }
 
