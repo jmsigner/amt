@@ -95,7 +95,8 @@ random_steps.steps_xy <- function(
 plot.random_steps <- function(x, ...) {
   plot(0, 0, type = "n",
        xlim = grDevices::extendrange(c(x$x1_, x$x2_), f = 0.1),
-       ylim = grDevices::extendrange(c(x$y1_, x$y2_), f = 0.1))
+       ylim = grDevices::extendrange(c(x$y1_, x$y2_), f = 0.1),
+       xlab = "x", ylab = "y")
   for (i in 1:nrow(x)) {
     graphics::lines(c(x$x1_[i], x$x2_[i]), c(x$y1_[i], x$y2_[i]), lty = 2,
                     col = "grey79")

@@ -4,7 +4,8 @@
 
 ## updates
 - Streamlined home-range methods
-- Added new convinience functions
+- Added methods for overlaps and intersections of home ranges
+- Added href scaled for KDE
 
 
 # amt 0.0.9
