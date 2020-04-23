@@ -16,7 +16,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 ## About
 
-This vignette briefly introduces how one can coerce `amt track_xy*` to other commonly used packages. At the moment this vignette shows methods to coerece to `adehabitatHR`, `ctmm`, and `move`.
+This vignette briefly introduces how one can coerce `amt track_xy*` to other commonly used packages. At the moment this vignette shows methods to coerce to `adehabitatHR`, `ctmm`, and `move`.
 
 ## Getting the data ready
 

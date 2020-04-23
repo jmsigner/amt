@@ -25,7 +25,7 @@ valid_distr_params <- function(dist_name, params) {
   FALSE
 }
 
-#' Display availabel distributions for step lengths and turn angles.
+#' Display available distributions for step lengths and turn angles.
 #'
 #' @param which_dist `[char(1)="all"]{"all", "ta", "sl"}` \cr Should `all`
 #'   distributions be returned, or only distributions for turn angles (`ta`) or

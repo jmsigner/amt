@@ -13,7 +13,7 @@ as_track(x, ...)
 \method{as_track}{sfc_POINT}(x, ...)
 }
 \arguments{
-\item{x}{\code{[SpatialPoints]} \cr Object to be converted to a track.}
+\item{x}{\verb{[SpatialPoints]} \cr Object to be converted to a track.}
 
 \item{...}{Further arguments, none implemented.}
 }

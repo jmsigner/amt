@@ -31,7 +31,7 @@ tac(x, ...)
 \item{...}{Further arguments, none implemented.}
 }
 \description{
-Functions to calculate metrics such as straightness, mean squred displacement (msd), intensity use,
+Functions to calculate metrics such as straightness, mean squared displacement (msd), intensity use,
 sinuosity, mean turn angle correlation (\code{tac}) of a track.
 }
 \details{

@@ -17,9 +17,9 @@ transform_crs(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{crs_to}{\code{[sp::CRS(1)]} \cr Coordinate reference system the data should be transformed to, see \code{sp::CRS}.}
+\item{crs_to}{\verb{[sp::CRS(1)]} \cr Coordinate reference system the data should be transformed to, see \code{sp::CRS}.}
 
-\item{crs_from}{\code{[sp::CRS(1)]} \cr Coordinate reference system the data are currently in, see \code{sp::CRS}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
+\item{crs_from}{\verb{[sp::CRS(1)]} \cr Coordinate reference system the data are currently in, see \code{sp::CRS}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
 }
 \description{
 Transforms the CRS for a track.

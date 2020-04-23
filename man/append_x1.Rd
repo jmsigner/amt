@@ -7,12 +7,12 @@
 append_x1(string)
 }
 \arguments{
-\item{string}{\code{[character]} Variable name to possibly append to}
+\item{string}{\verb{[character]} Variable name to possibly append to}
 }
 \description{
 Helper function to append "_x1" to variable names
 }
 \details{
 The function first checks if "_x1" is already appended and adds it if
-it is not. This is meant for internal use in \code{\link{plot.log_rss}()}.
+it is not. This is meant for internal use in \verb{\link{plot.log_rss}()}.
 }

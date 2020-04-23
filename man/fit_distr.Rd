@@ -7,12 +7,12 @@
 fit_distr(x, dist_name, na.rm = TRUE)
 }
 \arguments{
-\item{x}{\code{[numeric(>1)]} \cr The observed data.}
+\item{x}{\verb{[numeric(>1)]} \cr The observed data.}
 
-\item{dist_name}{\code{[character(1)]{"exp", "gamma", "unif", "vonmises"}} \cr The name of the
+\item{dist_name}{\verb{[character(1)]\{"exp", "gamma", "unif", "vonmises"\}} \cr The name of the
 distribution.}
 
-\item{na.rm}{\code{[logical(1)=TRUE]} \cr Indicating whether \code{NA} should be
+\item{na.rm}{\verb{[logical(1)=TRUE]} \cr Indicating whether \code{NA} should be
 removed before fitting the distribution.}
 }
 \value{

@@ -100,7 +100,7 @@ hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
 #' is made between the two dimensions.
 #'
 #' @param x A `track_xy*`.
-#' @param trast A tempalte `RasterLayer`.
+#' @param trast A template `RasterLayer`.
 #' @param range Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.
 #' @param num.of.parts Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.
 #' @param tol Numeric scalar, indicating which difference of to stop.
@@ -168,7 +168,7 @@ hr_kde_ref_scaled <- function(
 
 
 #' `hr_kde_pi` wraps `KernSmooth::dpik` to select bandwidth for kernel density estimation the plug-in-the-equation method in two dimensions.
-#' This function calcualtes bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
+#' This function calculates bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
 #' @param correct Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.
 #' @return The bandwidth, the standardization method and correction.
 #' @seealso \code{KernSmooth::dpik}
@@ -224,7 +224,7 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
 #' @param range numeric vector with different candidate h values.
 #' @param which_min A character indicating if the \code{global} or \code{local} minimum should be searched for.
 
-#' @details `hr_kde_lscv` calcualtes least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
+#' @details `hr_kde_lscv` calculates least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
 
 #' @return \code{vector} of length two
 #' @export

@@ -4,16 +4,22 @@
 \alias{hr_kde_ref_scaled}
 \title{Select a bandwidth for Kernel Density Estimation}
 \usage{
-hr_kde_ref_scaled(x, range = hr_kde_ref(x)[1] * c(0.01, 1),
-  trast = make_trast(x), num.of.parts = 1, levels = 0.95,
-  tol = 0.1, max.it = 500L)
+hr_kde_ref_scaled(
+  x,
+  range = hr_kde_ref(x)[1] * c(0.01, 1),
+  trast = make_trast(x),
+  num.of.parts = 1,
+  levels = 0.95,
+  tol = 0.1,
+  max.it = 500L
+)
 }
 \arguments{
-\item{x}{A \code{track_xy*}.}
+\item{x}{A \verb{track_xy*}.}
 
 \item{range}{Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.}
 
-\item{trast}{A tempalte \code{RasterLayer}.}
+\item{trast}{A template \code{RasterLayer}.}
 
 \item{num.of.parts}{Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.}
 

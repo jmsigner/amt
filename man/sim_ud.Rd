@@ -15,32 +15,31 @@ movement_kernel(scale, shape, template, quant = 0.99)
 
 simulate_ud(movement_kernel, habitat_kernel, start, n = 100000L)
 
-simulate_tud(movement_kernel, habitat_kernel, start, n = 100,
-  n_rep = 5000)
+simulate_tud(movement_kernel, habitat_kernel, start, n = 100, n_rep = 5000)
 }
 \arguments{
-\item{coef}{\code{[list]} \cr Vector with coeffiecients, not yet implemented.}
+\item{coef}{\verb{[list]} \cr Vector with coeffiecients, not yet implemented.}
 
-\item{resources}{\code{[RasterLayer, RasterStack]} \cr The resources.}
+\item{resources}{\verb{[RasterLayer, RasterStack]} \cr The resources.}
 
 \item{exp}{A logical scalar, indicating whether or not the resulting habitat kernel should be exponentiated. This is usually \code{TRUE}.}
 
-\item{scale, shape}{\code{[numeric](1)}\cr Scale and scale parameter of the gamma distribution of step lengths.}
+\item{scale, shape}{\verb{[numeric](1)}\cr Scale and scale parameter of the gamma distribution of step lengths.}
 
-\item{template}{\code{[RasterLayer,RasterStack]}\cr A raster serving as template for the simulations.}
+\item{template}{\verb{[RasterLayer,RasterStack]}\cr A raster serving as template for the simulations.}
 
 \item{quant}{A numeric scalar, quantile of the step-length distribution that is
 the maximum movement distance.}
 
-\item{movement_kernel}{\code{[RasterLayer]} \cr The movement kernel.}
+\item{movement_kernel}{\verb{[RasterLayer]} \cr The movement kernel.}
 
-\item{habitat_kernel}{\code{[RasterLayer]} \cr The habitat kernel.}
+\item{habitat_kernel}{\verb{[RasterLayer]} \cr The habitat kernel.}
 
-\item{start}{\code{[numeric(2)]} \cr Starting point of the simulation.}
+\item{start}{\verb{[numeric(2)]} \cr Starting point of the simulation.}
 
-\item{n}{\code{[integer(1)=1e5]} \cr The number of simulation steps.}
+\item{n}{\verb{[integer(1)=1e5]} \cr The number of simulation steps.}
 
-\item{n_rep}{\code{[integer(1)=5e3]{>0}} \cr The number of times the animal walks of the final position. The mean of all replicates is returned.}
+\item{n_rep}{\verb{[integer(1)=5e3]\{>0\}} \cr The number of times the animal walks of the final position. The mean of all replicates is returned.}
 }
 \value{
 The habitat kernel, as \code{RasterLayer}.
@@ -57,7 +56,7 @@ The habitat kernel is calculated by multiplying resources with their correspondi
 
 \strong{\code{simulate_ud()}:} simulates a utilization distribution (UD) from a fitted Step-Selection Function.
 
-\strong{\code{simulate_tud()}:} Is a conviencience wrapper arround \code{simulate_ud} to simulate transition UDs (i.e., starting at the same position many times and only simulate for a short time).
+\strong{\code{simulate_tud()}:} Is a convenience wrapper around \code{simulate_ud} to simulate transition UDs (i.e., starting at the same position many times and only simulate for a short time).
 }
 \note{
 This functions are still experimental and should be used with care. If in doubt, please contact the author.

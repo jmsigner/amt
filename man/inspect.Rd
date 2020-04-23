@@ -14,9 +14,9 @@ inspect(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{popup}{\code{[character(nrow(x))]} \cr Optional labels for popups.}
+\item{popup}{\verb{[character(nrow(x))]} \cr Optional labels for popups.}
 
-\item{cluster}{\code{[logical(1)]} \cr If \code{TRUE} points are clustered at lower zoom levels.}
+\item{cluster}{\verb{[logical(1)]} \cr If \code{TRUE} points are clustered at lower zoom levels.}
 }
 \value{
 An interactive \code{leaflet} map.

@@ -10,32 +10,28 @@
 \usage{
 random_points(x, ...)
 
-\method{random_points}{hr}(x, n = 100, type = "random",
-  presence = NULL, ...)
+\method{random_points}{hr}(x, n = 100, type = "random", presence = NULL, ...)
 
-\method{random_points}{sf}(x, n = 100, type = "random",
-  presence = NULL, ...)
+\method{random_points}{sf}(x, n = 100, type = "random", presence = NULL, ...)
 
-\method{random_points}{SpatialPolygons}(x, n = 100, type = "random",
-  presence = NULL, ...)
+\method{random_points}{SpatialPolygons}(x, n = 100, type = "random", presence = NULL, ...)
 
-\method{random_points}{track_xy}(x, level = 1, hr = "mcp",
-  n = nrow(x) * 10, type = "random", ...)
+\method{random_points}{track_xy}(x, level = 1, hr = "mcp", n = nrow(x) * 10, type = "random", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
-\item{...}{\code{[any]}\cr None implemented.}
+\item{...}{\verb{[any]}\cr None implemented.}
 
-\item{n}{\code{[integer(1)]} \cr The number of random points.}
+\item{n}{\verb{[integer(1)]} \cr The number of random points.}
 
-\item{type}{\code{[character(1)]} \cr Argument passed to \code{sp::spsample type}. The default is \code{random}.}
+\item{type}{\verb{[character(1)]} \cr Argument passed to \verb{sp::spsample type}. The default is \code{random}.}
 
-\item{presence}{\code{[track]} \cr The presence points, that will be added to the result.}
+\item{presence}{\verb{[track]} \cr The presence points, that will be added to the result.}
 
-\item{level}{\code{[numeric(1)]} \cr Home-range level of the minimum convex polygon, used for generating the background samples.}
+\item{level}{\verb{[numeric(1)]} \cr Home-range level of the minimum convex polygon, used for generating the background samples.}
 
-\item{hr}{\code{[character(1)]} \cr The home range estimator to be used. Currently only MCP is implemented.}
+\item{hr}{\verb{[character(1)]} \cr The home range estimator to be used. Currently only MCP is implemented.}
 }
 \description{
 Functions to generate random points within an animals home range. This is usually the first step for investigating habitat selection via Resource Selection Functions (RSF).

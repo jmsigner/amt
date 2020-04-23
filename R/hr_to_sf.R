@@ -2,7 +2,7 @@
 #'
 #' @param x A `tibble` with a `list column` with individual home ranges.
 #' @param col The column where the home
-#' @param ... Additional columns that should be transfered to the new `tible`.
+#' @param ... Additional columns that should be transferred to the new `tible`.
 #'
 #' @return A `data.frame` with a simple feature column (from the `sf`) package.
 #' @export

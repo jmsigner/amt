@@ -14,7 +14,7 @@ centroid(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{spatial}{\code{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPoints}-object.}
+\item{spatial}{\verb{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPoints}-object.}
 }
 \description{
 Calculate the centroid of a track.

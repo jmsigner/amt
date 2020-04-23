@@ -13,13 +13,13 @@ fit_ssf(data, formula, more = NULL, summary_only = FALSE, ...)
 fit_issf(data, formula, more = NULL, summary_only = FALSE, ...)
 }
 \arguments{
-\item{data}{\code{[data.frame]} \cr The data used to fit a model.}
+\item{data}{\verb{[data.frame]} \cr The data used to fit a model.}
 
-\item{formula}{\code{[formula]} \cr The model formula.}
+\item{formula}{\verb{[formula]} \cr The model formula.}
 
-\item{more}{\code{[list]} \cr Optional list that is passed on the output.}
+\item{more}{\verb{[list]} \cr Optional list that is passed on the output.}
 
-\item{summary_only}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} only a \code{broom::tidy} summary of the model is returned.}
+\item{summary_only}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE} only a \code{broom::tidy} summary of the model is returned.}
 
 \item{...}{Additional arguments, passed to \code{survival::clogit}.}
 }

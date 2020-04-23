@@ -8,22 +8,20 @@
 \usage{
 time_of_day(x, ...)
 
-\method{time_of_day}{track_xyt}(x, solar.dep = 6,
-  include.crepuscule = FALSE, ...)
+\method{time_of_day}{track_xyt}(x, solar.dep = 6, include.crepuscule = FALSE, ...)
 
-\method{time_of_day}{steps_xyt}(x, solar.dep = 6,
-  include.crepuscule = FALSE, where = "end", ...)
+\method{time_of_day}{steps_xyt}(x, solar.dep = 6, include.crepuscule = FALSE, where = "end", ...)
 }
 \arguments{
-\item{x}{\code{[track_xyt,steps_xyt]}\cr A track or steps.}
+\item{x}{\verb{[track_xyt,steps_xyt]}\cr A track or steps.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{solar.dep}{\code{[numeric(1,n)=6]}\cr The angle of the sun below the horizon in degrees. Passed to \code{maptools::crepuscule}.}
+\item{solar.dep}{\verb{[numeric(1,n)=6]}\cr The angle of the sun below the horizon in degrees. Passed to \code{maptools::crepuscule}.}
 
-\item{include.crepuscule}{\code{[logical(1)=TRUE]}\cr Should dawn and dusk be included.}
+\item{include.crepuscule}{\verb{[logical(1)=TRUE]}\cr Should dawn and dusk be included.}
 
-\item{where}{\code{[character(1)="end"]{"start", "end", "both"}} For \code{steps}, should the start, end or both time points be used?}
+\item{where}{\verb{[character(1)="end"]\{"start", "end", "both"\}} For \code{steps}, should the start, end or both time points be used?}
 }
 \description{
 A convenience wrapper around \code{maptools::sunriset} and \code{maptools::crepuscule} to extract if a fix was taken during day or night (optionally also include dawn and dusk).

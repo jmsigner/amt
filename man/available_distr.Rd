@@ -2,20 +2,20 @@
 % Please edit documentation in R/distributions.R
 \name{available_distr}
 \alias{available_distr}
-\title{Display availabel distributions for step lengths and turn angles.}
+\title{Display available distributions for step lengths and turn angles.}
 \usage{
 available_distr(which_dist = "all", names_only = FALSE, ...)
 }
 \arguments{
-\item{which_dist}{\code{[char(1)="all"]{"all", "ta", "sl"}} \cr Should \code{all}
+\item{which_dist}{\verb{[char(1)="all"]\{"all", "ta", "sl"\}} \cr Should \code{all}
 distributions be returned, or only distributions for turn angles (\code{ta}) or
 step lengths (\code{sl}).}
 
-\item{names_only}{\code{[logical(1)=FALSE]} \cr Indicates if only the names of
+\item{names_only}{\verb{[logical(1)=FALSE]} \cr Indicates if only the names of
 distributions should be returned.}
 
 \item{...}{none implemented.}
 }
 \description{
-Display availabel distributions for step lengths and turn angles.
+Display available distributions for step lengths and turn angles.
 }

@@ -1,6 +1,6 @@
 #' Coerce a track to other formats.
 #'
-#' Several other packages provides methods to analyse movement data, and `amt` provides coercion methods to some packages
+#' Several other packages provides methods to analyze movement data, and `amt` provides coercion methods to some packages
 #'
 #' @template track_xy_star
 #' @param id `[numeric,character,factor]` \cr Animal id(s).

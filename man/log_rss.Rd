@@ -13,15 +13,15 @@ log_rss(object, ...)
 \method{log_rss}{fit_clogit}(object, x1, x2, ...)
 }
 \arguments{
-\item{object}{\code{[fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.}
+\item{object}{\verb{[fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{x1}{\code{[data.frame]} \cr A \code{data.frame} representing the habitat values
+\item{x1}{\verb{[data.frame]} \cr A \code{data.frame} representing the habitat values
 at location x_1. Must contain all fitted covariates as expected by
 \code{predict()}.}
 
-\item{x2}{\code{[data.frame]} \cr A 1-row \code{data.frame} representing the single
+\item{x2}{\verb{[data.frame]} \cr A 1-row \code{data.frame} representing the single
 hypothetical location of x_2. Must contain all fitted covariates as expected
 by \code{predict()}.}
 }
@@ -123,7 +123,7 @@ Strength: Quantifying effect size in habitat- and step-selection inference.
 See Avgar \emph{et al.} 2017 for details about relative
 selection strength.
 
-Default plotting method available: \code{\link{plot.log_rss}()}
+Default plotting method available: \verb{\link{plot.log_rss}()}
 }
 \author{
 Brian Smith

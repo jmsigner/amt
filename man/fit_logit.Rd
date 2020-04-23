@@ -10,12 +10,12 @@ fit_logit(data, formula, ...)
 fit_rsf(data, formula, ...)
 }
 \arguments{
-\item{data}{\code{[data.frame]} \cr The data used to fit a model.}
+\item{data}{\verb{[data.frame]} \cr The data used to fit a model.}
 
-\item{formula}{\code{[formula]} \cr The model formula.}
+\item{formula}{\verb{[formula]} \cr The model formula.}
 
 \item{...}{Further arguments passed to \code{stats::glm}.}
 }
 \description{
-Tihs function is a wrapper around \code{stats::glm} for piped workflows.
+This function is a wrapper around \code{stats::glm} for piped workflows.
 }

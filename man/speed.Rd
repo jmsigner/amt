@@ -14,10 +14,10 @@ speed(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{append_na}{\code{[logical(1)=TRUE]} \cr Should an \code{NA} be appended at the end.}
+\item{append_na}{\verb{[logical(1)=TRUE]} \cr Should an \code{NA} be appended at the end.}
 }
 \value{
-\code{[numeric]} \cr The speed in \code{m/s}.
+\verb{[numeric]} \cr The speed in \code{m/s}.
 }
 \description{
 Obtain the speed of a track.

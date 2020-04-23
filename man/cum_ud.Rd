@@ -14,12 +14,12 @@ cumulative_ud(x, ...)
 \method{cumulative_ud}{kde}(x, ...)
 }
 \arguments{
-\item{x}{\code{[RasterLayer]} \cr Containing the Utilization Distribution (UD).}
+\item{x}{\verb{[RasterLayer]} \cr Containing the Utilization Distribution (UD).}
 
 \item{...}{Further arguments, none implemented.}
 }
 \value{
-\code{[RasterLayer]} \cr The cumulative UD.
+\verb{[RasterLayer]} \cr The cumulative UD.
 }
 \description{
 Calculate the cumulative utilization distribution (UD).

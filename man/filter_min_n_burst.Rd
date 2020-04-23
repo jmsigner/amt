@@ -14,7 +14,7 @@ filter_min_n_burst(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{min_n}{\code{[numeric(1)=3]} \cr Indicating the minimum number of relocations (=fixes per burst).}
+\item{min_n}{\verb{[numeric(1)=3]} \cr Indicating the minimum number of relocations (=fixes per burst).}
 }
 \description{
 Only retain bursts with a minimum number (= \code{min_n}) of relocations.

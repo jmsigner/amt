@@ -26,35 +26,47 @@ extract_covariates_along(x, ...)
 
 extract_covariates_var_time(x, ...)
 
-\method{extract_covariates_var_time}{track_xyt}(x, covariates,
-  when = "any", max_time, name_covar = "time_var_covar", ...)
+\method{extract_covariates_var_time}{track_xyt}(
+  x,
+  covariates,
+  when = "any",
+  max_time,
+  name_covar = "time_var_covar",
+  ...
+)
 
-\method{extract_covariates_var_time}{steps_xyt}(x, covariates,
-  when = "any", max_time, name_covar = "time_var_covar",
-  where = "end", ...)
+\method{extract_covariates_var_time}{steps_xyt}(
+  x,
+  covariates,
+  when = "any",
+  max_time,
+  name_covar = "time_var_covar",
+  where = "end",
+  ...
+)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{covariates}{\code{[RasterLayer,RasterStack,RasterBrick]} \cr The
+\item{covariates}{\verb{[RasterLayer,RasterStack,RasterBrick]} \cr The
 (environmental) covariates. For \code{extract_covariates_var_time} the argument
-\code{covariates} need to have a \code{z}-columne (i.e. the time stamp).}
+\code{covariates} need to have a \code{z}-column (i.e. the time stamp).}
 
-\item{where}{\code{[character(1)="end"]{"start", "end", "both"}} \cr For \code{steps} this
+\item{where}{\verb{[character(1)="end"]\{"start", "end", "both"\}} \cr For \code{steps} this
 determines if the covariate values should be extracted at the beginning or
 the end of a step. or \code{end}.}
 
-\item{when}{\code{[character(1)="any"]{"any", "before", "after"}} \cr Specifies for
+\item{when}{\verb{[character(1)="any"]\{"any", "before", "after"\}} \cr Specifies for
 for \code{extract_covariates_var_time} whether to look before, after or in both
 direction (\code{any}) for the temporally closest environmental raster.}
 
-\item{max_time}{\code{[Period(1)]} \cr The maximum time difference between a relocation
+\item{max_time}{\verb{[Period(1)]} \cr The maximum time difference between a relocation
 and the corresponding raster. If no rasters are within the specified max.
 distance \code{NA} is returned.}
 
-\item{name_covar}{\code{[character(1)="time_var_covar"]} \cr The name of the new column.}
+\item{name_covar}{\verb{[character(1)="time_var_covar"]} \cr The name of the new column.}
 }
 \description{
 Extract the covariate values at relocations, or at the beginning or end of

@@ -4,13 +4,15 @@
 \name{sh}
 \alias{sh}
 \title{Relocations of 1 red deer}
-\format{A data frame with 1500 rows and 4 variables:
+\format{
+A data frame with 1500 rows and 4 variables:
 \describe{
 \item{x_epsg31467}{the x-coordinate}
 \item{y_epsg31467}{the y-coordinate}
 \item{day}{the day of the relocation}
 \item{time}{the hour of the relocation}
-}}
+}
+}
 \source{
 Verein für Wildtierforschung Dresden und Göttingen e.V.
 }

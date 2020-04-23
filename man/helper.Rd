@@ -28,8 +28,7 @@ coords(x, ...)
 
 make_trast(x, ...)
 
-\method{make_trast}{track_xy}(x, factor = 1.5,
-  res = max(c(extent_max(x)/100, 1e-09)), ...)
+\method{make_trast}{track_xy}(x, factor = 1.5, res = max(c(extent_max(x)/100, 1e-09)), ...)
 
 extent_x(x, ...)
 
@@ -64,12 +63,12 @@ range_both(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{factor}{\code{[numeric(1)=1.5]{>= 1}}\cr Factor by which the extent of the relocationsis extended.}
+\item{factor}{\verb{[numeric(1)=1.5]\{>= 1\}}\cr Factor by which the extent of the relocations is extended.}
 
-\item{res}{\code{[numeric(1)]}\cr Resolution of the output raster.}
+\item{res}{\verb{[numeric(1)]}\cr Resolution of the output raster.}
 }
 \value{
-\code{[tibble]} \cr The coordinates.
+\verb{[tibble]} \cr The coordinates.
 }
 \description{
 Coordinates of a track.

@@ -11,7 +11,7 @@ as_rad(x)
 as_degree(x)
 }
 \arguments{
-\item{x}{\code{[numeric]}\cr Angles in degrees or rad.}
+\item{x}{\verb{[numeric]}\cr Angles in degrees or rad.}
 }
 \description{
 Converts angles to radians

@@ -10,9 +10,9 @@ hr_to_sf(x, ...)
 \method{hr_to_sf}{tbl_df}(x, col, ...)
 }
 \arguments{
-\item{x}{A \code{tibble} with a \code{list column} with individual home ranges.}
+\item{x}{A \code{tibble} with a \verb{list column} with individual home ranges.}
 
-\item{...}{Additional columns that should be transfered to the new \code{tible}.}
+\item{...}{Additional columns that should be transferred to the new \code{tible}.}
 
 \item{col}{The column where the home}
 }

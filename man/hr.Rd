@@ -22,8 +22,13 @@
 \usage{
 hr_akde(x, ...)
 
-\method{hr_akde}{track_xyt}(x, model = fit_ctmm(x, "iid"),
-  trast = make_trast(x), levels = 0.95, ...)
+\method{hr_akde}{track_xyt}(
+  x,
+  model = fit_ctmm(x, "iid"),
+  trast = make_trast(x),
+  levels = 0.95,
+  ...
+)
 
 hr_area(x, ...)
 
@@ -31,8 +36,7 @@ hr_isopleths(x, ...)
 
 hr_kde(x, ...)
 
-\method{hr_kde}{track_xy}(x, h = hr_kde_ref(x), trast = make_trast(x),
-  levels = 0.95, ...)
+\method{hr_kde}{track_xy}(x, h = hr_kde_ref(x), trast = make_trast(x), levels = 0.95, ...)
 
 hr_kde_ref(x, ...)
 
@@ -42,14 +46,17 @@ hr_kde_pi(x, ...)
 
 \method{hr_kde_pi}{track_xy}(x, rescale = "none", correct = TRUE, ...)
 
-hr_kde_lscv(x, range = do.call(seq, as.list(c(hr_kde_ref(x) * c(0.1, 2),
-  length.out = 100))), which_min = "global", rescale = "none",
-  trast = raster(as_sp(x), nrow = 100, ncol = 100))
+hr_kde_lscv(
+  x,
+  range = do.call(seq, as.list(c(hr_kde_ref(x) * c(0.1, 2), length.out = 100))),
+  which_min = "global",
+  rescale = "none",
+  trast = raster(as_sp(x), nrow = 100, ncol = 100)
+)
 
 hr_locoh(x, ...)
 
-\method{hr_locoh}{track_xy}(x, n = 10, type = "k", levels = 0.95,
-  rand_buffer = 1e-05, ...)
+\method{hr_locoh}{track_xy}(x, n = 10, type = "k", levels = 0.95, rand_buffer = 1e-05, ...)
 
 hr_mcp(x, ...)
 
@@ -60,16 +67,16 @@ hr_mcp(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{model}{A continous time movement model. This can be fitted either with \code{ctmm::ctmm.fit} or \code{fit_ctmm}.}
+\item{model}{A continuous time movement model. This can be fitted either with \code{ctmm::ctmm.fit} or \code{fit_ctmm}.}
 
-\item{trast}{\code{[RasterLayer]} \cr A template raster for kernel density home-ranges.}
+\item{trast}{\verb{[RasterLayer]} \cr A template raster for kernel density home-ranges.}
 
-\item{levels}{\code{[numeric]} \cr The isopleth levels used for calculating home
-ranges. Should be \code{0 < level < 1}.}
+\item{levels}{\verb{[numeric]} \cr The isopleth levels used for calculating home
+ranges. Should be \verb{0 < level < 1}.}
 
-\item{h}{\code{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
+\item{h}{\verb{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
 
-\item{rescale}{\code{[character(1)]} \cr Rescaling method for reference bandwidth calucation. Must be one of "unitvar", "xvar", or "none".}
+\item{rescale}{\verb{[character(1)]} \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".}
 
 \item{correct}{Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.}
 
@@ -77,12 +84,12 @@ ranges. Should be \code{0 < level < 1}.}
 
 \item{which_min}{A character indicating if the \code{global} or \code{local} minimum should be searched for.}
 
-\item{n}{\code{[integer(1)]} \cr The number of neighbors used when calculating
+\item{n}{\verb{[integer(1)]} \cr The number of neighbors used when calculating
 local convex hulls.}
 
 \item{type}{\code{k}, \code{r} or \code{a}. Type of LoCoH.}
 
-\item{rand_buffer}{\code{[numeric(1)]} \cr Random buffer to avoid polygons with
+\item{rand_buffer}{\verb{[numeric(1)]} \cr Random buffer to avoid polygons with
 area 0 (if coordinates are numerically identical).}
 }
 \value{
@@ -91,16 +98,16 @@ The bandwidth, the standardization method and correction.
 \code{vector} of length two
 }
 \description{
-Functions to calculate animal home ranges from a \code{track_xy*}, and to work
+Functions to calculate animal home ranges from a \verb{track_xy*}, and to work
 with home ranges. \code{hr_mcp}, \code{hr_kde}, and \code{hr_locoh} calculate the minimum convex
 polygon, kernel density, and local convex hull home range respectively. \code{hr_area} extracts the
 area of an home range, \code{hr_isopleths} returns the isopleth as a
 \code{SpatialPolygonsDataFrame}.
 }
 \details{
-The implementation of the reference bandwidth calculation is based on Worton (1989). If variances differ greatly, it is advaisable to rescale the data using \code{rescale = "unitvar"} the data is suspected to multimodal other bandwidth estimation methods may be more suitable.
+The implementation of the reference bandwidth calculation is based on Worton (1989). If variances differ greatly, it is advisable to rescale the data using \code{rescale = "unitvar"} the data is suspected to multimodal other bandwidth estimation methods may be more suitable.
 
-\code{hr_kde_lscv} calcualtes least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
+\code{hr_kde_lscv} calculates least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
 }
 \examples{
 # akde

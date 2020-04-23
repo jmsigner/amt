@@ -20,7 +20,7 @@ set.seed(20161113)
 
 ### Q1: How to work with `extract_covariates_var_time()` with multiple animals:
 
-Simulate some data: 10 animals over a year with monhtly covariates. Note the covariates do not influence movement during the simulaitons. This purely for illustration. 
+Simulate some data: 10 animals over a year with monthly covariates. Note the covariates do not influence movement during the simulations. This purely for illustration. 
 
 ```{r}
 library(raster)

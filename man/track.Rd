@@ -4,13 +4,31 @@
 \alias{track}
 \alias{mk_track}
 \alias{make_track}
-\title{Create a \code{track_*}}
+\title{Create a \verb{track_*}}
 \usage{
-mk_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
-  check_duplicates = FALSE, all_cols = FALSE)
+mk_track(
+  tbl,
+  .x,
+  .y,
+  .t,
+  ...,
+  crs = NULL,
+  order_by_ts = TRUE,
+  check_duplicates = FALSE,
+  all_cols = FALSE
+)
 
-make_track(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
-  check_duplicates = FALSE, all_cols = FALSE)
+make_track(
+  tbl,
+  .x,
+  .y,
+  .t,
+  ...,
+  crs = NULL,
+  order_by_ts = TRUE,
+  check_duplicates = FALSE,
+  all_cols = FALSE
+)
 
 track(x, y, t, ..., crs = NULL)
 }
@@ -18,28 +36,28 @@ track(x, y, t, ..., crs = NULL)
 \item{tbl}{\link{data.frame} \cr The \code{data.frame} from which a track should be
 created.}
 
-\item{.x, .y, .t}{\code{[expression(1)]} \cr Unquoted variable names of columns
+\item{.x, .y, .t}{\verb{[expression(1)]} \cr Unquoted variable names of columns
 containing the x and y coordinates, and optionally a time stamp.}
 
-\item{...}{\code{[expression]} \cr Additional columns from \code{tbl} to be used in a
+\item{...}{\verb{[expression]} \cr Additional columns from \code{tbl} to be used in a
 track. Columns should be provided in the form of \code{key = val} (e.g., for ids
-this may look like this \code{id = c(1, 1, 1, 2, 2, 2} for three points for ids
+this may look like this \verb{id = c(1, 1, 1, 2, 2, 2} for three points for ids
 1 and 2 each).}
 
-\item{crs}{\code{[sp::CRS]} \cr An optional coordinate reference system of the
+\item{crs}{\verb{[sp::CRS]} \cr An optional coordinate reference system of the
 points.}
 
-\item{order_by_ts}{\code{[logical(1)]} \cr Should relocations be ordered by time
+\item{order_by_ts}{\verb{[logical(1)]} \cr Should relocations be ordered by time
 stamp, default is \code{TRUE}.}
 
-\item{check_duplicates}{\code{[logical(1)=FALSE]} \cr Should it be checked if there are
+\item{check_duplicates}{\verb{[logical(1)=FALSE]} \cr Should it be checked if there are
 duplicated time stamp, default is \code{FALSE}.}
 
-\item{all_cols}{\code{[logical(1)=FALSE]} \cr Should all columns be carried over to the track object, default is \code{FALSE}.}
+\item{all_cols}{\verb{[logical(1)=FALSE]} \cr Should all columns be carried over to the track object, default is \code{FALSE}.}
 
-\item{x, y}{\code{[numeric]} \cr The x and y coordinates.}
+\item{x, y}{\verb{[numeric]} \cr The x and y coordinates.}
 
-\item{t}{\code{[POSIXct]} \cr The time stamp.}
+\item{t}{\verb{[POSIXct]} \cr The time stamp.}
 }
 \value{
 If \code{t} was provided an object of class \code{track_xyt} is returned

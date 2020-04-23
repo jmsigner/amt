@@ -5,7 +5,7 @@
 #' @template track_xy_star_steps
 #' @param covariates `[RasterLayer,RasterStack,RasterBrick]` \cr The
 #'   (environmental) covariates. For `extract_covariates_var_time` the argument
-#'   `covariates` need to have a `z`-columne (i.e. the time stamp).
+#'   `covariates` need to have a `z`-column (i.e. the time stamp).
 #' @param where `[character(1)="end"]{"start", "end", "both"}` \cr For `steps` this
 #'   determines if the covariate values should be extracted at the beginning or
 #'   the end of a step. or `end`.

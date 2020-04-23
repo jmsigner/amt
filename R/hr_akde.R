@@ -14,7 +14,7 @@ hr_akde <- function(x, ...) {
 
 
 #' @export
-#' @param model A continous time movement model. This can be fitted either with `ctmm::ctmm.fit` or `fit_ctmm`.
+#' @param model A continuous time movement model. This can be fitted either with `ctmm::ctmm.fit` or `fit_ctmm`.
 #' @rdname hr
 hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"),
                               trast = make_trast(x), levels = 0.95, ...) {

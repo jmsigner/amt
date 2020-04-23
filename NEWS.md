@@ -11,7 +11,7 @@
 # amt 0.0.9
 ## bug fixes
 - `extract_covariate` now works with new version of tibble for raster stacks.
-- `fit_distr` for gamma distribution, now replaces 0 step length with min setep- length and informs the user with a message. 
+- `fit_distr` for gamma distribution, now replaces 0 step length with min step- length and informs the user with a message. 
 
 ## minor changes
 - added citation to the description
@@ -30,7 +30,7 @@
 
 
 ## major changes
-- Improved `random_points` by addeing methods for track, hr and spatial objects.
+- Improved `random_points` by adding methods for track, hr and spatial objects.
 - Adjusted `random_steps`
 - Removed dependency on `velox`. This makes `extract_covariates_along` slower. 
 
@@ -65,14 +65,14 @@
 - bug fix in `random_steps`
 - new function `extract_covariates_along`, extracts covariates along a random step.
 - `steps` gains a new argument: `keep_cols` in order to keep columns from point when creating steps.
-- `simulate_tud`: a convenience wrapper arround `simulate_ud` to simulate transition UDs.
+- `simulate_tud`: a convenience wrapper around `simulate_ud` to simulate transition UDs.
 # amt 0.0.4.0
 ## major changes
 - Added an alias to `mk_track` called `make_track`.
 - `mk_track` gained a new argument `all_cols` that allows to carry over all columns to track.
 - `mk_track` gained a new argument `check_duplicates` that allows to the user to specify if temporal duplicates should give an error or not.
 - Added `hr_kde` to calculate Kernel home ranges.
-- `steps` now uses `difftime` to calcualte time differences.
+- `steps` now uses `difftime` to calculate time differences.
 
 ## minor changes
 - Removed: Depends tidyverse
@@ -81,5 +81,5 @@
 # amt 0.0.3.0
 ## minor changes
 
-- Fixed vignette titels.
+- Fixed vignette titles.
 - Added `Rdpack` to suggest
