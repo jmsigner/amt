@@ -30,6 +30,8 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer 
     ## 2. order by dist
     ## 3. take n nearest
     aa <- FNN::get.knn(x[, c("x_", "y_")], k = n)$nn.index
+    #"r" and "a" methods return a list -- split so that this is the same
+    aa <- split(aa, 1:nrow(aa))
   } else if (type == "r") {
     ## 1. calc dist
     ## 2. take all pts with dist <= n
@@ -41,13 +43,13 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer 
     # 3. take cum dist
     # 4. take points where cumist <= n
     aa <- lapply(no, function(i) {
-      di <- sqrt((x$x_ - x$y_[i])^2 + (x$y_ - x$y_[i])^2)
+      di <- sqrt((x$x_ - x$x_[i])^2 + (x$y_ - x$y_[i])^2)
       no[order(di)][cumsum(di[order(di)]) <= n]
     })
   }
 
   xysp <- sp::SpatialPointsDataFrame(x[, c("x_", "y_")], data=data.frame(id=1:nrow(x)))
-  zz <- lapply(1:nrow(aa), function(i) xysp[aa[i, ], ])
+  zz <- lapply(1:length(aa), function(i) xysp[aa[[i]], ])
   mcps <- lapply(zz, function(x) rgeos::gBuffer(rgeos::gConvexHull(x), width = rand_buffer))
   mcpAreas <- sapply(mcps, rgeos::gArea)
 
