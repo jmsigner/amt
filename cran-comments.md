@@ -1,4 +1,16 @@
 # Version 0.1.0
+## Round 2
+
+The unit tests gave an error for MacOS. I was asked by Prof. B. Ripley to resolve these. 
+
+I this and tested the package again with
+
+```
+rhub::check(platform = "macos-highsierra-release-cran")
+```
+
+There were no errors, warnings or notes.
+
 ## Round 1
 
 ### Test environments

@@ -4,6 +4,7 @@
 #' @importFrom grDevices adjustcolor
 #' @importFrom lazyeval lazy_dots lazy
 #' @importFrom lubridate hours minutes seconds now days weeks
+#' @importFrom magrittr %>%
 #' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd var
 #' @importFrom tidyr nest unnest
 #' @importFrom tibble tibble tribble is_tibble as_tibble
@@ -12,6 +13,7 @@
 #' @importFrom stats dexp qexp terms predict
 #' @importFrom methods is
 #' @importFrom purrr map map_int
+#' @importFrom Rcpp evalCpp
 #' @importFrom rlang quo quos enquo quo_name
 #' @importFrom raster raster
 #' @import survival

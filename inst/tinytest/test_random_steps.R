@@ -1,39 +1,54 @@
 # Check that angles are correct
-a <- -pi
+a <- round(-pi, 5)
 x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
 
-a <- -pi/2
-x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
 
-a <- -pi/3
+a <- round(-pi/2, 5)
 x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
 
-a <- -pi/4
-x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
 
-a <- 0
+a <- round(-pi/3, 5)
 x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
 
-a <- pi/7
-x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
 
-a <- pi/4
+a <- round(-pi/4, 5)
 x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
 
-a <- pi/2
+a <- round(-pi/5, 5)
 x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
 
-a <- pi
+a <- round(0, 5)
 x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
-expect_true(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]) == a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
+
+
+a <- round(pi, 5)
+x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
+
+
+a <- round(pi/2, 5)
+x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
+
+
+a <- round(pi/3, 5)
+x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
+
+
+a <- round(pi/4, 5)
+x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
+
+a <- round(pi/5, 5)
+x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
+expect_true(round(atan2(x1[1, "y2_"] - x1[1, "y1_"], x1[1, "x2_"] - x1[1, "x1_"]), 5) == a)
 
 # check args
 expect_error(random_steps(c(0), n_control = 1, rand_sl = 1, rand_ta = 0))
