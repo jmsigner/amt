@@ -13,7 +13,7 @@
 #' log-RSS. `NA` skips calculating CIs. Character string `"se"` uses standard error
 #' method and `"boot"` uses empirical bootstrap method.
 #' @param ci_level `[numeric]` \cr Level for confidence interval. Defaults to 0.95
-#' for a 95\% confidence interval.
+#' for a 95% confidence interval.
 #' @param n_boot `[integer]` \cr Number of bootstrap samples to estimate confidence
 #' intervals. Ignored if `ci != "boot"`.
 #' @template dots_none
@@ -25,17 +25,19 @@
 #' The objects `object$model`, `x1`, and `x2` will be passed to
 #' `predict()`. Therefore, the columns of `x1` and `x2` must match
 #' the terms in the model formula exactly.
+#'
 #' @author Brian Smith
+#'
 #' @return Returns a `list` of class `log_rss`.
 #'
 #' @seealso See Avgar \emph{et al.} 2017 for details about relative
 #' selection strength.
 #'
-#' Default plotting method available: `\link{plot.log_rss}()`
+#' Default plotting method available: \code{\link{plot.log_rss}()}
 #'
 #' @references
 #'
-#' Avgar, T., Lele, S.R., Keim, J.L., & Boyce, M.S.. (2017). Relative Selection
+#' Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection
 #' Strength: Quantifying effect size in habitat- and step-selection inference.
 #' \emph{Ecology and Evolution}, 7, 5322–5330.
 #'
@@ -294,7 +296,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #'
 #' Default plot method for an object of class `log_rss`
 #'
-#' @param x `[log_rss]` An object returned by the function `\link{log_rss}()`.
+#' @param x `[log_rss]` An object returned by the function \code{\link{log_rss}()}.
 #' @param x_var1 `[character]` The variable to plot on the x-axis. A string of
 #' either `"guess"` (default -- see Details) or the variable name.
 #' @param x_var2 `[character]` A second predictor variable to include in the plot.
@@ -306,7 +308,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #' the user to carefully consider how to represent the patterns found in their
 #' habitat selection model.
 #'
-#' The function `\link{log_rss}()` is meant to accept a user-defined
+#' The function \code{\link{log_rss}()} is meant to accept a user-defined
 #' input for `x1`. The structure of `x1` likely reflects how the user intended
 #' to visualize the results. Therefore, it is possible to "guess" which covariate
 #' the user would like to see on the x-axis by choosing the column from `x1` with
@@ -317,7 +319,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #' an error.
 #'
 #' This function uses integers to represent colors, and therefore the user can
-#' change the default colors by specifying a custom `\link{palette}()` before
+#' change the default colors by specifying a custom \code{\link{palette}()} before
 #' calling the function.
 #'
 #' @examples
