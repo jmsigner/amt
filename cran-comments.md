@@ -1,3 +1,23 @@
+# Version 0.1.1
+
+## Round 1
+
+### Test environments
+- local: Ubuntu 18.04.2 LTS, R 3.6.3
+- win builder: release and devel
+- travis-ci: release and devel
+- appveyor
+
+### R CMD check results
+
+There were no errors, warnings or notes
+
+### What changed
+#### bug fixes
+- Fixed issues for CRAN submission of version 0.1.0, in particular imports and tests.
+
+
+
 # Version 0.1.0
 ## Round 2
 
