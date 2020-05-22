@@ -25,20 +25,9 @@ site_fidelty <- function(x, ...) {
 #' @export
 site_fidelty.steps_xy <- function(x, n = 100, alpha = 0.05, ...) {
 
-  ##
-  library(amt)
-  data(deer)
-  n <- 100
-  x <- steps(deer)
-  alpha <- 0.05
-  ##
-
-
   # Some argument checking
   checkmate::assert_numeric(n, lower = 1, len = 1)
   checkmate::assert_numeric(alpha, lower = 0, upper = 1, len = 1)
-
-
 
   ## simulate n random walks
   a <- replicate(n, permute_steps(x), simplify=FALSE)
