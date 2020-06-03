@@ -6,7 +6,9 @@ hr_kde <- function(x, ...) {
 
 #' @export
 #' @rdname hr
-hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels = 0.95, ...) {
+hr_kde.track_xy <- function(
+  x, h = hr_kde_ref(x), trast = make_trast(x),
+  levels = 0.95, keep.data = TRUE, ...) {
 
   # ---------------------------------------------------------------------------- #
   # Check bandwidth
@@ -43,7 +45,8 @@ hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), levels 
     estimator = "kde",
     h = h,
     ud = kde,
-    levels = levels
+    levels = levels,
+    data = if(keep.data) x else NULL
   )
   class(res) <- c("kde", "hr_prob", "hr", class(res))
   res

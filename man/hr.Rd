@@ -60,7 +60,7 @@ hr_locoh(x, ...)
 
 hr_mcp(x, ...)
 
-\method{hr_mcp}{track_xy}(x, levels = 0.95, ...)
+\method{hr_mcp}{track_xy}(x, levels = 0.95, keep.data = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}

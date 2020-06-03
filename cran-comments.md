@@ -4,13 +4,14 @@
 
 ### Test environments
 - local: Ubuntu 18.04.2 LTS, R 3.6.3
-- win builder: release and devel
+- win builder: release (devel was not available)
 - travis-ci: release and devel
 - appveyor
+- macos-highsierra-release-cran on rhub
 
 ### R CMD check results
 
-There were no errors, warnings or notes
+There were no errors or warnings. On some platforms I received a note indicating that I have to many imports from non-default packages. I will reduce the number of imports in futur versions of the `amt` package.
 
 ### What changed
 #### bug fixes
@@ -29,7 +30,7 @@ I this and tested the package again with
 rhub::check(platform = "macos-highsierra-release-cran")
 ```
 
-There were no errors, warnings or notes.
+There were no errors warnings or notes.
 
 ## Round 1
 

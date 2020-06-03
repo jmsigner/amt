@@ -5,7 +5,7 @@ hr_isopleths <- function (x, ...) {
 }
 
 #' @export
-hr_isopleths.RasterLayer <- function (x, level, as_sf = TRUE, ...) {
+hr_isopleths.RasterLayer <- function (x, level, ...) {
   con <- raster::rasterToContour(cumulative_ud(x), level = level)
   b <- sp::coordinates(con)
 
@@ -54,9 +54,8 @@ hr_isopleths.RasterLayer <- function (x, level, as_sf = TRUE, ...) {
   row.names(df) <- 1:length(level)
   con <- sp::SpatialPolygonsDataFrame(con, df)
 
-  if (as_sf) {
-    con <- sf::st_as_sf(con)
-  }
+  con <- sf::st_as_sf(con)
+  con$area <- sf::st_area(con)
   con
 }
 
@@ -67,7 +66,7 @@ hr_isopleths.mcp <- function (x, ...) {
 
 #' @export
 hr_isopleths.locoh <- function (x, ...) {
-  sf::st_as_sf(x$locoh)
+  x$locoh
 }
 
 #' @export

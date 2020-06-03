@@ -17,7 +17,7 @@ cum_dist(x, ...)
 
 tot_dist(x, ...)
 
-msd(x, ...)
+msd(x)
 
 intensity_use(x, ...)
 

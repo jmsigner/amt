@@ -17,6 +17,7 @@
 #'   area 0 (if coordinates are numerically identical).
 #' @param trast `[RasterLayer]` \cr A template raster for kernel density home-ranges.
 #' @param h `[numeric(2)]` \cr The bandwidth for kernel density estimation.
+#' @param keep.data `[logic(2)]` \cr Should the original tracking data be included in the estimate?
 #' @param rescale `[character(1)]` \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".
 #' @template dots_none
 #' @references Worton, B. J. (1989). Kernel methods for estimating the utilization distribution in home-range studies. _Ecology, 70(1)_, 164-168.

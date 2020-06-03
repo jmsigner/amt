@@ -100,6 +100,9 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer 
     sp::proj4string(qq2) <- attr(x, "crs_")
   }
 
+  qq2 <- sf::st_as_sf(qq2)
+  qq2$area <- sf::st_area(qq2)
+
   out <- list(locoh = qq2, levels = levels, type = type, n = n, estimator = "locoh")
   class(out) <- c("locoh", "hr_geom", "hr", "list")
   out

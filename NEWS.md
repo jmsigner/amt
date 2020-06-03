@@ -1,3 +1,13 @@
+# amt 0.1.2
+## bug fixes
+
+## updates
+- `hr_mcp` gained an argument `keep.data`
+- `as_track` can now convert `steps_xyt` back to a `track_xyt`
+- `plot` function for home ranges improved
+- Ported function for `site_fidelity` from package `rhr`.
+
+
 # amt 0.1.0
 ## bug fixes
 - `random_steps` uses abs direction as reference instead of relative direction

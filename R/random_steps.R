@@ -43,6 +43,7 @@ random_steps.numeric <- function(
 
 #' @export
 #' @rdname random_steps
+#'
 random_steps.steps_xy <- function(
   x, n_control = 10,
   sl_distr = fit_distr(x$sl_, "gamma"), # this arugment could be remove
