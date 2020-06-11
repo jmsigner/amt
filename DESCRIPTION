@@ -1,7 +1,7 @@
 Package: amt
 Type: Package
 Title: Animal Movement Tools
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"), 
   person("Bjoern", "Reineking", role = "ctb"), 
   person("Brian", "Smith", role = "ctb"), 
@@ -23,11 +23,7 @@ Imports:
     fitdistrplus,
     FNN,
     geosphere,
-    glue,
-    graphics,
-    grDevices,
     KernSmooth,
-    lazyeval,
     leaflet,
     lubridate,
     magrittr,
@@ -41,10 +37,8 @@ Imports:
     sf,
     sp,
     survival,
-    stats,
     tibble,
-    tidyr (>= 1.0.0),
-    utils
+    tidyr (>= 1.0.0)
 Suggests: 
   adehabitatLT,
   ggplot2,

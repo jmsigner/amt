@@ -73,12 +73,12 @@ make_distribution <- function(name, params, ...) {
 
   # check name
   if (!name %in% available_distr(names_only = TRUE)) {
-    stop(glue::glue("{name} is not implemented."))
+    stop(paste(name, "is not implemented."))
   }
 
   # check params
   if (!valid_distr_params(name, params)) {
-    stop(glue::glue("Parameters for {name} are not valid."))
+    stop(paste("Parameters for ", name, "are not valid."))
   }
   out <- list(name = name,
               params = params)

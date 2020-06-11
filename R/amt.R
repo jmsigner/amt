@@ -1,8 +1,7 @@
 #' @importFrom dplyr arrange filter group_by select summarize summarise ungroup rename
 #' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars n
-#' @importFrom graphics plot legend lines par
+#' @importFrom graphics plot legend lines par points
 #' @importFrom grDevices adjustcolor
-#' @importFrom lazyeval lazy_dots lazy
 #' @importFrom lubridate hours minutes seconds now days weeks
 #' @importFrom magrittr %>%
 #' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd var
@@ -25,7 +24,7 @@ methods::setOldClass(c("random_points", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("steps", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("random_steps", "tbl_df"))
 
-utils::globalVariables(c("burst_", "step_id_", "t_", ".data", "ts", "sl_")) # to omit CRAN notes
+utils::globalVariables(c("burst_", "step_id_", "t_", ".data", "ts", "sl_", "xs", "ys")) # to omit CRAN notes
 
 #' @useDynLib amt
 

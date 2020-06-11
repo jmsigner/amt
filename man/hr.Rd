@@ -5,6 +5,7 @@
 \alias{hr_akde}
 \alias{hr_akde.track_xyt}
 \alias{hr_area}
+\alias{hr_area.hr}
 \alias{hr}
 \alias{hr_isopleths}
 \alias{hr_kde}
@@ -32,11 +33,20 @@ hr_akde(x, ...)
 
 hr_area(x, ...)
 
+\method{hr_area}{hr}(x, units = FALSE, ...)
+
 hr_isopleths(x, ...)
 
 hr_kde(x, ...)
 
-\method{hr_kde}{track_xy}(x, h = hr_kde_ref(x), trast = make_trast(x), levels = 0.95, ...)
+\method{hr_kde}{track_xy}(
+  x,
+  h = hr_kde_ref(x),
+  trast = make_trast(x),
+  levels = 0.95,
+  keep.data = TRUE,
+  ...
+)
 
 hr_kde_ref(x, ...)
 
@@ -74,7 +84,11 @@ hr_mcp(x, ...)
 \item{levels}{\verb{[numeric]} \cr The isopleth levels used for calculating home
 ranges. Should be \verb{0 < level < 1}.}
 
+\item{units}{\verb{[logic(1)]} \cr Should areas be returned as units? If \code{FALSE} areas are returned as numeric values.}
+
 \item{h}{\verb{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
+
+\item{keep.data}{\verb{[logic(2)]} \cr Should the original tracking data be included in the estimate?}
 
 \item{rescale}{\verb{[character(1)]} \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".}
 

@@ -1,3 +1,11 @@
+
+```
+rhub::check(platform = "ubuntu-gcc-release")
+rhub::check(platform = "ubuntu-gcc-devel")
+rhub::check(platform = "macos-highsierra-release-cran")
+```
+
+
 # Version 0.1.1
 
 ## Round 1

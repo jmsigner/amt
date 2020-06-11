@@ -1,12 +1,11 @@
 #' @export
 #' @rdname hr
-#' @param unit `[logic(1)]` \cr Should areas be returned as units? If `FALSE`
-#'   areas are returned as numeric values.
-hr_area <- function(x, units = FALSE, ...) {
+hr_area <- function(x, ...) {
   UseMethod("hr_area", x)
 }
 
 #' @export
+#' @rdname hr
 hr_area.hr <- function(x, units = FALSE, ...) {
   xx <- tibble::as_tibble(sf::st_set_geometry(hr_isopleths(x), NULL))
   if (!units) {
