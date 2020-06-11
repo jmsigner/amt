@@ -9,6 +9,7 @@
 #' The implementation of the reference bandwidth calculation is based on Worton (1989). If variances differ greatly, it is advisable to rescale the data using `rescale = "unitvar"` the data is suspected to multimodal other bandwidth estimation methods may be more suitable.
 #'
 #' @template track_xy_star
+#' @param units `[logic(1)]` \cr Should areas be returned as units? If `FALSE` areas are returned as numeric values.
 #' @param levels `[numeric]` \cr The isopleth levels used for calculating home
 #'   ranges. Should be `0 < level < 1`.
 #' @param n `[integer(1)]` \cr The number of neighbors used when calculating

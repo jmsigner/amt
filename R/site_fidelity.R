@@ -1,13 +1,14 @@
 #' Test for site fidelity of animal movement.
 #'
-#' Calculates two indices (mean sequared displacement and linearity) to test for site fidelity. Significance testing is done by permuting step lengths and drawing turning angles from a uniform distribution.
+#' Calculates two indices (mean squared displacement and linearity) to test for site fidelity. Significance testing is done by permuting step lengths and drawing turning angles from a uniform distribution.
 #'
 #' @param x A track
 #' @param n Numeric scalar. The number of simulated trajectories.
 #' @param alpha Numeric scalar. The alpha value used for the bootstrapping.
+#' @param ... None implemented
 #' @export
 #' @return A list of length 4. `msd_dat` and `li_dat` is the mean square distance and linearity for the real date. `msd_sim` and `li_sim`` are the mean square distances and linearities for the simulated trajectories.
-#'
+#' @name site_fidelity
 #' @references Spencer, S. R., Cameron, G. N., & Swihart, R. K. (1990). Operationally defining home range: temporal dependence exhibited by hispid cotton rats. Ecology, 1817-1822.
 #' @examples
 #' # real data
@@ -22,6 +23,7 @@ site_fidelty <- function(x, ...) {
 }
 
 
+#' @rdname site_fidelity
 #' @export
 site_fidelty.steps_xy <- function(x, n = 100, alpha = 0.05, ...) {
 
@@ -33,8 +35,8 @@ site_fidelty.steps_xy <- function(x, n = 100, alpha = 0.05, ...) {
   a <- replicate(n, permute_steps(x), simplify=FALSE)
 
   ## msd
-  msd_dat <- msd(x)
-  msd_sim <- sapply(a, msd)
+  msd_dat <- msd_sf(x)
+  msd_sim <- sapply(a, msd_sf)
 
   ## li
   li_dat <- li(x)
@@ -58,7 +60,7 @@ site_fidelty.steps_xy <- function(x, n = 100, alpha = 0.05, ...) {
 }
 
 
-msd <- function(x) {
+msd_sf <- function(x) {
   mx <- mean(x$x1_)
   my <- mean(x$y1_)
   mean((x$x1_ - mx)^2 + (x$y1_ - my)^2)

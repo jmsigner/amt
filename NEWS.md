@@ -6,6 +6,7 @@
 - `as_track` can now convert `steps_xyt` back to a `track_xyt`
 - `plot` function for home ranges improved
 - Ported function for `site_fidelity` from package `rhr`.
+- Changed test in order to be compatible with the new dplyr version. 
 
 
 # amt 0.1.0
