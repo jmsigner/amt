@@ -4,9 +4,7 @@
 \name{sh_forest}
 \alias{sh_forest}
 \title{Forest cover}
-\format{
-A \code{RasterLAyer} \describe{ \item{1}{forest} \item{2}{non-forest} }
-}
+\format{A \code{RasterLAyer} \describe{ \item{1}{forest} \item{2}{non-forest} }}
 \source{
 JRC
 }

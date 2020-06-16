@@ -4,16 +4,14 @@
 \name{amt_fisher}
 \alias{amt_fisher}
 \title{GPS tracks from four fishers}
-\format{
-A \code{tibble} with 32400 rows and 5 variables:
+\format{A \code{tibble} with 32400 rows and 5 variables:
 \describe{
 \item{id}{id of the animal}
 \item{x_}{the x-coordinate}
 \item{y_}{the y-coordinate}
 \item{t_}{the timestamp}
 \item{burst_}{bursts with 10 min sampling rates}
-}
-}
+}}
 \source{
 https://www.datarepository.movebank.org/handle/10255/move.330
 }

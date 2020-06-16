@@ -1,9 +1,27 @@
+# Version 0.1.2
 
-```
-rhub::check(platform = "ubuntu-gcc-release")
-rhub::check(platform = "ubuntu-gcc-devel")
-rhub::check(platform = "macos-highsierra-release-cran")
-```
+## Round 1
+
+### Test environments
+- local: Ubuntu 19.10, R 4.0.0
+- win builder: release and devel
+- travis-ci: release 
+- appveyor
+- macos-highsierra-release-cran on rhub
+
+### R CMD check results
+
+There were no errors or warnings. On some platforms I received a note indicating that I have to many imports from non-default packages (local check).
+
+### What changed
+- `hr_mcp` gained an argument `keep.data`
+- `as_track` can now convert `steps_xyt` back to a `track_xyt`
+- `plot` function for home ranges improved
+- Ported function for `site_fidelity` from package `rhr`.
+- Changed test in order to be compatible with the new dplyr version. 
+
+
+
 
 
 # Version 0.1.1

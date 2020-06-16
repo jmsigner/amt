@@ -4,9 +4,7 @@
 \name{amt_fisher_lu}
 \alias{amt_fisher_lu}
 \title{Landuse for fisher data}
-\format{
-A \code{RasterLayer}
-}
+\format{A \code{RasterLayer}}
 \usage{
 amt_fisher_lu
 }
