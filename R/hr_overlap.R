@@ -30,8 +30,11 @@ hr_overlap.hr <- function(x, y, ...) {
 }
 
 
+#' @rdname hr_overlaps
 #' @export
-hr_overlap.list <- function(x, ...) {
+#' @param  consecutive.only `[logical=TRUE]` \cr Should only consecutive overlaps be calculated or all combinations?
+#' @param  labels `[character=NULL]` \cr Labels for different instances. If `NULL` (the defualt) numbers will be used.
+hr_overlap.list <- function(x, consecutive.only = TRUE, labels = NULL, ...) {
 
   # check all elements are hr
   if(!all(sapply(x, inherits, "hr"))) {
@@ -43,6 +46,15 @@ hr_overlap.list <- function(x, ...) {
   }
 
   nn <- if (is.null(names(x))) 1:length(x) else names(x)
+
+  if (!is.null(labels)) {
+    if (length(labels) == length(nn)) {
+      nn <- labels
+    } else {
+      warning("Length of `labels` does not match the number of cases. Using default instead.")
+
+    }
+  }
 
   if (any(nchar(nn) == 0)) {
     stop("Names must be different from ''")
@@ -58,10 +70,14 @@ hr_overlap.list <- function(x, ...) {
     stop("Not all levels of first home range est are in the others as well.")
   }
 
-  res <- expand.grid(level = isos[[1]]$level, from = nn, to = nn)
+  grid <- if (consecutive.only) {
+    tibble(from = nn[-length(nn)], to = nn[-1])
+  } else {
+    tidyr::expand_grid(from = nn, to = nn) %>%
+      dplyr::filter(from != to)
+  }
 
-  tidyr::expand_grid(from = nn, to = nn) %>%
-    dplyr::filter(from != to) %>%
+  grid %>%
     dplyr::mutate(overlap = purrr::map2(from, to, function(i, j) {
       overlap_base(isos[[i]], isos[[j]])
     })) %>%
