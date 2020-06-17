@@ -2,6 +2,7 @@
 ## bug fixes
 
 ## updates
+- `hr_overlap` gained two new arguemnts `labels` and `consecutive.only`.
 
 
 # amt 0.1.2
