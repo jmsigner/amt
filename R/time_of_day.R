@@ -39,9 +39,9 @@ time_of_day.steps_xyt <- function(x, solar.dep = 6, include.crepuscule = FALSE, 
 
     } else {
       if (where == "end") {
-        x["tod_end_"] <- time_of_day_base(x, x[["t1_"]], solar.dep = solar.dep, include.crepuscule = include.crepuscule, end = TRUE, ...)
+        x["tod_end_"] <- time_of_day_base(x, x[["t2_"]], solar.dep = solar.dep, include.crepuscule = include.crepuscule, end = TRUE, ...)
       } else if (where == "start") {
-        x["tod_start_"] <- time_of_day_base(x, x[["t2_"]], solar.dep = solar.dep, include.crepuscule = include.crepuscule, end = FALSE, ...)
+        x["tod_start_"] <- time_of_day_base(x, x[["t1_"]], solar.dep = solar.dep, include.crepuscule = include.crepuscule, end = FALSE, ...)
       }
     }
     x
