@@ -44,7 +44,8 @@ as_track.steps_xyt <- function(x, ...) {
           t = c(y$t1_, y$t2_[n1])
         )
       })) %>% tidyr::unnest(cols = data)
-    make_track(xx, xs, ys, t, burst_ = burst_, crs = sp::CRS(get_crs(x)))
+    make_track(xx, xs, ys, t, burst_ = burst_,
+               crs = if (!is.null(get_crs(x))) sp::CRS(get_crs(x)) else NULL)
   } else {
     xx <- tibble::tibble(
       xs = c(x$x1_, x$x2_[n]),
