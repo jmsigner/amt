@@ -70,13 +70,8 @@ hr_isopleths.locoh <- function (x, ...) {
 }
 
 #' @export
-hr_isopleths.kde <- function (x, ...) {
+hr_isopleths.hr_prob <- function (x, ...) {
   iso <- hr_isopleths(x$ud, level = x$levels, ...)
   iso
 }
 
-#' @export
-hr_isopleths.akde <- function (x, ...) {
-  iso <- hr_isopleths(x$ud, level = x$levels, ...)
-  iso
-}
