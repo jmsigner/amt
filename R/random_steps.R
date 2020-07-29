@@ -46,8 +46,8 @@ random_steps.numeric <- function(
 #'
 random_steps.steps_xy <- function(
   x, n_control = 10,
-  sl_distr = fit_distr(x$sl_, "gamma"), # this arugment could be remove
-  ta_distr = fit_distr(x$ta_, "vonmises"), # this arugment could be remove
+  sl_distr = fit_distr(x$sl_, "gamma"), # this argument could be remove
+  ta_distr = fit_distr(x$ta_, "vonmises"), # this argument could be remove
   rand_sl = random_numbers(sl_distr, n = 1e5),
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE, ...) {
@@ -56,16 +56,17 @@ random_steps.steps_xy <- function(
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(1:ns, each = n_control)
 
-  abs_ta <- base::atan2(x$y2_ - x$y1_, x$x2_ - x$x1_)
-
-  stps <- which(!is.na(x$ta_))
+  #  abs_ta <- base::atan2(x$y2_ - x$y1_, x$x2_ - x$x1_)
+  # stps <- which(!is.na(x$ta_))
+  stps <- which(!is.na(x$direction_ps))
   x$step_id_ <- 1:nrow(x)
   x$case_ <- TRUE
 
   # This could be moved to c++
   xx <- lapply(stps, function(i) {
     random_steps(c(x$x1_[i], x$y1_[i]), n_control = n_control,
-                 angle = abs_ta[i-1],
+                 #angle = abs_ta[i-1],
+                 angle = x$direction_ps[i],
                  rand_sl = rand_sl, rand_ta = rand_ta)})
  xx <- do.call(rbind, xx)
 
