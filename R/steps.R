@@ -322,6 +322,7 @@ steps_base <- function(x, n, lonlat, zero_dir, keep_cols) {
     y1_ = x$y_[-n],
     y2_ = x$y_[-1],
     sl_ = step_lengths(x, lonlat = lonlat, append_last = FALSE),
+    direction_p = c(NA, head(direction_abs(x, lonlat = lonlat, zero_dir = "E", append_last = FALSE), -1)),
     ta_ = direction_rel(x, lonlat = lonlat, zero_dir = "E", append_last = FALSE)
   )
 
