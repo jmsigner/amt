@@ -149,7 +149,7 @@ plot.random_points <- function(x, y = NULL, ...) {
 
 rp_transfer_attr <- function(from, to) {
   from <- attributes(from)
-  attributes(to)$class <- from$class
+  attributes(to)$class <- c(setdiff(from$class, class(to)), class(to))
   attributes(to)$crs_ <- from$crs_
   to
 }
