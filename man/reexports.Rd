@@ -36,22 +36,22 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{arrange}}, \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{pull}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{summarise}}, \code{\link[dplyr]{summarize}}, \code{\link[dplyr]{ungroup}}, \code{\link[dplyr]{ungroup}}}
+  \item{dplyr}{\code{\link[dplyr]{arrange}}, \code{\link[dplyr]{distinct}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{pull}}, \code{\link[dplyr]{select}}, \code{\link[dplyr]{summarise}}, \code{\link[dplyr:summarise]{summarize}}, \code{\link[dplyr:group_by]{ungroup}}, \code{\link[dplyr:group_by]{ungroup}}}
 
-  \item{lubridate}{\code{\link[lubridate]{days}}, \code{\link[lubridate]{hours}}, \code{\link[lubridate]{minutes}}, \code{\link[lubridate]{seconds}}, \code{\link[lubridate]{weeks}}}
+  \item{lubridate}{\code{\link[lubridate:period]{days}}, \code{\link[lubridate:period]{hours}}, \code{\link[lubridate:period]{minutes}}, \code{\link[lubridate:period]{seconds}}, \code{\link[lubridate:period]{weeks}}}
 
-  \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
+  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
 
-  \item{purrr}{\code{\link[purrr]{map}}, \code{\link[purrr]{map_int}}}
+  \item{purrr}{\code{\link[purrr]{map}}, \code{\link[purrr:map]{map_int}}}
 
   \item{raster}{\code{\link[raster]{raster}}}
 
-  \item{sp}{\code{\link[sp]{CRS}}}
+  \item{sp}{\code{\link[sp:CRS-class]{CRS}}}
 
-  \item{survival}{\code{\link[survival]{clogit}}, \code{\link[survival]{strata}}, \code{\link[survival]{Surv}}}
+  \item{survival}{\code{\link[survival]{Surv}}, \code{\link[survival]{clogit}}, \code{\link[survival]{strata}}}
 
   \item{tibble}{\code{\link[tibble]{tibble}}}
 
-  \item{tidyr}{\code{\link[tidyr]{nest}}, \code{\link[tidyr]{unnest}}}
+  \item{tidyr}{\code{\link[tidyr]{nest}}, \code{\link[tidyr:nest]{unnest}}}
 }}
 

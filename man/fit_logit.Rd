@@ -15,6 +15,8 @@ fit_rsf(data, formula, ...)
 \item{formula}{\verb{[formula]} \cr The model formula.}
 
 \item{...}{Further arguments passed to \code{stats::glm}.}
+
+\item{weights}{\verb{[numeric]} \cr Possible weights, passed to \code{glm}.}
 }
 \description{
 This function is a wrapper around \code{stats::glm} for piped workflows.

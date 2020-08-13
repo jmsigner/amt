@@ -181,7 +181,7 @@ Gitzen, R. A., Millspaugh, J. J., & Kernohan, B. J. (2006). Bandwidth selection 
 
 Seaman, D. E., & Powell, R. A. (1996). An evaluation of the accuracy of kernel density estimators for home range analysis. \emph{Ecology, 77(7)}, 2075-2085.
 
-C. H. Fleming, W. F. Fagan, T. Mueller, K. A. Olson, P. Leimgruber, J. M. Calabrese, “Rigorous home-range estimation with movement data: A new autocorrelated kernel-density estimator”, Ecology, 96:5, 1182-1188 (2015).
+Fleming, C. H., Fagan, W. F., Mueller, T., Olson, K. A., Leimgruber, P., & Calabrese, J. M. (2016). Estimating where and how animals travel: an optimal framework for path reconstruction from autocorrelated tracking data. Ecology, 97(3), 576-582.
 }
 \seealso{
 \code{KernSmooth::dpik}
