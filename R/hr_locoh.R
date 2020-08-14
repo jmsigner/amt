@@ -8,7 +8,7 @@ hr_locoh <- function(x, ...) {
 #' @export
 #' @param type `k`, `r` or `a`. Type of LoCoH.
 #' @rdname hr
-hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer = 1e-5, ...) {
+hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = TRUE, rand_buffer = 1e-5, ...) {
 
   ## type
   if (!type %in% c("a", "k", "r")) {
@@ -103,7 +103,9 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, rand_buffer 
   qq2 <- sf::st_as_sf(qq2)
   qq2$area <- sf::st_area(qq2)
 
-  out <- list(locoh = qq2, levels = levels, type = type, n = n, estimator = "locoh")
+  out <- list(locoh = qq2, levels = levels, type = type, n = n, estimator = "locoh",
+              crs = get_crs(x),
+              data = if (keep.data) x else NULL)
   class(out) <- c("locoh", "hr_geom", "hr", "list")
   out
 

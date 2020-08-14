@@ -21,6 +21,7 @@ hr_mcp.track_xy <- function(x, levels = 0.95, keep.data = TRUE, ...) {
   geometry <- sf::st_as_sfc(geometry, crs = as.character(get_crs(x)))
   mcps <- sf::st_sf(level = levels, area = sf::st_area(geometry), geometry)
   mcp <- list(mcp = mcps, levels = levels, estimator = "mcp",
+              crs = get_crs(x),
               data = if (keep.data) x else NULL)
   class(mcp) <- c("mcp", "hr_geom", "hr")
   mcp

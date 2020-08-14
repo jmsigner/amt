@@ -15,13 +15,15 @@ hr_od <- function(x, ...) {
 
 #' @export
 #' @rdname hr
-hr_od.track_xyt <- function(x, model = fit_ctmm(x, "iid"),
+hr_od.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
                               trast = make_trast(x), levels = 0.95, ...) {
 
   est <- od(x, model = model, trast = trast, ...)
 
   res <- list(ud = est, model = model, levels = levels, trast = trast,
-              estimator = "od")
+              estimator = "od",
+              crs = get_crs(x),
+              data = if (keep.data) x else NULL)
   class(res) <- c("od", "hr_prob", "hr", class(res))
   res
 }
