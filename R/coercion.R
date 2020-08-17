@@ -68,7 +68,7 @@ as_sf_points.track_xy <- function(x, ...) {
 
   p <- sf::st_as_sf(x, coords = c("x_", "y_"))
   p <- sf::st_set_crs(p, if (!is.null(attributes(x)$crs_))
-    attributes(x)$crs_ else NA_crs_)
+    attributes(x)$crs_ else sf::NA_crs_)
 
   p
 }
@@ -109,7 +109,7 @@ as_sf_lines.track_xy <- function(x, ...) {
   }
 
   l <- sf::st_sf(sf::st_sfc(sf::st_multilinestring(l)))
-  l <- sf::st_set_crs(l,  if (!is.null(attributes(x)$crs_)) attributes(x)$crs_ else NA_crs_)
+  l <- sf::st_set_crs(l,  if (!is.null(attributes(x)$crs_)) attributes(x)$crs_ else sf::NA_crs_)
   l
 }
 

@@ -20,8 +20,8 @@ tinytest::expect_equivalent(ncol(p2), 2)
 tinytest::expect_equivalent(ncol(p3), 1)
 tinytest::expect_equivalent(ncol(p4), 2)
 
-tinytest::expect_true(sf::st_crs(p1) == NA_crs_)
-tinytest::expect_true(sf::st_crs(p2) == NA_crs_)
-tinytest::expect_false(sf::st_crs(p3) == NA_crs_)
-tinytest::expect_false(sf::st_crs(p4) == NA_crs_)
+tinytest::expect_true(sf::st_crs(p1) == sf::NA_crs_)
+tinytest::expect_true(sf::st_crs(p2) == sf::NA_crs_)
+tinytest::expect_false(sf::st_crs(p3) == sf::NA_crs_)
+tinytest::expect_false(sf::st_crs(p4) == sf::NA_crs_)
 

@@ -28,6 +28,7 @@ hr_akde(x, ...)
 \method{hr_akde}{track_xyt}(
   x,
   model = fit_ctmm(x, "iid"),
+  keep.data = TRUE,
   trast = make_trast(x),
   levels = 0.95,
   ...
@@ -68,7 +69,15 @@ hr_kde_lscv(
 
 hr_locoh(x, ...)
 
-\method{hr_locoh}{track_xy}(x, n = 10, type = "k", levels = 0.95, rand_buffer = 1e-05, ...)
+\method{hr_locoh}{track_xy}(
+  x,
+  n = 10,
+  type = "k",
+  levels = 0.95,
+  keep.data = TRUE,
+  rand_buffer = 1e-05,
+  ...
+)
 
 hr_mcp(x, ...)
 
@@ -76,7 +85,14 @@ hr_mcp(x, ...)
 
 hr_od(x, ...)
 
-\method{hr_od}{track_xyt}(x, model = fit_ctmm(x, "iid"), trast = make_trast(x), levels = 0.95, ...)
+\method{hr_od}{track_xyt}(
+  x,
+  model = fit_ctmm(x, "iid"),
+  keep.data = TRUE,
+  trast = make_trast(x),
+  levels = 0.95,
+  ...
+)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
@@ -84,6 +100,8 @@ hr_od(x, ...)
 \item{...}{Further arguments, none implemented.}
 
 \item{model}{A continuous time movement model. This can be fitted either with \code{ctmm::ctmm.fit} or \code{fit_ctmm}.}
+
+\item{keep.data}{\verb{[logic(2)]} \cr Should the original tracking data be included in the estimate?}
 
 \item{trast}{\verb{[RasterLayer]} \cr A template raster for kernel density home-ranges.}
 
@@ -93,8 +111,6 @@ ranges. Should be \verb{0 < level < 1}.}
 \item{units}{\verb{[logic(1)]} \cr Should areas be returned as units? If \code{FALSE} areas are returned as numeric values.}
 
 \item{h}{\verb{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
-
-\item{keep.data}{\verb{[logic(2)]} \cr Should the original tracking data be included in the estimate?}
 
 \item{rescale}{\verb{[character(1)]} \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".}
 
