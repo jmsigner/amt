@@ -17,7 +17,7 @@ hr_area.hr <- function(x, units = FALSE, ...) {
 
 #' @export
 hr_area.RasterLayer <- function(x, level = 0.95, ...) {
-    x <- cumulative_ud(x)
+    x <- hr_cud(x)
     sum(x[] <= level) * prod(raster::res(x))
 }
 

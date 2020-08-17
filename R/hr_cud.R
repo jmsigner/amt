@@ -8,13 +8,13 @@
 #' @note This function is typically used to obtain isopleths.
 #' @return `[RasterLayer]` \cr The cumulative UD.
 #' @name cum_ud
-cumulative_ud <- function (x, ...) {
-  UseMethod("cumulative_ud", x)
+hr_cud <- function (x, ...) {
+  UseMethod("hr_cud", x)
 }
 
 #' @export
 #' @rdname cum_ud
-cumulative_ud.RasterLayer <- function(x, ...) {
+hr_cud.RasterLayer <- function(x, ...) {
   r1 <- x
   v <- raster::getValues(r1)
   v <- v / sum(v, na.rm = TRUE)  # standarize
@@ -24,7 +24,7 @@ cumulative_ud.RasterLayer <- function(x, ...) {
 }
 
 #' @export
-#' @rdname cum_ud
-cumulative_ud.kde <- function(x, ...) {
-  cumulative_ud(x$ud, ...)
+hr_cud.hr_prob <- function(x, ...) {
+  hr_cud(hr_ud(x), ...)
 }
+
