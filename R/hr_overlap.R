@@ -113,8 +113,17 @@ hr_ba <- function (x, ...) {
 }
 
 #' @export
-hr_ba.hr_prob <- function(x, y, ...) {
-  hr_ba(hr_ud(x), hr_ud(y))
+hr_ba.hr_prob <- function(x, y, conditional = 0.95, ...) {
+
+
+  x_ud <- hr_ud(x)
+  y_ud <- hr_ud(y)
+  if (conditional < 1) {
+    x_ud[] <- ifelse(hr_cud(x)[] <= conditional, x_ud[], 0) / conditional
+    y_ud[] <- ifelse(hr_cud(y)[] <= conditional, y_ud[], 0) / conditional
+  }
+
+  hr_ba(hr_ud(x), hr_ud(y), conditional, ...)
 }
 
 #' @export
