@@ -105,7 +105,7 @@ as_sf_lines.track_xy <- function(x, ...) {
     l <- lapply(split(x, x$burst_), function(x)
       cbind(x$x_, x$y_))
   } else {
-    l <- cbind(x$x_, x$y_)
+    l <- list(cbind(x$x_, x$y_))
   }
 
   l <- sf::st_sf(sf::st_sfc(sf::st_multilinestring(l)))
