@@ -104,11 +104,12 @@ as_sf_lines.track_xy <- function(x, ...) {
     }
     l <- lapply(split(x, x$burst_), function(x)
       cbind(x$x_, x$y_))
+    l <- sf::st_sf(sf::st_sfc(sf::st_multilinestring(l)))
   } else {
     l <- cbind(x$x_, x$y_)
+    l <- sf::st_sf(sf::st_sfc(sf::st_linestring(l)))
   }
 
-  l <- sf::st_sf(sf::st_sfc(sf::st_multilinestring(l)))
   l <- sf::st_set_crs(l,  if (!is.null(attributes(x)$crs_)) attributes(x)$crs_ else sf::NA_crs_)
   l
 }
