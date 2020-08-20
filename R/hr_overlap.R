@@ -33,7 +33,7 @@ hr_overlap.hr <- function(x, y, ...) {
 #' @rdname hr_overlaps
 #' @export
 #' @param  consecutive.only `[logical=TRUE]` \cr Should only consecutive overlaps be calculated or all combinations?
-#' @param  labels `[character=NULL]` \cr Labels for different instances. If `NULL` (the defualt) numbers will be used.
+#' @param  labels `[character=NULL]` \cr Labels for different instances. If `NULL` (the default) numbers will be used.
 hr_overlap.list <- function(x, consecutive.only = TRUE, labels = NULL, ...) {
 
   # check all elements are hr
@@ -108,30 +108,28 @@ overlap_base <- function(x, y) {
 
 #' @rdname hr_overlaps
 #' @export
-hr_ba <- function (x, ...) {
-  UseMethod ("hr_ba", x )
+hr_intersection <- function (x, ...) {
+  UseMethod ("hr_intersection", x )
 }
 
 #' @export
-hr_ba.hr_prob <- function(x, y, conditional = 0.95, ...) {
+hr_ba.hr_prob <- function(x, y, type = "ba", conditional = 0.95, ...) {
 
+  if (!is(x, "hr_prob") & is(y, "hr_prob")) {
+    stop("x, y need to be prob estimators.")
+  }
 
   x_ud <- hr_ud(x)
   y_ud <- hr_ud(y)
+
   if (conditional < 1) {
     x_ud[] <- ifelse(hr_cud(x)[] <= conditional, x_ud[], 0) / conditional
     y_ud[] <- ifelse(hr_cud(y)[] <= conditional, y_ud[], 0) / conditional
   }
 
-  hr_ba(hr_ud(x), hr_ud(y), conditional, ...)
 }
 
-#' @export
-hr_ba.RasterLayer <- function(x, y, ...) {
-
-  if (!is(y, "RasterLayer")) {
-    stop("y, is not RasterLayer")
-  }
+hr_intersection_base <- function(x, y, type) {
 
   if (!identical(raster::extent(x), raster::extent(y))) {
     stop("x and y do not have an identical extent")
@@ -140,39 +138,17 @@ hr_ba.RasterLayer <- function(x, y, ...) {
   r2 <- y[]
   r1 <- r1 / sum(r1)
   r2 <- r2 / sum(r2)
-  ## bhattacharyya's afinity
-  sum(sqrt(r1 * r2))
+
+  if (type == "phr") {
+    sum(r2[r1 > 0])
+  } else if (type == "ba") {
+    ## bhattacharyya's afinity
+    sum(sqrt(r1) * sqrt(r2))
+  } else if (type == "vi") {
+    sum(pmin(r1, r2))
+  } else if (type == "hd") {
+    2 * (1 - sum(sqrt(r1) * sqrt(r2)))
+  } else if (type == "udoi") {
+    NA
+  }
 }
-
-#' @export
-hr_ba.list <- function(x, ...) {
-
-  # check all elements are hr
-  if(!all(sapply(x, inherits, "hr_prob"))) {
-    stop("Not all x are probabilistic home-range estimates.")
-  }
-
-  if (length(x) < 2) {
-    stop("At least two home range estimates are needed")
-  }
-
-  nn <- if (is.null(names(x))) 1:length(x) else names(x)
-
-  if (any(nchar(nn) == 0)) {
-    stop("Names must be different from ''")
-  }
-
-  if (any(duplicated(nn))) {
-    stop("Duplicated names are not permitted")
-  }
-
-  uds <- lapply(x, hr_ud)
-  res <- expand.grid(from = nn, to = nn)
-
-  tidyr::expand_grid(from = nn, to = nn) %>%
-    dplyr::filter(from != to) %>%
-    dplyr::mutate(ba = purrr::map2_dbl(from, to, function(i, j) {
-      hr_ba(uds[[i]], uds[[j]])
-    }))
-}
-
