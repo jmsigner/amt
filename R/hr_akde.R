@@ -14,10 +14,10 @@ hr_akde <- function(x, ...) {
 
 
 #' @export
-#' @param model A continous time movement model. This can be fitted either with `ctmm::ctmm.fit` or `fit_ctmm`.
+#' @param model A continuous time movement model. This can be fitted either with `ctmm::ctmm.fit` or `fit_ctmm`.
 #' @rdname hr
-hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"),
-                              trast = make_trast(x), ...) {
+hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
+                              trast = make_trast(x), levels = 0.95, ...) {
 
   if (grepl("bm", tolower(summary(model)$name))) {
     warning("Brownian motion was chosen as movement model, akde won't work")
@@ -33,7 +33,9 @@ hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"),
   v[is.na(v)] <- 0
   r <- raster::setValues(r, v)
 
-  res <- list(ud = r, model = model)
+  res <- list(ud = r, model = model, levels = levels, trast = trast, estimator = "adke",
+              crs = get_crs(x),
+              data = if (keep.data) x else NULL)
   class(res) <- c("akde", "hr_prob", "hr", class(res))
   res
 }

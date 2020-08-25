@@ -23,7 +23,7 @@ ta_distr_params(x, ...)
 \method{ta_distr_params}{fit_clogit}(x, ...)
 }
 \arguments{
-\item{x}{\code{[amt_distr]}\cr A (fitted) distribution}
+\item{x}{\verb{[amt_distr]}\cr A (fitted) distribution}
 
 \item{...}{None}
 }

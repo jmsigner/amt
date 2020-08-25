@@ -1,6 +1,6 @@
 #' Coerce a track to other formats.
 #'
-#' Several other packages provides methods to analyse movement data, and `amt` provides coercion methods to some packages
+#' Several other packages provides methods to analyze movement data, and `amt` provides coercion methods to some packages
 #'
 #' @template track_xy_star
 #' @param id `[numeric,character,factor]` \cr Animal id(s).
@@ -47,6 +47,73 @@ as_sp.steps_xy <- function(x, end = TRUE, ...) {
     )
   }
 }
+
+# as_sf_points ----------------------------------------------------------------
+
+#' Export track to points
+#'
+#' Exports a track to points from the `sf` package.
+#'
+#' @template track_xy_star
+#' @template dots_none
+#' @return A `tibble` with a `sfc`-column
+#' @export
+
+as_sf_points <- function(x, ...) {
+  UseMethod("as_sf_points", x)
+}
+
+#' @export
+as_sf_points.track_xy <- function(x, ...) {
+
+  p <- sf::st_as_sf(x, coords = c("x_", "y_"))
+  p <- sf::st_set_crs(p, if (!is.null(attributes(x)$crs_))
+    attributes(x)$crs_ else sf::NA_crs_)
+
+  p
+}
+
+
+# as_sf_lines ----------------------------------------------------------------
+
+#' Export track to lines
+#'
+#' Exports a track to (multi)lines from the `sf` package.
+#'
+#' @template track_xy_star
+#' @template dots_none
+#' @return A `tibble` with a `sfc`-column
+#' @export
+as_sf_lines <- function(x, ...) {
+  UseMethod("as_sf_lines", x)
+}
+
+#' @export
+as_sf_lines.track_xy <- function(x, ...) {
+
+  # > 1 points
+  if (nrow(x) < 2) {
+    stop("> 2 locations are required for a line.")
+  }
+
+  # bursts
+  if ("burst_" %in% names(x)) {
+    if (any(table(x$burst_) <= 1)) {
+      message("Some bursts consist of only 1 point, these will be ignored")
+      x <- amt::filter_min_n_burst(x, 2)
+    }
+    l <- lapply(split(x, x$burst_), function(x)
+      cbind(x$x_, x$y_))
+    l <- sf::st_sf(sf::st_sfc(sf::st_multilinestring(l)))
+  } else {
+    l <- cbind(x$x_, x$y_)
+    l <- sf::st_sf(sf::st_sfc(sf::st_linestring(l)))
+  }
+
+  l <- sf::st_set_crs(l,  if (!is.null(attributes(x)$crs_)) attributes(x)$crs_ else sf::NA_crs_)
+  l
+}
+
 
 
 # as_move() ---------------------------------------------------------------

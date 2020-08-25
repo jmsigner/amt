@@ -8,7 +8,7 @@
 #' @param zero_dir `[character(1)='E']` \cr Indicating the zero direction. Must be either `N`, `E`, `S`, or `W`.
 #' @param clockwise `[logical(1)=FALSE]` \cr Should angles be calculated clock or anti-clockwise?
 #' @param append_last `[logical(1)=TRUE]` \cr If `TRUE` an `NA` is appended at the end of all angles.
-#' @param keep_cols `[character(1)=NULL]{'start', 'end', 'both'}` \cr Should columns with attribute information be transfered to steps? If `keep_cols = 'start'` the attributes from the starting point are use, otherwise the columns from the end points are used.
+#' @param keep_cols `[character(1)=NULL]{'start', 'end', 'both'}` \cr Should columns with attribute information be transferred to steps? If `keep_cols = 'start'` the attributes from the starting point are use, otherwise the columns from the end points are used.
 #' @param ... Further arguments, none implemented
 #'
 #' @return `[numeric]` \cr For `step_lengths()` and `direction_*` a numeric vector. \cr
@@ -322,7 +322,8 @@ steps_base <- function(x, n, lonlat, zero_dir, keep_cols) {
     y1_ = x$y_[-n],
     y2_ = x$y_[-1],
     sl_ = step_lengths(x, lonlat = lonlat, append_last = FALSE),
-    ta_ = direction_rel(x, lonlat = lonlat, ero_dir = "E", append_last = FALSE)
+    direction_p = c(NA, head(direction_abs(x, lonlat = lonlat, zero_dir = "E", append_last = FALSE), -1)),
+    ta_ = direction_rel(x, lonlat = lonlat, zero_dir = "E", append_last = FALSE)
   )
 
   if (!is.null(keep_cols)) {

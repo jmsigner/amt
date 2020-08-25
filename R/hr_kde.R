@@ -6,7 +6,9 @@ hr_kde <- function(x, ...) {
 
 #' @export
 #' @rdname hr
-hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), ...) {
+hr_kde.track_xy <- function(
+  x, h = hr_kde_ref(x), trast = make_trast(x),
+  levels = 0.95, keep.data = TRUE, ...) {
 
   # ---------------------------------------------------------------------------- #
   # Check bandwidth
@@ -40,8 +42,13 @@ hr_kde.track_xy <- function(x, h = hr_kde_ref(x), trast = make_trast(x), ...) {
 
   sp::proj4string(kde) <- get_crs(x)
   res <- list(
+    estimator = "kde",
     h = h,
-    ud = kde
+    ud = kde,
+    trast = trast,
+    levels = levels,
+    crs = get_crs(x),
+    data = if(keep.data) x else NULL
   )
   class(res) <- c("kde", "hr_prob", "hr", class(res))
   res
@@ -86,8 +93,87 @@ hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
 }
 
 
+#' Select a bandwidth for Kernel Density Estimation
+#'
+#' Use two dimensional reference bandwidth to select a bandwidth for kernel density estimation.
+#' Find the smallest value for bandwidth (h) that results in n polygons
+#' (usually n=1) contiguous polygons at a given level.
+#'
+#' This implementation uses a bisection algorithm to the find the smallest value
+#' value for the kernel bandwidth within \code{range} that produces an home-range
+#' isopleth at \code{level} consisting of \code{n} polygons. Note, no difference is
+#' is made between the two dimensions.
+#'
+#' @param x A `track_xy*`.
+#' @param trast A template `RasterLayer`.
+#' @param range Numeric vector, indicating the lower and upper bound of the search range. If \code{range} is to large with regard to \code{trast}, the algorithm will fail.
+#' @param num.of.parts Numeric numeric scalar, indicating the number of contiguous  polygons desired. This will usually be one.
+#' @param tol Numeric scalar, indicating which difference of to stop.
+#' @param max.it Numeric scalar, indicating the maximum number of acceptable iterations.
+#' @param levels The home range level.
+#' @return \code{list} with the calculated bandwidth, exit status and the number of iteration.
+#' @export
+#' @references Kie, John G. "A rule-based ad hoc method for selecting a bandwidth in kernel home-range analyses." Animal Biotelemetry 1.1 (2013): 1-12.
+#'
+hr_kde_ref_scaled <- function(x, ...) {
+  UseMethod("hr_kde_ref_scaled", x)
+}
+
+#' @export
+hr_kde_ref_scaled <- function(
+  x, range = hr_kde_ref(x)[1] * c(0.01, 1),
+  trast = make_trast(x),
+  num.of.parts = 1, levels = 0.95,
+  tol = 0.1,
+  max.it = 500L) {
+
+  # Input checks
+  checkmate::assert_numeric(range, len = 2)
+  checkmate::assert_numeric(
+    levels, lower = 0.0001, upper = 0.9999, len = 1, finite = TRUE)
+  checkmate::assert_integer(max.it)
+
+  hmin <-min(range)
+  hmax <- max(range)
+  hcur <- mean(c(hmin, hmax))
+  success <- FALSE
+
+  for (i in 1:max.it) {
+    if (i > 1) {
+      hcur <- hnew
+    }
+    suppressMessages(tmp_est <- hr_isopleths(hr_kde(x, h = c(hcur, hcur),
+                                   trast = trast, levels = levels)))
+    n_holes <- length(sf::st_geometry(tmp_est)[[1]])
+
+    if (n_holes <= num.of.parts) {
+      ## decrease h
+      hmax <- hcur
+    } else {
+      ## increase h
+      hmin <- hcur
+    }
+    hnew <- mean(c(hmax, hmin))
+    if (abs(hcur - hnew) <= tol && n_holes <= num.of.parts) {
+      success = TRUE
+      break
+    }
+  }
+
+  if (!success) {
+    warning("`hr_kde_ref_scaled` did not converge.")
+  }
+
+  h <- hcur
+  attr(h, "n.iter") <- i
+  attr(h, "success") <- success
+  h
+}
+
+
+
 #' `hr_kde_pi` wraps `KernSmooth::dpik` to select bandwidth for kernel density estimation the plug-in-the-equation method in two dimensions.
-#' This function calcualtes bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
+#' This function calculates bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
 #' @param correct Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.
 #' @return The bandwidth, the standardization method and correction.
 #' @seealso \code{KernSmooth::dpik}
@@ -143,7 +229,7 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
 #' @param range numeric vector with different candidate h values.
 #' @param which_min A character indicating if the \code{global} or \code{local} minimum should be searched for.
 
-#' @details `hr_kde_lscv` calcualtes least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
+#' @details `hr_kde_lscv` calculates least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
 
 #' @return \code{vector} of length two
 #' @export
@@ -222,10 +308,4 @@ lscv <- function(x, hs) {
     out <- sum(exp(-f^2 / (4 * h^2)) - 4 * exp(-f^2 / (2 * h^2)))
     1.0 / (pi * h^2 * n) + (2 * out -3 * n)/(pi * 4. * h^2 * n^2);
   })
-}
-
-#' @export
-#' @method plot kde
-plot.kde <- function(x, y = NULL, ...) {
-  plot(x$ud)
 }

@@ -130,7 +130,7 @@ make_trast <- function(x, ...) {
 
 #' @export
 #' @rdname  helper
-#' @param factor `[numeric(1)=1.5]{>= 1}`\cr Factor by which the extent of the relocationsis extended.
+#' @param factor `[numeric(1)=1.5]{>= 1}`\cr Factor by which the extent of the relocations is extended.
 #' @param res `[numeric(1)]`\cr Resolution of the output raster.
 make_trast.track_xy <- function(x, factor = 1.5, res = max(c(extent_max(x) / 100, 1e-9)), ...) {
 

@@ -17,19 +17,18 @@ distance_to_center(x, ...)
 
 distance_to_centers(x, ...)
 
-\method{distance_to_centers}{track_xy}(x, trast, top_n = 10,
-  square = TRUE, ...)
+\method{distance_to_centers}{track_xy}(x, trast, top_n = 10, square = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{trast}{\code{[RasterLayer]} \cr A template.}
+\item{trast}{\verb{[RasterLayer]} \cr A template.}
 
-\item{square}{\code{[logical(1)]} \cr Should the distance be squared?}
+\item{square}{\verb{[logical(1)]} \cr Should the distance be squared?}
 
-\item{top_n}{\code{[integer(1)]} \cr To how many centers should the distance be
+\item{top_n}{\verb{[integer(1)]} \cr To how many centers should the distance be
 calculated?}
 }
 \value{

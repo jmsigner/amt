@@ -8,35 +8,45 @@
 \usage{
 random_steps(x, ...)
 
-\method{random_steps}{numeric}(x, n_control = 10, rel_angle = 0,
+\method{random_steps}{numeric}(
+  x,
+  n_control = 10,
+  angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e+05),
-  rand_ta = random_numbers(make_unif_distr(), n = 1e+05), ...)
+  rand_ta = random_numbers(make_unif_distr(), n = 1e+05),
+  ...
+)
 
-\method{random_steps}{steps_xy}(x, n_control = 10,
-  sl_distr = fit_distr(x$sl_, "gamma"), ta_distr = fit_distr(x$ta_,
-  "vonmises"), rand_sl = random_numbers(sl_distr, n = 1e+05),
+\method{random_steps}{steps_xy}(
+  x,
+  n_control = 10,
+  sl_distr = fit_distr(x$sl_, "gamma"),
+  ta_distr = fit_distr(x$ta_, "vonmises"),
+  rand_sl = random_numbers(sl_distr, n = 1e+05),
   rand_ta = random_numbers(ta_distr, n = 1e+05),
-  include_observed = TRUE, ...)
+  include_observed = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Steps.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{n_control}{\code{[integer(1)=10]{>1}} \cr The number of control steps paired
+\item{n_control}{\verb{[integer(1)=10]\{>1\}} \cr The number of control steps paired
 with each observed step.}
 
-\item{rel_angle}{\code{[numeric(1) = 0]{-pi < rel_angle < pi}} \cr Relative turing angle for the first step.}
+\item{angle}{\verb{[numeric(1) = 0]\{-pi < rel_angle < pi\}} \cr Angle for the first step.}
 
-\item{rand_sl}{\code{[numeric]} \cr Numeric vector with random step lengths an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., gamma or exponential).}
+\item{rand_sl}{\verb{[numeric]} \cr Numeric vector with random step lengths an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., gamma or exponential).}
 
-\item{rand_ta}{\code{[numeric]} \cr Numeric vector with relative turning angles an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., von Mises or uniform).}
+\item{rand_ta}{\verb{[numeric]} \cr Numeric vector with relative turning angles an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., von Mises or uniform).}
 
-\item{sl_distr}{\code{[amt_distr]} \cr The step-length distribution.}
+\item{sl_distr}{\verb{[amt_distr]} \cr The step-length distribution.}
 
-\item{ta_distr}{\code{[amt_distr]} \cr The turn-angle distribution.}
+\item{ta_distr}{\verb{[amt_distr]} \cr The turn-angle distribution.}
 
-\item{include_observed}{\code{[logical(1) = TRUE]} \cr Indicates if observed steps are to be included in the result.}
+\item{include_observed}{\verb{[logical(1) = TRUE]} \cr Indicates if observed steps are to be included in the result.}
 }
 \description{
 Function to generate a given number of random steps for each observed step.

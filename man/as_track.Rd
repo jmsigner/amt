@@ -4,6 +4,7 @@
 \alias{as_track}
 \alias{as_track.SpatialPoints}
 \alias{as_track.sfc_POINT}
+\alias{as_track.steps_xyt}
 \title{Coerce to track}
 \usage{
 as_track(x, ...)
@@ -11,9 +12,11 @@ as_track(x, ...)
 \method{as_track}{SpatialPoints}(x, ...)
 
 \method{as_track}{sfc_POINT}(x, ...)
+
+\method{as_track}{steps_xyt}(x, ...)
 }
 \arguments{
-\item{x}{\code{[SpatialPoints]} \cr Object to be converted to a track.}
+\item{x}{\verb{[SpatialPoints]} \cr Object to be converted to a track.}
 
 \item{...}{Further arguments, none implemented.}
 }

@@ -7,7 +7,7 @@
 #' @param trast `[RasterLayer]` \cr A template raster for the extent and resolution of the result.
 #' @param model `[An output of fit_ctmm]` \cr The autocorrelation model that should be fit to the data. `bm` corresponds to Brownian motion, `ou` to an Ornstein-Uhlenbeck process, `ouf` to an Ornstein-Uhlenbeck forage process.
 #' @param res.space `[numeric(1)=10]` \cr Number of grid point along each axis, relative to the average diffusion (per median timestep) from a stationary point. See also `help(ctmm::occurrence)`.
-#' @param res.time `[numeric(1)=10]` \cr Number of temproal grid points per median timestep.
+#' @param res.time `[numeric(1)=10]` \cr Number of temporal grid points per median timestep.
 #' @param n.points `[numeric(1)=5]` \cr This argument is only relevant for `rolling_od` and specifies the window size for the od estimation.
 #' @param show.progress `[logical(1)=TRUE]` \cr Indicates if a progress bar is used.
 #' @template dots_none

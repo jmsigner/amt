@@ -29,26 +29,26 @@ random_numbers(x, n = 100, ...)
 \method{random_numbers}{amt_distr}(x, n = 100, ...)
 }
 \arguments{
-\item{name}{\code{[char(1)]} \cr Short name of distribution. See \code{available_distr()}
+\item{name}{\verb{[char(1)]} \cr Short name of distribution. See \code{available_distr()}
 for all currently implemented distributions.}
 
-\item{params}{\code{[list]} \cr A named list with parameters of the distribution.}
+\item{params}{\verb{[list]} \cr A named list with parameters of the distribution.}
 
 \item{...}{none implemented.}
 
-\item{rate}{\code{[double(1)>0]} \cr The rate of the exponential distribution.}
+\item{rate}{\verb{[double(1)>0]} \cr The rate of the exponential distribution.}
 
-\item{min}{\code{[double(1)]} \cr The minimum of the uniform distribution.}
+\item{min}{\verb{[double(1)]} \cr The minimum of the uniform distribution.}
 
-\item{max}{\code{[double(1)]} \cr The minimum of the uniform distribution.}
+\item{max}{\verb{[double(1)]} \cr The minimum of the uniform distribution.}
 
-\item{kappa}{\code{[double(1)>=0]} \cr Concentration parameter of the von Mises distribution.}
+\item{kappa}{\verb{[double(1)>=0]} \cr Concentration parameter of the von Mises distribution.}
 
-\item{shape, scale}{\code{[double(1)>=0]} \cr Shape and scale of the Gamma distribution}
+\item{shape, scale}{\verb{[double(1)>=0]} \cr Shape and scale of the Gamma distribution}
 
-\item{x}{\code{[amt_distr]} \cr A distribution object.}
+\item{x}{\verb{[amt_distr]} \cr A distribution object.}
 
-\item{n}{\code{[integer(1)=100]{>0}} \cr The number of random draws.}
+\item{n}{\verb{[integer(1)=100]\{>0\}} \cr The number of random draws.}
 }
 \description{
 \code{make_distributions} creates a distribution.

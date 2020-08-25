@@ -16,57 +16,59 @@
 \usage{
 direction_abs(x, ...)
 
-\method{direction_abs}{track_xy}(x, full_circle = FALSE,
-  zero_dir = "E", clockwise = FALSE, append_last = TRUE,
-  lonlat = FALSE, ...)
+\method{direction_abs}{track_xy}(
+  x,
+  full_circle = FALSE,
+  zero_dir = "E",
+  clockwise = FALSE,
+  append_last = TRUE,
+  lonlat = FALSE,
+  ...
+)
 
 direction_rel(x, ...)
 
-\method{direction_rel}{track_xy}(x, lonlat = FALSE, append_last = TRUE,
-  zero_dir = "E", ...)
+\method{direction_rel}{track_xy}(x, lonlat = FALSE, append_last = TRUE, zero_dir = "E", ...)
 
 step_lengths(x, ...)
 
-\method{step_lengths}{track_xy}(x, lonlat = FALSE, append_last = TRUE,
-  ...)
+\method{step_lengths}{track_xy}(x, lonlat = FALSE, append_last = TRUE, ...)
 
 steps_by_burst(x, ...)
 
-\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, keep_cols = NULL,
-  ...)
+\method{steps_by_burst}{track_xyt}(x, lonlat = FALSE, keep_cols = NULL, ...)
 
 steps(x, ...)
 
 \method{steps}{track_xy}(x, lonlat = FALSE, keep_cols = NULL, ...)
 
-\method{steps}{track_xyt}(x, lonlat = FALSE, keep_cols = NULL,
-  diff_time_units = "auto", ...)
+\method{steps}{track_xyt}(x, lonlat = FALSE, keep_cols = NULL, diff_time_units = "auto", ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented}
 
-\item{full_circle}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} angles are returned between 0 and $2pi$, otherwise angles are between $-pi$ and $pi$.}
+\item{full_circle}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE} angles are returned between 0 and $2pi$, otherwise angles are between $-pi$ and $pi$.}
 
-\item{zero_dir}{\code{[character(1)='E']} \cr Indicating the zero direction. Must be either \code{N}, \code{E}, \code{S}, or \code{W}.}
+\item{zero_dir}{\verb{[character(1)='E']} \cr Indicating the zero direction. Must be either \code{N}, \code{E}, \code{S}, or \code{W}.}
 
-\item{clockwise}{\code{[logical(1)=FALSE]} \cr Should angles be calculated clock or anti-clockwise?}
+\item{clockwise}{\verb{[logical(1)=FALSE]} \cr Should angles be calculated clock or anti-clockwise?}
 
-\item{append_last}{\code{[logical(1)=TRUE]} \cr If \code{TRUE} an \code{NA} is appended at the end of all angles.}
+\item{append_last}{\verb{[logical(1)=TRUE]} \cr If \code{TRUE} an \code{NA} is appended at the end of all angles.}
 
-\item{lonlat}{\code{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geographic distances are calculated.}
+\item{lonlat}{\verb{[logical(1)=TRUE]} \cr Should geographical or planar coordinates be used? If \code{TRUE} geographic distances are calculated.}
 
-\item{keep_cols}{\code{[character(1)=NULL]{'start', 'end', 'both'}} \cr Should columns with attribute information be transfered to steps? If \code{keep_cols = 'start'} the attributes from the starting point are use, otherwise the columns from the end points are used.}
+\item{keep_cols}{\verb{[character(1)=NULL]\{'start', 'end', 'both'\}} \cr Should columns with attribute information be transferred to steps? If \code{keep_cols = 'start'} the attributes from the starting point are use, otherwise the columns from the end points are used.}
 
-\item{diff_time_units}{\code{[character(1)='auto']} \cr The unit for time differences, see \code{?difftime}.}
+\item{diff_time_units}{\verb{[character(1)='auto']} \cr The unit for time differences, see \code{?difftime}.}
 }
 \value{
-\code{[numeric]} \cr For \code{step_lengths()} and \code{direction_*} a numeric vector. \cr
-\code{[data.frame]} \cr For \code{steps} and \code{steps_by_burst}, containing the steps.
+\verb{[numeric]} \cr For \code{step_lengths()} and \verb{direction_*} a numeric vector. \cr
+\verb{[data.frame]} \cr For \code{steps} and \code{steps_by_burst}, containing the steps.
 }
 \description{
-\code{step_lengths} can be use to calculate step lengths of a track. \code{direction_abs} and \code{direction_rel} calculate the absolute and relative direction of steps. \code{steps} converts a \code{track_xy*} from a point representation to a step representation and automatically calculates step lengths and relative turning angles.
+\code{step_lengths} can be use to calculate step lengths of a track. \code{direction_abs} and \code{direction_rel} calculate the absolute and relative direction of steps. \code{steps} converts a \verb{track_xy*} from a point representation to a step representation and automatically calculates step lengths and relative turning angles.
 }
 \details{
 \code{step_lengths} calculates the step lengths between points a long the path. The last value returned is \code{NA}, because no observed step is 'started' at the last point. If \code{lonlat = TRUE}, \code{step_lengths()} wraps \code{\link[raster:pointDistance]{raster::pointDistance()}}.

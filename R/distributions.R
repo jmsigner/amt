@@ -25,7 +25,7 @@ valid_distr_params <- function(dist_name, params) {
   FALSE
 }
 
-#' Display availabel distributions for step lengths and turn angles.
+#' Display available distributions for step lengths and turn angles.
 #'
 #' @param which_dist `[char(1)="all"]{"all", "ta", "sl"}` \cr Should `all`
 #'   distributions be returned, or only distributions for turn angles (`ta`) or
@@ -73,12 +73,12 @@ make_distribution <- function(name, params, ...) {
 
   # check name
   if (!name %in% available_distr(names_only = TRUE)) {
-    stop(glue::glue("{name} is not implemented."))
+    stop(paste(name, "is not implemented."))
   }
 
   # check params
   if (!valid_distr_params(name, params)) {
-    stop(glue::glue("Parameters for {name} are not valid."))
+    stop(paste("Parameters for ", name, "are not valid."))
   }
   out <- list(name = name,
               params = params)

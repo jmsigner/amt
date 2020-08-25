@@ -8,22 +8,20 @@
 \usage{
 bbox(x, ...)
 
-\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE,
-  ...)
+\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...)
 
-\method{bbox}{steps_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE,
-  ...)
+\method{bbox}{steps_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{spatial}{\code{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPolygons}-object or not.}
+\item{spatial}{\verb{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPolygons}-object or not.}
 
-\item{buffer}{\code{[numeric(0)=NULL]{NULL, >0}} \cr An optional buffer of the bounding box.}
+\item{buffer}{\verb{[numeric(0)=NULL]\{NULL, >0\}} \cr An optional buffer of the bounding box.}
 
-\item{sf}{\code{[logical(1)=FALSE]} \cr If \code{TRUE} a simple feature polygon is returned.}
+\item{sf}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE} a simple feature polygon is returned.}
 }
 \description{
 Get bounding box of a track.

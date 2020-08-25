@@ -9,31 +9,37 @@
 \usage{
 rolling_od(x, ...)
 
-\method{rolling_od}{track_xyt}(x, trast, model = fit_ctmm(x, "bm"),
-  res.space = 10, res.time = 10, n.points = 5,
-  show.progress = TRUE, ...)
+\method{rolling_od}{track_xyt}(
+  x,
+  trast,
+  model = fit_ctmm(x, "bm"),
+  res.space = 10,
+  res.time = 10,
+  n.points = 5,
+  show.progress = TRUE,
+  ...
+)
 
 od(x, ...)
 
-\method{od}{track_xyt}(x, trast, model = fit_ctmm(x, "bm"),
-  res.space = 10, res.time = 10, ...)
+\method{od}{track_xyt}(x, trast, model = fit_ctmm(x, "bm"), res.space = 10, res.time = 10, ...)
 }
 \arguments{
 \item{x}{\code{[track_xyt]} \cr A track created with \code{make_track} that includes time.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{trast}{\code{[RasterLayer]} \cr A template raster for the extent and resolution of the result.}
+\item{trast}{\verb{[RasterLayer]} \cr A template raster for the extent and resolution of the result.}
 
-\item{model}{\code{[An output of fit_ctmm]} \cr The autocorrelation model that should be fit to the data. \code{bm} corresponds to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process.}
+\item{model}{\verb{[An output of fit_ctmm]} \cr The autocorrelation model that should be fit to the data. \code{bm} corresponds to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process.}
 
-\item{res.space}{\code{[numeric(1)=10]} \cr Number of grid point along each axis, relative to the average diffusion (per median timestep) from a stationary point. See also \code{help(ctmm::occurrence)}.}
+\item{res.space}{\verb{[numeric(1)=10]} \cr Number of grid point along each axis, relative to the average diffusion (per median timestep) from a stationary point. See also \code{help(ctmm::occurrence)}.}
 
-\item{res.time}{\code{[numeric(1)=10]} \cr Number of temproal grid points per median timestep.}
+\item{res.time}{\verb{[numeric(1)=10]} \cr Number of temporal grid points per median timestep.}
 
-\item{n.points}{\code{[numeric(1)=5]} \cr This argument is only relevant for \code{rolling_od} and specifies the window size for the od estimation.}
+\item{n.points}{\verb{[numeric(1)=5]} \cr This argument is only relevant for \code{rolling_od} and specifies the window size for the od estimation.}
 
-\item{show.progress}{\code{[logical(1)=TRUE]} \cr Indicates if a progress bar is used.}
+\item{show.progress}{\verb{[logical(1)=TRUE]} \cr Indicates if a progress bar is used.}
 }
 \description{
 \code{od} is a wrapper around \code{ctmm::occurrence}. See \code{help(ctmm::occurrence)} for more details. \code{rolling_od} estimates occurrence distributions for a subset of a track.

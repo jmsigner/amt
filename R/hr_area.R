@@ -5,28 +5,19 @@ hr_area <- function(x, ...) {
 }
 
 #' @export
-hr_area.mcp <- function(x, ...) {
-  as_tibble(x$mcp)
+#' @rdname hr
+hr_area.hr <- function(x, units = FALSE, ...) {
+  xx <- tibble::as_tibble(sf::st_set_geometry(hr_isopleths(x), NULL))
+  if (!units) {
+    xx$area <- as.numeric(xx$area)
+  }
+  xx
 }
 
-#' @export
-hr_area.locoh <- function(x, ...) {
-  as_tibble(x$locoh)
-}
 
 #' @export
 hr_area.RasterLayer <- function(x, level = 0.95, ...) {
-    x <- cumulative_ud(x)
+    x <- hr_cud(x)
     sum(x[] <= level) * prod(raster::res(x))
 }
 
-#' @export
-hr_area.kde <- function(x, level = 0.95, ...) {
-  hr_area(x$ud, level = level, ...)
-}
-
-
-#' @export
-hr_area.akde <- function(x, level = 0.95, ...) {
-  hr_area(x$ud, level = level, ...)
-}

@@ -7,8 +7,7 @@
 \usage{
 track_resample(x, ...)
 
-\method{track_resample}{track_xyt}(x, rate = hours(2),
-  tolerance = minutes(15), start = 1, ...)
+\method{track_resample}{track_xyt}(x, rate = hours(2), tolerance = minutes(15), start = 1, ...)
 }
 \arguments{
 \item{x}{A \code{track_xyt}.}

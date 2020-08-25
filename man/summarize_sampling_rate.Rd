@@ -9,8 +9,13 @@
 \usage{
 summarize_sampling_rate(x, ...)
 
-\method{summarize_sampling_rate}{track_xyt}(x, time_unit = "auto",
-  summarize = TRUE, as_tibble = TRUE, ...)
+\method{summarize_sampling_rate}{track_xyt}(
+  x,
+  time_unit = "auto",
+  summarize = TRUE,
+  as_tibble = TRUE,
+  ...
+)
 
 summarize_sampling_rate_many(x, ...)
 
@@ -31,7 +36,7 @@ sampling intervals are returned.}
 \item{as_tibble}{A logical. Should result be returned as \code{tibble} or as
 \code{table}.}
 
-\item{cols}{\code{[character(>= 1)]} \cr Indicating columns to be used as grouping variables.}
+\item{cols}{\verb{[character(>= 1)]} \cr Indicating columns to be used as grouping variables.}
 }
 \value{
 Depending on \code{summarize} and \code{as_tibble}, a vector, table or tibble.

@@ -2,18 +2,19 @@
 % Please edit documentation in R/hr_to_sf.R
 \name{hr_to_sf}
 \alias{hr_to_sf}
+\alias{hr_to_sf.tbl_df}
 \title{Convert}
 \usage{
-hr_to_sf(x, col, ..., level = 0.95)
+hr_to_sf(x, ...)
+
+\method{hr_to_sf}{tbl_df}(x, col, ...)
 }
 \arguments{
-\item{x}{A \code{tibble} with a \code{list column} with individual home ranges.}
+\item{x}{A \code{tibble} with a \verb{list column} with individual home ranges.}
+
+\item{...}{Additional columns that should be transferred to the new \code{tible}.}
 
 \item{col}{The column where the home}
-
-\item{...}{Additional columns that should be transfered to the new \code{tible}.}
-
-\item{level}{\code{[numeric(1)=0.95]{0-1}} \cr The home-range level.}
 }
 \value{
 A \code{data.frame} with a simple feature column (from the \code{sf}) package.

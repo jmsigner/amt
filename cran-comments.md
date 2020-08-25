@@ -1,7 +1,103 @@
-# Version 0.0.9.0
+# Version 0.1.2
+
 ## Round 1
 
-### Test envionments
+### Test environments
+- local: Ubuntu 19.10, R 4.0.0
+- win builder: release and devel
+- travis-ci: release 
+- appveyor
+- macos-highsierra-release-cran on rhub
+
+### R CMD check results
+
+There were no errors or warnings. On some platforms I received a note indicating that I have to many imports from non-default packages (local check).
+
+### What changed
+- `hr_mcp` gained an argument `keep.data`
+- `as_track` can now convert `steps_xyt` back to a `track_xyt`
+- `plot` function for home ranges improved
+- Ported function for `site_fidelity` from package `rhr`.
+- Changed test in order to be compatible with the new dplyr version. 
+
+
+
+
+
+# Version 0.1.1
+
+## Round 1
+
+### Test environments
+- local: Ubuntu 18.04.2 LTS, R 3.6.3
+- win builder: release (devel was not available)
+- travis-ci: release and devel
+- appveyor
+- macos-highsierra-release-cran on rhub
+
+### R CMD check results
+
+There were no errors or warnings. On some platforms I received a note indicating that I have to many imports from non-default packages. I will reduce the number of imports in futur versions of the `amt` package.
+
+### What changed
+#### bug fixes
+- Fixed issues for CRAN submission of version 0.1.0, in particular imports and tests.
+
+
+
+# Version 0.1.0
+## Round 2
+
+The unit tests gave an error for MacOS. I was asked by Prof. B. Ripley to resolve these. 
+
+I this and tested the package again with
+
+```
+rhub::check(platform = "macos-highsierra-release-cran")
+```
+
+There were no errors warnings or notes.
+
+## Round 1
+
+### Test environments
+- local: Ubuntu 18.04.2 LTS, R 3.6.3
+- win builder: release and devel
+- travis-ci: release and devel
+- appveyor
+
+### R CMD check results
+
+There were no errors, warnings or notes
+
+### What changed
+#### bug fixes
+- `random_steps` uses abs direction as reference instead of relative direction
+
+#### updates
+- Streamlined home-range methods
+- Added methods for overlaps and intersections of home ranges
+- Added href scaled for KDE
+
+
+# Version 0.0.9.0
+
+## Round 2
+
+I was asked to fix the references in the Description to `<doi:prefix/suffix>` which is now done. 
+
+
+### Test environments
+- local: Ubuntu 18.04.2 LTS, R 3.6.3
+- win builder: release and devel
+- travis-ci: release and devel
+- appveyor
+
+There were no errors, warnings or notes.
+
+## Round 1
+
+### Test environments
 - local: Ubuntu 18.04.2 LTS, R 3.6.3
 - win builder: release and devel
 - travis-ci: release and devel

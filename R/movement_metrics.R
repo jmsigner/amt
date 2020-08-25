@@ -1,6 +1,6 @@
 #' Movement metrics
 #'
-#' Functions to calculate metrics such as straightness, mean squred displacement (msd), intensity use,
+#' Functions to calculate metrics such as straightness, mean squared displacement (msd), intensity use,
 #' sinuosity, mean turn angle correlation (`tac`) of a track.
 #'
 #' The intensity use is calculated by dividing the total movement distance (`tot_dist`) by the square of the area of movement (= minimum convex polygon 100).

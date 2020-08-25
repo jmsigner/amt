@@ -8,22 +8,20 @@
 \usage{
 plot_sl(x, ...)
 
-\method{plot_sl}{fit_clogit}(x, n = 1000, upper_quantile = 0.99,
-  plot = TRUE, ...)
+\method{plot_sl}{fit_clogit}(x, n = 1000, upper_quantile = 0.99, plot = TRUE, ...)
 
-\method{plot_sl}{random_steps}(x, n = 1000, upper_quantile = 0.99,
-  plot = TRUE, ...)
+\method{plot_sl}{random_steps}(x, n = 1000, upper_quantile = 0.99, plot = TRUE, ...)
 }
 \arguments{
-\item{x}{\code{[fit_clogit|random_steps]} \cr A fitted step selection or random steps.}
+\item{x}{\verb{[fit_clogit|random_steps]} \cr A fitted step selection or random steps.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{n}{\code{[numeric(1)=1000]{>0}} \cr The number of breaks between \code{0} and \code{upper_quantile}.}
+\item{n}{\verb{[numeric(1)=1000]\{>0\}} \cr The number of breaks between \code{0} and \code{upper_quantile}.}
 
-\item{upper_quantile}{\code{[nummeric(1)=0.99]{0-1}} \cr The quantile until where the distribution should be plotted. Typically this will be \code{0.95} or \code{0.99}.}
+\item{upper_quantile}{\verb{[nummeric(1)=0.99]\{0-1\}} \cr The quantile until where the distribution should be plotted. Typically this will be \code{0.95} or \code{0.99}.}
 
-\item{plot}{\code{[logical(1)=TRUE]} \cr Indicates if a plot should be drawn or not.}
+\item{plot}{\verb{[logical(1)=TRUE]} \cr Indicates if a plot should be drawn or not.}
 }
 \description{
 Plot step-length distribution

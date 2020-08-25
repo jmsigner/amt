@@ -7,7 +7,7 @@
 #'   with each observed step.
 #' @param sl_distr `[amt_distr]` \cr The step-length distribution.
 #' @param ta_distr `[amt_distr]` \cr The turn-angle distribution.
-#' @param rel_angle `[numeric(1) = 0]{-pi < rel_angle < pi}` \cr Relative turing angle for the first step.
+#' @param angle `[numeric(1) = 0]{-pi < rel_angle < pi}` \cr Angle for the first step.
 #' @param  rand_sl `[numeric]` \cr Numeric vector with random step lengths an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., gamma or exponential).
 #' @param  rand_ta `[numeric]` \cr Numeric vector with relative turning angles an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., von Mises or uniform).
 #' @param include_observed `[logical(1) = TRUE]` \cr Indicates if observed steps are to be included in the result.
@@ -22,13 +22,20 @@ random_steps <- function(x, ...) {
 #' @rdname random_steps
 random_steps.numeric <- function(
   x, n_control = 10,
-  rel_angle = 0,
+  angle = 0,
   rand_sl = random_numbers(make_exp_distr(), n = 1e5),
   rand_ta = random_numbers(make_unif_distr(), n = 1e5), ...) {
+
+  # Check arguments
+  checkmate::assert_numeric(x, len = 2)
+  checkmate::assert_int(n_control, lower = 1)
+  checkmate::assert_numeric(rand_sl, lower = 0)
+  checkmate::assert_numeric(rand_ta, lower = -pi, upper = pi)
+
   rs <- random_steps_cpp_one_step(
     n_control,  # number of controll steps
     x[1], x[2],
-    rel_angle,
+    angle,
     rand_sl, rand_ta)
   rs
 }
@@ -36,26 +43,28 @@ random_steps.numeric <- function(
 
 #' @export
 #' @rdname random_steps
+#'
 random_steps.steps_xy <- function(
   x, n_control = 10,
-  sl_distr = fit_distr(x$sl_, "gamma"), # this arugment could be remove
-  ta_distr = fit_distr(x$ta_, "vonmises"), # this arugment could be remove
+  sl_distr = fit_distr(x$sl_, "gamma"), # this argument could be remove
+  ta_distr = fit_distr(x$ta_, "vonmises"), # this argument could be remove
   rand_sl = random_numbers(sl_distr, n = 1e5),
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE, ...) {
+
 
   # Generate random points
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(1:ns, each = n_control)
 
-  stps <- which(!is.na(x$ta_))
+  stps <- which(!is.na(x$direction_p))
   x$step_id_ <- 1:nrow(x)
   x$case_ <- TRUE
 
   # This could be moved to c++
   xx <- lapply(stps, function(i) {
     random_steps(c(x$x1_[i], x$y1_[i]), n_control = n_control,
-                 rel_angle = x$ta_[i],
+                 angle = x$direction_p[i],
                  rand_sl = rand_sl, rand_ta = rand_ta)})
  xx <- do.call(rbind, xx)
 
@@ -67,7 +76,7 @@ random_steps.steps_xy <- function(
 
  for_rand$sl_ <- xx[, "sl_"]
  for_rand$ta_ <- xx[, "ta_"]
-  x <- x[stps, ]
+ x <- x[stps, ]
 
  out <- dplyr::bind_rows(x, for_rand)
  out <- dplyr::arrange(out, step_id_)
@@ -82,6 +91,26 @@ random_steps.steps_xy <- function(
 
 }
 
+#' @export
+plot.random_steps <- function(x, ...) {
+  plot(0, 0, type = "n",
+       xlim = grDevices::extendrange(c(x$x1_, x$x2_), f = 0.1),
+       ylim = grDevices::extendrange(c(x$y1_, x$y2_), f = 0.1),
+       xlab = "x", ylab = "y")
+  for (i in 1:nrow(x)) {
+    graphics::lines(c(x$x1_[i], x$x2_[i]), c(x$y1_[i], x$y2_[i]), lty = 2,
+                    col = "grey79")
+  }
+
+  x1 <- x[x$case_, ]
+  for (i in 1:nrow(x1)) {
+    lines(c(x1$x1_[i], x1$x2_[i]), c(x1$y1_[i], x1$y2_[i]))
+    graphics::points(x1$x1_[i], x1$y1_[i], pch = 20, cex = 2, col = "red")
+    graphics::points(x1$x2_[i], x1$y2_[i], pch = 20, cex = 2, col = "red")
+  }
+}
+
+
 rsteps_transfer_attr <- function(from, to) {
   from <- attributes(from)
   attributes(to)$class <- from$class
@@ -90,6 +119,8 @@ rsteps_transfer_attr <- function(from, to) {
   attributes(to)$crs_ <- from$crs_
   to
 }
+
+
 
 # see here: https://github.com/hadley/dplyr/issues/719
 #' @export
