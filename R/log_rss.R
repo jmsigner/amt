@@ -26,7 +26,7 @@
 #' `predict()`. Therefore, the columns of `x1` and `x2` must match
 #' the terms in the model formula exactly.
 #'
-#' @author Brian Smith
+#' @author Brian J. Smith
 #'
 #' @return Returns a `list` of class `log_rss`.
 #'
@@ -466,7 +466,13 @@ append_x1 <- function(string){
   if (last3 == "_x1"){
     return(string)
   } else {
-    string <- paste0(string, "_x1")
+    #Check if name ends in just "_"
+    last1 <- substr(string, start = l, stop = l)
+    if (last1 == "_"){
+      string <- paste0(string, "x1")
+    } else {
+      string <- paste0(string, "_x1")
+    }
     return(string)
   }
 }
@@ -605,19 +611,10 @@ resample_coxph <- function(mdat){
   #Create new data.frame with just columns to drop attributes
   dat <- mdat[, 1:ncol(mdat)]
 
-  #Sampling should be stratified
-    #Resample observed steps
-    #Resample random steps for the sampled observed steps
+  #Sampling only strata
   n_obs <- sum(dat$case_)
   new_obs <- sample(x = unique(dat$step_id_), size = n_obs, replace = TRUE)
-  new_dat <- dplyr::bind_rows(lapply(new_obs, function(x){
-    dat_sub <- dat[which(dat$step_id_ == x & !dat$case_), ]
-    dat_obs <- dat[which(dat$step_id_ == x & dat$case_), ]
-    new_avail <- dat_sub[sample(x = 1:nrow(dat_sub), size = nrow(dat_sub),
-                                replace = TRUE),]
-    new_step <- rbind(dat_obs, new_avail)
-    return(new_step)
-  }))
+  new_dat <- dat[new_obs, ]
   #Return
   return(new_dat)
 }
