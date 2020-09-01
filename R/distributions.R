@@ -223,7 +223,204 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
   )
 }
 
+# Update distr ------------------------------------------------------------
 
+#' Update movement distributions
+#'
+#' Update tentative step length or turning angle distribution from a fitted iSSF.
+#'
+#' @param object `[fit_clogit]` \cr A fitted iSSF model.
+#' @template dots_none
+#'
+#' @details Blah blah
+#'
+#' @author Brian J. Smith
+#'
+#' @return An `amt_distr` object, which consists of a list with the `name` of
+#'   the distribution and its parameters (saved in `params`).
+#'
+#' @seealso
+#' Wrapper to fit a distribution to data \code{\link{fit_distr}()}
+#'
+#' @references
+#'
+#' Fieberg et al. in prep.
+#'
+#' @examples
+#'
+#' # Fit an SSF, then update movement parameters.
+#'
+#'  #Prepare data for SSF
+#' ssf_data <- deer %>%
+#'   steps_by_burst() %>%
+#'   random_steps(n = 15) %>%
+#'   extract_covariates(sh_forest) %>%
+#'   mutate(forest = factor(sh.forest, levels = 1:2,
+#'                     labels = c("forest", "non-forest")),
+#'   cos_ta_ = cos(ta_),
+#'   log_sl_ = log(sl_))
+#'
+#' # Check tentative distributions
+#' #    Step length
+#' attr(ssf_data, "sl_")
+#' #    Turning angle
+#' attr(ssf_data, "ta_")
+#'
+#' # Fit an iSSF (note model = TRUE necessary for predict() to work)
+#' m1 <- ssf_data %>%
+#'   fit_issf(case_ ~ forest +
+#'                sl_ + log_sl_ + cos_ta_ +
+#'                strata(step_id_), model = TRUE)
+#'
+#' # Update step length distribution
+#' new_gamma <- update_sl_distr(m1)
+#'
+#' #Update turning angle distribution
+#' new_vm <- update_ta_distr(m1)
+#'
+#' @rdname update_distr
+#' @export
+update_sl_distr <- function(object, ...){
+  #Check inputs
+  if (!inherits(object, "fit_clogit")){
+    stop("\'object\' must be of class \"fit_clogit\"")
+  }
+
+  # Get tentative distribution name
+  tent_dist_name <- sl_distr_name(object)
+
+  # Update distribution
+  switch(tent_dist_name,
+         unif = {
+           stop("If you generate available steps with a uniform distribution,
+            you cannot update the distribution. You may consider refitting
+            your model using a different step length distribution.")
+         },
+         exp = {
+           ## Update rate
+           # Fitted coef
+           beta_sl_ <- object$model$coefficients["sl_"]
+           # Check
+           if (is.na(beta_sl_)){
+             warning(paste("The covariate \'sl_\' did not appear in your model,",
+                           "and the rate parameter was not updated."))
+             beta_sl_ <- 0
+           }
+           # Update
+           new_rate <- object$sl_$params$rate - beta_sl_
+
+           #Create distribution
+           new_dist <- make_exp_distr(rate = new_rate)
+         },
+         gamma = {
+           ## Update shape
+           # Fitted coef
+           beta_log_sl_ <- object$model$coefficients["log_sl_"]
+           # Check
+           if (is.na(beta_log_sl_)){
+             warning(paste("The covariate \'log_sl_\' did not appear in your model,",
+                     "and the shape parameter was not updated."))
+             beta_log_sl_ <- 0
+           }
+           # Update
+           new_shape <- object$sl_$params$shape + beta_log_sl_
+
+           ## Update scale
+           # Fitted coef
+           beta_sl_ <- object$model$coefficients["sl_"]
+           # Check
+           if (is.na(beta_sl_)){
+             warning(paste("The covariate \'sl_\' did not appear in your model,",
+                           "and the scale parameter was not updated."))
+             beta_sl_ <- 0
+           }
+           # Update
+           new_scale <- 1/((1/object$sl_$params$scale) - beta_sl_)
+
+           #Create distribution
+           new_dist <- make_gamma_distr(shape = new_shape, scale = new_scale)
+         })
+
+  #Return
+  return(new_dist)
+}
+
+#' @rdname update_distr
+#' @export
+update_ta_distr <- function(object, ...){
+  #Check inputs
+  if (!inherits(object, "fit_clogit")){
+    stop("\'object\' must be of class \"fit_clogit\"")
+  }
+
+  # Get tentative distribution name
+  tent_dist_name <- ta_distr_name(object)
+
+  # Update distribution
+  switch(tent_dist_name,
+         unif = {
+           # Note: same as von Mises, but with kappa = 0
+
+           ## Update kappa
+           # Fitted coef
+           beta_cos_ta_ <- object$model$coefficients["cos_ta_"]
+           # Check
+           if (is.na(beta_cos_ta_)){
+             warning(paste("The covariate \'cos_ta_\' did not appear in your model,",
+                           "and the concentration parameter (kappa) was not updated."))
+             beta_cos_ta_ <- 0
+           }
+           # Create distribution
+           new_dist <- make_vonmises_distr(kappa = beta_cos_ta_)
+         },
+         vonmises = {
+           ## Update kappa
+           # Fitted coef
+           beta_cos_ta_ <- object$model$coefficients["cos_ta_"]
+           # Check
+           if (is.na(beta_cos_ta_)){
+             warning(paste("The covariate \'cos_ta_' did not appear in your model,",
+                           "and the concentration parameter (kappa) was not updated."))
+             beta_cos_ta_ <- 0
+           }
+           # Update
+           new_kappa <- object$ta_$params$kappa + beta_cos_ta_
+
+           #Create distribution
+           new_dist <- make_vonmises_distr(kappa = new_kappa)
+         },
+         gamma = {
+           ## Update shape
+           # Fitted coef
+           beta_log_sl_ <- object$model$coefficients["log_sl_"]
+           # Check
+           if (is.na(beta_log_sl_)){
+             warning(paste("The covariate \'log_sl_' did not appear in your model",
+                           "and the shape parameter was not updated."))
+             beta_log_sl_ <- 0
+           }
+           # Update
+           new_shape <- object$sl_$params$shape + beta_log_sl_
+
+           ## Update scale
+           # Fitted coef
+           beta_sl_ <- object$model$coefficients["sl_"]
+           # Check
+           if (is.na(beta_sl_)){
+             warning(paste("The covariate \'sl_' did not appear in your model",
+                           "and the scale parameter was not updated."))
+             beta_sl_ <- 0
+           }
+           # Update
+           new_scale <- 1/((1/object$sl_$params$scale) - beta_sl_)
+
+           #Create distribution
+           new_dist <- make_gamma_distr(shape = new_shape, scale = new_scale)
+         })
+
+  #Return
+  return(new_dist)
+}
 
 
 # Utility functions -------------------------------------------------------
