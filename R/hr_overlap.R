@@ -112,6 +112,14 @@ hr_intersection <- function (x, ...) {
   UseMethod ("hr_intersection", x )
 }
 
+# NOTE BY B Smith----------------
+# Missing hr_ba() is stopping package from building
+# Adding dummy here, but this should be addressed
+#' @export
+hr_ba <- function(...){
+
+}
+
 #' @export
 hr_ba.hr_prob <- function(x, y, type = "ba", conditional = 0.95, ...) {
 
