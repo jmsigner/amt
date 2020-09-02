@@ -299,7 +299,7 @@ update_sl_distr <- function(object, ...){
          exp = {
            ## Update rate
            # Fitted coef
-           beta_sl_ <- object$model$coefficients["sl_"]
+           beta_sl_ <- unname(object$model$coefficients["sl_"])
            # Check
            if (is.na(beta_sl_)){
              warning(paste("The covariate \'sl_\' did not appear in your model,",
@@ -315,7 +315,7 @@ update_sl_distr <- function(object, ...){
          gamma = {
            ## Update shape
            # Fitted coef
-           beta_log_sl_ <- object$model$coefficients["log_sl_"]
+           beta_log_sl_ <- unname(object$model$coefficients["log_sl_"])
            # Check
            if (is.na(beta_log_sl_)){
              warning(paste("The covariate \'log_sl_\' did not appear in your model,",
@@ -327,7 +327,7 @@ update_sl_distr <- function(object, ...){
 
            ## Update scale
            # Fitted coef
-           beta_sl_ <- object$model$coefficients["sl_"]
+           beta_sl_ <- unname(object$model$coefficients["sl_"])
            # Check
            if (is.na(beta_sl_)){
              warning(paste("The covariate \'sl_\' did not appear in your model,",
@@ -363,7 +363,7 @@ update_ta_distr <- function(object, ...){
 
            ## Update kappa
            # Fitted coef
-           beta_cos_ta_ <- object$model$coefficients["cos_ta_"]
+           beta_cos_ta_ <- unname(object$model$coefficients["cos_ta_"])
            # Check
            if (is.na(beta_cos_ta_)){
              warning(paste("The covariate \'cos_ta_\' did not appear in your model,",
@@ -376,7 +376,7 @@ update_ta_distr <- function(object, ...){
          vonmises = {
            ## Update kappa
            # Fitted coef
-           beta_cos_ta_ <- object$model$coefficients["cos_ta_"]
+           beta_cos_ta_ <- unname(object$model$coefficients["cos_ta_"])
            # Check
            if (is.na(beta_cos_ta_)){
              warning(paste("The covariate \'cos_ta_' did not appear in your model,",
@@ -388,34 +388,6 @@ update_ta_distr <- function(object, ...){
 
            #Create distribution
            new_dist <- make_vonmises_distr(kappa = new_kappa)
-         },
-         gamma = {
-           ## Update shape
-           # Fitted coef
-           beta_log_sl_ <- object$model$coefficients["log_sl_"]
-           # Check
-           if (is.na(beta_log_sl_)){
-             warning(paste("The covariate \'log_sl_' did not appear in your model",
-                           "and the shape parameter was not updated."))
-             beta_log_sl_ <- 0
-           }
-           # Update
-           new_shape <- object$sl_$params$shape + beta_log_sl_
-
-           ## Update scale
-           # Fitted coef
-           beta_sl_ <- object$model$coefficients["sl_"]
-           # Check
-           if (is.na(beta_sl_)){
-             warning(paste("The covariate \'sl_' did not appear in your model",
-                           "and the scale parameter was not updated."))
-             beta_sl_ <- 0
-           }
-           # Update
-           new_scale <- 1/((1/object$sl_$params$scale) - beta_sl_)
-
-           #Create distribution
-           new_dist <- make_gamma_distr(shape = new_shape, scale = new_scale)
          })
 
   #Return
