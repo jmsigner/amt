@@ -613,8 +613,11 @@ resample_coxph <- function(mdat){
 
   #Sampling only strata
   n_obs <- sum(dat$case_)
-  new_obs <- sample(x = unique(dat$step_id_), size = n_obs, replace = TRUE)
-  new_dat <- dat[new_obs, ]
+  strats <- sample(x = unique(dat$step_id_), size = n_obs, replace = TRUE)
+  new_dat_list <- lapply(strats, function(x){
+    dat[which(dat$step_id_ == x),]
+  })
+  new_dat <- dplyr::bind_rows(new_dat_list)
   #Return
   return(new_dat)
 }
