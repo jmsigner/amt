@@ -306,14 +306,11 @@ update_sl_distr <- function(object, ...){
                            "and the rate parameter was not updated."))
              beta_sl_ <- 0
            }
-           # Update
-           new_rate <- object$sl_$params$rate - beta_sl_
-
-           #Create distribution
-           new_dist <- make_exp_distr(rate = new_rate)
+           # Update distribution
+           new_dist <- update_exp(object$sl_, beta_sl_ = beta_sl_)
          },
          gamma = {
-           ## Update shape
+           ## New shape
            # Fitted coef
            beta_log_sl_ <- unname(object$model$coefficients["log_sl_"])
            # Check
@@ -322,10 +319,8 @@ update_sl_distr <- function(object, ...){
                      "and the shape parameter was not updated."))
              beta_log_sl_ <- 0
            }
-           # Update
-           new_shape <- object$sl_$params$shape + beta_log_sl_
 
-           ## Update scale
+           ## New scale
            # Fitted coef
            beta_sl_ <- unname(object$model$coefficients["sl_"])
            # Check
@@ -338,7 +333,9 @@ update_sl_distr <- function(object, ...){
            new_scale <- 1/((1/object$sl_$params$scale) - beta_sl_)
 
            #Create distribution
-           new_dist <- make_gamma_distr(shape = new_shape, scale = new_scale)
+           new_dist <- update_gamma(object$sl_,
+                                    beta_sl_ = beta_sl_,
+                                    beta_log_sl_ = beta_log_sl_)
          })
 
   #Return
@@ -371,7 +368,8 @@ update_ta_distr <- function(object, ...){
              beta_cos_ta_ <- 0
            }
            # Create distribution
-           new_dist <- make_vonmises_distr(kappa = beta_cos_ta_)
+           new_dist <- update_vonmises(make_vonmises_distr(kappa = 0),
+                                       beta_cos_ta_ = beta_cos_ta_)
          },
          vonmises = {
            ## Update kappa
@@ -383,13 +381,109 @@ update_ta_distr <- function(object, ...){
                            "and the concentration parameter (kappa) was not updated."))
              beta_cos_ta_ <- 0
            }
-           # Update
-           new_kappa <- object$ta_$params$kappa + beta_cos_ta_
 
            #Create distribution
-           new_dist <- make_vonmises_distr(kappa = new_kappa)
+           new_dist <- update_vonmises(object$ta_, beta_cos_ta_ = beta_cos_ta_)
          })
 
+  #Return
+  return(new_dist)
+}
+
+# Manually update distribution --------------------------------------------
+#' Manually update `amt_distr`
+#'
+#' Functions to update `amt_distr` from iSSF coefficients
+#'
+#' @param dist `[amt_distr]` The tentative distribution to be updated
+#' @param beta_* `[numeric]` The fitted model coefficients used to update the
+#' respective distributions.
+#'
+#' @details These functions are called internally by
+#' \code{\link{update_sl_distr}()} and \code{\link{update_ta_distr}()}.
+#' However, those simple functions assume that the selection-free step-length
+#' and turn-angle distributions are constant (i.e., they do not depend on
+#' covariates). In the case of interactions between movement parameters and
+#' covariates, the user will want to manually access these functions to update
+#' their selection-free movement distributions.
+#'
+#' @examples
+#'
+#' # Fit an SSF, then update movement parameters.
+#'
+#'  #Prepare data for SSF
+#' ssf_data <- deer %>%
+#'   steps_by_burst() %>%
+#'   random_steps(n = 15) %>%
+#'   extract_covariates(sh_forest) %>%
+#'   mutate(forest = factor(sh.forest, levels = 1:2,
+#'                     labels = c("forest", "non-forest")),
+#'   cos_ta_ = cos(ta_),
+#'   log_sl_ = log(sl_))
+#'
+#' # Check tentative distributions
+#' #    Step length
+#' attr(ssf_data, "sl_")
+#' #    Turning angle
+#' attr(ssf_data, "ta_")
+#'
+#' # Fit an iSSF (note model = TRUE necessary for predict() to work)
+#' m1 <- ssf_data %>%
+#'   fit_issf(case_ ~ forest * (sl_ + log_sl_ + cos_ta_) +
+#'                strata(step_id_), model = TRUE)
+#'
+#' # Update forest step lengths (the reference level)
+#' forest_sl <- update_gamma(m1$sl_,
+#'                           beta_sl_ = m1$model$coefficients["sl_"],
+#'                           beta_log_sl_ = m1$model$coefficients["log_sl_"])
+#'
+#' # Update non-forest step lengths
+#' nonforest_sl <- update_gamma(m1$sl_,
+#'                              beta_sl_ = m1$model$coefficients["sl_"] +
+#'                                m1$model$coefficients["forestnon-forest:sl_"],
+#'                              beta_log_sl_ = m1$model$coefficients["log_sl_"] +
+#'                                m1$model$coefficients["forestnon-forest:log_sl_"])
+#'
+#' # Update forest turn angles (the reference level)
+#' forest_ta <- update_vonmises(m1$ta_,
+#'                              beta_cos_ta_ = m1$model$coefficients["cos_ta_"])
+#'
+#' # Update non-forest turn angles
+#' nonforest_ta <- update_vonmises(m1$ta_,
+#'                                 beta_cos_ta_ = m1$model$coefficients["cos_ta_"] +
+#'                                   m1$model$coefficients["forestnon-forest:cos_ta_"])
+#'
+#' @rdname update_distr_man
+#' @export
+update_gamma <- function(dist, beta_sl_, beta_log_sl_){
+  #Update shape
+  new_shape <- unname(dist$params$shape + beta_log_sl_)
+  #Update scale
+  new_scale <- unname(1/((1/dist$params$scale) - beta_sl_))
+  #Make new distribution
+  new_dist <- make_gamma_distr(shape = new_shape, scale = new_scale)
+  #Return
+  return(new_dist)
+}
+
+#' @rdname update_distr_man
+#' @export
+update_exp <- function(dist, beta_sl_){
+  #Update rate
+  new_rate <- dist$params$rate - beta_sl_
+  #Make new distribution
+  new_dist <- make_exp_distr(rate = new_rate)
+  #Return
+  return(new_dist)
+}
+
+#' @rdname update_distr_man
+#' @export
+update_vonmises <- function(dist, beta_cos_ta_){
+  #Update rate
+  new_conc <- dist$params$kappa + beta_cos_ta_
+  #Make new distribution
+  new_dist <- make_vonmises_distr(kappa = new_conc)
   #Return
   return(new_dist)
 }
