@@ -470,7 +470,7 @@ update_gamma <- function(dist, beta_sl_, beta_log_sl_){
 #' @export
 update_exp <- function(dist, beta_sl_){
   #Update rate
-  new_rate <- dist$params$rate - beta_sl_
+  new_rate <- unname(dist$params$rate - beta_sl_)
   #Make new distribution
   new_dist <- make_exp_distr(rate = new_rate)
   #Return
@@ -481,7 +481,7 @@ update_exp <- function(dist, beta_sl_){
 #' @export
 update_vonmises <- function(dist, beta_cos_ta_){
   #Update rate
-  new_conc <- dist$params$kappa + beta_cos_ta_
+  new_conc <- unname(dist$params$kappa + beta_cos_ta_)
   #Make new distribution
   new_dist <- make_vonmises_distr(kappa = new_conc)
   #Return
