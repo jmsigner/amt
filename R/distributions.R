@@ -266,11 +266,11 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' #    Turning angle
 #' attr(ssf_data, "ta_")
 #'
-#' # Fit an iSSF (note model = TRUE necessary for predict() to work)
+#' # Fit an iSSF
 #' m1 <- ssf_data %>%
 #'   fit_issf(case_ ~ forest +
 #'                sl_ + log_sl_ + cos_ta_ +
-#'                strata(step_id_), model = TRUE)
+#'                strata(step_id_))
 #'
 #' # Update step length distribution
 #' new_gamma <- update_sl_distr(m1)
