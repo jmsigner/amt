@@ -7,7 +7,7 @@
 \method{plot}{log_rss}(x, x_var1 = "guess", x_var2 = "guess", ...)
 }
 \arguments{
-\item{x}{\verb{[log_rss]} An object returned by the function \verb{\link{log_rss}()}.}
+\item{x}{\verb{[log_rss]} An object returned by the function \code{\link{log_rss}()}.}
 
 \item{x_var1}{\verb{[character]} The variable to plot on the x-axis. A string of
 either \code{"guess"} (default -- see Details) or the variable name.}
@@ -26,7 +26,7 @@ This function provides defaults for a basic plot, but we encourage
 the user to carefully consider how to represent the patterns found in their
 habitat selection model.
 
-The function \verb{\link{log_rss}()} is meant to accept a user-defined
+The function \code{\link{log_rss}()} is meant to accept a user-defined
 input for \code{x1}. The structure of \code{x1} likely reflects how the user intended
 to visualize the results. Therefore, it is possible to "guess" which covariate
 the user would like to see on the x-axis by choosing the column from \code{x1} with
@@ -37,7 +37,7 @@ user specifies \code{x_var1 != "guess" & x_var2 == "guess"}, the function will r
 an error.
 
 This function uses integers to represent colors, and therefore the user can
-change the default colors by specifying a custom \verb{\link{palette}()} before
+change the default colors by specifying a custom \code{\link{palette}()} before
 calling the function.
 }
 \examples{

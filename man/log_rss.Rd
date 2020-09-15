@@ -8,11 +8,9 @@
 \usage{
 log_rss(object, ...)
 
-\method{log_rss}{fit_logit}(object, x1, x2, ci = NA, ci_level = 0.95,
-  n_boot = 1000, ...)
+\method{log_rss}{fit_logit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 
-\method{log_rss}{fit_clogit}(object, x1, x2, ci = NA, ci_level = 0.95,
-  n_boot = 1000, ...)
+\method{log_rss}{fit_clogit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 }
 \arguments{
 \item{object}{\verb{[fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.}
@@ -27,14 +25,14 @@ at location x_1. Must contain all fitted covariates as expected by
 hypothetical location of x_2. Must contain all fitted covariates as expected
 by \code{predict()}.}
 
-\item{ci}{\code{[character]} \cr Method for estimating confidence intervals around
+\item{ci}{\verb{[character]} \cr Method for estimating confidence intervals around
 log-RSS. \code{NA} skips calculating CIs. Character string \code{"se"} uses standard error
 method and \code{"boot"} uses empirical bootstrap method.}
 
-\item{ci_level}{\code{[numeric]} \cr Level for confidence interval. Defaults to 0.95
+\item{ci_level}{\verb{[numeric]} \cr Level for confidence interval. Defaults to 0.95
 for a 95\% confidence interval.}
 
-\item{n_boot}{\code{[integer]} \cr Number of bootstrap samples to estimate confidence
+\item{n_boot}{\verb{[integer]} \cr Number of bootstrap samples to estimate confidence
 intervals. Ignored if \code{ci != "boot"}.}
 }
 \value{
@@ -130,7 +128,7 @@ ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
 
 }
 \references{
-Avgar, T., Lele, S.R., Keim, J.L., & Boyce, M.S.. (2017). Relative Selection
+Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection
 Strength: Quantifying effect size in habitat- and step-selection inference.
 \emph{Ecology and Evolution}, 7, 5322–5330.
 }
@@ -138,8 +136,8 @@ Strength: Quantifying effect size in habitat- and step-selection inference.
 See Avgar \emph{et al.} 2017 for details about relative
 selection strength.
 
-Default plotting method available: \verb{\link{plot.log_rss}()}
+Default plotting method available: \code{\link{plot.log_rss}()}
 }
 \author{
-Brian Smith
+Brian J. Smith
 }

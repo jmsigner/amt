@@ -5,7 +5,7 @@
 \alias{hr_overlap}
 \alias{hr_overlap.hr}
 \alias{hr_overlap.list}
-\alias{hr_ba}
+\alias{hr_intersection}
 \title{Different Methods to calculate home-range overlaps}
 \usage{
 hr_overlap(x, ...)
@@ -14,7 +14,7 @@ hr_overlap(x, ...)
 
 \method{hr_overlap}{list}(x, consecutive.only = TRUE, labels = NULL, ...)
 
-hr_ba(x, ...)
+hr_intersection(x, ...)
 }
 \arguments{
 \item{x, y}{\code{hr} A home-range estimate}
@@ -23,7 +23,7 @@ hr_ba(x, ...)
 
 \item{consecutive.only}{\verb{[logical=TRUE]} \cr Should only consecutive overlaps be calculated or all combinations?}
 
-\item{labels}{\verb{[character=NULL]} \cr Labels for different instances. If \code{NULL} (the defualt) numbers will be used.}
+\item{labels}{\verb{[character=NULL]} \cr Labels for different instances. If \code{NULL} (the default) numbers will be used.}
 }
 \value{
 \code{data.frame} with the isopleth level and area in units of the coordinate reference system.
