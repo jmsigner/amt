@@ -18,7 +18,7 @@ http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse
 env_covar
 }
 \description{
-A list with three entries that correpsondend to the following three layer:
+A list with three entries that correspond to the following three layer:
 \itemize{
 \item land use
 \item elevation
