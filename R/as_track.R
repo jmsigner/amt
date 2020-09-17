@@ -34,6 +34,8 @@ as_track.sfc_POINT <- function(x, ...) {
 as_track.steps_xyt <- function(x, ...) {
   n <- nrow(x)
 
+  crs <- get_crs(x)
+
   if ("burst_" %in% names(x)) {
     xx <- tidyr::nest(x, data = -c(burst_)) %>%
       dplyr::mutate(data = purrr::map(data, function(y) {
@@ -45,14 +47,14 @@ as_track.steps_xyt <- function(x, ...) {
         )
       })) %>% tidyr::unnest(cols = data)
     make_track(xx, xs, ys, t, burst_ = burst_,
-               crs = if (!is.null(get_crs(x))) sp::CRS(get_crs(x)) else NULL)
+               crs = crs)
   } else {
     xx <- tibble::tibble(
       xs = c(x$x1_, x$x2_[n]),
       ys = c(x$y1_, x$y2_[n]),
       t = c(x$t1_, x$t2_[n])
     )
-    make_track(xx, xs, ys, t, crs = get_crs(x))
+    make_track(xx, xs, ys, t, crs = crs)
   }
 
 }
