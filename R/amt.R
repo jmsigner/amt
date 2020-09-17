@@ -4,7 +4,7 @@
 #' @importFrom grDevices adjustcolor
 #' @importFrom lubridate hours minutes seconds now days weeks
 #' @importFrom magrittr %>%
-#' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd var
+#' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd var formula reformulate qnorm
 #' @importFrom tidyr nest unnest
 #' @importFrom tibble tibble tribble is_tibble as_tibble
 #' @importFrom utils data head tail
