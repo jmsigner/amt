@@ -5,13 +5,14 @@
 \alias{amt_fisher}
 \title{GPS tracks from four fishers}
 \format{
-A \code{tibble} with 32400 rows and 5 variables:
+A \code{tibble} with 14230 rows and 5 variables:
 \describe{
-\item{id}{id of the animal}
 \item{x_}{the x-coordinate}
 \item{y_}{the y-coordinate}
 \item{t_}{the timestamp}
-\item{burst_}{bursts with 10 min sampling rates}
+\item{sex}{the sex of the animal}
+\item{id}{the id of the animal}
+\item{name}{the name of the animal}
 }
 }
 \source{
@@ -21,7 +22,7 @@ https://www.datarepository.movebank.org/handle/10255/move.330
 amt_fisher
 }
 \description{
-This file includes spatial data from 4 fisher (Martes pennanti). These location data were collected via a 105g GPS tracking collar (manufactured by E-obs GmbH) and programmed to record the animal's location every 10 minutes, continuously. The data usage is permitted for exploratory purposes. For other purposes please get in contact (Scott LaPoint).
+This file includes spatial data from 4 fisher (\strong{Pekania pennanti}). These location data were collected via a 105g GPS tracking collar (manufactured by E-obs GmbH) and programmed to record the animal's location every 10 minutes, continuously. The data re projected in NAD84 (epsg: 5070). The data usage is permitted for exploratory purposes. For other purposes please get in contact (Scott LaPoint).
 }
 \references{
 For more information, contact Scott LaPoint \code{sdlapoint@gmail.com}
