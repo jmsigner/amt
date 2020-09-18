@@ -33,6 +33,7 @@ Imports:
     raster,
     Rcpp (>= 0.12.7),
     rgeos,
+    Rdpack,
     rlang,
     sf,
     sp,
@@ -50,7 +51,6 @@ Suggests:
   spacetime,
   trajectories,
   knitr,
-  Rdpack,
   rmarkdown, tinytest
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1

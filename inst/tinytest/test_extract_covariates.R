@@ -39,24 +39,24 @@ expect_equal(ncol(extract_covariates(rp, rt)), 18)
 s1 <- trk1 %>% steps()
 s2 <- trk2 %>% steps()
 
-expect_equal(ncol(extract_covariates(s1, r1, where = "start")), 7)
-expect_equal(ncol(extract_covariates(s1, r1, where = "end")), 7)
-expect_equal(ncol(extract_covariates(s1, r1, where = "both")), 8)
-expect_equal(ncol(extract_covariates(s1, r2, where = "start")), 8)
-expect_equal(ncol(extract_covariates(s1, r2, where = "end")), 8)
-expect_equal(ncol(extract_covariates(s1, r2, where = "both")), 10)
-expect_equal(ncol(extract_covariates(s1, rt, where = "start")), 21)
-expect_equal(ncol(extract_covariates(s1, rt, where = "end")), 21)
-expect_equal(ncol(extract_covariates(s1, rt, where = "both")), 36)
-expect_equal(ncol(extract_covariates(s2, r1, where = "start")), 10)
-expect_equal(ncol(extract_covariates(s2, r1, where = "end")), 10)
-expect_equal(ncol(extract_covariates(s2, r1, where = "both")), 11)
-expect_equal(ncol(extract_covariates(s2, r2, where = "start")), 11)
-expect_equal(ncol(extract_covariates(s2, r2, where = "end")), 11)
-expect_equal(ncol(extract_covariates(s2, r2, where = "both")), 13)
-expect_equal(ncol(extract_covariates(s2, rt, where = "start")), 24)
-expect_equal(ncol(extract_covariates(s2, rt, where = "end")), 24)
-expect_equal(ncol(extract_covariates(s2, rt, where = "both")), 39)
+expect_equal(ncol(extract_covariates(s1, r1, where = "start")), 8)
+expect_equal(ncol(extract_covariates(s1, r1, where = "end")), 8)
+expect_equal(ncol(extract_covariates(s1, r1, where = "both")), 9)
+expect_equal(ncol(extract_covariates(s1, r2, where = "start")), 9)
+expect_equal(ncol(extract_covariates(s1, r2, where = "end")), 9)
+expect_equal(ncol(extract_covariates(s1, r2, where = "both")), 11)
+expect_equal(ncol(extract_covariates(s1, rt, where = "start")), 22)
+expect_equal(ncol(extract_covariates(s1, rt, where = "end")), 22)
+expect_equal(ncol(extract_covariates(s1, rt, where = "both")), 37)
+expect_equal(ncol(extract_covariates(s2, r1, where = "start")), 11)
+expect_equal(ncol(extract_covariates(s2, r1, where = "end")), 11)
+expect_equal(ncol(extract_covariates(s2, r1, where = "both")), 12)
+expect_equal(ncol(extract_covariates(s2, r2, where = "start")), 12)
+expect_equal(ncol(extract_covariates(s2, r2, where = "end")), 12)
+expect_equal(ncol(extract_covariates(s2, r2, where = "both")), 14)
+expect_equal(ncol(extract_covariates(s2, rt, where = "start")), 25)
+expect_equal(ncol(extract_covariates(s2, rt, where = "end")), 25)
+expect_equal(ncol(extract_covariates(s2, rt, where = "both")), 40)
 
 # along
 expect_error(extract_covariates_along(trk1, r1))
@@ -76,14 +76,14 @@ expect_error(extract_covariates_var_time(s2, r1))
 expect_equal(
   ncol(extract_covariates_var_time(trk2, rt, max_time = minutes(120))), 4)
 expect_equal(
-  ncol(extract_covariates_var_time(s2, rt, max_time = minutes(120))), 10)
+  ncol(extract_covariates_var_time(s2, rt, max_time = minutes(120))), 11)
 expect_equal(
   ncol(extract_covariates_var_time(s2, rt, max_time = minutes(120), where = "end")),
-  10)
+  11)
 expect_equal(
   ncol(extract_covariates_var_time(s2, rt, max_time = minutes(120), where = "start")),
-  10)
+  11)
 expect_equal(
   ncol(extract_covariates_var_time(s2, rt, max_time = minutes(120), where = "both")),
-  11)
+  12)
 

@@ -491,6 +491,50 @@ update_vonmises <- function(dist, beta_cos_ta_){
 
 # Utility functions -------------------------------------------------------
 
+#' Get distribution and parameters
+#'
+#' @param x Random steps or fitted model
+#' @param ... None implemented.
+#'
+#' @export
+#' @name get_distr
+sl_distr <- function(x, ...) {
+  UseMethod("sl_distr")
+}
+
+
+#' @export
+#' @rdname get_distr
+sl_distr.random_steps <- function(x, ...) {
+  attr(x, "sl_")
+}
+
+#' @export
+#' @rdname get_distr
+sl_distr.fit_clogit <- function(x, ...) {
+  x$sl_
+}
+
+
+#' @export
+#' @rdname get_distr
+ta_distr <- function(x, ...) {
+  UseMethod("ta_distr")
+}
+
+#' @export
+#' @rdname get_distr
+ta_distr.random_steps <- function(x, ...) {
+  attr(x, "ta_")
+}
+
+#' @export
+#' @rdname get_distr
+ta_distr.fit_clogit <- function(x, ...) {
+  x$ta_
+}
+
+
 #' Name of step-length distribution and turn-angle distribution
 #'
 #' @param x Random steps or fitted model
