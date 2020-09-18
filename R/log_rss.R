@@ -159,7 +159,7 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
 
   #Include values of x1 in return data.frame
   df <- x1
-  names(df) <- paste0(names(x1), "_x1")
+  names(df) <- unname(sapply(names(x1), append_x1))
   #Calculate log_rss
   df$log_rss <- unname(y_x1 - y_x2)
 
@@ -249,7 +249,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 
   #Include values of x1 in return data.frame
   df <- x1
-  names(df) <- paste0(names(x1), "_x1")
+  names(df) <- unname(sapply(names(x1), append_x1))
   #Calculate log_rss
   df$log_rss <- unname(y_x1 - y_x2)
 
