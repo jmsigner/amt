@@ -152,8 +152,8 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
   }
 
   #Calculate y_x
-  pred_x1 <- stats::predict.glm(object$model, newdata = x1, type = "link", se.fit = TRUE)
-  pred_x2 <- stats::predict.glm(object$model, newdata = x2, type = "link", se.fit = TRUE)
+  pred_x1 <- stats::predict.glm(object$model, newdata = x1, type = "link", se.fit = FALSE)
+  pred_x2 <- stats::predict.glm(object$model, newdata = x2, type = "link", se.fit = FALSE)
   y_x1 <- pred_x1$fit
   y_x2 <- pred_x2$fit
 
