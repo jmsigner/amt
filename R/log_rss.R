@@ -152,8 +152,10 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
   }
 
   #Calculate y_x
-  pred_x1 <- stats::predict.glm(object$model, newdata = x1, type = "link", se.fit = FALSE)
-  pred_x2 <- stats::predict.glm(object$model, newdata = x2, type = "link", se.fit = FALSE)
+  pred_x1 <- stats::predict.glm(object$model, newdata = x1,
+                                type = "link", se.fit = TRUE)
+  pred_x2 <- stats::predict.glm(object$model, newdata = x2,
+                                type = "link", se.fit = TRUE)
   y_x1 <- pred_x1$fit
   y_x2 <- pred_x2$fit
 
@@ -165,9 +167,21 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
 
   #Calculate confidence intervals
   if (!is.na(ci)){
-    if (ci == "se"){ #Standard error method
-      #Combine standard errors
-      logrss_se <- unname(sqrt(pred_x1$se.fit^2 + pred_x2$se.fit^2))
+    if (ci == "se"){ #Large-sample based standard error method
+      #Get model matrix for x1 and x2
+      x1_mm <- stats::model.matrix(object$model, data = x1,
+                            contrast.arg = object$model$contrasts)
+      x2_mm <- stats::model.matrix(object$model, data = x2,
+                            contrast.arg = object$model$contrasts)
+      #Get model variance-covariance matrix
+      m_vcov <- stats::vcov(object$model)
+      #Subtract x2 model matrix from each row of x1
+      delta_mm <- sweep(data.matrix(x1_mm), 2, data.matrix(x2_mm))
+      #Get variance of log-RSS prediction
+      var_pred <- apply(delta_mm, 1,
+            function(x) {sum(x %*% diag(m_vcov) %*% t(x))})
+      #Get standard error of prediction
+      logrss_se <- unname(sqrt(var_pred))
       #Get critical value
       p <- 1 - ((1 - ci_level)/2)
       zstar <- qnorm(p)
@@ -256,8 +270,20 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
   #Calculate confidence intervals
   if (!is.na(ci)){
     if (ci == "se"){ #Standard error method
-      #Combine standard errors
-      logrss_se <- unname(sqrt(pred_x1$se.fit^2 + pred_x2$se.fit^2))
+      #Get model matrix for x1 and x2
+      x1_mm <- stats::model.matrix(object$model, data = x1,
+                                   contrast.arg = object$model$contrasts)
+      x2_mm <- stats::model.matrix(object$model, data = x2,
+                                   contrast.arg = object$model$contrasts)
+      #Get model variance-covariance matrix
+      m_vcov <- stats::vcov(object$model)
+      #Subtract x2 model matrix from each row of x1
+      delta_mm <- sweep(data.matrix(x1_mm), 2, data.matrix(x2_mm))
+      #Get variance of log-RSS prediction
+      var_pred <- apply(delta_mm, 1,
+                        function(x) {sum(x %*% diag(m_vcov) %*% t(x))})
+      #Get standard error of prediction
+      logrss_se <- unname(sqrt(var_pred))
       #Get critical value
       p <- 1 - ((1 - ci_level)/2)
       zstar <- qnorm(p)
