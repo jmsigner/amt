@@ -383,7 +383,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #' # data.frame of x1s
 #' x1 <- data.frame(lu = sort(unique(rsf_data$lu)))
 #' # data.frame of x2 (note factor levels should be same as model data)
-#' x2 <- data.frame(lu = factor(40, levels = levels(rsf_data$lu)))
+#' x2 <- data.frame(lu = factor(50, levels = levels(rsf_data$lu)))
 #' # Calculate
 #' logRSS <- log_rss(object = m1, x1 = x1, x2 = x2)
 #'
