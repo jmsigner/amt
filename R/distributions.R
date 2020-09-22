@@ -280,7 +280,9 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #'
 #' @rdname update_distr
 #' @export
-update_sl_distr <- function(object, ...){
+update_sl_distr <- function(
+  object, beta_sl = "sl_",
+  beta_log_sl = "log_sl_", ...){
   #Check inputs
   if (!inherits(object, "fit_clogit")){
     stop("\'object\' must be of class \"fit_clogit\"")
@@ -299,7 +301,7 @@ update_sl_distr <- function(object, ...){
          exp = {
            ## Update rate
            # Fitted coef
-           beta_sl_ <- unname(object$model$coefficients["sl_"])
+           beta_sl_ <- unname(object$model$coefficients[beta_sl])
            # Check
            if (is.na(beta_sl_)){
              warning(paste("The covariate \'sl_\' did not appear in your model,",
@@ -312,7 +314,7 @@ update_sl_distr <- function(object, ...){
          gamma = {
            ## New shape
            # Fitted coef
-           beta_log_sl_ <- unname(object$model$coefficients["log_sl_"])
+           beta_log_sl_ <- unname(object$model$coefficients[beta_log_sl])
            # Check
            if (is.na(beta_log_sl_)){
              warning(paste("The covariate \'log_sl_\' did not appear in your model,",
@@ -322,7 +324,7 @@ update_sl_distr <- function(object, ...){
 
            ## New scale
            # Fitted coef
-           beta_sl_ <- unname(object$model$coefficients["sl_"])
+           beta_sl_ <- unname(object$model$coefficients[beta_sl])
            # Check
            if (is.na(beta_sl_)){
              warning(paste("The covariate \'sl_\' did not appear in your model,",
@@ -344,7 +346,7 @@ update_sl_distr <- function(object, ...){
 
 #' @rdname update_distr
 #' @export
-update_ta_distr <- function(object, ...){
+update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
   #Check inputs
   if (!inherits(object, "fit_clogit")){
     stop("\'object\' must be of class \"fit_clogit\"")
@@ -357,14 +359,15 @@ update_ta_distr <- function(object, ...){
   switch(tent_dist_name,
          unif = {
            # Note: same as von Mises, but with kappa = 0
-
            ## Update kappa
            # Fitted coef
-           beta_cos_ta_ <- unname(object$model$coefficients["cos_ta_"])
+           beta_cos_ta_ <- unname(object$model$coefficients[beta_cos_ta])
            # Check
            if (is.na(beta_cos_ta_)){
-             warning(paste("The covariate \'cos_ta_\' did not appear in your model,",
-                           "and the concentration parameter (kappa) was not updated."))
+             warning(
+               paste(
+                 "The covariate \'cos_ta_\' did not appear in your model,",
+                 "and the concentration parameter (kappa) was not updated."))
              beta_cos_ta_ <- 0
            }
            # Create distribution
@@ -374,11 +377,12 @@ update_ta_distr <- function(object, ...){
          vonmises = {
            ## Update kappa
            # Fitted coef
-           beta_cos_ta_ <- unname(object$model$coefficients["cos_ta_"])
+           beta_cos_ta_ <- unname(object$model$coefficients[beta_cos_ta])
            # Check
            if (is.na(beta_cos_ta_)){
-             warning(paste("The covariate \'cos_ta_' did not appear in your model,",
-                           "and the concentration parameter (kappa) was not updated."))
+             warning(paste(
+               "The covariate \'cos_ta_' did not appear in your model,",
+               "and the concentration parameter (kappa) was not updated."))
              beta_cos_ta_ <- 0
            }
 
