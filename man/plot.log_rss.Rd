@@ -44,15 +44,15 @@ calling the function.
 
 # Load data
 data("amt_fisher")
-data("amt_fisher_lu")
+data("amt_fisher_covar")
 
 # Prepare data for RSF
 rsf_data <- amt_fisher \%>\%
-  filter(burst_ == 1) \%>\%
+  filter(name == "Leroy") \%>\%
   make_track(x_, y_, t_) \%>\%
   random_points() \%>\%
-  extract_covariates(amt_fisher_lu) \%>\%
-  mutate(lu = factor(landuse_study_area))
+  extract_covariates(amt_fisher_covar$landuse) \%>\%
+  mutate(lu = factor(landuse))
 
 # Fit RSF
 m1 <- rsf_data \%>\%
@@ -62,7 +62,7 @@ m1 <- rsf_data \%>\%
 # data.frame of x1s
 x1 <- data.frame(lu = sort(unique(rsf_data$lu)))
 # data.frame of x2 (note factor levels should be same as model data)
-x2 <- data.frame(lu = factor(21, levels = levels(rsf_data$lu)))
+x2 <- data.frame(lu = factor(40, levels = levels(rsf_data$lu)))
 # Calculate
 logRSS <- log_rss(object = m1, x1 = x1, x2 = x2)
 

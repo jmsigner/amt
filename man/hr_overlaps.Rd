@@ -5,7 +5,6 @@
 \alias{hr_overlap}
 \alias{hr_overlap.hr}
 \alias{hr_overlap.list}
-\alias{hr_intersection}
 \title{Different Methods to calculate home-range overlaps}
 \usage{
 hr_overlap(x, ...)
@@ -13,8 +12,6 @@ hr_overlap(x, ...)
 \method{hr_overlap}{hr}(x, y, ...)
 
 \method{hr_overlap}{list}(x, consecutive.only = TRUE, labels = NULL, ...)
-
-hr_intersection(x, ...)
 }
 \arguments{
 \item{x, y}{\code{hr} A home-range estimate}

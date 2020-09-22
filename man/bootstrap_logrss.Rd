@@ -19,3 +19,4 @@ Use empirical bootstrap to estimate log-RSS CI
 This function is meant for internal use by \code{log_rss()} and is
 not meant to be called by the user.
 }
+\keyword{internal}

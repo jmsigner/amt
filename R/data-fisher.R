@@ -26,4 +26,4 @@
 #' @source http://dup.esrin.esa.it/page_globcover.php
 #' @source http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse
 #' @format A list with three where each entry is a `RasterLayer`.
-"env_covar"
+"amt_fisher_covar"

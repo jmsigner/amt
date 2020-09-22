@@ -16,3 +16,4 @@ Runs a single iteration of the empirical bootstrap
 This function is meant for internal use by \code{bootstrap_logrss()} and
 is not meant to be called by the user.
 }
+\keyword{internal}

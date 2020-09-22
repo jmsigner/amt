@@ -230,9 +230,10 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' Update tentative step length or turning angle distribution from a fitted iSSF.
 #'
 #' @param object `[fit_clogit]` \cr A fitted iSSF model.
+#' @param beta_sl `[character]` \cr The name of the coefficient of the step length.
+#' @param beta_log_sl `[character]` \cr The name of the coefficient of the log of the step length.
+#' @param beta_cos_ta `[character]` \cr The name of the coefficient of cosine of the turning angle.
 #' @template dots_none
-#'
-#' @details Blah blah
 #'
 #' @author Brian J. Smith
 #'
@@ -309,7 +310,7 @@ update_sl_distr <- function(
              beta_sl_ <- 0
            }
            # Update distribution
-           new_dist <- update_exp(object$sl_, beta_sl_ = beta_sl_)
+           new_dist <- update_exp(object$sl_, beta_sl = beta_sl_)
          },
          gamma = {
            ## New shape
@@ -336,8 +337,8 @@ update_sl_distr <- function(
 
            #Create distribution
            new_dist <- update_gamma(object$sl_,
-                                    beta_sl_ = beta_sl_,
-                                    beta_log_sl_ = beta_log_sl_)
+                                    beta_sl = beta_sl_,
+                                    beta_log_sl = beta_log_sl_)
          })
 
   #Return
@@ -372,7 +373,7 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
            }
            # Create distribution
            new_dist <- update_vonmises(make_vonmises_distr(kappa = 0),
-                                       beta_cos_ta_ = beta_cos_ta_)
+                                       beta_cos_ta = beta_cos_ta_)
          },
          vonmises = {
            ## Update kappa
@@ -387,7 +388,7 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
            }
 
            #Create distribution
-           new_dist <- update_vonmises(object$ta_, beta_cos_ta_ = beta_cos_ta_)
+           new_dist <- update_vonmises(object$ta_, beta_cos_ta = beta_cos_ta_)
          })
 
   #Return
@@ -399,9 +400,12 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
 #'
 #' Functions to update `amt_distr` from iSSF coefficients
 #'
+#' @param beta_sl `[numeric]` \cr The estimate of the coefficient of the step length.
+#' @param beta_log_sl `[numeric]` \cr The estimate of the coefficient of the log of the step length.
+#' @param beta_cos_ta `[numeric]` \cr The estimate of the coefficient of cosine of the turning angle.
 #' @param dist `[amt_distr]` The tentative distribution to be updated
-#' @param beta_* `[numeric]` The fitted model coefficients used to update the
 #' respective distributions.
+#' @name update_distr_man
 #'
 #' @details These functions are called internally by
 #' \code{\link{update_sl_distr}()} and \code{\link{update_ta_distr}()}.
@@ -457,13 +461,12 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
 #'                                 beta_cos_ta_ = m1$model$coefficients["cos_ta_"] +
 #'                                   m1$model$coefficients["forestnon-forest:cos_ta_"])
 #'
-#' @rdname update_distr_man
 #' @export
-update_gamma <- function(dist, beta_sl_, beta_log_sl_){
+update_gamma <- function(dist, beta_sl, beta_log_sl){
   #Update shape
-  new_shape <- unname(dist$params$shape + beta_log_sl_)
+  new_shape <- unname(dist$params$shape + beta_log_sl)
   #Update scale
-  new_scale <- unname(1/((1/dist$params$scale) - beta_sl_))
+  new_scale <- unname(1/((1/dist$params$scale) - beta_sl))
   #Make new distribution
   new_dist <- make_gamma_distr(shape = new_shape, scale = new_scale)
   #Return
@@ -472,9 +475,9 @@ update_gamma <- function(dist, beta_sl_, beta_log_sl_){
 
 #' @rdname update_distr_man
 #' @export
-update_exp <- function(dist, beta_sl_){
+update_exp <- function(dist, beta_sl){
   #Update rate
-  new_rate <- unname(dist$params$rate - beta_sl_)
+  new_rate <- unname(dist$params$rate - beta_sl)
   #Make new distribution
   new_dist <- make_exp_distr(rate = new_rate)
   #Return
@@ -483,9 +486,9 @@ update_exp <- function(dist, beta_sl_){
 
 #' @rdname update_distr_man
 #' @export
-update_vonmises <- function(dist, beta_cos_ta_){
+update_vonmises <- function(dist, beta_cos_ta){
   #Update rate
-  new_conc <- unname(dist$params$kappa + beta_cos_ta_)
+  new_conc <- unname(dist$params$kappa + beta_cos_ta)
   #Make new distribution
   new_dist <- make_vonmises_distr(kappa = new_conc)
   #Return

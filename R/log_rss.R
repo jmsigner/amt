@@ -57,9 +57,9 @@
 #'   filter(name == "Lupe") %>%
 #'   make_track(x_, y_, t_) %>%
 #'   random_points() %>%
-#'   extract_covariates(env_covar$elevation) %>%
-#'   extract_covariates(env_covar$popden) %>%
-#'   extract_covariates(env_covar$landuse) %>%
+#'   extract_covariates(amt_fisher_covar$elevation) %>%
+#'   extract_covariates(amt_fisher_covar$popden) %>%
+#'   extract_covariates(amt_fisher_covar$landuse) %>%
 #'   mutate(lu = factor(landuse))
 #'
 #' # Fit RSF
@@ -126,7 +126,7 @@
 #' @export
 log_rss <- function(object, ...){
   #Check inputs
-  if(!inherits(object, c("fit_logit", "fit_clogit"))){
+  if(!inherits(object, c("glm", "fit_logit", "fit_clogit"))){
     stop("'object' should be an object of class 'fit_logit' or 'fit_clogit'.")
   }
   UseMethod("log_rss", object)
@@ -134,7 +134,7 @@ log_rss <- function(object, ...){
 
 #' @rdname log_rss
 #' @export
-log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...){
+log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...){
   if(!inherits(x1, "data.frame")){
     stop("'x1' should be an object of class 'data.frame'.")
   }
@@ -146,6 +146,13 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
     stop(paste0("The data.frame provided as 'x2' should have exactly 1 row.\n",
                 "  See ?log_rss for more details."))
   }
+  # Check if it is a fit_logit
+  model <- if (inherits(object, "fit_logit")) {
+    object$model
+  } else {
+    object
+  }
+
   #Check confidence interval arguments
   if(!is.na(ci)){
     if(!(ci %in% c("se", "boot"))){
@@ -158,9 +165,9 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
   }
 
   #Calculate y_x
-  pred_x1 <- stats::predict.glm(object$model, newdata = x1,
+  pred_x1 <- stats::predict.glm(model, newdata = x1,
                                 type = "link", se.fit = TRUE)
-  pred_x2 <- stats::predict.glm(object$model, newdata = x2,
+  pred_x2 <- stats::predict.glm(model, newdata = x2,
                                 type = "link", se.fit = TRUE)
   y_x1 <- pred_x1$fit
   y_x2 <- pred_x2$fit
@@ -175,12 +182,12 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
   if (!is.na(ci)){
     if (ci == "se"){ #Large-sample based standard error method
       #Model terms (same as predict.lm)
-      Terms <- delete.response(terms(object$model))
+      Terms <- stats::delete.response(terms(model))
       #Get model matrix for x1 and x2
-      x1_mm <- stats::model.matrix(Terms,data = x1)
+      x1_mm <- stats::model.matrix(Terms, data = x1)
       x2_mm <- stats::model.matrix(Terms, data = x2)
       #Get model variance-covariance matrix
-      m_vcov <- stats::vcov(object$model)
+      m_vcov <- stats::vcov(model)
       #Subtract x2 model matrix from each row of x1
       delta_mm <- sweep(data.matrix(x1_mm), 2, data.matrix(x2_mm))
       #Get variance of log-RSS prediction
@@ -211,7 +218,7 @@ log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot =
   res <- list(df = df,
               x1 = x1,
               x2 = x2,
-              formula = object$model$formula)
+              formula = model$formula)
 
   #Set the S3 class
   class(res) <- c("log_rss", class(res))
@@ -358,15 +365,15 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #'
 #' # Load data
 #' data("amt_fisher")
-#' data("amt_fisher_lu")
+#' data("amt_fisher_covar")
 #'
 #' # Prepare data for RSF
 #' rsf_data <- amt_fisher %>%
-#'   filter(burst_ == 1) %>%
+#'   filter(name == "Leroy") %>%
 #'   make_track(x_, y_, t_) %>%
 #'   random_points() %>%
-#'   extract_covariates(amt_fisher_lu) %>%
-#'   mutate(lu = factor(landuse_study_area))
+#'   extract_covariates(amt_fisher_covar$landuse) %>%
+#'   mutate(lu = factor(landuse))
 #'
 #' # Fit RSF
 #' m1 <- rsf_data %>%
@@ -376,7 +383,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #' # data.frame of x1s
 #' x1 <- data.frame(lu = sort(unique(rsf_data$lu)))
 #' # data.frame of x2 (note factor levels should be same as model data)
-#' x2 <- data.frame(lu = factor(21, levels = levels(rsf_data$lu)))
+#' x2 <- data.frame(lu = factor(40, levels = levels(rsf_data$lu)))
 #' # Calculate
 #' logRSS <- log_rss(object = m1, x1 = x1, x2 = x2)
 #'
@@ -517,6 +524,7 @@ append_x1 <- function(string){
 #' not meant to be called by the user.
 #'
 #' @rdname bootstrap_logrss
+#' @keywords internal
 bootstrap_logrss <- function(object, ...){
   UseMethod("bootstrap_logrss", object)
 }
@@ -575,6 +583,7 @@ bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle){
 #' @details This function is meant for internal use by `bootstrap_logrss()` and
 #' is not meant to be called by the user.
 #' @rdname boot1
+#' @keywords internal
 boot1.fit_logit <- function(object, x1, x2){
   dat <- object$model$model
   #If resampling factor levels, missing levels can cause prediction to fail

@@ -2,13 +2,13 @@
 % Please edit documentation in R/log_rss.R
 \name{log_rss}
 \alias{log_rss}
-\alias{log_rss.fit_logit}
+\alias{log_rss.glm}
 \alias{log_rss.fit_clogit}
 \title{Calculate log-RSS for a fitted model}
 \usage{
 log_rss(object, ...)
 
-\method{log_rss}{fit_logit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
+\method{log_rss}{glm}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 
 \method{log_rss}{fit_clogit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 }
@@ -66,9 +66,9 @@ rsf_data <- amt_fisher \%>\%
   filter(name == "Lupe") \%>\%
   make_track(x_, y_, t_) \%>\%
   random_points() \%>\%
-  extract_covariates(env_covar$elevation) \%>\%
-  extract_covariates(env_covar$popden) \%>\%
-  extract_covariates(env_covar$landuse) \%>\%
+  extract_covariates(amt_fisher_covar$elevation) \%>\%
+  extract_covariates(amt_fisher_covar$popden) \%>\%
+  extract_covariates(amt_fisher_covar$landuse) \%>\%
   mutate(lu = factor(landuse))
 
 # Fit RSF
