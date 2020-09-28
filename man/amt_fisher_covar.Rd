@@ -8,11 +8,11 @@
 A list with three where each entry is a \code{RasterLayer}.
 }
 \source{
-https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table/astgtm_v002
+\url{https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table/astgtm_v002}
 
-http://dup.esrin.esa.it/page_globcover.php
+\url{http://dup.esrin.esa.it/page_globcover.php]
 
-http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse
+\url{http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse}
 }
 \usage{
 amt_fisher_covar

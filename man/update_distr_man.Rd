@@ -62,23 +62,23 @@ m1 <- ssf_data \%>\%
 
 # Update forest step lengths (the reference level)
 forest_sl <- update_gamma(m1$sl_,
-                          beta_sl_ = m1$model$coefficients["sl_"],
-                          beta_log_sl_ = m1$model$coefficients["log_sl_"])
+                          beta_sl = m1$model$coefficients["sl_"],
+                          beta_log_sl = m1$model$coefficients["log_sl_"])
 
 # Update non-forest step lengths
 nonforest_sl <- update_gamma(m1$sl_,
-                             beta_sl_ = m1$model$coefficients["sl_"] +
+                             beta_sl = m1$model$coefficients["sl_"] +
                                m1$model$coefficients["forestnon-forest:sl_"],
-                             beta_log_sl_ = m1$model$coefficients["log_sl_"] +
+                             beta_log_sl = m1$model$coefficients["log_sl_"] +
                                m1$model$coefficients["forestnon-forest:log_sl_"])
 
 # Update forest turn angles (the reference level)
 forest_ta <- update_vonmises(m1$ta_,
-                             beta_cos_ta_ = m1$model$coefficients["cos_ta_"])
+                             beta_cos_ta = m1$model$coefficients["cos_ta_"])
 
 # Update non-forest turn angles
 nonforest_ta <- update_vonmises(m1$ta_,
-                                beta_cos_ta_ = m1$model$coefficients["cos_ta_"] +
+                                beta_cos_ta = m1$model$coefficients["cos_ta_"] +
                                   m1$model$coefficients["forestnon-forest:cos_ta_"])
 
 }
