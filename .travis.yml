@@ -3,13 +3,12 @@ language: r
 r: devel
 cache: packages
 warnings_are_errors: false
-sudo: required
-r_check_args: "--as-cran"
+sudo: true
 
 env:
  global:
-   - CRAN: http://cran.rstudio.com
-
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  - MAKEFLAGS="-j 2"
 
 r_packages:
 - devtools
@@ -34,5 +33,7 @@ env:
 
 notifications:
   email:
+    recipients:
+      - jsigner@gwdg.de
   on_success: change
   on_failure: change
