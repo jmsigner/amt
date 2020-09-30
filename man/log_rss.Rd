@@ -2,13 +2,13 @@
 % Please edit documentation in R/log_rss.R
 \name{log_rss}
 \alias{log_rss}
-\alias{log_rss.fit_logit}
+\alias{log_rss.glm}
 \alias{log_rss.fit_clogit}
 \title{Calculate log-RSS for a fitted model}
 \usage{
 log_rss(object, ...)
 
-\method{log_rss}{fit_logit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
+\method{log_rss}{glm}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 
 \method{log_rss}{fit_clogit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 }
@@ -52,46 +52,52 @@ the terms in the model formula exactly.
 }
 \examples{
 
+# RSF -------------------------------------------------------
 # Fit an RSF, then calculate log-RSS to visualize results.
 
 # Load packages
 library(ggplot2)
 
-# Load data
+#Load data
 data("amt_fisher")
-data("amt_fisher_lu")
 
 # Prepare data for RSF
 rsf_data <- amt_fisher \%>\%
-  filter(burst_ == 1) \%>\%
+  filter(name == "Lupe") \%>\%
   make_track(x_, y_, t_) \%>\%
   random_points() \%>\%
-  extract_covariates(amt_fisher_lu) \%>\%
-  mutate(lu = factor(landuse_study_area))
+  extract_covariates(amt_fisher_covar$elevation) \%>\%
+  extract_covariates(amt_fisher_covar$popden) \%>\%
+  extract_covariates(amt_fisher_covar$landuse) \%>\%
+  mutate(lu = factor(landuse))
 
 # Fit RSF
 m1 <- rsf_data \%>\%
-  fit_rsf(case_ ~ lu)
+  fit_rsf(case_ ~ lu + elevation + popden)
 
 # Calculate log-RSS
 # data.frame of x1s
-x1 <- data.frame(lu = sort(unique(rsf_data$lu)))
+x1 <- data.frame(lu = factor(50, levels = levels(rsf_data$lu)),
+                 elevation = seq(90, 120, length.out = 100),
+                 popden = mean(rsf_data$popden))
 # data.frame of x2 (note factor levels should be same as model data)
-x2 <- data.frame(lu = factor(21, levels = levels(rsf_data$lu)))
+x2 <- data.frame(lu = factor(50, levels = levels(rsf_data$lu)),
+                 elevation = mean(rsf_data$elevation),
+                 popden = mean(rsf_data$popden))
 # Calculate (use se method for confidence interval)
 logRSS <- log_rss(object = m1, x1 = x1, x2 = x2, ci = "se")
 
 # Plot
-ggplot(logRSS$df, aes(x = lu_x1, y = log_rss)) +
+ggplot(logRSS$df, aes(x = elevation_x1, y = log_rss)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray") +
-  geom_point() +
-  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.25) +
-  coord_cartesian(ylim = c(-20, 10)) +
-  xlab(expression("Land Use Category " * (x[1]))) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr), fill = "gray80") +
+  geom_line() +
+  xlab(expression("Elevation " * (x[1]))) +
   ylab("log-RSS") +
   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
   theme_bw()
 
+# SSF -------------------------------------------------------
 # Fit an SSF, then calculate log-RSS to visualize results.
 
  #Prepare data for SSF

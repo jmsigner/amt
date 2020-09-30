@@ -14,16 +14,19 @@ centroid
 coeffiecients
 CRS
 coerce
+covar
 datarepository
 doi
 DOP
 dplyr
 env
 EPSG
+epsg
 ecs
 et
 ETM
 Fagan
+Fieberg
 für
 Gitzen
 Glivenko
@@ -34,6 +37,7 @@ href
 https
 hispid
 isopleth
+iSSF
 isopleths
 jmsigner
 JRC
@@ -56,9 +60,11 @@ Millspaugh
 Mises
 movebank
 msd
+NAD
 od
 Ornstein
 Pekkarinen
+Pekania
 pennanti
 propgagates
 rasters
@@ -83,6 +89,7 @@ UDs
 Uhlenbeck
 uncorrelcated
 und
+usgs
 unitvar
 unnest
 Verein

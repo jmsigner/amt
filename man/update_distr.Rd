@@ -5,14 +5,20 @@
 \alias{update_ta_distr}
 \title{Update movement distributions}
 \usage{
-update_sl_distr(object, ...)
+update_sl_distr(object, beta_sl = "sl_", beta_log_sl = "log_sl_", ...)
 
-update_ta_distr(object, ...)
+update_ta_distr(object, beta_cos_ta = "cos_ta_", ...)
 }
 \arguments{
 \item{object}{\verb{[fit_clogit]} \cr A fitted iSSF model.}
 
+\item{beta_sl}{\verb{[character]} \cr The name of the coefficient of the step length.}
+
+\item{beta_log_sl}{\verb{[character]} \cr The name of the coefficient of the log of the step length.}
+
 \item{...}{Further arguments, none implemented.}
+
+\item{beta_cos_ta}{\verb{[character]} \cr The name of the coefficient of cosine of the turning angle.}
 }
 \value{
 An \code{amt_distr} object, which consists of a list with the \code{name} of
@@ -20,9 +26,6 @@ the distribution and its parameters (saved in \code{params}).
 }
 \description{
 Update tentative step length or turning angle distribution from a fitted iSSF.
-}
-\details{
-Blah blah
 }
 \examples{
 

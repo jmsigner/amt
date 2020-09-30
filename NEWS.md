@@ -2,7 +2,7 @@
 ## bug fixes
 
 ## updates
-- `hr_overlap` gained two new arguemnts `labels` and `consecutive.only`.
+- `hr_overlap` gained two new arguments `labels` and `consecutive.only`.
 
 ## bug fixes
 - `group_by` for random points works as expected.

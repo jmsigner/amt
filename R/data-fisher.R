@@ -22,8 +22,8 @@
 #' - elevation
 #' - population density.
 #'
-#' @source  https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table/astgtm_v002
-#' @source http://dup.esrin.esa.it/page_globcover.php
-#' @source http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse
+#' @source  \url{https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table/astgtm_v002}
+#' @source \url{http://dup.esrin.esa.it/page_globcover.php]
+#' @source \url{http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse}
 #' @format A list with three where each entry is a `RasterLayer`.
-"env_covar"
+"amt_fisher_covar"

@@ -106,22 +106,22 @@ overlap_base <- function(x, y) {
   }
 }
 
-#' @rdname hr_overlaps
+#' Different Methods to calculate home-range intersections
+#'
+#' @param x,y A probabilistic home-range estimate.
+#' @param type `[character]` \cr Which index should be calculated.
+#' @param conditional `[numeric]` \cr Condition on which number?
+#' @template dots_none
+#' @return \code{data.frame} with the isopleth level and area in units of the coordinate reference system.
+#' @name hr_intersection
 #' @export
 hr_intersection <- function (x, ...) {
   UseMethod ("hr_intersection", x )
 }
 
-# NOTE BY B Smith----------------
-# Missing hr_ba() is stopping package from building
-# Adding dummy here, but this should be addressed
 #' @export
-hr_ba <- function(...){
-
-}
-
-#' @export
-hr_ba.hr_prob <- function(x, y, type = "ba", conditional = 0.95, ...) {
+#' @rdname hr_intersection
+hr_intersection.hr_prob <- function(x, y, type = "ba", conditional = 0.95, ...) {
 
   if (!is(x, "hr_prob") & is(y, "hr_prob")) {
     stop("x, y need to be prob estimators.")

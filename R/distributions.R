@@ -230,9 +230,10 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' Update tentative step length or turning angle distribution from a fitted iSSF.
 #'
 #' @param object `[fit_clogit]` \cr A fitted iSSF model.
+#' @param beta_sl `[character]` \cr The name of the coefficient of the step length.
+#' @param beta_log_sl `[character]` \cr The name of the coefficient of the log of the step length.
+#' @param beta_cos_ta `[character]` \cr The name of the coefficient of cosine of the turning angle.
 #' @template dots_none
-#'
-#' @details Blah blah
 #'
 #' @author Brian J. Smith
 #'
@@ -280,7 +281,9 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #'
 #' @rdname update_distr
 #' @export
-update_sl_distr <- function(object, ...){
+update_sl_distr <- function(
+  object, beta_sl = "sl_",
+  beta_log_sl = "log_sl_", ...){
   #Check inputs
   if (!inherits(object, "fit_clogit")){
     stop("\'object\' must be of class \"fit_clogit\"")
@@ -299,7 +302,7 @@ update_sl_distr <- function(object, ...){
          exp = {
            ## Update rate
            # Fitted coef
-           beta_sl_ <- unname(object$model$coefficients["sl_"])
+           beta_sl_ <- unname(object$model$coefficients[beta_sl])
            # Check
            if (is.na(beta_sl_)){
              warning(paste("The covariate \'sl_\' did not appear in your model,",
@@ -307,12 +310,12 @@ update_sl_distr <- function(object, ...){
              beta_sl_ <- 0
            }
            # Update distribution
-           new_dist <- update_exp(object$sl_, beta_sl_ = beta_sl_)
+           new_dist <- update_exp(object$sl_, beta_sl = beta_sl_)
          },
          gamma = {
            ## New shape
            # Fitted coef
-           beta_log_sl_ <- unname(object$model$coefficients["log_sl_"])
+           beta_log_sl_ <- unname(object$model$coefficients[beta_log_sl])
            # Check
            if (is.na(beta_log_sl_)){
              warning(paste("The covariate \'log_sl_\' did not appear in your model,",
@@ -322,7 +325,7 @@ update_sl_distr <- function(object, ...){
 
            ## New scale
            # Fitted coef
-           beta_sl_ <- unname(object$model$coefficients["sl_"])
+           beta_sl_ <- unname(object$model$coefficients[beta_sl])
            # Check
            if (is.na(beta_sl_)){
              warning(paste("The covariate \'sl_\' did not appear in your model,",
@@ -334,8 +337,8 @@ update_sl_distr <- function(object, ...){
 
            #Create distribution
            new_dist <- update_gamma(object$sl_,
-                                    beta_sl_ = beta_sl_,
-                                    beta_log_sl_ = beta_log_sl_)
+                                    beta_sl = beta_sl_,
+                                    beta_log_sl = beta_log_sl_)
          })
 
   #Return
@@ -344,7 +347,7 @@ update_sl_distr <- function(object, ...){
 
 #' @rdname update_distr
 #' @export
-update_ta_distr <- function(object, ...){
+update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
   #Check inputs
   if (!inherits(object, "fit_clogit")){
     stop("\'object\' must be of class \"fit_clogit\"")
@@ -357,33 +360,35 @@ update_ta_distr <- function(object, ...){
   switch(tent_dist_name,
          unif = {
            # Note: same as von Mises, but with kappa = 0
-
            ## Update kappa
            # Fitted coef
-           beta_cos_ta_ <- unname(object$model$coefficients["cos_ta_"])
+           beta_cos_ta_ <- unname(object$model$coefficients[beta_cos_ta])
            # Check
            if (is.na(beta_cos_ta_)){
-             warning(paste("The covariate \'cos_ta_\' did not appear in your model,",
-                           "and the concentration parameter (kappa) was not updated."))
+             warning(
+               paste(
+                 "The covariate \'cos_ta_\' did not appear in your model,",
+                 "and the concentration parameter (kappa) was not updated."))
              beta_cos_ta_ <- 0
            }
            # Create distribution
            new_dist <- update_vonmises(make_vonmises_distr(kappa = 0),
-                                       beta_cos_ta_ = beta_cos_ta_)
+                                       beta_cos_ta = beta_cos_ta_)
          },
          vonmises = {
            ## Update kappa
            # Fitted coef
-           beta_cos_ta_ <- unname(object$model$coefficients["cos_ta_"])
+           beta_cos_ta_ <- unname(object$model$coefficients[beta_cos_ta])
            # Check
            if (is.na(beta_cos_ta_)){
-             warning(paste("The covariate \'cos_ta_' did not appear in your model,",
-                           "and the concentration parameter (kappa) was not updated."))
+             warning(paste(
+               "The covariate \'cos_ta_' did not appear in your model,",
+               "and the concentration parameter (kappa) was not updated."))
              beta_cos_ta_ <- 0
            }
 
            #Create distribution
-           new_dist <- update_vonmises(object$ta_, beta_cos_ta_ = beta_cos_ta_)
+           new_dist <- update_vonmises(object$ta_, beta_cos_ta = beta_cos_ta_)
          })
 
   #Return
@@ -395,9 +400,12 @@ update_ta_distr <- function(object, ...){
 #'
 #' Functions to update `amt_distr` from iSSF coefficients
 #'
+#' @param beta_sl `[numeric]` \cr The estimate of the coefficient of the step length.
+#' @param beta_log_sl `[numeric]` \cr The estimate of the coefficient of the log of the step length.
+#' @param beta_cos_ta `[numeric]` \cr The estimate of the coefficient of cosine of the turning angle.
 #' @param dist `[amt_distr]` The tentative distribution to be updated
-#' @param beta_* `[numeric]` The fitted model coefficients used to update the
 #' respective distributions.
+#' @name update_distr_man
 #'
 #' @details These functions are called internally by
 #' \code{\link{update_sl_distr}()} and \code{\link{update_ta_distr}()}.
@@ -434,32 +442,31 @@ update_ta_distr <- function(object, ...){
 #'
 #' # Update forest step lengths (the reference level)
 #' forest_sl <- update_gamma(m1$sl_,
-#'                           beta_sl_ = m1$model$coefficients["sl_"],
-#'                           beta_log_sl_ = m1$model$coefficients["log_sl_"])
+#'                           beta_sl = m1$model$coefficients["sl_"],
+#'                           beta_log_sl = m1$model$coefficients["log_sl_"])
 #'
 #' # Update non-forest step lengths
 #' nonforest_sl <- update_gamma(m1$sl_,
-#'                              beta_sl_ = m1$model$coefficients["sl_"] +
+#'                              beta_sl = m1$model$coefficients["sl_"] +
 #'                                m1$model$coefficients["forestnon-forest:sl_"],
-#'                              beta_log_sl_ = m1$model$coefficients["log_sl_"] +
+#'                              beta_log_sl = m1$model$coefficients["log_sl_"] +
 #'                                m1$model$coefficients["forestnon-forest:log_sl_"])
 #'
 #' # Update forest turn angles (the reference level)
 #' forest_ta <- update_vonmises(m1$ta_,
-#'                              beta_cos_ta_ = m1$model$coefficients["cos_ta_"])
+#'                              beta_cos_ta = m1$model$coefficients["cos_ta_"])
 #'
 #' # Update non-forest turn angles
 #' nonforest_ta <- update_vonmises(m1$ta_,
-#'                                 beta_cos_ta_ = m1$model$coefficients["cos_ta_"] +
+#'                                 beta_cos_ta = m1$model$coefficients["cos_ta_"] +
 #'                                   m1$model$coefficients["forestnon-forest:cos_ta_"])
 #'
-#' @rdname update_distr_man
 #' @export
-update_gamma <- function(dist, beta_sl_, beta_log_sl_){
+update_gamma <- function(dist, beta_sl, beta_log_sl){
   #Update shape
-  new_shape <- unname(dist$params$shape + beta_log_sl_)
+  new_shape <- unname(dist$params$shape + beta_log_sl)
   #Update scale
-  new_scale <- unname(1/((1/dist$params$scale) - beta_sl_))
+  new_scale <- unname(1/((1/dist$params$scale) - beta_sl))
   #Make new distribution
   new_dist <- make_gamma_distr(shape = new_shape, scale = new_scale)
   #Return
@@ -468,9 +475,9 @@ update_gamma <- function(dist, beta_sl_, beta_log_sl_){
 
 #' @rdname update_distr_man
 #' @export
-update_exp <- function(dist, beta_sl_){
+update_exp <- function(dist, beta_sl){
   #Update rate
-  new_rate <- unname(dist$params$rate - beta_sl_)
+  new_rate <- unname(dist$params$rate - beta_sl)
   #Make new distribution
   new_dist <- make_exp_distr(rate = new_rate)
   #Return
@@ -479,9 +486,9 @@ update_exp <- function(dist, beta_sl_){
 
 #' @rdname update_distr_man
 #' @export
-update_vonmises <- function(dist, beta_cos_ta_){
+update_vonmises <- function(dist, beta_cos_ta){
   #Update rate
-  new_conc <- unname(dist$params$kappa + beta_cos_ta_)
+  new_conc <- unname(dist$params$kappa + beta_cos_ta)
   #Make new distribution
   new_dist <- make_vonmises_distr(kappa = new_conc)
   #Return

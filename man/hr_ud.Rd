@@ -7,7 +7,9 @@
 hr_ud(x, ...)
 }
 \arguments{
-\item{x}{\verb{[hr_prob]} The home-range estiamte}
+\item{x}{\verb{[hr_prob]} The home-range estimate}
+
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Obtain the utilization distribution of a probabilistic home range
