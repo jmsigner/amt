@@ -8,21 +8,17 @@
 A list with three where each entry is a \code{RasterLayer}.
 }
 \source{
-\url{https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table/astgtm_v002}
+\verb{https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table}
 
-\url{http://dup.esrin.esa.it/page_globcover.php]
+\verb{http://dup.esrin.esa.it/page_globcover.php}
 
-\url{http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse}
+\verb{http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse}
 }
 \usage{
 amt_fisher_covar
 }
 \description{
-A list with three entries that correspond to the following three layer:
-\itemize{
-\item land use
-\item elevation
-\item population density.
-}
+A list with three entries that correspond to the following three layer: land
+use, elevation and population density.
 }
 \keyword{datasets}

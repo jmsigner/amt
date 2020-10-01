@@ -1,3 +1,26 @@
+# Version 0.1.3
+
+## Round 1
+
+### Test environments
+- local: Ubuntu 19.10, R 4.0.0
+- win builder: release and devel
+- travis-ci: release and devel
+- appveyor
+- macos-highsierra-release-cran on rhub
+
+### R CMD check results
+
+There were no errors or warnings. On some platforms I received a note indicating that I have to many imports from non-default packages (local check).
+
+### What changed
+
+- `hr_overlap` gained two new arguments `labels` and `consecutive.only`.
+- `log_rss` new CI
+- I was asked to move `Rdpack` to imports. 
+- `group_by` for random points works as expected.
+
+
 # Version 0.1.2
 
 ## Round 1

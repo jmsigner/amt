@@ -3,6 +3,8 @@
 
 ## updates
 - `hr_overlap` gained two new arguments `labels` and `consecutive.only`.
+- `log_rss` new CI
+- I was asked to move `Rdpack` to imports. 
 
 ## bug fixes
 - `group_by` for random points works as expected.

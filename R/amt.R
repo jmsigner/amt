@@ -16,6 +16,7 @@
 #' @importFrom rlang quo quos enquo quo_name
 #' @importFrom raster raster
 #' @import survival
+#' @import Rdpack
 #' @export
 
 methods::setOldClass(c("track_xy", "tbl_df", "tbl", "data.frame"))
