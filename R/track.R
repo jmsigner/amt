@@ -207,8 +207,37 @@ group_by.track_xyt <- function(.data, ..., .dots) {
 #' @export
 nest.track_xy <- function(.data, ..., .dots) {
  x <-  NextMethod()
- class(x) <- c("tbl_df", "tbl", "data.frame")
+ class(x) <- c("nested_track", "tbl_df", "tbl", "data.frame")
  x
+}
+
+#' @export
+unnest.nested_track <- function(.data, cols, ...) {
+  col <- rlang::as_label(rlang::enquo(cols))
+  if (length(col) > 1) {
+    stop("amt currently only supports unnesting one column")
+  }
+
+  dd <- .data[[col]]
+
+  # check length > 1
+  class_col_entries <- if (length(dd) > 1) {
+    class(dd[[1]])
+  } else {
+    all_classes_equal <- all(
+      sapply(dd[-1],
+             function(x) all(class(x) == class(dd[[1]]))))
+    if (all_classes_equal) {
+      class(dd[[1]])
+    } else {
+      stop("Not all elments are of the same class.")
+    }
+  }
+  # check they are all of the same class
+  class(.data) <- c("tbl_df", "tbl", "data.frame")
+  x <- unnest(.data, cols = !!rlang::enquo(cols))
+  class(x) <- class_col_entries
+  track_transfer_attr(dd[[1]], x)
 }
 
 #' @export

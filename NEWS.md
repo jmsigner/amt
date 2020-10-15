@@ -1,6 +1,9 @@
-# amt 0.1.3
-## bug fixes
+# amt 0.1.4
+## updates
+- `unnest` works for track_xy*
 
+
+# amt 0.1.3
 ## updates
 - `hr_overlap` gained two new arguments `labels` and `consecutive.only`.
 - `log_rss` new CI
