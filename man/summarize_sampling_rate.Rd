@@ -19,16 +19,14 @@ summarize_sampling_rate(x, ...)
 
 summarize_sampling_rate_many(x, ...)
 
-\method{summarize_sampling_rate_many}{track_xyt}(x, cols, ...)
+\method{summarize_sampling_rate_many}{track_xyt}(x, cols, time_unit = "auto")
 }
 \arguments{
 \item{x}{A \code{track_xyt}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{time_unit}{A character. The time unit in which the sampling rate is
-calculated. Acceptable values are \code{sec}, \code{min}, \code{hour}, \code{day}, and \code{auto}.
-If \code{auto} (the default) is used, the optimal unit is guessed.}
+\item{time_unit}{\verb{[character(1) = "auto"]} \cr Which time unit will be used.}
 
 \item{summarize}{A logical. If \code{TRUE} a summary is returned, otherwise raw
 sampling intervals are returned.}
@@ -36,7 +34,7 @@ sampling intervals are returned.}
 \item{as_tibble}{A logical. Should result be returned as \code{tibble} or as
 \code{table}.}
 
-\item{cols}{\verb{[character(>= 1)]} \cr Indicating columns to be used as grouping variables.}
+\item{cols}{Columns used for grouping.}
 }
 \value{
 Depending on \code{summarize} and \code{as_tibble}, a vector, table or tibble.
