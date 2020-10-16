@@ -104,4 +104,18 @@ expect_true(is(summarize(tr1, mean(x_)), "tbl_df"))
 expect_true(is(summarize(tr1, mean(x_)), "tbl"))
 expect_true(is(summarize(tr1, mean(x_)), "data.frame"))
 
+# unnest
+expect_true(is(x1 %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d), "track_xy"))
+expect_true(is(x1 %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d), "tbl_df"))
+expect_true(is(x1 %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d), "data.frame"))
+
+expect_true(is(tr1 %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d), "track_xy"))
+expect_true(is(tr1 %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d), "track_xyt"))
+expect_true(is(tr1 %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d), "tbl_df"))
+expect_true(is(tr1 %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d), "data.frame"))
+
+# make sure CRS is kept
+d1 <- deer %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d)
+expect_true(has_crs(d1))
+expect_equal(get_crs(d1), get_crs(d1))
 
