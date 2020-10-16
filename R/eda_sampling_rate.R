@@ -26,6 +26,10 @@ summarize_sampling_rate <- function(x, ...) {
 #' @export
 summarize_sampling_rate.track_xyt <- function(x, time_unit = "auto", summarize = TRUE, as_tibble = TRUE, ...) {
 
+  if (!time_unit %in% c("auto", "sec", "min", "hour", "day")) {
+    stop('`time_unit` should be one of: "auto", "sec", "min", "hour", "day"')
+  }
+
   if (nrow(x) < 2) {
     stop("summarize_sampling_rate: at least 2 relocations per unit are needed.")
   }
@@ -92,7 +96,8 @@ summarize_sampling_rate_many <- function(x, ...) {
 }
 
 #' @rdname summarize_sampling_rate
-#' @param cols `[character(>= 1)]` \cr Indicating columns to be used as grouping variables.
+#' @param time_unit `[character(1) = "auto"]` \cr Which time unit will be used.
+#' @param cols Columns used for grouping.
 #' @export
 #' @examples
 #' data(amt_fisher)
@@ -100,8 +105,9 @@ summarize_sampling_rate_many <- function(x, ...) {
 #' amt_fisher %>% mutate(yday = lubridate::yday(t_)) %>%
 #' summarize_sampling_rate_many(c("id", "yday"))
 #'
-summarize_sampling_rate_many.track_xyt <- function(x, cols, ...) {
-  ##ids <- rlang::enquos(...)
-  x %>% nest(data = -{{ cols }}) %>% mutate(ts = map(data, summarize_sampling_rate)) %>%
+summarize_sampling_rate_many.track_xyt <- function(x, cols, time_unit = "auto") {
+  #ids <- rlang::enquos(...)
+  x %>% nest(data = -{{cols }}) %>%
+    mutate(ts = map(data, summarize_sampling_rate, time_unit = time_unit)) %>%
     select(cols, ts) %>% unnest(cols = ts)
 }
