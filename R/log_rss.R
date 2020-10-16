@@ -204,7 +204,7 @@ log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000,
     }
     if (ci == "boot"){ #Bootstrap method
       cat("Generating bootstrapped confidence intervals...\n")
-      boot_res <- bootstrap_logrss.fit_logit(object = object, x1 = x1, x2 = x2,
+      boot_res <- bootstrap_logrss(object = object, x1 = x1, x2 = x2,
                                              ci_level = ci_level, n_boot = n_boot,
                                              mle = df$log_rss)
 
@@ -531,9 +531,9 @@ bootstrap_logrss <- function(object, ...){
 }
 
 #' @rdname bootstrap_logrss
-bootstrap_logrss.fit_logit <- function(object, x1, x2, ci_level, n_boot, mle){
+bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle){
   #Perform the bootstrap
-  arr <- replicate(n_boot, boot1.fit_logit(object, x1, x2), simplify = "array")
+  arr <- replicate(n_boot, boot1.glm(object, x1, x2), simplify = "array")
   #Lower percentile
   p_lwr <- (1 - ci_level)/2
   #Upper percentile
@@ -585,8 +585,13 @@ bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle){
 #' is not meant to be called by the user.
 #' @rdname boot1
 #' @keywords internal
-boot1.fit_logit <- function(object, x1, x2){
-  dat <- object$model$model
+boot1.glm <- function(object, x1, x2){
+  # not so nice workaround
+  object <- if (inherits(object, "fit_logit")) {
+    object$model
+  }
+  dat <- object$model
+
   #If resampling factor levels, missing levels can cause prediction to fail
   logrss <- NULL
   i <- 1
@@ -594,7 +599,8 @@ boot1.fit_logit <- function(object, x1, x2){
     #Resample
     newdat <- dat[sample(1:nrow(dat), nrow(dat), replace = TRUE), ]
     #Refit model
-    m <- fit_logit(formula = formula(object$model), data = newdat)
+    m <- glm(formula = formula(object), data = newdat, family = binomial(),
+             weights = stats::weights(object))
     try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
     i <- i + 1
     #Warn after 25 tries

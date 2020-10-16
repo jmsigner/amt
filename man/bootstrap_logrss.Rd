@@ -2,13 +2,13 @@
 % Please edit documentation in R/log_rss.R
 \name{bootstrap_logrss}
 \alias{bootstrap_logrss}
-\alias{bootstrap_logrss.fit_logit}
+\alias{bootstrap_logrss.glm}
 \alias{bootstrap_logrss.fit_clogit}
 \title{Bootstrap log-RSS estimate}
 \usage{
 bootstrap_logrss(object, ...)
 
-\method{bootstrap_logrss}{fit_logit}(object, x1, x2, ci_level, n_boot, mle)
+\method{bootstrap_logrss}{glm}(object, x1, x2, ci_level, n_boot, mle)
 
 \method{bootstrap_logrss}{fit_clogit}(object, x1, x2, ci_level, n_boot, mle)
 }
