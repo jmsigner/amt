@@ -532,7 +532,11 @@ bootstrap_logrss <- function(object, ...){
 
 #' @rdname bootstrap_logrss
 bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle){
+<<<<<<< HEAD
 
+=======
+  #Perform the bootstrap
+>>>>>>> 08106932c4dfafe76c7070edef19a18c5f8d1d0c
   arr <- replicate(n_boot, boot1.glm(object, x1, x2), simplify = "array")
   #Lower percentile
   p_lwr <- (1 - ci_level)/2
@@ -604,8 +608,13 @@ boot1.glm <- function(object, x1, x2){
     newdat <- dat[wp, ]
     newweights <- w[wp]
     #Refit model
+<<<<<<< HEAD
     m <- glm(formula = formula(object), data = newdat, family = binomial())#,
              #weights = rep(1, nrow(newdat)))
+=======
+    m <- glm(formula = formula(object), data = newdat, family = binomial(),
+             weights = stats::weights(object))
+>>>>>>> 08106932c4dfafe76c7070edef19a18c5f8d1d0c
     try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
     i <- i + 1
     #Warn after 25 tries
