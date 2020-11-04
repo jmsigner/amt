@@ -532,11 +532,7 @@ bootstrap_logrss <- function(object, ...){
 
 #' @rdname bootstrap_logrss
 bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle){
-<<<<<<< HEAD
-
-=======
   #Perform the bootstrap
->>>>>>> 08106932c4dfafe76c7070edef19a18c5f8d1d0c
   arr <- replicate(n_boot, boot1.glm(object, x1, x2), simplify = "array")
   #Lower percentile
   p_lwr <- (1 - ci_level)/2
