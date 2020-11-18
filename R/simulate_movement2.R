@@ -42,6 +42,8 @@ prep_and_check_simulations_to_rcpp <- function(
                                "_start"), "[", 1)
   data_names <- c(data_names, paste0(names(habitat), "_start"),
                   paste0(names(habitat), "_end"))
+
+  # resolution
   res <- raster::res(habitat)[1]
 
   # other

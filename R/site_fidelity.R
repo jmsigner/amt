@@ -18,14 +18,14 @@
 #' site_fidelity(ds)
 #' }
 
-site_fidelty <- function(x, ...) {
+site_fidelity <- function(x, ...) {
   UseMethod("site_fidelity", x)
 }
 
 
 #' @rdname site_fidelity
 #' @export
-site_fidelty.steps_xy <- function(x, n = 100, alpha = 0.05, ...) {
+site_fidelity.steps_xy <- function(x, n = 100, alpha = 0.05, ...) {
 
   # Some argument checking
   checkmate::assert_numeric(n, lower = 1, len = 1)
