@@ -237,11 +237,29 @@ as_telemetry <- function(x, ...) {
 #' @rdname coercion
 as_telemetry.track_xyt <- function(x, ...) {
   if (!amt::has_crs(x)) {
-    stop("track needs to have a CRS.")
+    stop("track needs to have a crs.")
   }
   x <- transform_coords(x, sp::CRS("+init=epsg:4326"))
-  ctmm::as.telemetry(data.frame(lon = x$x_, lat = x$y_, timestamp = x$t_))
 
+  dat_ctmm <- data.frame(
+    lon = x$x_, lat = x$y_, timestamp = x$t_,
+    individual.local.identifier = 1
+  )
+
+  if ("dop" %in% colnames(x))
+    dat_ctmm$dop <- x[["dop"]]
+  else if ("DOP" %in% colnames(x))
+    dat_ctmm$dop <- x[["DOP"]]
+  else if ("hdop" %in% colnames(x))
+    dat_ctmm$dop <- x[["hdop"]]
+  else if ("HDOP" %in% colnames(x))
+    dat_ctmm$dop <- x[["HDOP"]]
+
+  suppressMessages(
+    ctmm::as.telemetry(
+      dat_ctmm
+    )
+  )
 }
 
 
