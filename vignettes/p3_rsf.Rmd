@@ -4,6 +4,7 @@ author: "Johannes Signer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
+  %\VignetteKeyword{rsf}
   %\VignetteIndexEntry{Resource Selection Functions (RSF) with `amt`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
