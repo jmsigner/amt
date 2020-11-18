@@ -2,13 +2,12 @@
 % Please edit documentation in R/site_fidelity.R
 \name{site_fidelity}
 \alias{site_fidelity}
-\alias{site_fidelty}
-\alias{site_fidelty.steps_xy}
+\alias{site_fidelity.steps_xy}
 \title{Test for site fidelity of animal movement.}
 \usage{
-site_fidelty(x, ...)
+site_fidelity(x, ...)
 
-\method{site_fidelty}{steps_xy}(x, n = 100, alpha = 0.05, ...)
+\method{site_fidelity}{steps_xy}(x, n = 100, alpha = 0.05, ...)
 }
 \arguments{
 \item{x}{A track}

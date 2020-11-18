@@ -6,6 +6,7 @@
 \alias{hr_akde.track_xyt}
 \alias{hr_area}
 \alias{hr_area.hr}
+\alias{hr_area.akde}
 \alias{hr}
 \alias{hr_isopleths}
 \alias{hr_kde}
@@ -37,6 +38,8 @@ hr_akde(x, ...)
 hr_area(x, ...)
 
 \method{hr_area}{hr}(x, units = FALSE, ...)
+
+\method{hr_area}{akde}(x, units = FALSE, ...)
 
 hr_isopleths(x, ...)
 

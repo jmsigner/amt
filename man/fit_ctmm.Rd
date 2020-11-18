@@ -4,12 +4,14 @@
 \alias{fit_ctmm}
 \title{Fit a continuous time movement model with \code{ctmm}}
 \usage{
-fit_ctmm(x, model, ...)
+fit_ctmm(x, model, uere = NULL, ...)
 }
 \arguments{
 \item{x}{\code{[track_xyt]} \cr A track created with \code{make_track} that includes time.}
 
 \item{model}{\verb{[character(1)="bm"]\{"iid", "bm","ou","ouf", "auto"\}} \cr The autocorrelation model that should be fit to the data. \code{iid} corresponds to uncorrelated independent data, \code{bm} to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process. \code{auto} will use model selection with AICc to find the best model.}
+
+\item{uere}{User Equivalent Range Error, see \code{?ctmm::uere} for more details.}
 
 \item{...}{Additional parameters passed to \code{ctmm::ctmm.fit} or \code{ctmm::ctmm.select} for \code{model = "auto"}}
 }

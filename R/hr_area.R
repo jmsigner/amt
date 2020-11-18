@@ -21,3 +21,13 @@ hr_area.RasterLayer <- function(x, level = 0.95, ...) {
     sum(x[] <= level) * prod(raster::res(x))
 }
 
+
+#' @export
+#' @rdname hr
+hr_area.akde <- function(x, units = FALSE, ...) {
+  xx <- tibble::as_tibble(sf::st_set_geometry(hr_isopleths(x), NULL))
+  if (!units) {
+    xx$area <- as.numeric(xx$area)
+  }
+  xx
+}
