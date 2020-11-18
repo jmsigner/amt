@@ -23,8 +23,7 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   no <- 1:nrow(x)
   if (type == "k") {
     if (n > nrow(x)) {
-      n <- nrow(x)
-      warning(paste0("hr_locoh, type k, n > number of points, set n to number of points (", n, ")"))
+      stop(paste0("hr_locoh, type k, n > number of points"))
     }
     ## 1. calc dist
     ## 2. order by dist

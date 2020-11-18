@@ -26,12 +26,18 @@ hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
   suppressMessages(suppressWarnings(dat <- as_telemetry(x)))
   ud <- ctmm::akde(dat, model)
 
-  r <- 1 - ctmm::raster(ud, DF = "CDF")
-  r <- raster::projectRaster(r, to = trast)
-  r <- raster::resample(r, trast)
-  v <- raster::getValues(r)
-  v[is.na(v)] <- 0
-  r <- raster::setValues(r, v)
+  ctmm2rast <- function(x, trast) {
+    r <- ctmm::raster(x)
+    r <- raster::projectRaster(r, to = trast)
+    r <- raster::resample(r, trast)
+    v <- raster::getValues(r)
+    v[is.na(v)] <- 0
+    r <- raster::setValues(r, v)
+    r
+  }
+
+  point.est <- ctmm2rast()
+
 
   res <- list(ud = r, model = model, levels = levels, trast = trast, estimator = "adke",
               crs = get_crs(x),
