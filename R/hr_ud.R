@@ -10,6 +10,7 @@ hr_ud <- function(x, ...) {
 
 #' @export
 hr_ud.hr_prob <- function(x, ...) {
-  x$ud
+  ud <- x$ud
+  ud[] <- ud[] / sum(ud[], na.rm = TRUE)
 }
 
