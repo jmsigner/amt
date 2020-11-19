@@ -19,7 +19,7 @@ hr_mcp.track_xy <- function(x, levels = 0.95, keep.data = TRUE, ...) {
   qts <- stats::quantile(sqd, levels)
   geometry <- lapply(qts, function(i) chull_mcp(xy[sqd <= i, ]))
   geometry <- sf::st_as_sfc(geometry, crs = as.character(get_crs(x)))
-  mcps <- sf::st_sf(level = levels, area = sf::st_area(geometry), geometry)
+  mcps <- sf::st_sf(level = levels, what = "estimate", area = sf::st_area(geometry), geometry)
   mcp <- list(mcp = mcps, levels = levels, estimator = "mcp",
               crs = get_crs(x),
               data = if (keep.data) x else NULL)

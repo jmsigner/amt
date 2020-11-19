@@ -49,8 +49,10 @@ hr_isopleths.RasterLayer <- function (x, level, ...) {
   ## Set proj4string
   sp::proj4string(con) <- raster::projection(x)
 
-  df <- data.frame(level = level,
-                   area = rgeos::gArea(con, byid = TRUE))
+  df <- data.frame(
+    level = level,
+    what = "estimate",
+    area = rgeos::gArea(con, byid = TRUE))
   row.names(df) <- 1:length(level)
   con <- sp::SpatialPolygonsDataFrame(con, df)
 
@@ -85,10 +87,10 @@ hr_isopleths.akde <- function(x, conf.level = 0.95, ...) {
     mutate(
       level = rep(x$levels, each = 3),
       what = rep(c(paste0("lci (", conf.level, ")"),
-                   "point estimate",
+                   "estimate",
                    paste0("uci (", conf.level,")")),
                  length(x$levels)),
-      area = st_area(.)) %>%
+      area = sf::st_area(.)) %>%
     select(level, what, area, geometry)
 
 }

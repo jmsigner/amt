@@ -85,8 +85,12 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     ## buffer is necessary, to overcome some topology errors if the polygon is quasi a line
     p1 <- lapply(1:wlevel[i], function(i) sp::Polygon(mm[[i]]@polygons[[1]]@Polygons[[1]]@coords))
     ff <- sp::SpatialPolygons(list(sp::Polygons(p1, ID=1)))
-
-    qq[[i]] <- rgeos::gBuffer(rgeos::gUnaryUnion(ff), width=0, id=i)
+    ff <- if (length(ff@polygons) == 1) {
+      ff
+    } else {
+      rgeos::gUnaryUnion(ff)
+    }
+    qq[[i]] <- rgeos::gBuffer(ff, width=0, id=i)
   }
 
   rr <- do.call(sp::rbind.SpatialPolygons, qq)
@@ -101,8 +105,10 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
 
   qq2 <- sf::st_as_sf(qq2)
   qq2$area <- sf::st_area(qq2)
+  qq2$what <- "estimate"
 
-  out <- list(locoh = qq2, levels = levels, type = type, n = n, estimator = "locoh",
+  out <- list(locoh = qq2[, c("level", "what", "area", "geometry")],
+              levels = levels, type = type, n = n, estimator = "locoh",
               crs = get_crs(x),
               data = if (keep.data) x else NULL)
   class(out) <- c("locoh", "hr_geom", "hr", "list")
