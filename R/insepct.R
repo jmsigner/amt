@@ -33,6 +33,11 @@ inspect.track_xy <- function(x, popup = NULL, cluster = TRUE, ...) {
   } else {
     stop("x is not projected.")
   }
+
+  if (!requireNamespace("leaflet", quietly = TRUE)) {
+    stop("Please install package `leaflet`.")
+  }
+
   leaflet::leaflet(x) %>%
     leaflet::addTiles(group = "OSM (default)") %>%
     leaflet::addProviderTiles(leaflet::providers$OpenSeaMap, group = "OpenSeaMap") %>%

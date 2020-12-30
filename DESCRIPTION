@@ -21,12 +21,8 @@ Imports:
     ctmm,
     dplyr (>= 0.7.0),
     fitdistrplus,
-    FNN,
-    KernSmooth,
-    leaflet,
     lubridate,
     magrittr,
-    maptools,
     methods,
     purrr,
     raster,
@@ -44,7 +40,10 @@ Suggests:
   broom,
   ggplot2,
   geosphere,
+  KernSmooth,
+  FNN,
   bcpa,
+  leaflet,
   devtools,
   moveHMM,
   move,
@@ -52,7 +51,8 @@ Suggests:
   spacetime,
   trajectories,
   knitr,
-  rmarkdown, tinytest
+  rmarkdown, tinytest,
+  maptools
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

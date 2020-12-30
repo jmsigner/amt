@@ -62,6 +62,9 @@ time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
   }
   res <- rep(NA, length(idx))
 
+  if (!requireNamespace("maptools", quietly = TRUE)) {
+    stop("Please install package `maptools` first.")
+  }
 
   if (any(!idx)) {
 

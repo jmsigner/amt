@@ -28,6 +28,10 @@ hr_kde.track_xy <- function(
   rncol <- raster::ncol(trast)
   rnrow <- raster::nrow(trast)
 
+  if (!requireNamespace("KernSmooth", quietly = TRUE)) {
+    stop("Please install the package `KernSmooth` first.")
+  }
+
   # Create Raster
   kde <- KernSmooth::bkde2D(as.matrix(x[, c("x_", "y_")]), bandwidth = h,
                             range.x = list(xrange, yrange),
@@ -204,6 +208,10 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
   } else if (rescale == "xvar") {
     # standardize x and y by
     ys <- (ys / sd(ys)) * sd(xs)
+  }
+
+  if (!requireNamespace("KernSmooth", quietly = TRUE)) {
+    stop("Please install the package `KernSmooth` first.")
   }
 
   hx <- KernSmooth::dpik(xs, ...)

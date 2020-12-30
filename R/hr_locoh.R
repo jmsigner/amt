@@ -28,6 +28,9 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     ## 1. calc dist
     ## 2. order by dist
     ## 3. take n nearest
+    if (!requireNamespace("FNN", quietly = TRUE)) {
+      stop("Please install package `FNN` first.")
+    }
     aa <- FNN::get.knn(x[, c("x_", "y_")], k = n)$nn.index
     #"r" and "a" methods return a list -- split so that this is the same
     aa <- split(aa, 1:nrow(aa))
