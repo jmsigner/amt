@@ -83,14 +83,13 @@ hr_isopleths.akde <- function(x, conf.level = 0.95, ...) {
   checkmate::assert_number(conf.level, lower = 0, upper = 1)
   res <- ctmm::SpatialPolygonsDataFrame.UD(x$akde, level.UD = x$levels,
                                            conf.level = conf.level)
-  sf::st_as_sf(res) %>% select(-name) %>%
-    mutate(
-      level = rep(x$levels, each = 3),
-      what = rep(c(paste0("lci (", conf.level, ")"),
-                   "estimate",
-                   paste0("uci (", conf.level,")")),
-                 length(x$levels)),
-      area = sf::st_area(.)) %>%
-    select(level, what, area, geometry)
-
+  res1 <- sf::st_as_sf(res)
+  res1 <- res1[, setdiff(names(res1), "name")]
+  res1$level <- rep(x$levels, each = nrow(res1))
+  res1$what <- rep(c(paste0("lci (", conf.level, ")"),
+                     "estimate",
+                     paste0("uci (", conf.level,")")),
+                   length(x$levels))
+  res1$area = sf::st_area(res1)
+  res1[, c("level", "what", "area", "geometry")]
 }

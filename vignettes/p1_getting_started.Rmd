@@ -4,7 +4,7 @@ author: "Johannes Signer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting started with amt}
+  %\VignetteIndexEntry{Getting started with `amt`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -238,7 +238,8 @@ We now want to resample each track to 30 minutes with a tolerance of 5 minutes a
 x <- trk1$data[[1]]
 
 # apply the data analysis
-x %>% track_resample(rate = minutes(30), tolerance = minutes(5)) %>% steps_by_burst()
+x %>% track_resample(rate = minutes(30), tolerance = minutes(5)) %>%
+  steps_by_burst()
 ```
 We now want to apply exactly the same logic to all animals. We can do this by using a `map` and save the results to a new column using `mutate`.
 
@@ -253,7 +254,7 @@ trk2
 Finally, we can select `id` and `steps`, unnest the new `data_frame` and create a plot of the step-length distributions.
 
 ```{r}
-trk2 %>% select(id, steps) %>% unnest(cols = "steps") %>% 
+trk2 %>% select(id, steps) %>% unnest(cols = steps) %>% 
   ggplot(aes(sl_, fill = factor(id))) + geom_density(alpha = 0.4)
 ```
 

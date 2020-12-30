@@ -1,6 +1,8 @@
 # amt 0.1.4
 ## updates
 - `unnest` works for track_xy*
+- Major updates for `hr_akde`. This includes that now CI are available for  
+-
 
 
 # amt 0.1.3

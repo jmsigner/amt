@@ -13,4 +13,4 @@ x2 <- data.frame(sh.forest = 1)
 rss1 <- log_rss(f1, x1, x2)
 rss2 <- log_rss(f2, x1, x2)
 
-tinytest::expect_equal(rss1, rss2)
+expect_equal(rss1, rss2)

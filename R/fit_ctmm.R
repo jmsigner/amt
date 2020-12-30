@@ -25,7 +25,7 @@ fit_ctmm <- function(x, model, uere = NULL, ...) {
   use_error <- !is.null(uere)
 
   if (use_error) {
-    stop("requested to use UERE, but no (H)DOP is present.")
+  #  stop("requested to use UERE, but no (H)DOP is present.")
     ctmm::uere(dat) <- uere
   }
 

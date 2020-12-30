@@ -105,7 +105,7 @@ summarize_sampling_rate_many <- function(x, ...) {
 #' amt_fisher %>% mutate(yday = lubridate::yday(t_)) %>%
 #' summarize_sampling_rate_many(c("id", "yday"))
 #'
-summarize_sampling_rate_many.track_xyt <- function(x, cols, time_unit = "auto") {
+summarize_sampling_rate_many.track_xyt <- function(x, cols, time_unit = "auto", ...) {
   #ids <- rlang::enquos(...)
   x %>% nest(data = -{{cols }}) %>%
     mutate(ts = map(data, summarize_sampling_rate, time_unit = time_unit)) %>%

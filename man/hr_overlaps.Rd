@@ -9,21 +9,36 @@
 \usage{
 hr_overlap(x, ...)
 
-\method{hr_overlap}{hr}(x, y, ...)
+\method{hr_overlap}{hr}(x, y, type = "hr", conditional = FALSE, ...)
 
-\method{hr_overlap}{list}(x, consecutive.only = TRUE, labels = NULL, ...)
+\method{hr_overlap}{list}(
+  x,
+  type = "hr",
+  conditional = FALSE,
+  which = "consecutive",
+  labels = NULL,
+  ...
+)
 }
 \arguments{
 \item{x, y}{\code{hr} A home-range estimate}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{consecutive.only}{\verb{[logical=TRUE]} \cr Should only consecutive overlaps be calculated or all combinations?}
+\item{type}{\verb{[character](1)} \cr Type of index, should be one of \code{hr}, \code{phr},
+\code{vi}, \code{ba}, \code{udoi}, or \code{hd}.}
+
+\item{conditional}{\verb{[logical](1)} \cr Whether or not conditional UDs are
+used. If \code{TRUE} levels from that were used to estimate home ranges will be
+used.}
+
+\item{which}{\verb{[character = "consecutive"]} \cr Should only consecutive overlaps be calculated or all combinations?}
 
 \item{labels}{\verb{[character=NULL]} \cr Labels for different instances. If \code{NULL} (the default) numbers will be used.}
 }
 \value{
-\code{data.frame} with the isopleth level and area in units of the coordinate reference system.
+\code{data.frame} with the isopleth level and area in units of the
+coordinate reference system.
 }
 \description{
 Different Methods to calculate home-range overlaps

@@ -604,7 +604,8 @@ boot1.glm <- function(object, x1, x2){
     newdat <- dat[wp, ]
     newweights <- w[wp]
     #Refit model
-    m <- glm(formula = formula(object), data = newdat, family = binomial())#,
+    m <- stats::glm(formula = formula(object), data = newdat,
+                    family = stats::binomial())#,
              #weights = rep(1, nrow(newdat)))
     try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
     i <- i + 1

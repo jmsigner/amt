@@ -23,6 +23,7 @@ Other contributors:
   \item Brian Smith [contributor]
   \item Bjoern Reineking [contributor]
   \item Ulrike Schlaegel [contributor]
+  \item John Fieberg [contributor]
   \item Scott LaPoint [data contributor]
 }
 

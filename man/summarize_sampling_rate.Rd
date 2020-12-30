@@ -19,7 +19,7 @@ summarize_sampling_rate(x, ...)
 
 summarize_sampling_rate_many(x, ...)
 
-\method{summarize_sampling_rate_many}{track_xyt}(x, cols, time_unit = "auto")
+\method{summarize_sampling_rate_many}{track_xyt}(x, cols, time_unit = "auto", ...)
 }
 \arguments{
 \item{x}{A \code{track_xyt}.}

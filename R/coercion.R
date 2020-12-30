@@ -251,9 +251,9 @@ as_telemetry.track_xyt <- function(x, ...) {
   else if ("DOP" %in% colnames(x))
     dat_ctmm$dop <- x[["DOP"]]
   else if ("hdop" %in% colnames(x))
-    dat_ctmm$dop <- x[["hdop"]]
+    dat_ctmm$hdop <- x[["hdop"]]
   else if ("HDOP" %in% colnames(x))
-    dat_ctmm$dop <- x[["HDOP"]]
+    dat_ctmm$hdop <- x[["HDOP"]]
 
   suppressMessages(
     ctmm::as.telemetry(
