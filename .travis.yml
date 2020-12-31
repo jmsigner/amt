@@ -11,8 +11,10 @@ env:
   - MAKEFLAGS="-j 2"
 
 r_packages:
+- usethis
 - devtools
 - ade4
+
 
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
