@@ -1,0 +1,190 @@
+---
+title: "Calculating home-range overlaps with `amt`"
+author: "Johannes Signer and John Fieberg"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteKeyword{hr-overlap}
+  %\VignetteIndexEntry{Calculating home-range overlaps with `amt`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+## Background
+
+Several different indices have been proposed for measuring home-range overlap. These are reviewed
+by Fieberg & Kochany
+(2005)^[https://wildlife.onlinelibrary.wiley.com/doi/abs/10.2193/0022-541X%282005%2969%5B1346%3AQHOTIO%5D2.0.CO%3B2].
+There are two general approaches used to calculate home-range overlap: 1) calculate the percentage overlap at a given isopleth level (this works for geometric and probabilistic home ranges) or 2) calculate an index of
+similarity between the two utilization distributions (UD; this only works for
+probabilistic estimators)^[For a discussion of geometric vs. probabilistic estimators see here: https://www.biorxiv.org/content/10.1101/2020.08.19.256859v2].
+
+## Implementation in `amt`
+
+`amt` currently implements all methods to calculate overlaps that were reviewed by Fieberg and Kochanny (2005). These are: 
+
+- `hr`: That is the proportion of the home range of instance $i$ that overlaps with the home range of instance $j$. This measure does not rely on a UD and is directional (i.e., $HR_{i,j} \ne HR_{j,i}$) and bound between 0 (no overlap) and 1 (complete overlap)
+- `phr`: Is the probability of instance $j$ being located in the home range of instance $i$. `phr` is also directional and bounded between 0 (no overlap) and 1 (complete overlap)
+- `vi`: The volumetric intersection between two UDs.
+- `ba`: The Bhattacharyya's affinity between two UDs. 
+- `udoi`: A UD overlap index. 
+- `hd`: Hellinger's distance between two UDs. 
+
+These overlap indices can be calculated with the function `hr_overlap`. The type of overlap measure an be controlled with the argument `type`. 
+
+All of these estimators can be calculated for a given home-range level (i.e., using conditional UDs). Whether or not a conditional overlap is desired or not, can be controlled with the argument `conditional`. For `hr`, the argument `conditional` has no effect and the isopleths used for home-range estimation will always be used for the overlap calculation. 
+
+The function `hr_overlap()` can also be provided with a list of home-range estimates in situations when overlap between many different instances are required. Currently, there are three options for calcualting overlap among multiple instances: `which = "all"` calculates overlap for each pair of home ranges, `which = "one_to_all"` calculates overlap between the first element in the list and all others, and `which = "consecutive"` will calculate overlap between consecutive elements in the list. 
+
+
+## Examples
+
+First we need to load the required packages: 
+
+```{r}
+
+```
+
+### Two instances
+
+We will use tracking data from Fishers from New York State, USA. 
+
+```{r}
+leroy <- amt_fisher %>% filter(name == "Leroy")
+lupe <- amt_fisher %>% filter(name == "Lupe")
+```
+
+Create a template raster for the KDE
+
+```{r}
+trast <- make_trast(amt_fisher %>% filter(name %in% c("Leroy", "Lupe")), res = 50)
+```
+
+And estimate home-ranges for both fishers
+
+```{r}
+hr_leroy <- hr_kde(leroy, trast = trast, levels = c(0.5, 0.9))
+hr_lupe <- hr_kde(lupe, trast = trast, levels = c(0.5, 0.9))
+```
+
+`hr` and `phr` are directional, this means the order matters. For all other overlap measures the order does not matter. 
+
+```{r}
+hr_overlap(hr_leroy, hr_lupe, type = "hr") 
+hr_overlap(hr_lupe, hr_leroy, type = "hr")
+```
+
+By default `conditional = FALSE` and the full UD is used.
+
+```{r}
+hr_overlap(hr_leroy, hr_lupe, type = "phr", conditional = FALSE) 
+hr_overlap(hr_lupe, hr_leroy, type = "phr", conditional = FALSE)
+```
+
+If we set `conditional = TRUE`, the overlap is measured at home-range levels that were specified during estimation. 
+
+```{r}
+hr_overlap(hr_leroy, hr_lupe, type = "phr", conditional = TRUE) 
+hr_overlap(hr_lupe, hr_leroy, type = "phr", conditional = TRUE)
+```
+
+Note, for the remaining overlap measures the order does not matter. Below
+we show this for the volumnic intersection (`type = "vi"`) as an example. 
+
+```{r}
+hr_overlap(hr_lupe, hr_leroy, type = "vi", conditional = FALSE)
+hr_overlap(hr_leroy, hr_lupe, type = "vi", conditional = FALSE)
+```
+
+### More than two instances
+
+Lets calculate daily ranges for Lupe and then and then see how different
+ranges overlap with each other.
+
+We have to use the same template raster in order to make ranges comparable. 
+
+```{r}
+trast <- make_trast(amt_fisher, res = 100) 
+```
+
+Then we add a new column with day and calculate for each day a `KDE` home range. 
+
+```{r}
+dat <- amt_fisher %>% 
+  nest(data = -name) %>% 
+  mutate(kde = map(data, hr_kde, trast = trast, levels = c(0.5, 0.95, 0.99)))
+```
+  
+Now we can use the list column with the home-range estimates to calculate
+overlap between the different home-ranges. By default `which = "consecutive"`, this means for each list entry (= home-range estimate) the overlap to the next entry will be calculated.
+
+```{r}
+hr_overlap(dat$kde, type = "vi")
+```
+
+
+This works as well, if we set `conditional = TRUE`:
+
+```{r}
+hr_overlap(dat$kde, type = "vi", conditional = TRUE)
+```
+
+Sometimes it can be useful to provide meaningful labels. We can do this with
+the `labels` argument.
+
+```{r}
+hr_overlap(dat$kde, type = "vi", labels = dat$name)
+```
+
+Different options exist for the argument `which`. For example, `which = "one_to_all"` calculates the overlap between the first and all other home ranges. In our example, the home range of the first day is compared with home-ranges of consecutive days:
+**I WOULD RECOMMEND PLOTTING THE FIRST SET OF HOME RANGES (CALCUALTING USING CONSECUTIVE DAYS).**
+**EITHER TO REPLACE THE PLOT BELOW OR IN ADDITION TO IT**
+
+```{r}
+hr_to_sf(dat, kde)
+ov1 <- hr_overlap(dat$kde, type = "vi", labels = dat$name, which = "one_to_all")
+ggplot(ov1, aes(x = to, y = overlap)) + geom_point()
+```
+
+Finally, we can calculate the overlap between all elements inside a list (use
+`which = "all"` for this). We will use only the first 8 days here to speed up
+computation:
+
+
+This can nicely be illustrated as a network. Labels are days since the first
+day. **THIS IS REALLY COOOL. IT WOULD BE AWESOME TO INCLUDE AN EXAMPLE WITH MULITPLE INDIVIDUALS RATHER THAN MULTIPLE DAYS**
+
+```{r}
+
+ov2 <- hr_overlap(dat$kde, type = "vi", labels = dat$name, which = "all", 
+                  conditional = TRUE)
+graph <- as_tbl_graph(ov2) %>% 
+  mutate(Popularity = centrality_degree(mode = 'in')) 
+
+ggraph(graph, layout = 'stress') + 
+  geom_edge_fan(aes(col = overlap), show.legend = TRUE) + 
+  geom_node_point(size = 4) + 
+  geom_node_label(aes(label = name), repel = TRUE) +
+  facet_edges(~ levels) + 
+  theme_light() +
+  scale_edge_color_gradient(low = "white", high = "red")
+```
+  
+## Overlap between a home range and a simple feature
+
+The function `hr_overlap_feature` allows to calcualte percentage overlap ($HR$ index) between a home 
+
+## Todo
+
+ctmm implements overlap for stationary dist with ci: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13027
+
+
+## Session
+```{r}
+sessioninfo::session_info()
+```
+

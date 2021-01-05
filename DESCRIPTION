@@ -39,6 +39,7 @@ Suggests:
   adehabitatLT,
   broom,
   ggplot2,
+  ggraph,
   geosphere,
   KernSmooth,
   FNN,
