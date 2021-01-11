@@ -191,8 +191,7 @@ log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000,
       #Subtract x2 model matrix from each row of x1
       delta_mm <- sweep(data.matrix(x1_mm), 2, data.matrix(x2_mm))
       #Get variance of log-RSS prediction
-      var_pred <- apply(delta_mm, 1,
-            function(x) {sum(x %*% diag(m_vcov) %*% t(x))})
+      var_pred <- diag(delta_mm %*% m_vcov %*% t(delta_mm))
       #Get standard error of prediction
       logrss_se <- unname(sqrt(var_pred))
       #Get critical value
@@ -293,8 +292,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
       #Subtract x2 model matrix from each row of x1
       delta_mm <- sweep(data.matrix(x1_mm), 2, data.matrix(x2_mm))
       #Get variance of log-RSS prediction
-      var_pred <- apply(delta_mm, 1,
-                        function(x) {sum(x %*% diag(m_vcov) %*% t(x))})
+      var_pred <- diag(delta_mm %*% m_vcov %*% t(delta_mm))
       #Get standard error of prediction
       logrss_se <- unname(sqrt(var_pred))
       #Get critical value
