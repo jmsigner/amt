@@ -120,6 +120,8 @@ prep_and_check_simulations_to_rcpp <- function(
 #' @param raster `[logical(1) = TRUE]` \cr Should a `RasterLayer` be returned.
 #' @param stop `[integer(1)=1]{0,1}` \cr What happens when the animal steps out of the landscape.
 #'
+#' @rdname dispersal_kernel
+#'
 #' @export
 #'
 dispersal_kernel <- function(
@@ -177,6 +179,70 @@ dispersal_kernel <- function(
   out
 }
 
+#' @rdname dispersal_kernel
+#' @param model `[fit_clogit]` A fitted (i)SSF model
+#'
+#' @author Brian J. Smith
+#'
+#' @examples
+#'
+dk <- dispersal_kernel.fit_clogit(model = m1,
+                            habitat = hab,
+                            start = raster_center(hab),
+                            max.dist = 5000,
+                            init.dir = amt::as_rad(155),
+                            raster = TRUE,
+                            standardize = TRUE,
+                            stop = 0)
+# Plot
+plot(dk$dispersal_kernel)
+
+#'
+#' @export
+dispersal_kernel.fit_clogit <- function(model,
+                                        habitat = NULL, other.vars = NULL,
+                                        start, max.dist,
+                                        init.dir = amt::as_rad(45),
+                                        standardize = TRUE, raster = TRUE,
+                                        stop = 0) {
+  # Check that object is of correct class
+  if(!inherits(model, "fit_clogit")){
+    stop("`model` must be of class \"fit_clogit\".")
+  }
+
+  # Extract formula from model
+  # Some notes:
+  #     1. Only need RHS
+  #     2. Need to drop strata(step_id_) from model
+
+  # Get the original formula
+  f_orig <- model$model$formula
+  # Get term labels
+  tl <- attr(terms(f_orig), "term.labels")
+  # Get the position of the strata variable
+  strat_pos <- grep("strata(", tl, fixed = TRUE)
+  # Drop strata variable from terms (also drops response)
+  f_dropped <- drop.terms(terms(f_orig), strat_pos)
+  # Reformulate
+  f_new <- reformulate(attr(f_dropped, "term.labels"))
+
+  # Get coefficients from model
+  B <- coef(model)
+
+  # Pass everything along to default dispersal_kernel function
+  dk <- dispersal_kernel(formula = f_new,
+                         coefs = B,
+                         habitat = habitat,
+                         other.vars = other.vars,
+                         start = start,
+                         max.dist = max.dist,
+                         init.dir = init.dir,
+                         standardize = standardize,
+                         raster = raster,
+                         stop = stop)
+  # Return
+  return(dk)
+}
 
 #' Simulate a trajectory
 #'
@@ -289,7 +355,49 @@ simulate_ud_from_dk <- function(obj, n = 1e3, other.vars = NULL) {
    cl <- table(cells)
    ud[as.numeric(names(cl))] <- cl
    ud
- }
+}
+
+
+#' Find the center of a Raster*
+#'
+#' Finds the center of a Raster* object
+#'
+#' @param r `[Raster*]`
+#'
+#' @details This helper function is useful for initializing a simulated track
+#' in the center of the raster.
+#'
+#' @authors Brian J. Smith
+#'
+#' @return Returns a numeric vector of length 2 with (x, y) coordinates of the
+#' raster center.
+#'
+#' @examples
+#'
+#' # Load data
+#' data(sh_forest)
+#'
+#' # Calculate center
+#' raster_center(sh_forest)
+#'
+#' @export
+raster_center <- function(r) {
+  # Check that object is a raster
+  if(!inherits(r, "BasicRaster")){
+    stop("The object passed as `r` must be a Raster* object.")
+  }
+
+  # Get extent of r
+  ext <- extent(r)
+
+  # Calculate x-coord
+  x <- mean(c(ext@xmin, ext@xmax))
+  # Calculate y-coord
+  y <- mean(c(ext@ymin, ext@ymax))
+
+  # Return
+  return(c(x, y))
+}
 
 
 # #### OLD
@@ -399,3 +507,5 @@ simulate_ud_from_dk <- function(obj, n = 1e3, other.vars = NULL) {
 #    out
 #  }
 #
+
+
