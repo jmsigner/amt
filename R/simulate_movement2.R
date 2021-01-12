@@ -147,18 +147,19 @@ dispersal_kernel <- function(
     stop = p$stop
   )
 
+  # Create object to return
+  kern <- cbind(
+    x = raster::xFromCol(habitat, k[, 1]),
+    y = raster::yFromRow(habitat, k[, 2]),
+    sel = k[, 3])
+
   # Return
   kernel <- if (raster) {
-    raster::rasterFromXYZ(cbind(
-      k[, 1] * p$res,
-      k[, 2] * p$res,
-      k[, 3]))
+    raster::rasterFromXYZ(kern,
+      res = res(habitat),
+      crs = crs(habitat))
   } else {
-    cbind(
-      x = k[, 1] * p$res + start[1],
-      y = k[, 2] * p$res + start[2],
-      sel = k[, 3]
-    )
+    kern
   }
 
   out <- list(
@@ -182,21 +183,50 @@ dispersal_kernel <- function(
 #' @rdname dispersal_kernel
 #' @param model `[fit_clogit]` A fitted (i)SSF model
 #'
-#' @author Brian J. Smith
-#'
 #' @examples
+#' # Load raster package
+#' library(raster)
 #'
-dk <- dispersal_kernel.fit_clogit(model = m1,
-                            habitat = hab,
-                            start = raster_center(hab),
-                            max.dist = 5000,
-                            init.dir = amt::as_rad(155),
-                            raster = TRUE,
-                            standardize = TRUE,
-                            stop = 0)
-# Plot
-plot(dk$dispersal_kernel)
-
+#' # Load data
+#' data("deer")
+#' data("sh_forest")
+#'
+#' # Factor habitat
+#' sh_forest <- setValues(sh_forest,
+#'                        factor(getValues(sh_forest),
+#'                               levels = 1:2,
+#'                               labels = c("forest", "non-forest")))
+#' # Make stack of habitat
+#' hab <- stack(sh_forest)
+#' names(hab) <- "forest"
+#'
+#' # Process data for iSSF
+#' ssf_dat <- deer %>%
+#'   steps_by_burst() %>%
+#'   random_steps(n = 15) %>%
+#'   extract_covariates(hab) %>%
+#'   mutate(forest = factor(forest, levels = 1:2, labels = c("forest", "non-forest")),
+#'          cos_ta_ = cos(ta_),
+#'          log_sl_ = log(sl_)) %>%
+#'   dplyr::rename(forest_end = forest)
+#'
+#' # Fit model
+#' m1 <- ssf_dat %>%
+#'   fit_clogit(case_ ~ forest_end + forest_end:cos_ta_ + forest_end:log_sl_ +
+#'                log_sl_ + cos_ta_ + strata(step_id_),
+#'              model = TRUE)
+#'
+#' # Create dispersal kernel
+#' dk <- dispersal_kernel.fit_clogit(model = m1,
+#'                             habitat = hab,
+#'                             start = raster_center(hab),
+#'                             max.dist = 5000,
+#'                             init.dir = amt::as_rad(155),
+#'                             raster = TRUE,
+#'                             standardize = TRUE,
+#'                             stop = 0)
+#' # Plot
+#' plot(dk$dispersal_kernel)
 #'
 #' @export
 dispersal_kernel.fit_clogit <- function(model,
@@ -367,7 +397,7 @@ simulate_ud_from_dk <- function(obj, n = 1e3, other.vars = NULL) {
 #' @details This helper function is useful for initializing a simulated track
 #' in the center of the raster.
 #'
-#' @authors Brian J. Smith
+#' @author Brian J. Smith
 #'
 #' @return Returns a numeric vector of length 2 with (x, y) coordinates of the
 #' raster center.
