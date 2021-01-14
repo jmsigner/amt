@@ -332,8 +332,6 @@ update_sl_distr <- function(
                            "and the scale parameter was not updated."))
              beta_sl_ <- 0
            }
-           # Update
-           new_scale <- 1/((1/object$sl_$params$scale) - beta_sl_)
 
            #Create distribution
            new_dist <- update_gamma(object$sl_,

@@ -43,6 +43,7 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' # RSF -------------------------------------------------------
 #' # Fit an RSF, then calculate log-RSS to visualize results.
 #'
@@ -122,7 +123,7 @@
 #'   ylab("log-RSS") +
 #'   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
 #'   theme_bw()
-#'
+#' }
 #' @export
 log_rss <- function(object, ...){
   #Check inputs
@@ -543,6 +544,7 @@ append_x1 <- function(string){
 #'
 #' @examples
 #'
+#' \dontrun{
 #' #Load data
 #' data("amt_fisher")
 #'
@@ -601,6 +603,8 @@ append_x1 <- function(string){
 #'
 #' # Function should return informative errors regarding data vs x1 and data vs x2
 #' check_factors(m2$model, x1, x2)
+#' }
+#'
 check_factors <- function(model, x1, x2){
   # Get original data from model
   dat <- model$model

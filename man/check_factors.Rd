@@ -27,6 +27,7 @@ not meant to be called by the user.
 }
 \examples{
 
+\dontrun{
 #Load data
 data("amt_fisher")
 
@@ -85,5 +86,7 @@ x2 <- data.frame(lu = factor(50),
 
 # Function should return informative errors regarding data vs x1 and data vs x2
 check_factors(m2$model, x1, x2)
+}
+
 }
 \keyword{internal}
