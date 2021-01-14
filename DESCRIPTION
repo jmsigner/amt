@@ -37,6 +37,7 @@ Imports:
     tidyr (>= 1.0.0)
 Suggests: 
   adehabitatLT,
+  adehabitatMA,
   broom,
   ggplot2,
   ggraph,
@@ -52,7 +53,7 @@ Suggests:
   spacetime,
   trajectories,
   knitr,
-  rmarkdown, tinytest,
+  rmarkdown, tinytest, tidygraph,
   maptools
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1

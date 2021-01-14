@@ -202,8 +202,15 @@ hr_overlap.list <- function(
 hr_overlap_feature <- function(x, sf, direction = "hr_with_feature", feature_names = NULL) {
 
   checkmate::assert_class(x, "hr")
-  checkmate::assert_class(sf, "sf")
   checkmate::assert_character(direction, len = 1)
+
+  if (!(is(sf, "sf") | is(sf, "sfc"))) {
+    stop("sf needs be of class `sf` or `sfc`.")
+  }
+
+  if (is(sf, "sfc")) {
+    sf <- sf::st_as_sf(sf)
+  }
 
   if (!sf::st_geometry_type(sf) %in% c("POLYGON", "MULTIPOLYGON")) {
     stop("`sf` should be a (MULTI)POLYGON.")
@@ -232,7 +239,8 @@ hr_overlap_feature <- function(x, sf, direction = "hr_with_feature", feature_nam
 
 hr_feature <- function(x, y) {
   if (nrow(x) == 1 & nrow(y) == 1) {
-    return(hr_base_ov(x, y))
+    return(tibble::tibble(from = 1, to = 1,
+                          overlap = hr_base_ov(x, y)))
   } else {
     res <- expand.grid(from = 1:nrow(x), to = 1:nrow(y))
     return(

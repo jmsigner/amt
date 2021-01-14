@@ -38,7 +38,7 @@ These overlap indices can be calculated with the function `hr_overlap`. The type
 
 All of these estimators can be calculated for a given home-range level (i.e., using conditional UDs). Whether or not a conditional overlap is desired or not, can be controlled with the argument `conditional`. For `hr`, the argument `conditional` has no effect and the isopleths used for home-range estimation will always be used for the overlap calculation. 
 
-The function `hr_overlap()` can also be provided with a list of home-range estimates in situations when overlap between many different instances are required. Currently, there are three options for calcualting overlap among multiple instances: `which = "all"` calculates overlap for each pair of home ranges, `which = "one_to_all"` calculates overlap between the first element in the list and all others, and `which = "consecutive"` will calculate overlap between consecutive elements in the list. 
+The function `hr_overlap()` can also be provided with a list of home-range estimates in situations when overlap between many different instances are required. Currently, there are three options for calculating overlap among multiple instances: `which = "all"` calculates overlap for each pair of home ranges, `which = "one_to_all"` calculates overlap between the first element in the list and all others, and `which = "consecutive"` will calculate overlap between consecutive elements in the list. 
 
 
 ## Examples
@@ -46,7 +46,10 @@ The function `hr_overlap()` can also be provided with a list of home-range estim
 First we need to load the required packages: 
 
 ```{r}
-
+library(amt)
+library(ggplot2)
+library(tidygraph)
+library(ggraph)
 ```
 
 ### Two instances
@@ -100,7 +103,7 @@ hr_overlap(hr_lupe, hr_leroy, type = "vi", conditional = FALSE)
 hr_overlap(hr_leroy, hr_lupe, type = "vi", conditional = FALSE)
 ```
 
-### More than two instances
+### $> 2$ instances
 
 Lets calculate daily ranges for Lupe and then and then see how different
 ranges overlap with each other.
@@ -108,14 +111,15 @@ ranges overlap with each other.
 We have to use the same template raster in order to make ranges comparable. 
 
 ```{r}
-trast <- make_trast(amt_fisher, res = 100) 
+trast <- make_trast(lupe, res = 50)
 ```
 
 Then we add a new column with day and calculate for each day a `KDE` home range. 
 
 ```{r}
-dat <- amt_fisher %>% 
-  nest(data = -name) %>% 
+dat <- lupe %>% 
+  mutate(week = lubridate::floor_date(t_, "week")) %>% 
+  nest(data = -week) %>% 
   mutate(kde = map(data, hr_kde, trast = trast, levels = c(0.5, 0.95, 0.99)))
 ```
   
@@ -125,7 +129,6 @@ overlap between the different home-ranges. By default `which = "consecutive"`, t
 ```{r}
 hr_overlap(dat$kde, type = "vi")
 ```
-
 
 This works as well, if we set `conditional = TRUE`:
 
@@ -137,46 +140,75 @@ Sometimes it can be useful to provide meaningful labels. We can do this with
 the `labels` argument.
 
 ```{r}
-hr_overlap(dat$kde, type = "vi", labels = dat$name)
+hr_overlap(dat$kde, type = "vi", labels = dat$week)
 ```
 
-Different options exist for the argument `which`. For example, `which = "one_to_all"` calculates the overlap between the first and all other home ranges. In our example, the home range of the first day is compared with home-ranges of consecutive days:
-**I WOULD RECOMMEND PLOTTING THE FIRST SET OF HOME RANGES (CALCUALTING USING CONSECUTIVE DAYS).**
-**EITHER TO REPLACE THE PLOT BELOW OR IN ADDITION TO IT**
+Different options exist for the argument `which`. For example, `which = "one_to_all"` calculates the overlap between the first and all other home ranges. 
 
-```{r}
-hr_to_sf(dat, kde)
-ov1 <- hr_overlap(dat$kde, type = "vi", labels = dat$name, which = "one_to_all")
-ggplot(ov1, aes(x = to, y = overlap)) + geom_point()
-```
 
 Finally, we can calculate the overlap between all elements inside a list (use
-`which = "all"` for this). We will use only the first 8 days here to speed up
-computation:
+`which = "all"` for this). We will use the `puechcir` from the `adehabitatMA` package to illustrate this. 
 
-
-This can nicely be illustrated as a network. Labels are days since the first
-day. **THIS IS REALLY COOOL. IT WOULD BE AWESOME TO INCLUDE AN EXAMPLE WITH MULITPLE INDIVIDUALS RATHER THAN MULTIPLE DAYS**
 
 ```{r}
+data("puechabonsp", package = "adehabitatMA")
+dat <- puechabonsp$relocs %>% as.data.frame() %>% 
+  make_track(X, Y, id = Name)
+trast <- make_trast(dat, res = 50)
+dat1 <- dat %>% nest(data = -id) %>% 
+  mutate(kde = map(data, ~ hr_kde(., trast = trast, level = c(0.5, 0.9, 0.99))))
+```
 
-ov2 <- hr_overlap(dat$kde, type = "vi", labels = dat$name, which = "all", 
-                  conditional = TRUE)
+Now we can calculate the overlaps between animals: 
+
+```{r, fig.width=7, fig.height=7}
+ov2 <- hr_overlap(dat1$kde, type = "hr", labels = dat1$id, which = "all", 
+                  conditional = TRUE) %>% 
+  filter(overlap > 0)
 graph <- as_tbl_graph(ov2) %>% 
   mutate(Popularity = centrality_degree(mode = 'in')) 
 
 ggraph(graph, layout = 'stress') + 
-  geom_edge_fan(aes(col = overlap), show.legend = TRUE) + 
+  #geom_edge_fan(aes(col = overlap), show.legend = TRUE, arrow = arrow()) + 
+  geom_edge_arc(aes(col = overlap), arrow = arrow(length = unit(4, 'mm'), type = "closed"), 
+                start_cap = circle(3, 'mm'),
+                end_cap = circle(3, 'mm')) + 
   geom_node_point(size = 4) + 
-  geom_node_label(aes(label = name), repel = TRUE) +
-  facet_edges(~ levels) + 
+  geom_node_label(aes(label = name), repel = TRUE, alpha = 0.7) +
+  facet_edges(~ levels, ncol = 2) + 
   theme_light() +
-  scale_edge_color_gradient(low = "white", high = "red")
+  scale_edge_color_gradient(low = "blue", high = "red")
 ```
   
 ## Overlap between a home range and a simple feature
 
-The function `hr_overlap_feature` allows to calcualte percentage overlap ($HR$ index) between a home 
+The function `hr_overlap_feature` allows to calculate percentage overlap ($HR$ index) between a home. To illustrate this feature, we will use again the data from `lupe` and calculate the intersection with an arbitrary polygon. 
+
+```{r}
+poly <- bbox(lupe, buffer = -500, sf = TRUE)
+poly1 <- bbox(lupe, sf = TRUE)
+hr <- hr_mcp(lupe)
+ggplot() + geom_sf(data = hr_isopleths(hr)) + 
+  geom_sf(data = poly, fill = NA, col = "red") +
+  geom_sf(data = poly1, fill = NA, col = "blue")
+```
+```{r}
+hr_overlap_feature(hr, poly, direction = "hr_with_feature")
+hr_overlap_feature(hr, poly1, direction = "hr_with_feature")
+
+hr_overlap_feature(hr, poly, direction = "feature_with_hr")
+hr_overlap_feature(hr, poly1, direction = "feature_with_hr")
+```
+
+The same work with several home-range levels:
+
+```{r}
+hr <- hr_mcp(lupe, levels = c(0.5, 0.9, 0.95))
+hr_overlap_feature(hr, poly, direction = "hr_with_feature")
+```
+
+
+
 
 ## Todo
 
