@@ -52,6 +52,7 @@ the terms in the model formula exactly.
 }
 \examples{
 
+\dontrun{
 # RSF -------------------------------------------------------
 # Fit an RSF, then calculate log-RSS to visualize results.
 
@@ -131,7 +132,7 @@ ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
   ylab("log-RSS") +
   ggtitle(expression("log-RSS" * (x[1] * ", " * x[2]))) +
   theme_bw()
-
+}
 }
 \references{
 Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection

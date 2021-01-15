@@ -167,6 +167,6 @@ summary(m1)
 ## Session
 
 ```{r}
-devtools::session_info()
+sessioninfo::session_info()
 ```
 

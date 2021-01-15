@@ -46,7 +46,6 @@ Suggests:
   FNN,
   bcpa,
   leaflet,
-  devtools,
   moveHMM,
   move,
   sessioninfo,
