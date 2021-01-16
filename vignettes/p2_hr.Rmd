@@ -25,7 +25,7 @@ probabilistic estimators)^[For a discussion of geometric vs. probabilistic estim
 
 ## Implementation in `amt`
 
-`amt` currently implements all methods to calculate overlaps that were reviewed by Fieberg and Kochanny (2005). These are: 
+`amt` currently implements all methods to calculate overlaps that were reviewed by Fieberg and Kochany (2005). These are: 
 
 - `hr`: That is the proportion of the home range of instance $i$ that overlaps with the home range of instance $j$. This measure does not rely on a UD and is directional (i.e., $HR_{i,j} \ne HR_{j,i}$) and bound between 0 (no overlap) and 1 (complete overlap)
 - `phr`: Is the probability of instance $j$ being located in the home range of instance $i$. `phr` is also directional and bounded between 0 (no overlap) and 1 (complete overlap)
