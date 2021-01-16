@@ -11,8 +11,6 @@ env:
   - MAKEFLAGS="-j 2"
 
 r_packages:
-- usethis
-- devtools
 - ade4
 
 
