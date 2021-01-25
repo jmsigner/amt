@@ -1,3 +1,26 @@
+
+# Version 0.1.4
+
+## Round 1
+
+### Test environments
+- local: Ubuntu 19.10, R 4.0.0
+- win builder: R release and devel
+- travis-ci: R release and devel
+- appveyor
+- macos-highsierra-release-cran on rhub
+
+### R CMD check results
+
+There were no errors, warnings or notes. 
+
+### What changed
+- `unnest` works for track_xy*
+- Major updates for `hr_akde`. This includes that now CI are available for  
+- new vignette and methods for `hr_overlap`
+- reduced package dependencies.
+- Fixed bug in confidence calculation for `log_rss`.
+
 # Version 0.1.3
 
 ## Round 1
