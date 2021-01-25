@@ -4,6 +4,8 @@
 \alias{distributions}
 \alias{make_distribution}
 \alias{make_exp_distr}
+\alias{make_hnrom_distr}
+\alias{make_lnorm_distr}
 \alias{make_unif_distr}
 \alias{make_vonmises_distr}
 \alias{make_gamma_distr}
@@ -15,6 +17,10 @@
 make_distribution(name, params, ...)
 
 make_exp_distr(rate = 1)
+
+make_hnrom_distr(sd = 1)
+
+make_lnorm_distr(meanlog = 0, sdlog = 1)
 
 make_unif_distr(min = -pi, max = pi)
 
@@ -37,6 +43,12 @@ for all currently implemented distributions.}
 \item{...}{none implemented.}
 
 \item{rate}{\verb{[double(1)>0]} \cr The rate of the exponential distribution.}
+
+\item{sd}{\verb{[double(1)>0]} \cr The standard deviation of the half-normal distribution.}
+
+\item{meanlog}{\verb{[double(1)>0]} \cr The standard deviation of the half-normal distribution.}
+
+\item{sdlog}{\verb{[double(1)>0]} \cr The standard deviation of the half-normal distribution.}
 
 \item{min}{\verb{[double(1)]} \cr The minimum of the uniform distribution.}
 

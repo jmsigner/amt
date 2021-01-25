@@ -5,7 +5,14 @@
 \alias{update_ta_distr}
 \title{Update movement distributions}
 \usage{
-update_sl_distr(object, beta_sl = "sl_", beta_log_sl = "log_sl_", ...)
+update_sl_distr(
+  object,
+  beta_sl = "sl_",
+  beta_log_sl = "log_sl_",
+  beta_sl_sq = "sl_sq_",
+  beta_log_sl_sq = "log_sl_sq_",
+  ...
+)
 
 update_ta_distr(object, beta_cos_ta = "cos_ta_", ...)
 }

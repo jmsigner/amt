@@ -4,12 +4,18 @@
 \alias{update_distr_man}
 \alias{update_gamma}
 \alias{update_exp}
+\alias{update_hnorm}
+\alias{update_lnorm}
 \alias{update_vonmises}
 \title{Manually update \code{amt_distr}}
 \usage{
 update_gamma(dist, beta_sl, beta_log_sl)
 
 update_exp(dist, beta_sl)
+
+update_hnorm(dist, beta_sl_sq)
+
+update_lnorm(dist, beta_log_sl, beta_log_sl_sq)
 
 update_vonmises(dist, beta_cos_ta)
 }

@@ -21,7 +21,7 @@ valid_distr_params <- function(dist_name, params) {
   } else if (dist_name == "hnorm") {
     return(c("sd") %in% names(params))
   } else if (dist_name == "lnorm") {
-    return(all(c("logmean", "logsd") %in% names(params)))
+    return(all(c("meanlog", "sdlog") %in% names(params)))
   } else if (dist_name == "gamma") {
     return(all(c("shape", "rate") %in% names(params)) |
       all(c("shape", "scale") %in% names(params)))
@@ -113,10 +113,10 @@ make_hnrom_distr <- function(sd = 1) {
 #' @param meanlog `[double(1)>0]` \cr The standard deviation of the half-normal distribution.
 #' @param sdlog `[double(1)>0]` \cr The standard deviation of the half-normal distribution.
 #' @rdname distributions
-make_lnorm_distr <- function(logmean = 0, logsd = 1) {
-  checkmate::check_number(logmean)
-  checkmate::check_number(logsd, lower = 0)
-  make_distribution(name = "lnorm", params = list(logmean = logmean, logsd = logsd))
+make_lnorm_distr <- function(meanlog = 0, sdlog = 1) {
+  checkmate::check_number(meanlog)
+  checkmate::check_number(sdlog, lower = 0)
+  make_distribution(name = "lnorm", params = list(meanlog = meanlog, sdlog = sdlog))
 }
 
 #' @export
@@ -237,8 +237,8 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
     },
     lnorm = {
       fit <- fitdistrplus::fitdist(x, "lnorm", keepdata = FALSE)
-      make_lnorm_distr(logmean = fit$estimate["meanlog"],
-                       logsd = fit$estimate["sdlog"])
+      make_lnorm_distr(meanlog = fit$estimate["meanlog"],
+                       sdlog = fit$estimate["sdlog"])
     },
     hnorm = {
       # following: https://en.wikipedia.org/wiki/Half-normal_distribution#Parameter_estimation
@@ -318,7 +318,9 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' @export
 update_sl_distr <- function(
   object, beta_sl = "sl_",
-  beta_log_sl = "log_sl_", ...){
+  beta_log_sl = "log_sl_",
+  beta_sl_sq = "sl_sq_",
+  beta_log_sl_sq = "log_sl_sq_", ...){
   #Check inputs
   if (!inherits(object, "fit_clogit")){
     stop("\'object\' must be of class \"fit_clogit\"")
@@ -396,16 +398,16 @@ update_sl_distr <- function(
                                beta_log_sl_sq = beta_log_sl_sq_)
     },
     hnorm = {
-      beta_log_sl_sq_ <- unname(object$model$coefficients[beta_log_sl_sq])
+      beta_sl_sq_ <- unname(object$model$coefficients[beta_sl_sq])
       # Check
-      if (is.na(beta_log_sl_sq_)){
+      if (is.na(beta_sl_sq_)){
         warning("The covariate \'log_sl_sq_\' did not appear in your model.")
-        beta_log_sl_sq_ <- 0
+        beta_sl_sq_ <- 0
       }
 
       #Create distribution
       new_dist <- update_hnorm(object$sl_,
-                               beta_log_sl_sq = beta_log_sl_sq_)
+                               beta_sl_sq = beta_sl_sq_)
     })
 
   #Return
@@ -555,7 +557,7 @@ update_exp <- function(dist, beta_sl){
 #' @export
 update_hnorm <- function(dist, beta_sl_sq){
   #Update rate
-  new_sd <- unname(dist$params$sd / (1 - 2 * dist$params$sd * beta_sl_sq))
+  new_sd <- unname(dist$params$sd / sqrt(1 - 2 * dist$params$sd^2 * beta_sl_sq))
   #Make new distribution
   new_dist <- make_hnrom_distr(sd = new_sd)
   #Return
@@ -566,13 +568,13 @@ update_hnorm <- function(dist, beta_sl_sq){
 #' @export
 update_lnorm <- function(dist, beta_log_sl, beta_log_sl_sq){
   #Update rate
-  new_logmean <- unname(
-    (dist$params$logmean - dist$params$logsd * beta_log_sl_sq) /
-      (1 - 2 * dist$params$logsd^2 * beta_log_sl_sq))
-  new_logsd <- unname(dist$params$logsd / (1 - 2 * dist$params$sd^2 * beta_sl_sq))
+  new_meanlog <- unname(
+    (dist$params$meanlog - dist$params$sdlog * beta_log_sl) /
+      (1 - 2 * dist$params$sdlog^2 * beta_log_sl_sq))
+  new_sdlog <- unname(dist$params$sdlog / sqrt(1 - 2 * dist$params$sd^2 * beta_log_sl_sq))
 
   #Make new distribution
-  new_dist <- make_lnrom_distr(logmean = new_logmean, logsd = new_logsd)
+  new_dist <- make_lnorm_distr(meanlog = new_meanlog, sdlog = new_sdlog)
   #Return
   return(new_dist)
 }
