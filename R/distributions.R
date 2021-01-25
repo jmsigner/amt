@@ -3,7 +3,7 @@ valid_ta_distr <- function(...) {
 }
 
 valid_sl_distr <- function(...) {
-  c("exp", "gamma", "unif")
+  c("exp", "gamma", "unif", "hnorm", "lnorm")
 }
 
 valid_distr <- function(...) {
@@ -18,6 +18,10 @@ valid_distr_params <- function(dist_name, params) {
     return(all(c("min", "max") %in% names(params)))
   } else if (dist_name == "exp") {
     return(c("rate") %in% names(params))
+  } else if (dist_name == "hnorm") {
+    return(c("sd") %in% names(params))
+  } else if (dist_name == "lnorm") {
+    return(all(c("logmean", "logsd") %in% names(params)))
   } else if (dist_name == "gamma") {
     return(all(c("shape", "rate") %in% names(params)) |
       all(c("shape", "scale") %in% names(params)))
@@ -98,6 +102,24 @@ make_exp_distr <- function(rate = 1) {
 }
 
 #' @export
+#' @param sd `[double(1)>0]` \cr The standard deviation of the half-normal distribution.
+#' @rdname distributions
+make_hnrom_distr <- function(sd = 1) {
+  checkmate::check_number(sd, lower = 0)
+  make_distribution(name = "hnorm", params = list(sd = sd))
+}
+
+#' @export
+#' @param meanlog `[double(1)>0]` \cr The standard deviation of the half-normal distribution.
+#' @param sdlog `[double(1)>0]` \cr The standard deviation of the half-normal distribution.
+#' @rdname distributions
+make_lnorm_distr <- function(logmean = 0, logsd = 1) {
+  checkmate::check_number(logmean)
+  checkmate::check_number(logsd, lower = 0)
+  make_distribution(name = "lnorm", params = list(logmean = logmean, logsd = logsd))
+}
+
+#' @export
 #' @rdname distributions
 #' @param min `[double(1)]` \cr The minimum of the uniform distribution.
 #' @param max `[double(1)]` \cr The minimum of the uniform distribution.
@@ -149,6 +171,10 @@ random_numbers.vonmises_distr <- function(x, n = 100, ...) {
   # turn angles for new stps
   x <- x %% (2 * pi)
   ifelse(x > base::pi, x - (2 * base::pi), x)
+}
+
+random_numbers.hnorm_distr <- function(x, n = 100, ...) {
+  abs(rnorm(n, mean = 0, sd = x$params$sd))
 }
 
 #' @export
@@ -208,6 +234,15 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
     exp = {
       fit <- fitdistrplus::fitdist(x, "exp", keepdata = FALSE)
       make_exp_distr(rate = fit$estimate["rate"])
+    },
+    lnorm = {
+      fit <- fitdistrplus::fitdist(x, "lnorm", keepdata = FALSE)
+      make_lnorm_distr(logmean = fit$estimate["meanlog"],
+                       logsd = fit$estimate["sdlog"])
+    },
+    hnorm = {
+      # following: https://en.wikipedia.org/wiki/Half-normal_distribution#Parameter_estimation
+      make_hnrom_distr(sd = sqrt(1/length(x) * sum(x^2)))
     },
     unif = {
       fit <- fitdistrplus::fitdist(x, "unif", keepdata = FALSE)
@@ -293,51 +328,85 @@ update_sl_distr <- function(
   tent_dist_name <- sl_distr_name(object)
 
   # Update distribution
-  switch(tent_dist_name,
-         unif = {
-           stop("If you generate available steps with a uniform distribution,
+  switch(
+    tent_dist_name,
+    unif = {
+      stop("If you generate available steps with a uniform distribution,
             you cannot update the distribution. You may consider refitting
             your model using a different step length distribution.")
-         },
-         exp = {
-           ## Update rate
-           # Fitted coef
-           beta_sl_ <- unname(object$model$coefficients[beta_sl])
-           # Check
-           if (is.na(beta_sl_)){
-             warning(paste("The covariate \'sl_\' did not appear in your model,",
-                           "and the rate parameter was not updated."))
-             beta_sl_ <- 0
-           }
-           # Update distribution
-           new_dist <- update_exp(object$sl_, beta_sl = beta_sl_)
-         },
-         gamma = {
-           ## New shape
-           # Fitted coef
-           beta_log_sl_ <- unname(object$model$coefficients[beta_log_sl])
-           # Check
-           if (is.na(beta_log_sl_)){
-             warning(paste("The covariate \'log_sl_\' did not appear in your model,",
-                     "and the shape parameter was not updated."))
-             beta_log_sl_ <- 0
-           }
+    },
+    exp = {
+      ## Update rate
+      # Fitted coef
+      beta_sl_ <- unname(object$model$coefficients[beta_sl])
+      # Check
+      if (is.na(beta_sl_)){
+        warning(paste("The covariate \'sl_\' did not appear in your model,",
+                      "and the rate parameter was not updated."))
+        beta_sl_ <- 0
+      }
+      # Update distribution
+      new_dist <- update_exp(object$sl_, beta_sl = beta_sl_)
+    },
+    gamma = {
+      ## New shape
+      # Fitted coef
+      beta_log_sl_ <- unname(object$model$coefficients[beta_log_sl])
+      # Check
+      if (is.na(beta_log_sl_)){
+        warning(paste("The covariate \'log_sl_\' did not appear in your model,",
+                      "and the shape parameter was not updated."))
+        beta_log_sl_ <- 0
+      }
 
-           ## New scale
-           # Fitted coef
-           beta_sl_ <- unname(object$model$coefficients[beta_sl])
-           # Check
-           if (is.na(beta_sl_)){
-             warning(paste("The covariate \'sl_\' did not appear in your model,",
-                           "and the scale parameter was not updated."))
-             beta_sl_ <- 0
-           }
+      ## New scale
+      # Fitted coef
+      beta_sl_ <- unname(object$model$coefficients[beta_sl])
+      # Check
+      if (is.na(beta_sl_)){
+        warning(paste("The covariate \'sl_\' did not appear in your model,",
+                      "and the scale parameter was not updated."))
+        beta_sl_ <- 0
+      }
 
-           #Create distribution
-           new_dist <- update_gamma(object$sl_,
-                                    beta_sl = beta_sl_,
-                                    beta_log_sl = beta_log_sl_)
-         })
+      #Create distribution
+      new_dist <- update_gamma(object$sl_,
+                               beta_sl = beta_sl_,
+                               beta_log_sl = beta_log_sl_)
+    },
+    lnorm = {
+      ## New shape
+      # Fitted coef
+      beta_log_sl_ <- unname(object$model$coefficients[beta_log_sl])
+      beta_log_sl_sq_ <- unname(object$model$coefficients[beta_log_sl_sq])
+
+      # Check
+      if (is.na(beta_log_sl_)){
+        warning("The covariate \'log_sl_\' did not appear in your model.")
+        beta_log_sl_ <- 0
+      }
+      if (is.na(beta_log_sl_sq_)){
+        warning("The covariate \'log_sl_sq_\' did not appear in your model.")
+        beta_log_sl_sq_ <- 0
+      }
+
+      #Create distribution
+      new_dist <- update_lnorm(object$sl_,
+                               beta_log_sl = beta_log_sl_,
+                               beta_log_sl_sq = beta_log_sl_sq_)
+    },
+    hnorm = {
+      beta_log_sl_sq_ <- unname(object$model$coefficients[beta_log_sl_sq])
+      # Check
+      if (is.na(beta_log_sl_sq_)){
+        warning("The covariate \'log_sl_sq_\' did not appear in your model.")
+        beta_log_sl_sq_ <- 0
+      }
+
+      #Create distribution
+      new_dist <- update_hnorm(object$sl_,
+                               beta_log_sl_sq = beta_log_sl_sq_)
+    })
 
   #Return
   return(new_dist)
@@ -481,6 +550,33 @@ update_exp <- function(dist, beta_sl){
   #Return
   return(new_dist)
 }
+
+#' @rdname update_distr_man
+#' @export
+update_hnorm <- function(dist, beta_sl_sq){
+  #Update rate
+  new_sd <- unname(dist$params$sd / (1 - 2 * dist$params$sd * beta_sl_sq))
+  #Make new distribution
+  new_dist <- make_hnrom_distr(sd = new_sd)
+  #Return
+  return(new_dist)
+}
+
+#' @rdname update_distr_man
+#' @export
+update_lnorm <- function(dist, beta_log_sl, beta_log_sl_sq){
+  #Update rate
+  new_logmean <- unname(
+    (dist$params$logmean - dist$params$logsd * beta_log_sl_sq) /
+      (1 - 2 * dist$params$logsd^2 * beta_log_sl_sq))
+  new_logsd <- unname(dist$params$logsd / (1 - 2 * dist$params$sd^2 * beta_sl_sq))
+
+  #Make new distribution
+  new_dist <- make_lnrom_distr(logmean = new_logmean, logsd = new_logsd)
+  #Return
+  return(new_dist)
+}
+
 
 #' @rdname update_distr_man
 #' @export
