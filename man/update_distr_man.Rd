@@ -27,6 +27,10 @@ respective distributions.}
 
 \item{beta_log_sl}{\verb{[numeric]} \cr The estimate of the coefficient of the log of the step length.}
 
+\item{beta_sl_sq}{\verb{[character]} \cr The name of the coefficient of the square of the step length.}
+
+\item{beta_log_sl_sq}{\verb{[character]} \cr The name of the coefficient of the square of log of the step length.}
+
 \item{beta_cos_ta}{\verb{[numeric]} \cr The estimate of the coefficient of cosine of the turning angle.}
 }
 \description{

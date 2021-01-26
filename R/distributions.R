@@ -104,7 +104,7 @@ make_exp_distr <- function(rate = 1) {
 #' @export
 #' @param sd `[double(1)>0]` \cr The standard deviation of the half-normal distribution.
 #' @rdname distributions
-make_hnrom_distr <- function(sd = 1) {
+make_hnorm_distr <- function(sd = 1) {
   checkmate::check_number(sd, lower = 0)
   make_distribution(name = "hnorm", params = list(sd = sd))
 }
@@ -174,7 +174,7 @@ random_numbers.vonmises_distr <- function(x, n = 100, ...) {
 }
 
 random_numbers.hnorm_distr <- function(x, n = 100, ...) {
-  abs(rnorm(n, mean = 0, sd = x$params$sd))
+  base::abs(stats::rnorm(n, mean = 0, sd = x$params$sd))
 }
 
 #' @export
@@ -242,7 +242,7 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
     },
     hnorm = {
       # following: https://en.wikipedia.org/wiki/Half-normal_distribution#Parameter_estimation
-      make_hnrom_distr(sd = sqrt(1/length(x) * sum(x^2)))
+      make_hnorm_distr(sd = sqrt(1/length(x) * sum(x^2)))
     },
     unif = {
       fit <- fitdistrplus::fitdist(x, "unif", keepdata = FALSE)
@@ -267,10 +267,12 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' @param object `[fit_clogit]` \cr A fitted iSSF model.
 #' @param beta_sl `[character]` \cr The name of the coefficient of the step length.
 #' @param beta_log_sl `[character]` \cr The name of the coefficient of the log of the step length.
+#' @param beta_sl_sq `[character]` \cr The name of the coefficient of the square of the step length.
+#' @param beta_log_sl_sq `[character]` \cr The name of the coefficient of the square of log of the step length.
 #' @param beta_cos_ta `[character]` \cr The name of the coefficient of cosine of the turning angle.
 #' @template dots_none
 #'
-#' @author Brian J. Smith
+#' @author Brian J. Smith and Johannes Signer
 #'
 #' @return An `amt_distr` object, which consists of a list with the `name` of
 #'   the distribution and its parameters (saved in `params`).
@@ -279,14 +281,13 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' Wrapper to fit a distribution to data \code{\link{fit_distr}()}
 #'
 #' @references
-#'
-#' Fieberg et al. in prep.
+#' \insertRef{fieberg2020guide}{amt}
 #'
 #' @examples
 #'
 #' # Fit an SSF, then update movement parameters.
 #'
-#'  #Prepare data for SSF
+#' # Prepare data for SSF
 #' ssf_data <- deer %>%
 #'   steps_by_burst() %>%
 #'   random_steps(n = 15) %>%
@@ -297,10 +298,11 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #'   log_sl_ = log(sl_))
 #'
 #' # Check tentative distributions
-#' #    Step length
+#' # Step length
+#' sl_distr_params(ssf_data)
 #' attr(ssf_data, "sl_")
 #' #    Turning angle
-#' attr(ssf_data, "ta_")
+#' ta_distr_params(ssf_data)
 #'
 #' # Fit an iSSF
 #' m1 <- ssf_data %>%
@@ -311,8 +313,35 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' # Update step length distribution
 #' new_gamma <- update_sl_distr(m1)
 #'
-#' #Update turning angle distribution
+#' # Update turning angle distribution
 #' new_vm <- update_ta_distr(m1)
+#'
+#' # It is also possible to use different step length distributions
+#'
+#' # exponential step-length distribution
+#' s2 <- deer %>% steps_by_burst() %>%
+#'   random_steps(sl_distr = fit_distr(.$sl_, "exp"))
+#' m2 <- s2 %>%
+#'   fit_clogit(case_ ~ sl_ + strata(step_id_))
+#' update_sl_distr(m2)
+#'
+#' # half normal step-length distribution
+#' s3 <- deer %>% steps_by_burst() %>%
+#'   random_steps(sl_distr = fit_distr(.$sl_, "hnorm"))
+#' m3 <- s3 %>%
+#'   mutate(sl_sq_ = sl_^2) %>%
+#'   fit_clogit(case_ ~ sl_sq_ + strata(step_id_))
+#' update_sl_distr(m3)
+#'
+#' # log normal step-length distribution
+#' s4 <- deer %>% steps_by_burst() %>%
+#'   random_steps(sl_distr = fit_distr(.$sl_, "lnorm"))
+#' m4 <- s4 %>%
+#'   mutate(log_sl_ = log(sl_), log_sl_sq_ = log(sl_)^2) %>%
+#'   fit_clogit(case_ ~ log_sl_ + log_sl_sq_ + strata(step_id_))
+#' update_sl_distr(m4)
+#'
+#'
 #'
 #' @rdname update_distr
 #' @export
@@ -469,8 +498,11 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
 #'
 #' Functions to update `amt_distr` from iSSF coefficients
 #'
+#' @inheritParams update_distr
 #' @param beta_sl `[numeric]` \cr The estimate of the coefficient of the step length.
 #' @param beta_log_sl `[numeric]` \cr The estimate of the coefficient of the log of the step length.
+#' @param beta_sl_sq `[character]` \cr The name of the coefficient of the square of the step length.
+#' @param beta_log_sl_sq `[character]` \cr The name of the coefficient of the square of log of the step length.
 #' @param beta_cos_ta `[numeric]` \cr The estimate of the coefficient of cosine of the turning angle.
 #' @param dist `[amt_distr]` The tentative distribution to be updated
 #' respective distributions.
@@ -559,7 +591,7 @@ update_hnorm <- function(dist, beta_sl_sq){
   #Update rate
   new_sd <- unname(dist$params$sd / sqrt(1 - 2 * dist$params$sd^2 * beta_sl_sq))
   #Make new distribution
-  new_dist <- make_hnrom_distr(sd = new_sd)
+  new_dist <- make_hnorm_distr(sd = new_sd)
   #Return
   return(new_dist)
 }

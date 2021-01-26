@@ -4,7 +4,7 @@
 \alias{distributions}
 \alias{make_distribution}
 \alias{make_exp_distr}
-\alias{make_hnrom_distr}
+\alias{make_hnorm_distr}
 \alias{make_lnorm_distr}
 \alias{make_unif_distr}
 \alias{make_vonmises_distr}
@@ -18,7 +18,7 @@ make_distribution(name, params, ...)
 
 make_exp_distr(rate = 1)
 
-make_hnrom_distr(sd = 1)
+make_hnorm_distr(sd = 1)
 
 make_lnorm_distr(meanlog = 0, sdlog = 1)
 
