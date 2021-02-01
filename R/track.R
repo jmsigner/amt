@@ -12,8 +12,8 @@
 #'   track. Columns should be provided in the form of `key = val` (e.g., for ids
 #'   this may look like this `id = c(1, 1, 1, 2, 2, 2` for three points for ids
 #'   1 and 2 each).
-#' @param crs `[sp::CRS]` \cr An optional coordinate reference system of the
-#'   points.
+#' @param crs `[crs]` \cr An optional coordinate reference system of the
+#'   points. Usually just the `epsg` code is sufficient.
 #' @param order_by_ts `[logical(1)]` \cr Should relocations be ordered by time
 #'   stamp, default is `TRUE`.
 #' @param check_duplicates `[logical(1)=FALSE]` \cr Should it be checked if there are
@@ -26,11 +26,11 @@
 #' @export
 #' @name track
 
-mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
+mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs, order_by_ts = TRUE,
                      check_duplicates = FALSE, all_cols = FALSE) {
 
   if (missing(.x) | missing(.y)) {
-    stop("x and y are required")
+    stop(".x and .y are required.")
   }
 
   if (!is_tibble(tbl)) {
@@ -92,12 +92,19 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NULL, order_by_ts = TRUE,
   }
 
 
-  if (!is.null(crs)) {
-    if (!is(crs, "CRS")) {
+  if (!is.na(crs)) {
+    if (is(crs, "CRS")) {
+
       stop("crs is no instance of class CRS")
+    } else {
+      crs <- sf::st_crs(crs)
+      if (is.na(crs)) {
+        warning("`crs` invalid.")
+      }
     }
   }
-  attributes(out)$crs_ <- if(is.null(crs)) NA_character_ else crs
+
+  attributes(out)$crs_ <- crs
 
   out
 }

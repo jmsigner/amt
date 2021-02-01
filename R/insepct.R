@@ -13,7 +13,7 @@
 #' @seealso `leaflet::leaflet()`
 #' @examples
 #' data(sh)
-#' x <- track(x = sh$x, y = sh$y, crs = sp::CRS("+init=epsg:31467"))
+#' x <- track(x = sh$x, y = sh$y, crs = 31467)
 #'
 #' \dontrun{
 #' inspect(x)
@@ -29,7 +29,7 @@ inspect <- function(x, ...) {
 #' @rdname inspect
 inspect.track_xy <- function(x, popup = NULL, cluster = TRUE, ...) {
   if (has_crs(x)) {
-    x <- transform_coords(x, sp::CRS("+init=epsg:4326"))
+    x <- transform_coords(x, 4326)
   } else {
     stop("x is not projected.")
   }

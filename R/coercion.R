@@ -13,14 +13,15 @@ as_sp <- function(x, ...) {
 
 #' @export
 as_sp.track_xy <- function(x, ...) {
-  sp::SpatialPoints(
-    coords = x[, c("x_", "y_")],
-    proj4string = if (!is.na(attributes(x)$crs_)) {
-      attributes(x)$crs_
-    } else {
-      sp::CRS(NA_character_)
-    }
-  )
+  sf::as_Spatial(as_sf_points(x))
+  #sp::SpatialPoints(
+  #  coords = x[, c("x_", "y_")],
+  #  proj4string = if (!is.na(attributes(x)$crs_)) {
+  #    attributes(x)$crs_
+  #  } else {
+  #    sp::CRS(NA_character_)
+  #  }
+  #)
 }
 
 #' @export
@@ -239,7 +240,7 @@ as_telemetry.track_xyt <- function(x, ...) {
   if (!amt::has_crs(x)) {
     stop("track needs to have a crs.")
   }
-  x <- transform_coords(x, sp::CRS("+init=epsg:4326"))
+  x <- transform_coords(x, 4326)
 
   dat_ctmm <- data.frame(
     lon = x$x_, lat = x$y_, timestamp = x$t_,
