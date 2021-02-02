@@ -56,7 +56,7 @@ bbox_base <- function(bbx, spatial, buffer, sf, x) {
   p <- sf::st_sfc(sf::st_polygon(list(coords)))
 
   if (has_crs(x)) {
-    p <- sf::st_set_crs(p, as.character(get_crs(x)))
+    p <- sf::st_set_crs(p, get_crs(x))
   }
 
   if (spatial) {

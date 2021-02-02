@@ -14,14 +14,6 @@ as_sp <- function(x, ...) {
 #' @export
 as_sp.track_xy <- function(x, ...) {
   sf::as_Spatial(as_sf_points(x))
-  #sp::SpatialPoints(
-  #  coords = x[, c("x_", "y_")],
-  #  proj4string = if (!is.na(attributes(x)$crs_)) {
-  #    attributes(x)$crs_
-  #  } else {
-  #    sp::CRS(NA_character_)
-  #  }
-  #)
 }
 
 #' @export
@@ -32,7 +24,7 @@ as_sp.steps_xy <- function(x, end = TRUE, ...) {
     sp::SpatialPoints(
       coords = as.matrix(x[, c("x2_", "y2_")]),
       proj4string = if (!is.null(attributes(x)$crs_)) {
-        attributes(x)$crs_
+        as(attributes(x)$crs_, "CRS")
       } else {
         sp::CRS(as.character(NA))
       }
@@ -41,7 +33,7 @@ as_sp.steps_xy <- function(x, end = TRUE, ...) {
     sp::SpatialPoints(
       coords = as.matrix(x[, c("x1_", "y1_")]),
       proj4string = if (!is.null(attributes(x)$crs_)) {
-        attributes(x)$crs_
+        as(attributes(x)$crs_, "CRS")
       } else {
         sp::CRS(as.character(NA))
       }
@@ -70,7 +62,6 @@ as_sf_points.track_xy <- function(x, ...) {
   p <- sf::st_as_sf(x, coords = c("x_", "y_"))
   p <- sf::st_set_crs(p, if (!is.null(attributes(x)$crs_))
     attributes(x)$crs_ else sf::NA_crs_)
-
   p
 }
 
@@ -167,7 +158,7 @@ as_move.track_xyt <- function(x, id = "id", ...){
     y= x$y_,
     time = x$t_,
     data = data.frame(x[!names(x) %in% c("x_","y_","t_")]),
-    proj = get_crs(x),
+    proj = as(get_crs(x), "CRS"),
     animal = if (has_id) as.character(x[[id]]) else "unnamed")
 }
 
@@ -279,7 +270,7 @@ as_moveHMM <- function(x, ...) {
 #' @export
 #' @rdname coercion
 as_moveHMM.track_xy <- function(x, ...) {
-  if (grepl("+proj=longlat", attr(x, "crs"))) {
+  if (grepl("+proj=longlat", attr(x, "crs")$wkt)) {
     moveHMM::prepData(as.data.frame(x), type = "LL", coordNames = c("x_", "y_"))
   } else {
     message("Assuming projected CRS")

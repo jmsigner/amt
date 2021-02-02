@@ -21,6 +21,7 @@
 \alias{weeks}
 \alias{map}
 \alias{map_int}
+\alias{NA_crs_}
 \alias{clogit}
 \alias{strata}
 \alias{nest}
@@ -45,6 +46,8 @@ below to see their documentation.
   \item{purrr}{\code{\link[purrr]{map}}, \code{\link[purrr:map]{map_int}}}
 
   \item{raster}{\code{\link[raster]{raster}}}
+
+  \item{sf}{\code{\link[sf:st_crs]{NA_crs_}}}
 
   \item{sp}{\code{\link[sp:CRS-class]{CRS}}}
 

@@ -46,9 +46,6 @@ hr_isopleths.RasterLayer <- function (x, level, ...) {
   con <- lapply(seq_along(con), function(i) sp::Polygons(con[[i]], i))
   con <- sp::SpatialPolygons(con)
 
-  ## Set proj4string
-  sp::proj4string(con) <- raster::projection(x)
-
   df <- data.frame(
     level = level,
     what = "estimate",
@@ -58,7 +55,14 @@ hr_isopleths.RasterLayer <- function (x, level, ...) {
 
   con <- sf::st_as_sf(con)
   con$area <- sf::st_area(con)
+  # Set projection
+  sf::st_crs(con) <- if (is.null(attr(x, "crs_"))) {
+    raster::projection(x)}
+  else {
+    attr(x, "crs_")
+  }
   con
+
 }
 
 #' @export

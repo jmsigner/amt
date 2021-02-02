@@ -498,7 +498,6 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
 #'
 #' Functions to update `amt_distr` from iSSF coefficients
 #'
-#' @inheritParams update_distr
 #' @param beta_sl `[numeric]` \cr The estimate of the coefficient of the step length.
 #' @param beta_log_sl `[numeric]` \cr The estimate of the coefficient of the log of the step length.
 #' @param beta_sl_sq `[character]` \cr The name of the coefficient of the square of the step length.

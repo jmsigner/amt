@@ -78,3 +78,4 @@ expect_true(all(names(hr_isopleths(rd)) == c("level", "what", "area", "geometry"
 expect_true(all(names(hr_isopleths(loc)) == c("level", "what", "area", "geometry")))
 expect_true(all(names(hr_isopleths(mcp)) == c("level", "what", "area", "geometry")))
 expect_true(all(names(hr_isopleths(kde)) == c("level", "what", "area", "geometry")))
+

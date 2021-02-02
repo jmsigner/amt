@@ -12,7 +12,7 @@ mk_track(
   .y,
   .t,
   ...,
-  crs = NULL,
+  crs = NA_crs_,
   order_by_ts = TRUE,
   check_duplicates = FALSE,
   all_cols = FALSE
@@ -24,7 +24,7 @@ make_track(
   .y,
   .t,
   ...,
-  crs = NULL,
+  crs = NA_crs_,
   order_by_ts = TRUE,
   check_duplicates = FALSE,
   all_cols = FALSE
@@ -44,8 +44,8 @@ track. Columns should be provided in the form of \code{key = val} (e.g., for ids
 this may look like this \verb{id = c(1, 1, 1, 2, 2, 2} for three points for ids
 1 and 2 each).}
 
-\item{crs}{\verb{[sp::CRS]} \cr An optional coordinate reference system of the
-points.}
+\item{crs}{\verb{[crs]} \cr An optional coordinate reference system of the
+points. Usually just the \code{epsg} code is sufficient.}
 
 \item{order_by_ts}{\verb{[logical(1)]} \cr Should relocations be ordered by time
 stamp, default is \code{TRUE}.}

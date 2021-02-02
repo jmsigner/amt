@@ -16,7 +16,7 @@ as_track <- function(x, ...) {
 #' @rdname as_track
 as_track.SpatialPoints <- function(x, ...) {
   xx <- sp::coordinates(x)
-  track(x = xx[, 1], y = xx[, 2], crs = sp::proj4string(x))
+  track(x = xx[, 1], y = xx[, 2], crs = sf::st_crs(sp::proj4string(x)))
 }
 
 

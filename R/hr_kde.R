@@ -44,7 +44,9 @@ hr_kde.track_xy <- function(
                         ymn = yrange[1],
                         ymx = yrange[2])
 
-  sp::proj4string(kde) <- get_crs(x)
+  raster::projection(kde)  <- as(get_crs(x), "CRS")
+  attr(kde, "crs_") <- get_crs(x) # needs to be fixed when updating to terra
+
   res <- list(
     estimator = "kde",
     h = h,
