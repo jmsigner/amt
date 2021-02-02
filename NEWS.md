@@ -1,3 +1,9 @@
+# amt 0.1.5
+## updates
+- support for `hnorm` and `lnorm` step-length distributions.
+- support for `st_crs` for CRS. Major updates for several functions
+- deprecated the function `dist_cent`.
+
 # amt 0.1.4
 ## updates
 - `unnest` works for track_xy*
@@ -17,6 +23,7 @@
 
 ## bug fixes
 - `group_by` for random points works as expected.
+
 
 # amt 0.1.2
 ## bug fixes

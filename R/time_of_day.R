@@ -47,7 +47,6 @@ time_of_day.steps_xyt <- function(x, solar.dep = 6, include.crepuscule = FALSE, 
     x
 }
 
-
 time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
 
   # Remove NA coordinates, so we can propagate NA's
@@ -67,10 +66,8 @@ time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
   }
 
   if (any(!idx)) {
-
     x <- x[!idx, ]
     t <- t[!idx]
-
     if (suppressWarnings(has_crs(x))) {
       pts <- sp::spTransform(as_sp(x, end = end), sp::CRS("+init=epsg:4326"))
     } else {

@@ -44,7 +44,8 @@ hr_kde.track_xy <- function(
                         ymn = yrange[1],
                         ymx = yrange[2])
 
-  sp::proj4string(kde) <- get_crs(x)
+  sp::proj4string(kde)  <- as(get_crs(x), "CRS")
+
   res <- list(
     estimator = "kde",
     h = h,

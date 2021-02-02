@@ -4,7 +4,7 @@ dat <- tibble(x = cumsum(rnorm(10)),
               y = cumsum(rnorm(10)),
               t = lubridate::ymd("2020-01-01") + days(1:10))
 
-trk <- make_track(dat, x, y, t, crs = CRS("+init=epsg:4326"))
+trk <- make_track(dat, x, y, t, crs = 4326)
 trk_ctmm <- as_telemetry(trk)
 g <- ctmm::ctmm.guess(trk_ctmm, interactive = FALSE)
 

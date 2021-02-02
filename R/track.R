@@ -26,7 +26,7 @@
 #' @export
 #' @name track
 
-mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs, order_by_ts = TRUE,
+mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
                      check_duplicates = FALSE, all_cols = FALSE) {
 
   if (missing(.x) | missing(.y)) {
@@ -91,11 +91,11 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs, order_by_ts = TRUE,
     class(out) <- c("track_xyt", "track_xy", class(out))
   }
 
-
   if (!is.na(crs)) {
     if (is(crs, "CRS")) {
-
-      stop("crs is no instance of class CRS")
+      .Deprecated("It looks like you used `CRS()` to create the crs,
+                  please use the ESPG directly.")
+      crs <- sf::st_crs(crs)
     } else {
       crs <- sf::st_crs(crs)
       if (is.na(crs)) {

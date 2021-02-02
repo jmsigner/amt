@@ -17,9 +17,9 @@ transform_crs(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{crs_to}{\verb{[sp::CRS(1)]} \cr Coordinate reference system the data should be transformed to, see \code{sp::CRS}.}
+\item{crs_to}{\verb{[crs(1)]} \cr Coordinate reference system the data should be transformed to, see \code{sf::st_crs}.}
 
-\item{crs_from}{\verb{[sp::CRS(1)]} \cr Coordinate reference system the data are currently in, see \code{sp::CRS}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
+\item{crs_from}{\verb{[crs(1)]} \cr Coordinate reference system the data are currently in, see \code{sf::sf_crs}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
 }
 \description{
 Transforms the CRS for a track.
@@ -29,8 +29,8 @@ data(deer)
 get_crs(deer)
 
 # project to geographical coordinates (note the CRS is taken automatically from the object deer).
-d1 <- transform_coords(deer, sp::CRS("+init=epsg:4326"))
+d1 <- transform_coords(deer, crs_to = 4326)
 }
 \seealso{
-sp::spTransform
+\code{sf::st_transform}
 }

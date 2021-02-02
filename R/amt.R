@@ -8,9 +8,10 @@
 #' @importFrom tidyr nest unnest
 #' @importFrom tibble tibble tribble is_tibble as_tibble
 #' @importFrom utils data head tail
+#' @importFrom sf NA_crs_
 #' @importFrom sp CRS
 #' @importFrom stats dexp qexp terms predict
-#' @importFrom methods is
+#' @importFrom methods as is
 #' @importFrom purrr map map_int
 #' @importFrom Rcpp evalCpp
 #' @importFrom rlang quo quos enquo quo_name
@@ -74,6 +75,8 @@ lubridate::weeks
 purrr::map
 #' @export
 purrr::map_int
+#' @export
+sf::NA_crs_
 #' @export
 survival::clogit
 #' @export

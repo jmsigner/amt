@@ -58,6 +58,7 @@ move_obj
 
 
 ## Session
+
 ```{r}
 sessioninfo::session_info()
 ```

@@ -103,7 +103,7 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
                                                           area=areas), match.ID=FALSE)
 
   if (!is.null(attr(x, "crs_"))) {
-    sp::proj4string(qq2) <- attr(x, "crs_")
+    sp::proj4string(qq2) <- as(attr(x, "crs_"), "CRS")
   }
 
   qq2 <- sf::st_as_sf(qq2)
