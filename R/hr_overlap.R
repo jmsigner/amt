@@ -70,6 +70,8 @@ hr_overlap.hr <- function(x, y, type = "hr", conditional = FALSE, ...) {
             overlap = vol_base(xud[], yud[], type)
           )
         }
+      } else {
+        stop("Extend and resolution differ, make sure to use a template raster.")
       }
     } else {
       stop("Both x and y should be probabilistic estimators.")
