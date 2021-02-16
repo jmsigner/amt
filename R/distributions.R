@@ -67,11 +67,12 @@ available_distr <- function(which_dist = "all", names_only = FALSE, ...) {
 #' @param name `[char(1)]` \cr Short name of distribution. See `available_distr()`
 #'   for all currently implemented distributions.
 #' @param params `[list]` \cr A named list with parameters of the distribution.
+#' @param se `[list]` \cr A list with the standard error for estimated parameters.
 #' @param ... none implemented.
 #' @export
 #' @name distributions
 
-make_distribution <- function(name, params, ...) {
+make_distribution <- function(name, params, se = NULL, ...) {
   checkmate::check_character(name, len = 1)
   checkmate::check_list(params)
 
@@ -85,7 +86,8 @@ make_distribution <- function(name, params, ...) {
     stop(paste("Parameters for ", name, "are not valid."))
   }
   out <- list(name = name,
-              params = params)
+              params = params,
+              se = se)
 
   class(out) <- c(paste0(name, "_distr"),
                   if (name %in% valid_ta_distr()) "ta_distr" else "sl_distr",
@@ -140,10 +142,11 @@ make_vonmises_distr <- function(kappa = 1) {
 #' @export
 #' @rdname distributions
 #' @param shape,scale `[double(1)>=0]` \cr Shape and scale of the Gamma distribution
-make_gamma_distr <- function(shape = 1, scale = 1) {
+make_gamma_distr <- function(shape = 1, scale = 1, se = NULL) {
   checkmate::check_number(shape)
   checkmate::check_number(scale)
-  make_distribution(name = "gamma", params = list(shape = shape, scale = scale))
+  make_distribution(name = "gamma", params = list(shape = shape, scale = scale),
+                    se = se)
 }
 
 
@@ -228,8 +231,23 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
         x[x == 0] <- sl_min
         base::message(paste0("Steps with length 0 are present. This will lead to an error when fitting a gamma distribution. 0 step lengths are replaced with the smallest non zero step length, which is: ", sl_min))
       }
-      fit <- fitdistrplus::fitdist(x, "gamma", keepdata = FALSE, lower = 0)
-      make_gamma_distr(shape = unname(fit$estimate["shape"]), scale = 1 / unname(fit$estimate["rate"]))
+
+      #  get closed form estimates as starting values for the optimation
+      n <- length(x)
+      t1 <- n * sum(x * log(x)) - sum(log(x)) * sum(x)
+      shape_closed <- (n * sum(x)) / t1
+      scale_closed <- 1/n^2 * t1
+
+      fit <- fitdistrplus::fitdist(
+        x, "gamma", keepdata = FALSE,
+        start = list(scale = scale_closed, shape = shape_closed))
+
+      make_gamma_distr(
+        shape = unname(fit$estimate["shape"]),
+        scale = unname(fit$estimate["scale"]),
+        se = list(
+          shape = unname(fit$sd["shape"]),
+          scale = unname(fit$sd["scale"])))
     },
     exp = {
       fit <- fitdistrplus::fitdist(x, "exp", keepdata = FALSE)

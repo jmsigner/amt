@@ -14,7 +14,7 @@
 \alias{random_numbers.amt_distr}
 \title{Functions to work with distributions as objects}
 \usage{
-make_distribution(name, params, ...)
+make_distribution(name, params, se = NULL, ...)
 
 make_exp_distr(rate = 1)
 
@@ -26,7 +26,7 @@ make_unif_distr(min = -pi, max = pi)
 
 make_vonmises_distr(kappa = 1)
 
-make_gamma_distr(shape = 1, scale = 1)
+make_gamma_distr(shape = 1, scale = 1, se = NULL)
 
 random_numbers(x, n = 100, ...)
 
