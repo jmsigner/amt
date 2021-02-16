@@ -173,22 +173,12 @@ filter.random_points <- function(.data, ..., .dots) {
   rp_transfer_attr(.data, xx)
 }
 
-#' @export
-group_by.random_points <- function(.data, ..., .dots) {
-  xx <- NextMethod()
-  rp_transfer_attr(.data, xx)
-}
 
 #' @export
 nest.random_points <- function(.data, ..., .dots) {
   NextMethod()
 }
 
-#' @export
-ungroup.random_points <- function(x, ...) {
-  xx <- NextMethod()
-  rp_transfer_attr(.data, xx)
-}
 
 #' @export
 distinct.random_points <- function(.data, ..., .dots) {

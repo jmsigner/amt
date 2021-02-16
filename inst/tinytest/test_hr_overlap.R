@@ -22,6 +22,7 @@ expect_inherits(hr_overlap(list(mcp, mcp1)), "tbl_df")
 expect_inherits(hr_overlap(kde, kde1), "tbl_df")
 expect_inherits(hr_overlap(list(kde, kde1)), "tbl_df")
 
-expect_inherits(hr_overlap(kde, kde1, type = "vi"), "tbl_df")
-expect_inherits(hr_overlap(list(kde, kde1), type = "vi"), "tbl_df")
+expect_error(hr_overlap(kde, kde1, type = "vi"))
+expect_error(hr_overlap(list(kde, kde1), type = "vi"))
+
 
