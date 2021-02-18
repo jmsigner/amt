@@ -67,12 +67,12 @@ available_distr <- function(which_dist = "all", names_only = FALSE, ...) {
 #' @param name `[char(1)]` \cr Short name of distribution. See `available_distr()`
 #'   for all currently implemented distributions.
 #' @param params `[list]` \cr A named list with parameters of the distribution.
-#' @param se `[list]` \cr A list with the standard error for estimated parameters.
+#' @param vcov `[matrix]` \cr A matrix with variance and covariances.
 #' @param ... none implemented.
 #' @export
 #' @name distributions
 
-make_distribution <- function(name, params, se = NULL, ...) {
+make_distribution <- function(name, params, vcov = NULL, ...) {
   checkmate::check_character(name, len = 1)
   checkmate::check_list(params)
 
@@ -87,7 +87,7 @@ make_distribution <- function(name, params, se = NULL, ...) {
   }
   out <- list(name = name,
               params = params,
-              se = se)
+              vcov = vcov)
 
   class(out) <- c(paste0(name, "_distr"),
                   if (name %in% valid_ta_distr()) "ta_distr" else "sl_distr",
@@ -134,19 +134,20 @@ make_unif_distr <- function(min = -pi, max = pi) {
 #' @export
 #' @rdname distributions
 #' @param kappa `[double(1)>=0]` \cr Concentration parameter of the von Mises distribution.
-make_vonmises_distr <- function(kappa = 1) {
+make_vonmises_distr <- function(kappa = 1, vcov = NULL) {
   checkmate::check_number(kappa, lower = 0)
-  make_distribution(name = "vonmises", params = list(kappa = kappa, mu = 0))
+  make_distribution(name = "vonmises", params = list(kappa = kappa, mu = 0),
+                    vcov = vcov)
 }
 
 #' @export
 #' @rdname distributions
 #' @param shape,scale `[double(1)>=0]` \cr Shape and scale of the Gamma distribution
-make_gamma_distr <- function(shape = 1, scale = 1, se = NULL) {
+make_gamma_distr <- function(shape = 1, scale = 1, vcov = NULL) {
   checkmate::check_number(shape)
   checkmate::check_number(scale)
   make_distribution(name = "gamma", params = list(shape = shape, scale = scale),
-                    se = se)
+                    vcov = vcov)
 }
 
 
@@ -245,9 +246,8 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
       make_gamma_distr(
         shape = unname(fit$estimate["shape"]),
         scale = unname(fit$estimate["scale"]),
-        se = list(
-          shape = unname(fit$sd["shape"]),
-          scale = unname(fit$sd["scale"])))
+        vcov = stats::vcov(fit)
+      )
     },
     exp = {
       fit <- fitdistrplus::fitdist(x, "exp", keepdata = FALSE)
@@ -271,7 +271,7 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
         x, type = "angles", units = "radians", template = "none",
         modulo = "asis", zero = 0, rotation = "counter")
       fit <- circular::mle.vonmises(xx)
-      make_vonmises_distr(kappa = fit$kappa)
+      make_vonmises_distr(kappa = fit$kappa, vcov = matrix(fit$se.kappa))
     }
   )
 }
