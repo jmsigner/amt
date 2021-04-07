@@ -95,24 +95,19 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     } else {
       rgeos::gUnaryUnion(ff)
     }
-    qq[[i]] <- rgeos::gBuffer(ff, width=0, id=i)
+    qq[[i]] <- st_union(st_as_sf(ff), by_feature=TRUE)
   }
 
-  rr <- do.call(sp::rbind.SpatialPolygons, qq)
-  areas <- sapply(qq, rgeos::gArea)
+  rr <- do.call(rbind, qq)
 
-  qq2 <- sp::SpatialPolygonsDataFrame(rr, data=data.frame(level=round(pp[wlevel], 2),
-                                                          area=areas), match.ID=FALSE)
+  qq2 <- cbind(level = round(pp[wlevel], 2), what = "estimate",
+               area = st_area(rr), rr)
 
   if (!is.null(attr(x, "crs_"))) {
-    sp::proj4string(qq2) <- as(attr(x, "crs_"), "CRS")
+    st_crs(qq2) <- st_crs(attr(x, "crs_"))
   }
 
-  qq2 <- sf::st_as_sf(qq2)
-  qq2$area <- sf::st_area(qq2)
-  qq2$what <- "estimate"
-
-  out <- list(locoh = qq2[, c("level", "what", "area", "geometry")],
+  out <- list(locoh = qq2,
               levels = levels, type = type, n = n, estimator = "locoh",
               crs = get_crs(x),
               data = if (keep.data) x else NULL)
