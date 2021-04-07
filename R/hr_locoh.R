@@ -70,18 +70,20 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   mm <- mcps[mcpAreasOrder]
 
 
-  pp <- rep(NA_integer_, length(ff))
-  seen <- c()
-
-  ## this is still slow
-  for (i in 1:length(ff)) {
-    seen <- union(seen, ff[[i]]$id)
-    pp[i] <- length(unique(seen))
-  }
+  ## Compute vector `pp`, which records what proportion of points,
+  ## cumulatively, have been "seen" with introduction of the nth
+  ## smallest polygon.
+  X <- lapply(ff, "[[", "id")
+  all_polys <- seq_along(X)
+  id_poly <- rep(all_polys, lengths(X))
+  id_pt <- unlist(X)
+  ## Vector with indices of polygon in which nth point first "seen"
+  id_poly <- id_poly[!(duplicated(id_pt))]
+  pp <- findInterval(all_polys, id_poly)
+  pp <- pp/nrow(x)
 
   qq <- list()
   qq[[1]] <- mm[[1]]
-  pp <- pp/nrow(x)
 
   wlevel <- sapply(levels, function(l) which.min(abs(pp - l)))
   for (i in seq_along(wlevel)) {
