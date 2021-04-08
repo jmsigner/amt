@@ -95,16 +95,16 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     } else {
       rgeos::gUnaryUnion(ff)
     }
-    qq[[i]] <- st_union(st_as_sf(ff), by_feature=TRUE)
+    qq[[i]] <- sf::st_union(sf::st_as_sf(ff), by_feature=TRUE)
   }
 
   rr <- do.call(rbind, qq)
 
   qq2 <- cbind(level = round(pp[wlevel], 2), what = "estimate",
-               area = st_area(rr), rr)
+               area = sf::st_area(rr), rr)
 
   if (!is.null(attr(x, "crs_"))) {
-    st_crs(qq2) <- st_crs(attr(x, "crs_"))
+    sf::st_crs(qq2) <- sf::st_crs(attr(x, "crs_"))
   }
 
   out <- list(locoh = qq2,
