@@ -70,18 +70,20 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   mm <- mcps[mcpAreasOrder]
 
 
-  pp <- rep(NA_integer_, length(ff))
-  seen <- c()
-
-  ## this is still slow
-  for (i in 1:length(ff)) {
-    seen <- union(seen, ff[[i]]$id)
-    pp[i] <- length(unique(seen))
-  }
+  ## Compute vector `pp`, which records what proportion of points,
+  ## cumulatively, have been "seen" with introduction of the nth
+  ## smallest polygon.
+  X <- lapply(ff, "[[", "id")
+  all_polys <- seq_along(X)
+  id_poly <- rep(all_polys, lengths(X))
+  id_pt <- unlist(X)
+  ## Vector with indices of polygon in which nth point first "seen"
+  id_poly <- id_poly[!(duplicated(id_pt))]
+  pp <- findInterval(all_polys, id_poly)
+  pp <- pp/nrow(x)
 
   qq <- list()
   qq[[1]] <- mm[[1]]
-  pp <- pp/nrow(x)
 
   wlevel <- sapply(levels, function(l) which.min(abs(pp - l)))
   for (i in seq_along(wlevel)) {
@@ -93,24 +95,19 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     } else {
       rgeos::gUnaryUnion(ff)
     }
-    qq[[i]] <- rgeos::gBuffer(ff, width=0, id=i)
+    qq[[i]] <- st_union(st_as_sf(ff), by_feature=TRUE)
   }
 
-  rr <- do.call(sp::rbind.SpatialPolygons, qq)
-  areas <- sapply(qq, rgeos::gArea)
+  rr <- do.call(rbind, qq)
 
-  qq2 <- sp::SpatialPolygonsDataFrame(rr, data=data.frame(level=round(pp[wlevel], 2),
-                                                          area=areas), match.ID=FALSE)
+  qq2 <- cbind(level = round(pp[wlevel], 2), what = "estimate",
+               area = st_area(rr), rr)
 
   if (!is.null(attr(x, "crs_"))) {
-    sp::proj4string(qq2) <- as(attr(x, "crs_"), "CRS")
+    st_crs(qq2) <- st_crs(attr(x, "crs_"))
   }
 
-  qq2 <- sf::st_as_sf(qq2)
-  qq2$area <- sf::st_area(qq2)
-  qq2$what <- "estimate"
-
-  out <- list(locoh = qq2[, c("level", "what", "area", "geometry")],
+  out <- list(locoh = qq2,
               levels = levels, type = type, n = n, estimator = "locoh",
               crs = get_crs(x),
               data = if (keep.data) x else NULL)
