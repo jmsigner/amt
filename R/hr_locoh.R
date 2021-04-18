@@ -51,7 +51,7 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   }
 
   xysp <- sp::SpatialPointsDataFrame(x[, c("x_", "y_")], data=data.frame(id=1:nrow(x)))
-  zz <- lapply(1:length(aa), function(i) xysp[aa[[i]], ])
+  zz <- lapply(1:length(aa), function(i) xysp[c(i, aa[[i]]), ])
   mcps <- lapply(zz, function(x) rgeos::gBuffer(rgeos::gConvexHull(x), width = rand_buffer))
   mcpAreas <- sapply(mcps, rgeos::gArea)
 
