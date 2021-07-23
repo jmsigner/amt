@@ -3,6 +3,7 @@
 - support for `hnorm` and `lnorm` step-length distributions.
 - support for `st_crs` for CRS. Major updates for several functions
 - deprecated the function `dist_cent`.
+- Added `as_track` for `data.frames`.
 
 # amt 0.1.4
 ## updates

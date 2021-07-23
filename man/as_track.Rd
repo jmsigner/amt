@@ -5,6 +5,7 @@
 \alias{as_track.SpatialPoints}
 \alias{as_track.sfc_POINT}
 \alias{as_track.steps_xyt}
+\alias{as_track.data.frame}
 \title{Coerce to track}
 \usage{
 as_track(x, ...)
@@ -14,6 +15,8 @@ as_track(x, ...)
 \method{as_track}{sfc_POINT}(x, ...)
 
 \method{as_track}{steps_xyt}(x, ...)
+
+\method{as_track}{data.frame}(x, ...)
 }
 \arguments{
 \item{x}{\verb{[SpatialPoints]} \cr Object to be converted to a track.}

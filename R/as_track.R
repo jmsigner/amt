@@ -58,3 +58,18 @@ as_track.steps_xyt <- function(x, ...) {
   }
 
 }
+
+# Thanks to bniebuhr see https://github.com/jmsigner/amt/issues/44
+#' @export
+#' @rdname as_track
+as_track.data.frame <- function(x, ...) {
+  cols <- colnames(x)
+  if("x_" %in% cols & "y_" %in% cols & !("t_" %in% cols)) {
+    make_track(x, .x = x_, .y = y_, ...)
+  } else {
+    if("x_" %in% cols & "y_" %in% cols & "t_" %in% cols) {
+      make_track(x, .x = x_, .y = y_, .t = t_, ...)
+    }
+  }
+
+}

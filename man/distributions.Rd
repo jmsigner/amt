@@ -14,7 +14,7 @@
 \alias{random_numbers.amt_distr}
 \title{Functions to work with distributions as objects}
 \usage{
-make_distribution(name, params, se = NULL, ...)
+make_distribution(name, params, vcov = NULL, ...)
 
 make_exp_distr(rate = 1)
 
@@ -24,9 +24,9 @@ make_lnorm_distr(meanlog = 0, sdlog = 1)
 
 make_unif_distr(min = -pi, max = pi)
 
-make_vonmises_distr(kappa = 1)
+make_vonmises_distr(kappa = 1, vcov = NULL)
 
-make_gamma_distr(shape = 1, scale = 1, se = NULL)
+make_gamma_distr(shape = 1, scale = 1, vcov = NULL)
 
 random_numbers(x, n = 100, ...)
 
@@ -39,6 +39,8 @@ random_numbers(x, n = 100, ...)
 for all currently implemented distributions.}
 
 \item{params}{\verb{[list]} \cr A named list with parameters of the distribution.}
+
+\item{vcov}{\verb{[matrix]} \cr A matrix with variance and covariances.}
 
 \item{...}{none implemented.}
 
