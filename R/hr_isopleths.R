@@ -88,6 +88,7 @@ hr_isopleths.akde <- function(x, conf.level = 0.95, ...) {
   res <- ctmm::SpatialPolygonsDataFrame.UD(x$akde, level.UD = x$levels,
                                            conf.level = conf.level)
   res1 <- sf::st_as_sf(res)
+  res1 <- sf::st_transform(res1, x$crs)
   res1 <- res1[, setdiff(names(res1), "name")]
   res1$level <- rep(x$levels, each = nrow(res1))
   res1$what <- rep(c(paste0("lci (", conf.level, ")"),

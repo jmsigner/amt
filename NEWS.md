@@ -5,6 +5,7 @@
 - deprecated the function `dist_cent`.
 - Added `as_track` for `data.frames`.
 - Added argument `verbose` to `make_track()`. 
+- Fixed bug with `hr_isopleths()` for aKDE.
 
 # amt 0.1.4
 ## updates
