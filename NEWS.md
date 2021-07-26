@@ -4,6 +4,7 @@
 - support for `st_crs` for CRS. Major updates for several functions
 - deprecated the function `dist_cent`.
 - Added `as_track` for `data.frames`.
+- Added argument `verbose` to `make_track()`. 
 
 # amt 0.1.4
 ## updates

@@ -119,3 +119,12 @@ d1 <- deer %>% mutate(g = 1:nrow(.)) %>% nest(d = -g) %>% unnest(cols = d)
 expect_true(has_crs(d1))
 expect_equal(get_crs(d1), get_crs(d1))
 
+
+# Check verbose
+expect_error(make_track(dat, x, y, verbose = "yes"))
+expect_message(make_track(dat, x, y, verbose = TRUE))
+expect_silent(make_track(dat, x, y, verbose = FALSE))
+
+expect_error(make_track(dat, x, y, t, verbose = "yes"))
+expect_message(make_track(dat, x, y, t, verbose = TRUE))
+expect_silent(make_track(dat, x, y, t, verbose = FALSE))

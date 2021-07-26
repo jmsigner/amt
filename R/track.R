@@ -21,13 +21,16 @@
 #' @param all_cols `[logical(1)=FALSE]` \cr Should all columns be carried over to the track object, default is `FALSE`.
 #' @param x,y `[numeric]` \cr The x and y coordinates.
 #' @param t `[POSIXct]` \cr The time stamp.
+#' @param verbose `[logical(1)=FALSE]` \cr Inform when tracks are created.
 #' @return If `t` was provided an object of class `track_xyt` is returned
 #'   otherwise a `track_xy`.
 #' @export
 #' @name track
 
 mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
-                     check_duplicates = FALSE, all_cols = FALSE) {
+                     check_duplicates = FALSE, all_cols = FALSE, verbose = FALSE) {
+
+  checkmate::assert_logical(verbose)
 
   if (missing(.x) | missing(.y)) {
     stop(".x and .y are required.")
@@ -54,7 +57,9 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
 
 
   if (missing(.t)) {
-    message(".t missing, creating `track_xy`.")
+    if (verbose) {
+      message(".t missing, creating `track_xy`.")
+    }
     out <- tbl %>%
       dplyr::select(x_ = !!.x,
              y_ = !!.y,
@@ -63,7 +68,9 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
     class(out) <- c("track_xy", class(out))
 
   } else {
-    message(".t found, creating `track_xyt`.")
+    if (verbose) {
+      message(".t found, creating `track_xyt`.")
+    }
 
     .t <- enquo(.t)
     if (order_by_ts) {
