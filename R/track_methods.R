@@ -91,7 +91,7 @@ centroid.track_xy <- function(x, spatial = FALSE, ...) {
 
 #' @export
 points.track_xy <- function(x, ...) {
-  graphics::points(x[, c("x_", "y_")], ...)
+  graphics::points(x$x_, x$y_, ...)
 }
 
 
@@ -119,7 +119,7 @@ coords.track_xy <- function(x, ...) {
 
 #' @export
 plot.track_xy <- function(x, ...) {
-  plot(x$x_, x$y_, ...)
+  plot(x$x_, x$y_, asp = 1, ...)
 }
 
 #' @rdname  helper
