@@ -2,6 +2,8 @@
 #'
 #' `step_lengths` can be use to calculate step lengths of a track. `direction_abs` and `direction_rel` calculate the absolute and relative direction of steps. `steps` converts a `track_xy*` from a point representation to a step representation and automatically calculates step lengths and relative turning angles.
 #'
+#' `dierctions_*()` returns `NA` for 0 step lengths.
+#'
 #' @template track_xy_star
 #' @param lonlat `[logical(1)=TRUE]` \cr Should geographical or planar coordinates be used? If `TRUE` geographic distances are calculated.
 #' @param full_circle `[logical(1)=FALSE]` \cr If `TRUE` angles are returned between 0 and $2pi$, otherwise angles are between $-pi$ and $pi$.
@@ -33,8 +35,8 @@ direction_abs <- function(x, ...) {
 #'
 
 #' xy <- tibble(
-#'   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
-#'   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
+#'   x = c(1, 4, 8, 8, 12, 12, 8, 0, 0, 4, 2),
+#'   y = c(0, 0, 0, 8, 12, 12, 12, 12, 8, 4, 2))
 #' trk <- make_track(xy, x, y)
 #'
 #' # append last
@@ -100,21 +102,28 @@ direction_abs.track_xy <- function(x, full_circle = FALSE, zero_dir = "E",
                                    append_last = TRUE, lonlat = FALSE, ...) {
   zero_dir <- toupper(zero_dir)
   if (!zero_dir %in% c("E", "N", "W", "S")) {
-    stop("zero_dir should be in either 'E', 'N', 'W', or 'S'")
+    stop("zero_dir should be one of 'E', 'N', 'W', or 'S'.")
   }
 
   if (zero_dir == "E") {
     zero_dir <- "East"
   }
 
+  x$dx <- diff_x(x)
+  x$dy <- diff_y(x)
+  x$zero_step <- x$dx == 0 & x$dy == 0
+
   # angles
   a <- if (!lonlat) {
-    atan2(diff_y(x), diff_x(x))
+    atan2(x$dy, x$dx)
   } else {
     xx <- sp::coordinates(as_sp(x))
     #c((450 + ((360 - geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]))) %% 360) %% 360, NA) * pi / 180
     c(geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]), NA) * pi / 180
   }
+
+  a[x$zero_step] <- NA
+
 
   # remove last NA
   a <- if (append_last) a else a[-length(a)]

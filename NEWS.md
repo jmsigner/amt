@@ -6,6 +6,7 @@
 - Added `as_track` for `data.frames`.
 - Added argument `verbose` to `make_track()`. 
 - Fixed bug with `hr_isopleths()` for aKDE.
+- Fix issue #48 (https://github.com/jmsigner/amt/issues/48). Zero step lengths return now NA for direction.
 
 # amt 0.1.4
 ## updates
