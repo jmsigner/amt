@@ -13,11 +13,13 @@
 #' @name extract_covariates
 #' @export
 #' @examples
+#' \dontrun{
 #' data(deer)
 #' data(sh_forest)
 #' deer %>% extract_covariates(sh_forest)
 #' deer %>% steps %>% extract_covariates(sh_forest)
 #' deer %>% steps %>% extract_covariates(sh_forest, where = "start")
+#' }
 
 extract_covariates <- function(x, ...) {
   UseMethod("extract_covariates", x)
@@ -82,7 +84,7 @@ extract_covar_base <- function(x, covars) {
 #' data(deer) # relocation
 #' data("sh_forest") # env covar
 #'
-#' p1 <- deer %>% steps() %>% random_steps() %>%
+#' p1 <- deer[1:10, ] %>% steps() %>% random_steps() %>%
 #'   extract_covariates(sh_forest) %>% # extract at the endpoint
 #'   mutate(for_path = extract_covariates_along(., sh_forest))  %>%
 #'   # 1 = forest, lets calc the fraction of forest along the path
@@ -121,6 +123,7 @@ extract_covariates_along.steps_xy <- function(x, covariates, ...) {
 #' @param name_covar `[character(1)="time_var_covar"]` \cr The name of the new column.
 #' @export
 #' @examples
+#' \dontrun{
 #' # Simulate some dummy data
 #' # Hourly data for 10 days: 24 * 10
 #' set.seed(123)
@@ -184,13 +187,14 @@ extract_covariates_along.steps_xy <- function(x, covariates, ...) {
 #'     rs, max_time = hours(2), when = "before", name_covar = "env_2h") %>%
 #'   print(n = 25)
 #'
-#' # also with start and end
+#' also with start and end
 #' trk %>%
 #'   steps() %>%
 #'   extract_covariates_var_time(
 #'     rs, max_time = hours(2), when = "before", name_covar = "env_2h",
 #'     where = "both") %>%
 #'   print(n = 25)
+#' }
 #'
 extract_covariates_var_time <- function(x, ...) {
   UseMethod("extract_covariates_var_time", x)

@@ -73,12 +73,12 @@ direction_abs <- function(x, ...) {
 #' amt::direction_abs(trk)
 #'
 #' # bcpa
-#' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(1:10))
+#' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(0:10))
 #' bcpa::GetVT(df)$Phi
 #' direction_abs(trk, full_circle = FALSE, append_last = FALSE)
 #'
 #' # move
-#' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:10),
+#' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:11),
 #'  proj = sp::CRS("+init=epsg:4326"))
 #' move::angle(m)
 #' direction_abs(trk, lonlat = TRUE, zero_dir = "E") %>% as_degree()
@@ -86,7 +86,7 @@ direction_abs <- function(x, ...) {
 #' # trajectories
 #' t1 <- trajectories::Track(
 #'   spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
-#'   lubridate::now(tzone = "UTC") + lubridate::hours(1:10), data = data.frame(1:10)))
+#'   lubridate::now(tzone = "UTC") + lubridate::hours(1:11), data = data.frame(1:11)))
 #'
 #' t1[["direction"]]
 #' direction_abs(trk, full_circle = TRUE, zero_dir = "N",

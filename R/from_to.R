@@ -6,10 +6,12 @@
 #' @name from_to
 #' @export
 #' @examples
+#' \dontrun{
 #' data(deer)
 #' from(deer)
 #' to(deer)
 #' from_to(deer)
+#' }
 
 from_to <- function(x, ...) {
   UseMethod("from_to", x)

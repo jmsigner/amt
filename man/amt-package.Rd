@@ -25,6 +25,7 @@ Other contributors:
   \item Ulrike Schlaegel [contributor]
   \item John Fieberg [contributor]
   \item Josh O'Brien [contributor]
+  \item Bernardo Niebuhr [contributor]
   \item Scott LaPoint [data contributor]
 }
 
