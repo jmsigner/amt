@@ -76,22 +76,25 @@ steps.
 \code{extract_covariates_along} extracts the covariates along a straight line between the start and the end point of a (random) step. It returns a list, which in most cases will have to be processed further.
 }
 \examples{
+\dontrun{
 data(deer)
 data(sh_forest)
 deer \%>\% extract_covariates(sh_forest)
 deer \%>\% steps \%>\% extract_covariates(sh_forest)
 deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
+}
 \dontrun{
 data(deer) # relocation
 data("sh_forest") # env covar
 
-p1 <- deer \%>\% steps() \%>\% random_steps() \%>\%
+p1 <- deer[1:10, ] \%>\% steps() \%>\% random_steps() \%>\%
   extract_covariates(sh_forest) \%>\% # extract at the endpoint
   mutate(for_path = extract_covariates_along(., sh_forest))  \%>\%
   # 1 = forest, lets calc the fraction of forest along the path
   mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
 }
 
+\dontrun{
 # Simulate some dummy data
 # Hourly data for 10 days: 24 * 10
 set.seed(123)
@@ -155,12 +158,13 @@ trk \%>\%
     rs, max_time = hours(2), when = "before", name_covar = "env_2h") \%>\%
   print(n = 25)
 
-# also with start and end
+also with start and end
 trk \%>\%
   steps() \%>\%
   extract_covariates_var_time(
     rs, max_time = hours(2), when = "before", name_covar = "env_2h",
     where = "both") \%>\%
   print(n = 25)
+}
 
 }

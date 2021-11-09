@@ -33,7 +33,7 @@ direction_abs <- function(x, ...) {
 #' @rdname steps
 #' @examples
 #'
-
+#' \dontrun{
 #' xy <- tibble(
 #'   x = c(1, 4, 8, 8, 12, 12, 8, 0, 0, 4, 2),
 #'   y = c(0, 0, 0, 8, 12, 12, 12, 12, 8, 4, 2))
@@ -73,12 +73,12 @@ direction_abs <- function(x, ...) {
 #' amt::direction_abs(trk)
 #'
 #' # bcpa
-#' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(1:10))
+#' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(0:10))
 #' bcpa::GetVT(df)$Phi
 #' direction_abs(trk, full_circle = FALSE, append_last = FALSE)
 #'
 #' # move
-#' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:10),
+#' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:11),
 #'  proj = sp::CRS("+init=epsg:4326"))
 #' move::angle(m)
 #' direction_abs(trk, lonlat = TRUE, zero_dir = "E") %>% as_degree()
@@ -86,7 +86,7 @@ direction_abs <- function(x, ...) {
 #' # trajectories
 #' t1 <- trajectories::Track(
 #'   spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
-#'   lubridate::now(tzone = "UTC") + lubridate::hours(1:10), data = data.frame(1:10)))
+#'   lubridate::now(tzone = "UTC") + lubridate::hours(1:11), data = data.frame(1:11)))
 #'
 #' t1[["direction"]]
 #' direction_abs(trk, full_circle = TRUE, zero_dir = "N",
@@ -96,6 +96,7 @@ direction_abs <- function(x, ...) {
 #' df <- data.frame(ID = 1, x = xy$x, y = xy$y)
 #' moveHMM::prepData(df, type = "UTM")$angle
 #' direction_rel(trk)
+#' }
 
 direction_abs.track_xy <- function(x, full_circle = FALSE, zero_dir = "E",
                                    clockwise = FALSE,
@@ -178,16 +179,14 @@ direction_abs.track_xy <- function(x, full_circle = FALSE, zero_dir = "E",
 #' # moveHMM (only rel. ta)
 #' df <- data.frame(ID = 1, x = xy$x, y = xy$y)
 #' moveHMM::prepData(df, type = "UTM")
+#'
 direction_rel <- function(x, ...) {
   UseMethod("direction_rel", x)
 }
 
 #' @export
 #' @rdname steps
-#' @examples
 #'
-# direction_rel -----------------------------------------------------------
-#' trk
 #'
 direction_rel.track_xy <- function(x, lonlat = FALSE, append_last = TRUE,
                                    zero_dir = "E", ...) {

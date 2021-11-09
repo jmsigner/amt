@@ -7,6 +7,7 @@
 #' @export
 #' @name remove_capture
 #' @examples
+#' \dontrun{
 #' library(lubridate)
 #' n <- 10
 #' df <- track(
@@ -20,6 +21,7 @@
 #' remove_capture_effect(df, start = days(1))
 #' remove_capture_effect(df, end = days(2))
 #' remove_capture_effect(df, start = days(1), end = days(2))
+#' }
 #'
 
 remove_capture_effect <- function(x, ...) {

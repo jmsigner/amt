@@ -22,9 +22,9 @@ A \code{ctmm} object.
 Fit a continuous time movement model with \code{ctmm}
 }
 \examples{
-data(deer)
-m1 <- fit_ctmm(deer, "iid")
-summary(m1)
+# data(deer)
+# m1 <- fit_ctmm(deer, "iid")
+# summary(m1)
 }
 \references{
 C. H. Fleming, J. M. Calabrese, T. Mueller, K.A. Olson, P. Leimgruber, W. F. Fagan, “From fine-scale foraging to home ranges: A semi-variance approach to identifying movement modes across spatiotemporal scales”, The American Naturalist, 183:5, E154-E167 (2014).

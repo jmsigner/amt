@@ -15,7 +15,8 @@ mk_track(
   crs = NA_crs_,
   order_by_ts = TRUE,
   check_duplicates = FALSE,
-  all_cols = FALSE
+  all_cols = FALSE,
+  verbose = FALSE
 )
 
 make_track(
@@ -27,7 +28,8 @@ make_track(
   crs = NA_crs_,
   order_by_ts = TRUE,
   check_duplicates = FALSE,
-  all_cols = FALSE
+  all_cols = FALSE,
+  verbose = FALSE
 )
 
 track(x, y, t, ..., crs = NULL)
@@ -54,6 +56,8 @@ stamp, default is \code{TRUE}.}
 duplicated time stamp, default is \code{FALSE}.}
 
 \item{all_cols}{\verb{[logical(1)=FALSE]} \cr Should all columns be carried over to the track object, default is \code{FALSE}.}
+
+\item{verbose}{\verb{[logical(1)=FALSE]} \cr Inform when tracks are created.}
 
 \item{x, y}{\verb{[numeric]} \cr The x and y coordinates.}
 

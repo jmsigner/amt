@@ -30,8 +30,10 @@ to(x, ...)
 Function that returns the start (\code{from}), end (\code{to}), and the duration (\code{from_to}) of a track.
 }
 \examples{
+\dontrun{
 data(deer)
 from(deer)
 to(deer)
 from_to(deer)
+}
 }
