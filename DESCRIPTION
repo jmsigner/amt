@@ -46,7 +46,6 @@ Suggests:
   geosphere,
   KernSmooth,
   FNN,
-  bcpa,
   leaflet,
   moveHMM,
   move,

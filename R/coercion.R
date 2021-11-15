@@ -197,24 +197,6 @@ as_ltraj.track_xyt <- function(x, ...) {
 }
 
 
-# as_bcpa -----------------------------------------------------------------
-#' @export
-#' @rdname coercion
-#' @examples
-#' data(deer)
-#' d <- as_bcpa(deer)
-
-as_bcpa <- function(x, ...) {
-  UseMethod("as_bcpa", x)
-}
-
-#' @export
-#' @rdname coercion
-as_bcpa.track_xyt <- function(x, ...) {
-  x <- tibble(X = x$x_, Y = x$y_, Time = x$t_)
-  bcpa::GetVT(x, ...)
-}
-
 # as_telemetry -----------------------------------------------------------------
 #' @export
 #' @rdname coercion
