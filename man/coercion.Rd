@@ -9,8 +9,6 @@
 \alias{as_ltraj}
 \alias{as_ltraj.track_xy}
 \alias{as_ltraj.track_xyt}
-\alias{as_bcpa}
-\alias{as_bcpa.track_xyt}
 \alias{as_telemetry}
 \alias{as_telemetry.track_xyt}
 \alias{as_moveHMM}
@@ -30,10 +28,6 @@ as_ltraj(x, ...)
 \method{as_ltraj}{track_xy}(x, id = "animal_1", ...)
 
 \method{as_ltraj}{track_xyt}(x, ...)
-
-as_bcpa(x, ...)
-
-\method{as_bcpa}{track_xyt}(x, ...)
 
 as_telemetry(x, ...)
 
@@ -59,14 +53,17 @@ Several other packages provides methods to analyze movement data, and \code{amt}
 data(deer)
 as_move(deer)
 as_move(deer, id = "foo")
+\dontrun{
 data(deer)
 as_ltraj(deer)
 as_ltraj(deer, id = "animal_3")
-data(deer)
-d <- as_bcpa(deer)
+}
+\dontrun{
 data(deer)
 as_telemetry(deer)
-# Fit HMM with two states
+}
+\dontrun{
 data(deer)
 dm <- as_moveHMM(deer)
+}
 }

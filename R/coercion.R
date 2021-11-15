@@ -169,9 +169,11 @@ as_move.track_xyt <- function(x, id = "id", ...){
 #' @export
 #' @rdname coercion
 #' @examples
+#' \dontrun{
 #' data(deer)
 #' as_ltraj(deer)
 #' as_ltraj(deer, id = "animal_3")
+#' }
 as_ltraj <- function(x, ...) {
   UseMethod("as_ltraj", x)
 }
@@ -197,30 +199,14 @@ as_ltraj.track_xyt <- function(x, ...) {
 }
 
 
-# as_bcpa -----------------------------------------------------------------
-#' @export
-#' @rdname coercion
-#' @examples
-#' data(deer)
-#' d <- as_bcpa(deer)
-
-as_bcpa <- function(x, ...) {
-  UseMethod("as_bcpa", x)
-}
-
-#' @export
-#' @rdname coercion
-as_bcpa.track_xyt <- function(x, ...) {
-  x <- tibble(X = x$x_, Y = x$y_, Time = x$t_)
-  bcpa::GetVT(x, ...)
-}
-
 # as_telemetry -----------------------------------------------------------------
 #' @export
 #' @rdname coercion
 #' @examples
+#' \dontrun{
 #' data(deer)
 #' as_telemetry(deer)
+#' }
 as_telemetry <- function(x, ...) {
   UseMethod("as_telemetry", x)
 }
@@ -259,9 +245,10 @@ as_telemetry.track_xyt <- function(x, ...) {
 #' @export
 #' @rdname coercion
 #' @examples
-#' # Fit HMM with two states
+#' \dontrun{
 #' data(deer)
 #' dm <- as_moveHMM(deer)
+#' }
 
 as_moveHMM <- function(x, ...) {
   UseMethod("as_moveHMM", x)

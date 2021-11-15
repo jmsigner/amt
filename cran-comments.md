@@ -4,15 +4,17 @@
 ## Round 1
 
 ### Test environments
-- local: Ubuntu 20.04, R 4.1.1
+- local: Ubuntu 20.04, R 4.1.2
 - win builder: R release and devel
-- macos-highsierra-release-cran on rhub
 
 ### R CMD check results
 
-There were no errors, warnings or notes. 
+There were no errors or warnings. There was one note. 
+
+1. That the package was archived.
 
 ### What changed
+- Removed dependency on the `bcpa` package.
 - Fixed test errors (Email by B. Ripley on 2021-10-26)
 - support for `hnorm` and `lnorm` step-length distributions.
 - support for `st_crs` for CRS. Major updates for several functions
