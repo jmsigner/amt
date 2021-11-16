@@ -16,8 +16,6 @@ fit_ctmm(x, model, uere = NULL, ...)
 \item{...}{Additional parameters passed to \code{ctmm::ctmm.fit} or \code{ctmm::ctmm.select} for \code{model = "auto"}}
 }
 \value{
-A \code{ctmm} object.
-
 An object of class \code{ctmm} from the package ctmm.
 }
 \description{

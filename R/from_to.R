@@ -4,14 +4,13 @@
 #' @template track_xy_star
 #' @template dots_none
 #' @name from_to
+#' @return A vector of class `POSIXct`.
 #' @export
 #' @examples
-#' \dontrun{
 #' data(deer)
 #' from(deer)
 #' to(deer)
 #' from_to(deer)
-#' }
 
 from_to <- function(x, ...) {
   UseMethod("from_to", x)

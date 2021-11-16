@@ -1,10 +1,11 @@
 #' Fit logistic regression
 #'
-#' This function is a wrapper around `stats::glm` for piped workflows.
+#' This function is a wrapper around `stats::glm` for a piped workflows.
 #' @param data `[data.frame]` \cr The data used to fit a model.
 #' @param formula `[formula]` \cr The model formula.
 #' @param ... Further arguments passed to `stats::glm`.
 #' @name fit_logit
+#' @returns A list with the model output.
 #' @export
 fit_logit <- function(data, formula, ...) {
   m <- stats::glm(formula, data = data, family = stats::binomial(link = "logit"), ...)

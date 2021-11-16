@@ -42,7 +42,7 @@ the maximum movement distance.}
 \item{n_rep}{\verb{[integer(1)=5e3]\{>0\}} \cr The number of times the animal walks of the final position. The mean of all replicates is returned.}
 }
 \value{
-The habitat kernel, as \code{RasterLayer}.
+A \code{RasterLayer}.
 }
 \description{
 Function to obtain a habitat kernel from a fitted (i)SSF.

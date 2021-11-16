@@ -16,6 +16,9 @@ fit_rsf(data, formula, ...)
 
 \item{...}{Further arguments passed to \code{stats::glm}.}
 }
+\value{
+A list with the model output.
+}
 \description{
-This function is a wrapper around \code{stats::glm} for piped workflows.
+This function is a wrapper around \code{stats::glm} for a piped workflows.
 }

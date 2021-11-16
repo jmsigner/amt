@@ -13,7 +13,7 @@
 #' \insertRef{avgar2016}{amt}
 #' \insertRef{signer2017}{amt}
 #'
-#' @return The habitat kernel, as `RasterLayer`.
+#' @return A `RasterLayer`.
 #' @name sim_ud
 #' @note This functions are still experimental and should be used with care. If in doubt, please contact the author.
 #' @author Johannes Signer (jmsigner@@gmail.com)

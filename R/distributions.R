@@ -643,10 +643,11 @@ update_vonmises <- function(dist, beta_cos_ta){
 
 # Utility functions -------------------------------------------------------
 
-#' Get distribution and parameters
+#' Obtain the step length and/or turn angle distributions from random steps or a fitted model.
 #'
 #' @param x Random steps or fitted model
 #' @param ... None implemented.
+#' @returns An amt distribution
 #'
 #' @export
 #' @name get_distr
