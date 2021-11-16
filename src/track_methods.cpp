@@ -193,7 +193,7 @@ NumericVector mk_reg_old(NumericVector relocs_time, int time_dist, int time_tol,
 }
 
 
-//// 
+////
 //NumericVector duration_acuracy(NumericVector x_, NumericVector y_, NumericVector t_,
 //                               NumericVector dop, NumericVector dim, int duration_accuracy) {
 //
