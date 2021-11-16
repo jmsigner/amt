@@ -9,10 +9,7 @@
 \alias{make_unif_distr}
 \alias{make_vonmises_distr}
 \alias{make_gamma_distr}
-\alias{random_numbers}
-\alias{random_numbers.vonmises_distr}
-\alias{random_numbers.amt_distr}
-\title{Functions to work with distributions as objects}
+\title{Functions create statistical distributions}
 \usage{
 make_distribution(name, params, vcov = NULL, ...)
 
@@ -27,12 +24,6 @@ make_unif_distr(min = -pi, max = pi)
 make_vonmises_distr(kappa = 1, vcov = NULL)
 
 make_gamma_distr(shape = 1, scale = 1, vcov = NULL)
-
-random_numbers(x, n = 100, ...)
-
-\method{random_numbers}{vonmises_distr}(x, n = 100, ...)
-
-\method{random_numbers}{amt_distr}(x, n = 100, ...)
 }
 \arguments{
 \item{name}{\verb{[char(1)]} \cr Short name of distribution. See \code{available_distr()}
@@ -59,11 +50,10 @@ for all currently implemented distributions.}
 \item{kappa}{\verb{[double(1)>=0]} \cr Concentration parameter of the von Mises distribution.}
 
 \item{shape, scale}{\verb{[double(1)>=0]} \cr Shape and scale of the Gamma distribution}
-
-\item{x}{\verb{[amt_distr]} \cr A distribution object.}
-
-\item{n}{\verb{[integer(1)=100]\{>0\}} \cr The number of random draws.}
+}
+\value{
+A list of class \code{amt_distr} that contains the name (\code{name}) and parameters (\code{params}) of a distribution.
 }
 \description{
-\code{make_distributions} creates a distribution.
+\code{make_distributions} creates a distribution suitable for using it with integrated step selection functions
 }

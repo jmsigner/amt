@@ -17,11 +17,14 @@ bbox(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{spatial}{\verb{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPolygons}-object or not.}
+\item{spatial}{\verb{[logical(1)=TRUE]} \cr Whether or not to return a \code{SpatialPolygons}-object or not.}
 
 \item{buffer}{\verb{[numeric(0)=NULL]\{NULL, >0\}} \cr An optional buffer of the bounding box.}
 
 \item{sf}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE} a simple feature polygon is returned.}
+}
+\value{
+If \code{spatial = FALSE} a named vector of length four with the extent of the bounding box. Otherwise a \code{SpatialPolygon} or a simple freature polygon with the bounding box.
 }
 \description{
 Get bounding box of a track.

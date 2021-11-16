@@ -37,6 +37,7 @@ track_resample.track_xyt <- function(x, rate = hours(2), tolerance = minutes(15)
 #' @param min_n `[numeric(1)=3]` \cr Indicating the minimum number of relocations (=fixes per burst).
 #' @template dots_none
 #' @name filter_min_n_burst
+#' @return A `tibble` of class `track_xy(t)`.
 #' @export
 filter_min_n_burst <- function(x, ...) {
   UseMethod("filter_min_n_burst")

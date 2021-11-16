@@ -38,6 +38,24 @@ dispersal_kernel(
 
 \item{stop}{\verb{[integer(1)=1]\{0,1\}} \cr What happens when the animal steps out of the landscape.}
 }
+\value{
+A list with the following entries
+\itemize{
+\item \code{formula}: The formula used to construct the dispersal kernel.
+\item \code{coefs}: The selection coefficients.
+\item \code{habitat}: Habitat covariates used to construct the dispersal kernel.
+\item \code{other.var}: Other (time) varying covariates used to construct the dispersal kernel.
+\item \code{start}: The start position.
+\item \code{max.dist}: The maximum distance of the dispersal kernel.
+\item \code{init.dir}: The initial direction of the dispersal kernel.
+\item \code{standardize}: Whether or not the dispersal kernel was standardized.
+\item \code{raster}: Should a \code{RasterLayer} be returned.
+\item \code{stop}: What happens when the animal steps outside the landscape.
+\item \code{prep_dk}: Metrics for each cell in the dispersal kernel (e.g., step length, direction, ...)
+\item \code{dispersal_kernel}: A RasterLayer if \code{raster = TRUE} or a \code{tibble} of the dispersal kernel.
+
+}
+}
 \description{
 Create a dispersal kernel
 }

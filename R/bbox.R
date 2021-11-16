@@ -1,10 +1,11 @@
 #' Get bounding box of a track.
 #' @template track_xy_star
-#' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPolygons`-object or not.
+#' @param spatial `[logical(1)=TRUE]` \cr Whether or not to return a `SpatialPolygons`-object or not.
 #' @param buffer `[numeric(0)=NULL]{NULL, >0}` \cr An optional buffer of the bounding box.
 #' @param sf `[logical(1)=FALSE]` \cr If `TRUE` a simple feature polygon is returned.
 #' @template dots_none
 #' @name bbox
+#' @return If `spatial = FALSE` a named vector of length four with the extent of the bounding box. Otherwise a `SpatialPolygon` or a simple freature polygon with the bounding box.
 #' @export
 #' @examples
 #' data(deer)

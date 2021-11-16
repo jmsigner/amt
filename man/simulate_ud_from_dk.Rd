@@ -13,6 +13,9 @@ simulate_ud_from_dk(obj, n = 1000, other.vars = NULL)
 
 \item{other.vars}{other covariates for each time step.}
 }
+\value{
+A raster layer.
+}
 \description{
 Simulate a UD from a dispersal kernel
 }

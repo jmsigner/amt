@@ -46,24 +46,19 @@ as_moveHMM(x, ...)
 
 \item{id}{\verb{[numeric,character,factor]} \cr Animal id(s).}
 }
+\value{
+An object of the class to which coercion is performed to.
+}
 \description{
-Several other packages provides methods to analyze movement data, and \code{amt} provides coercion methods to some packages
+Several other packages provides methods to analyze movement data, and \code{amt} provides coercion methods to some packages.
 }
 \examples{
 data(deer)
-as_move(deer)
-as_move(deer, id = "foo")
-\dontrun{
-data(deer)
-as_ltraj(deer)
-as_ltraj(deer, id = "animal_3")
-}
-\dontrun{
-data(deer)
+mini_deer <- deer[1:20, ]
+as_move(mini_deer)
+as_move(mini_deer, id = "foo")
+as_ltraj(mini_deer)
+as_ltraj(mini_deer, id = "animal_3")
 as_telemetry(deer)
-}
-\dontrun{
-data(deer)
-dm <- as_moveHMM(deer)
-}
+as_moveHMM(mini_deer)
 }

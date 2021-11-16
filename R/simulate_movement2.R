@@ -119,6 +119,24 @@ prep_and_check_simulations_to_rcpp <- function(
 #' @param standardize `[logical(1) = TRUE]` \cr Should the result be standardized.
 #' @param raster `[logical(1) = TRUE]` \cr Should a `RasterLayer` be returned.
 #' @param stop `[integer(1)=1]{0,1}` \cr What happens when the animal steps out of the landscape.
+#' @return A list with the following entries
+#' \itemize{
+#' \item `formula`: The formula used to construct the dispersal kernel.
+#' \item `coefs`: The selection coefficients.
+#' \item `habitat`: Habitat covariates used to construct the dispersal kernel.
+#' \item `other.var`: Other (time) varying covariates used to construct the dispersal kernel.
+#' \item `start`: The start position.
+#' \item `max.dist`: The maximum distance of the dispersal kernel.
+#' \item `init.dir`: The initial direction of the dispersal kernel.
+#' \item `standardize`: Whether or not the dispersal kernel was standardized.
+#' \item `raster`: Should a `RasterLayer` be returned.
+#' \item `stop`: What happens when the animal steps outside the landscape.
+#' \item `prep_dk`: Metrics for each cell in the dispersal kernel (e.g., step length, direction, ...)
+#' \item `dispersal_kernel`: A RasterLayer if `raster = TRUE` or a `tibble` of the dispersal kernel.
+#'
+#' }
+#'
+#'
 #'
 #' @export
 #'
@@ -183,6 +201,7 @@ dispersal_kernel <- function(
 #' @param obj A dispersal kernel.
 #' @param n Number of time steps.
 #' @param other.vars Other covariates (for each time step).
+#' @return A `tibble` with the coordinates of the simulated path.
 #'
 #' @export
 #'
@@ -244,6 +263,7 @@ simulate_xy <- function(obj, n = 100, other.vars = NULL) {
 #' @param obj A dispersal kernel
 #' @param n Number of time steps
 #' @param other.vars other covariates for each time step.
+#' @return A raster layer.
 #'
 #' @export
 #'
@@ -292,110 +312,3 @@ simulate_ud_from_dk <- function(obj, n = 1e3, other.vars = NULL) {
  }
 
 
-# #### OLD
-# simulate_xy <- function(x, n = 100, other.vars = NULL) {
-#
-#   if (!is(x, "dispersal_kernel")) {
-#     stop("x is no dispersal kernel")
-#   }
-#   p <- x$prep_dk
-#   if (is.null(x$other.vars)) {
-#     p$other_covars <- matrix(NA, nrow = n, ncol = 1)
-#   }
-#
-#   k <- simulate_track(
-#     cur_x = p$start[1], cur_y = p$start[2], nc = p$nc, nr = p$nr,
-#     dk = p$dk, coefs = p$coefs,
-#     standardize = p$standardize,
-#     first_order_terms = p$first_order_terms,
-#     second_order_terms = p$second_order_terms,
-#     hab = p$hab,
-#     other_covars = p$other_covars,
-#     other_covars_indicator = p$other_covars_indicator,
-#     stop = p$stop, n = n
-#   )
-#
-#   tibble::tibble(
-#     x1 = k[, 1] * p$res,
-#     y1 = k[, 2] * p$res,
-#     x2 = k[, 3] * p$res,
-#     y2 = k[, 4] * p$res,
-#     ta_ = k[, 5],
-#     sl_ = k[, 6] * p$res
-#   )
-#
-# }
-#
-#  simulate_xy_R <- function(obj, n = 100, other.vars = NULL) {
-#
-#    if (!is(obj, "dispersal_kernel")) {
-#      stop("obj is no dispersal kernel")
-#    }
-#    p <- obj$prep_dk
-#    if (is.null(obj$other.vars)) {
-#      p$other_covars <- matrix(NA, nrow = n, ncol = 1)
-#    }
-#
-#    x <- p$start[1]
-#    y <- p$start[2]
-#
-#    out <- data.frame(
-#      x1 = rep(NA, n),
-#      y1 = NA,
-#      x2 = NA,
-#      y2 = NA,
-#      sl_ = NA,
-#      ta_ = NA
-#    )
-#
-#    dk <- p$dk
-#
-#    for (i in 1:n) {
-#
-#      out$x1[i] <- x
-#      out$y1[i] <- y
-#
-#      k <- dispersal_kernel(
-#        cur_x = x, cur_y = y, nc = p$nc, nr = p$nr,
-#        dk = p$dk, coefs = p$coefs,
-#        standardize = p$standardize,
-#        first_order_terms = p$first_order_terms,
-#        second_order_terms = p$second_order_terms,
-#        hab = p$hab,
-#        other_covars = p$other_covars,
-#        other_covars_indicator = p$other_covars_indicator,
-#        stop = p$stop
-#      )
-#
-#      next_pixel <- sample.int(nrow(p$dk), size = 1, prob = k[, 3])
-#      x <- k[next_pixel, 1]
-#      y <- k[next_pixel, 2]
-#
-#      ###
-#      #plot(rasterFromXYZ(k))
-#      #points(out[i, "x1"], out[i, "y1"])
-#      #points(x, y)
-#
-#
-#      atan2_north <- function(y, x) {
-#        ta <- atan2(y, x)
-#        ta <- ta - (pi/2)
-#        ta <- ifelse(ta < -pi, ta + 2 * pi, ta)
-#        ifelse(ta > pi, ta - 2 * pi, ta)
-#      }
-#
-#      ta <- atan2_north(y -  out[i, "y1"], x - out[i, "x1"])
-#      dk[, "cos_ta_"] <- get_angle(dk[, 1:2], dir = ta, FALSE)
-#      # plot(rasterFromXYZ(dk[, c(1:2, 5)]))
-#      # head(dk)
-#      ###
-#
-#      out$x2[i] <- x
-#      out$y2[i] <- y
-#
-#      out$sl_[i] <- p$dk[next_pixel, "sl_"]
-#      out$ta_[i] <- ta
-#    }
-#    out
-#  }
-#

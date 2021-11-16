@@ -13,6 +13,9 @@ simulate_xy(obj, n = 100, other.vars = NULL)
 
 \item{other.vars}{Other covariates (for each time step).}
 }
+\value{
+A \code{tibble} with the coordinates of the simulated path.
+}
 \description{
 Simulate a trajectory
 }

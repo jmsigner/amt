@@ -66,6 +66,7 @@ diff_y.track_xy <- function(x, ...) {
 #' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object.
 #' @template dots_none
 #' @name centroid
+#' @return The centroid of a track as numeric vector if `spatial = FALSE`, otherwise as `SpatialPoints`.
 #' @examples
 #' data(deer)
 #' centroid(deer)

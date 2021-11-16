@@ -23,6 +23,14 @@ fit_issf(data, formula, more = NULL, summary_only = FALSE, ...)
 
 \item{...}{Additional arguments, passed to \code{survival::clogit}.}
 }
+\value{
+A list with the following entries
+\itemize{
+\item model: The model output.
+\item sl_: The step length distribution.
+\tiem: ta_: The turn angle distribution.
+}
+}
 \description{
 This function is a wrapper around \code{survival::clogit}, making it usable in a piped workflow.
 }
