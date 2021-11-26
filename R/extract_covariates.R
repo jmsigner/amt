@@ -18,6 +18,10 @@
 #' deer %>% extract_covariates(sh_forest)
 #' deer %>% steps %>% extract_covariates(sh_forest)
 #' deer %>% steps %>% extract_covariates(sh_forest, where = "start")
+#'
+#' # buffer
+#' deer %>% extract_covariates(sh_forest) # no buffer
+#' deer %>% extract_covariates(sh_forest, buffer = 100, fun = median)
 
 extract_covariates <- function(x, ...) {
   UseMethod("extract_covariates", x)
@@ -26,13 +30,13 @@ extract_covariates <- function(x, ...) {
 #' @export
 #' @rdname extract_covariates
 extract_covariates.track_xy <- function(x, covariates, ...) {
-  extract_covar_base(x, covariates)
+  extract_covar_base(x, covariates, ...)
 }
 
 #' @export
 #' @rdname extract_covariates
 extract_covariates.random_points <- function(x, covariates, ...) {
-  extract_covar_base(x, covariates)
+  extract_covar_base(x, covariates, ...)
 }
 
 #' @export
@@ -41,18 +45,18 @@ extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
   if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
     if (where == "both") {
       x_start <- raster::extract(covariates, as.matrix(x[, c("x1_", "y1_")]),
-                                 df = TRUE)[, -1, drop = FALSE]
+                                 df = TRUE, ...)[, -1, drop = FALSE]
       names(x_start) <- paste0(names(x_start), "_start")
       x_end <- raster::extract(covariates, as.matrix(x[, c("x2_", "y2_")]),
-                               df = TRUE)[, -1, drop = FALSE]
+                               df = TRUE, ...)[, -1, drop = FALSE]
       names(x_end) <- paste0(names(x_end), "_end")
       x_all <- cbind(x_start, x_end)
       x[names(x_all)] <- as.data.frame(x_all)
     } else {
       x[names(covariates)] <- if (where == "end") {
-        as.data.frame(raster::extract(covariates, as.matrix(x[, c("x2_", "y2_")])))
+        as.data.frame(raster::extract(covariates, as.matrix(x[, c("x2_", "y2_")]), ...))
       } else if (where == "start") {
-        as.data.frame(raster::extract(covariates, as.matrix(x[, c("x1_", "y1_")])))
+        as.data.frame(raster::extract(covariates, as.matrix(x[, c("x1_", "y1_")]), ...))
       }
     }
     x
@@ -61,9 +65,9 @@ extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
   }
 }
 
-extract_covar_base <- function(x, covars) {
+extract_covar_base <- function(x, covars, ...) {
   if (class(covars) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
-    x[names(covars)] <- as.data.frame(raster::extract(covars, x[, c("x_", "y_")]))
+    x[names(covars)] <- as.data.frame(raster::extract(covars, x[, c("x_", "y_")], ...))
     x
   } else {
     stop("no raster")
