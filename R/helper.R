@@ -3,6 +3,7 @@
 #' @param x `[numeric]`\cr Angles in degrees or rad.
 #' @export
 #' @name convert_angles
+#' @return A numeric vector with the converted angles.
 #' @examples
 #' as_rad(seq(-180, 180, 30))
 #'

@@ -13,6 +13,9 @@ as_degree(x)
 \arguments{
 \item{x}{\verb{[numeric]}\cr Angles in degrees or rad.}
 }
+\value{
+A numeric vector with the converted angles.
+}
 \description{
 Converts angles to radians
 }

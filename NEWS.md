@@ -1,3 +1,5 @@
+# amt 0.1.6
+
 # amt 0.1.5
 ## updates
 - support for `hnorm` and `lnorm` step-length distributions.
@@ -6,6 +8,7 @@
 - Added `as_track` for `data.frames`.
 - Added argument `verbose` to `make_track()`. 
 - Fixed bug with `hr_isopleths()` for aKDE.
+- Fix issue #48 (https://github.com/jmsigner/amt/issues/48). Zero step lengths return now NA for direction.
 
 # amt 0.1.4
 ## updates

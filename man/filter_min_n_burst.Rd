@@ -16,6 +16,9 @@ filter_min_n_burst(x, ...)
 
 \item{min_n}{\verb{[numeric(1)=3]} \cr Indicating the minimum number of relocations (=fixes per burst).}
 }
+\value{
+A \code{tibble} of class \code{track_xy(t)}.
+}
 \description{
 Only retain bursts with a minimum number (= \code{min_n}) of relocations.
 }

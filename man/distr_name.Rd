@@ -29,6 +29,9 @@ ta_distr_name(x, ...)
 
 \item{...}{None implemented.}
 }
+\value{
+Character vector of length 1.
+}
 \description{
 Name of step-length distribution and turn-angle distribution
 }

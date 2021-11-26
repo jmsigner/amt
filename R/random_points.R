@@ -17,9 +17,9 @@
 #'
 #' # track_xyt ---------------------------------------------------------------
 #' # Default settings
+#' \dontrun{
 #' rp1 <- random_points(deer)
 #'
-#' \dontrun{
 #' plot(rp1)
 #' }
 #'
@@ -35,25 +35,19 @@
 #' rp <- random_points(deer, factor = 1)
 #' \dontrun{
 #' plot(rp)
-#' }
 #'
 #' # Within a home range -----------------------------------------------------
 #' hr <- hr_mcp(deer, level = 1)
 #'
 #' # 100 random point within the home range
 #' rp <- random_points(hr, n = 100)
-#' \dontrun{
 #' plot(rp)
-#' }
 #'
 #' # 100 regular point within the home range
 #' rp <- random_points(hr, n = 100, type = "regular")
-#' \dontrun{
 #' plot(rp)
-#' }
 #' # 100 hexagonal point within the home range
 #' rp <- random_points(hr, n = 100, type = "hexagonal")
-#' \dontrun{
 #' plot(rp)
 #' }
 #'

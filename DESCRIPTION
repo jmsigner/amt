@@ -10,7 +10,7 @@ Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigne
   person("Josh", "O'Brien", role = "ctb"),
   person("Bernardo", "Niebuhr", role = "ctb"),
   person("Scott", "LaPoint", role = "dtc"))
-Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate home ranges <doi:10.1101/2020.08.19.256859v2>, track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses <doi:10.1101/2020.11.12.379834v4>, and simulation of space-use from fitted step-selection functions <doi:10.1002/ecs2.1771>.
+Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate home ranges, track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses, and simulation of space-use from fitted step-selection functions.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -46,7 +46,6 @@ Suggests:
   geosphere,
   KernSmooth,
   FNN,
-  bcpa,
   leaflet,
   moveHMM,
   move,
@@ -57,7 +56,7 @@ Suggests:
   rmarkdown, tinytest, tidygraph,
   maptools
 LinkingTo: Rcpp
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
 VignetteBuilder: knitr

@@ -38,6 +38,7 @@ valid_distr_params <- function(dist_name, params) {
 #'   distributions should be returned.
 #' @param ... none implemented.
 #' @export
+#' @return A `tibble` with the purpose of the distribution (turn angles [ta] or step length [sl]) and the distribution name.
 #'
 available_distr <- function(which_dist = "all", names_only = FALSE, ...) {
 
@@ -60,9 +61,9 @@ available_distr <- function(which_dist = "all", names_only = FALSE, ...) {
 }
 
 
-#' Functions to work with distributions as objects
+#' Functions create statistical distributions
 #'
-#' `make_distributions` creates a distribution.
+#' `make_distributions` creates a distribution suitable for using it with integrated step selection functions
 #'
 #' @param name `[char(1)]` \cr Short name of distribution. See `available_distr()`
 #'   for all currently implemented distributions.
@@ -71,6 +72,7 @@ available_distr <- function(which_dist = "all", names_only = FALSE, ...) {
 #' @param ... none implemented.
 #' @export
 #' @name distributions
+#' @return A list of class `amt_distr` that contains the name (`name`) and parameters (`params`) of a distribution.
 
 make_distribution <- function(name, params, vcov = NULL, ...) {
   checkmate::check_character(name, len = 1)
@@ -153,21 +155,20 @@ make_gamma_distr <- function(shape = 1, scale = 1, vcov = NULL) {
 
 # Random numbers ----------------------------------------------------------
 
+#' Sample random numbers
+#'
+#' Sample radom numbers from a distribution created within the `amt` package.
+
+#' @param x `[amt_distr]` \cr A distribution object.
+#' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
+#' @return A numermic vector.
 #' @export
-#' @rdname distributions
 random_numbers <- function(x, n = 100, ...) {
   UseMethod("random_numbers")
 }
 
 #' @export
-#' @param x `[amt_distr]` \cr A distribution object.
-#' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
-#' @rdname distributions
 random_numbers.vonmises_distr <- function(x, n = 100, ...) {
-
-  # mu <- circular::as.circular(
-  #   x$params$mu, type = "angles", units = "radians",  template = "none",
-  #   modulo = "asis", zero = 0, rotation = "counter")
 
   suppressWarnings(
     x <- do.call(circular::rvonmises, c(list(n = n), x$params)))
@@ -182,7 +183,6 @@ random_numbers.hnorm_distr <- function(x, n = 100, ...) {
 }
 
 #' @export
-#' @rdname distributions
 random_numbers.amt_distr <- function(x, n = 100, ...) {
   do.call(paste0("r", x$name), c(list(n = n), x$params))
 }
@@ -643,10 +643,11 @@ update_vonmises <- function(dist, beta_cos_ta){
 
 # Utility functions -------------------------------------------------------
 
-#' Get distribution and parameters
+#' Obtain the step length and/or turn angle distributions from random steps or a fitted model.
 #'
 #' @param x Random steps or fitted model
 #' @param ... None implemented.
+#' @returns An amt distribution
 #'
 #' @export
 #' @name get_distr
@@ -693,6 +694,7 @@ ta_distr.fit_clogit <- function(x, ...) {
 #' @param ... None implemented.
 #'
 #' @export
+#' @return Character vector of length 1.
 #' @name distr_name
 sl_distr_name <- function(x, ...) {
   UseMethod("sl_distr_name")

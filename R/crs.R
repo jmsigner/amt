@@ -1,14 +1,13 @@
-#' Coordinate References System (CRS)
+#' Obtains the Coordinate Reference Systems
 #'
-#' Check if an object has a coordinate reference system (`has_crs`) and returns the `proj4string` with `get_crs` of the coordinate reference system.
+#' Returns the `proj4string` of an object.
 #'
 #' @template any
 #' @template dots_none
-#' @name crs
+#' @return The `proj4string` of the CRS.
 #' @export
 #' @examples
 #' data(deer)
-#' has_crs(deer)
 #' get_crs(deer)
 
 get_crs <- function(x, ...) {
@@ -20,8 +19,18 @@ get_crs.default <- function(x, ...) {
   "Not implementes for objects of this class"
 }
 
+#' Check for Coordinate Reference Systems (CRS)
+#'
+#' Checks if an object has a CRS.
+#'
+#' @template any
+#' @template dots_none
+#' @return Logic vector of length 1.
 #' @export
-#' @rdname crs
+#' @examples
+#' data(deer)
+#' has_crs(deer)
+
 has_crs <- function(x, ...) {
   UseMethod("has_crs", x)
 }

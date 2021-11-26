@@ -9,8 +9,11 @@ append_x1(string)
 \arguments{
 \item{string}{\verb{[character]} Variable name to possibly append to}
 }
+\value{
+A string.
+}
 \description{
-Helper function to append "_x1" to variable names
+Helper function to append \verb{_x1} to variable names
 }
 \details{
 The function first checks if "_x1" is already appended and adds it if

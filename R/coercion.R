@@ -1,11 +1,12 @@
 #' Coerce a track to other formats.
 #'
-#' Several other packages provides methods to analyze movement data, and `amt` provides coercion methods to some packages
+#' Several other packages provides methods to analyze movement data, and `amt` provides coercion methods to some packages.
 #'
 #' @template track_xy_star
 #' @param id `[numeric,character,factor]` \cr Animal id(s).
 #' @template dots_none
 #' @name coercion
+#' @return An object of the class to which coercion is performed to.
 #' @export
 as_sp <- function(x, ...) {
   UseMethod("as_sp", x)
@@ -49,7 +50,6 @@ as_sp.steps_xy <- function(x, end = TRUE, ...) {
 #'
 #' @template track_xy_star
 #' @template dots_none
-#' @return A `tibble` with a `sfc`-column
 #' @export
 
 as_sf_points <- function(x, ...) {
@@ -114,8 +114,9 @@ as_sf_lines.track_xy <- function(x, ...) {
 #' @rdname coercion
 #' @examples
 #' data(deer)
-#' as_move(deer)
-#' as_move(deer, id = "foo")
+#' mini_deer <- deer[1:20, ]
+#' as_move(mini_deer)
+#' as_move(mini_deer, id = "foo")
 as_move <- function(x, ...) {
   UseMethod("as_move", x)
 }
@@ -169,9 +170,8 @@ as_move.track_xyt <- function(x, id = "id", ...){
 #' @export
 #' @rdname coercion
 #' @examples
-#' data(deer)
-#' as_ltraj(deer)
-#' as_ltraj(deer, id = "animal_3")
+#' as_ltraj(mini_deer)
+#' as_ltraj(mini_deer, id = "animal_3")
 as_ltraj <- function(x, ...) {
   UseMethod("as_ltraj", x)
 }
@@ -197,29 +197,10 @@ as_ltraj.track_xyt <- function(x, ...) {
 }
 
 
-# as_bcpa -----------------------------------------------------------------
-#' @export
-#' @rdname coercion
-#' @examples
-#' data(deer)
-#' d <- as_bcpa(deer)
-
-as_bcpa <- function(x, ...) {
-  UseMethod("as_bcpa", x)
-}
-
-#' @export
-#' @rdname coercion
-as_bcpa.track_xyt <- function(x, ...) {
-  x <- tibble(X = x$x_, Y = x$y_, Time = x$t_)
-  bcpa::GetVT(x, ...)
-}
-
 # as_telemetry -----------------------------------------------------------------
 #' @export
 #' @rdname coercion
 #' @examples
-#' data(deer)
 #' as_telemetry(deer)
 as_telemetry <- function(x, ...) {
   UseMethod("as_telemetry", x)
@@ -259,9 +240,7 @@ as_telemetry.track_xyt <- function(x, ...) {
 #' @export
 #' @rdname coercion
 #' @examples
-#' # Fit HMM with two states
-#' data(deer)
-#' dm <- as_moveHMM(deer)
+#' as_moveHMM(mini_deer)
 
 as_moveHMM <- function(x, ...) {
   UseMethod("as_moveHMM", x)

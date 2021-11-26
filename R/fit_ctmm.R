@@ -5,13 +5,14 @@
 #' @param uere User Equivalent Range Error, see `?ctmm::uere` for more details.
 #' @param ... Additional parameters passed to `ctmm::ctmm.fit` or `ctmm::ctmm.select` for `model = "auto"`
 #'
-#' @return A `ctmm` object.
 #' @export
 #' @references C. H. Fleming, J. M. Calabrese, T. Mueller, K.A. Olson, P. Leimgruber, W. F. Fagan, “From fine-scale foraging to home ranges: A semi-variance approach to identifying movement modes across spatiotemporal scales”, The American Naturalist, 183:5, E154-E167 (2014).
 #'
+#' @return An object of class `ctmm` from the package ctmm.
 #' @examples
 #' data(deer)
-#' m1 <- fit_ctmm(deer, "iid")
+#' mini_dee <- deer[1:20, ]
+#' m1 <- fit_ctmm(mini_deer, "iid")
 #' summary(m1)
 fit_ctmm <- function(x, model, uere = NULL, ...) {
 

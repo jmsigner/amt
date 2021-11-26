@@ -4,6 +4,7 @@
 #' @template track_xy_star
 #' @template dots_none
 #' @name from_to
+#' @return A vector of class `POSIXct`.
 #' @export
 #' @examples
 #' data(deer)

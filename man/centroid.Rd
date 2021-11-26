@@ -16,6 +16,9 @@ centroid(x, ...)
 
 \item{spatial}{\verb{[logical(1)=FALSE]} \cr Whether or not to return a \code{SpatialPoints}-object.}
 }
+\value{
+The centroid of a track as numeric vector if \code{spatial = FALSE}, otherwise as \code{SpatialPoints}.
+}
 \description{
 Calculate the centroid of a track.
 }

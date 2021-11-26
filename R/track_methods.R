@@ -66,6 +66,7 @@ diff_y.track_xy <- function(x, ...) {
 #' @param spatial `[logical(1)=FALSE]` \cr Whether or not to return a `SpatialPoints`-object.
 #' @template dots_none
 #' @name centroid
+#' @return The centroid of a track as numeric vector if `spatial = FALSE`, otherwise as `SpatialPoints`.
 #' @examples
 #' data(deer)
 #' centroid(deer)
@@ -91,7 +92,7 @@ centroid.track_xy <- function(x, spatial = FALSE, ...) {
 
 #' @export
 points.track_xy <- function(x, ...) {
-  graphics::points(x[, c("x_", "y_")], ...)
+  graphics::points(x$x_, x$y_, ...)
 }
 
 
@@ -119,7 +120,7 @@ coords.track_xy <- function(x, ...) {
 
 #' @export
 plot.track_xy <- function(x, ...) {
-  plot(x$x_, x$y_, ...)
+  plot(x$x_, x$y_, asp = 1, ...)
 }
 
 #' @rdname  helper

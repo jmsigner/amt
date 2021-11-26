@@ -2,6 +2,8 @@
 #'
 #' `step_lengths` can be use to calculate step lengths of a track. `direction_abs` and `direction_rel` calculate the absolute and relative direction of steps. `steps` converts a `track_xy*` from a point representation to a step representation and automatically calculates step lengths and relative turning angles.
 #'
+#' `dierctions_*()` returns `NA` for 0 step lengths.
+#'
 #' @template track_xy_star
 #' @param lonlat `[logical(1)=TRUE]` \cr Should geographical or planar coordinates be used? If `TRUE` geographic distances are calculated.
 #' @param full_circle `[logical(1)=FALSE]` \cr If `TRUE` angles are returned between 0 and $2pi$, otherwise angles are between $-pi$ and $pi$.
@@ -22,19 +24,11 @@ NULL
 
 #' @export
 #' @rdname steps
-#'
-direction_abs <- function(x, ...) {
-  UseMethod("direction_abs", x)
-}
-
-#' @export
-#' @rdname steps
 #' @examples
 #'
-
 #' xy <- tibble(
-#'   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
-#'   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
+#'   x = c(1, 4, 8, 8, 12, 12, 8, 0, 0, 4, 2),
+#'   y = c(0, 0, 0, 8, 12, 12, 12, 12, 8, 4, 2))
 #' trk <- make_track(xy, x, y)
 #'
 #' # append last
@@ -64,57 +58,72 @@ direction_abs <- function(x, ...) {
 #' direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = FALSE, clockwise = TRUE)
 #' direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = TRUE, clockwise = TRUE)
 #'
-#' # How do results compare to other packages
-#' # adehabitatLT
-#' df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
-#' df[[1]]$abs.angle
-#' amt::direction_abs(trk)
-#'
-#' # bcpa
-#' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(1:10))
-#' bcpa::GetVT(df)$Phi
-#' direction_abs(trk, full_circle = FALSE, append_last = FALSE)
-#'
-#' # move
-#' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:10),
-#'  proj = sp::CRS("+init=epsg:4326"))
-#' move::angle(m)
-#' direction_abs(trk, lonlat = TRUE, zero_dir = "E") %>% as_degree()
-#'
-#' # trajectories
-#' t1 <- trajectories::Track(
-#'   spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
-#'   lubridate::now(tzone = "UTC") + lubridate::hours(1:10), data = data.frame(1:10)))
-#'
-#' t1[["direction"]]
-#' direction_abs(trk, full_circle = TRUE, zero_dir = "N",
-#'   clockwise = TRUE, append_last = FALSE) %>% as_degree
-#'
-#' # moveHMM (only rel. ta)
-#' df <- data.frame(ID = 1, x = xy$x, y = xy$y)
-#' moveHMM::prepData(df, type = "UTM")$angle
-#' direction_rel(trk)
+## #' # How do results compare to other packages
+## #' # adehabitatLT
+## #' df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
+## #' df[[1]]$abs.angle
+## #' amt::direction_abs(trk)
+## #'
+## #' # bcpa
+## #' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(0:10))
+## #' bcpa::GetVT(df)$Phi
+## #' direction_abs(trk, full_circle = FALSE, append_last = FALSE)
+## #'
+## #' # move
+## #' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:11),
+## #'  proj = sp::CRS("+init=epsg:4326"))
+## #' move::angle(m)
+## #' direction_abs(trk, lonlat = TRUE, zero_dir = "E") %>% as_degree()
+## #'
+## #' # trajectories
+## #' t1 <- trajectories::Track(
+## #'   spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
+## #'   lubridate::now(tzone = "UTC") + lubridate::hours(1:11), data = data.frame(1:11)))
+## #'
+## #' t1[["direction"]]
+## #' direction_abs(trk, full_circle = TRUE, zero_dir = "N",
+## #'   clockwise = TRUE, append_last = FALSE) %>% as_degree
+## #'
+## #' # moveHMM (only rel. ta)
+## #' df <- data.frame(ID = 1, x = xy$x, y = xy$y)
+## #' moveHMM::prepData(df, type = "UTM")$angle
+## #' direction_rel(trk)
+
+
+direction_abs <- function(x, ...) {
+  UseMethod("direction_abs", x)
+}
+
+#' @export
+#' @rdname steps
 
 direction_abs.track_xy <- function(x, full_circle = FALSE, zero_dir = "E",
                                    clockwise = FALSE,
                                    append_last = TRUE, lonlat = FALSE, ...) {
   zero_dir <- toupper(zero_dir)
   if (!zero_dir %in% c("E", "N", "W", "S")) {
-    stop("zero_dir should be in either 'E', 'N', 'W', or 'S'")
+    stop("zero_dir should be one of 'E', 'N', 'W', or 'S'.")
   }
 
   if (zero_dir == "E") {
     zero_dir <- "East"
   }
 
+  x$dx <- diff_x(x)
+  x$dy <- diff_y(x)
+  x$zero_step <- x$dx == 0 & x$dy == 0
+
   # angles
   a <- if (!lonlat) {
-    atan2(diff_y(x), diff_x(x))
+    atan2(x$dy, x$dx)
   } else {
     xx <- sp::coordinates(as_sp(x))
     #c((450 + ((360 - geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]))) %% 360) %% 360, NA) * pi / 180
     c(geosphere::bearing(xx[-nrow(xx), ], xx[-1, ]), NA) * pi / 180
   }
+
+  a[x$zero_step] <- NA
+
 
   # remove last NA
   a <- if (append_last) a else a[-length(a)]
@@ -134,51 +143,14 @@ direction_abs.track_xy <- function(x, full_circle = FALSE, zero_dir = "E",
 # Directions rel ----------------------------------------------------------
 #' @rdname steps
 #' @export
-#' @examples
-#' # How do results compare to other packages
-#' xy <- tibble(
-#'   x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
-#'   y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
-#' trk <- mk_track(xy, x, y)
-#' # adehabitatLT
-#' df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
-#' df[[1]]$rel.angle
-#' amt::direction_rel(trk, degrees = FALSE, full_circle = FALSE)
-#'
-# # bcpa
-# df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(1:10))
-# bcpa::GetVT(df)$Theta
-# direction_rel(trk, degrees = FALSE, append_last = FALSE)
-#
-# # move
-# m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:10),
-# proj = sp::CRS("+init=epsg:4326"))
-# move::turnAngleGc(m)
-# direction_abs(trk, degrees = TRUE, full_circle = FALSE, zero_dir = "N",
-#   clockwise = TRUE, append_na = FALSE, lonlat = TRUE)
-#
-#' # trajectories
-#' t1 <- trajectories::Track(
-#'   spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
-#'   lubridate::now() + lubridate::hours(1:10), data = data.frame(1:10)))
-#'
-#' t1[["direction"]]
-#' direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",
-#'   clockwise = TRUE, append_last = FALSE)
-#'
-#' # moveHMM (only rel. ta)
-#' df <- data.frame(ID = 1, x = xy$x, y = xy$y)
-#' moveHMM::prepData(df, type = "UTM")
+
 direction_rel <- function(x, ...) {
   UseMethod("direction_rel", x)
 }
 
 #' @export
 #' @rdname steps
-#' @examples
 #'
-# direction_rel -----------------------------------------------------------
-#' trk
 #'
 direction_rel.track_xy <- function(x, lonlat = FALSE, append_last = TRUE,
                                    zero_dir = "E", ...) {
@@ -200,18 +172,6 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, append_last = TRUE,
 #' @export
 #' @rdname steps
 #' @details `step_lengths` calculates the step lengths between points a long the path. The last value returned is `NA`, because no observed step is 'started' at the last point. If `lonlat = TRUE`, `step_lengths()` wraps [raster::pointDistance()].
-#' @examples
-#' # step_lengths ------------------------------------------------------------
-#' xy <- tibble(
-#'   x = c(0, 1, 2),
-#'   y = c(0, 1, 2)
-#' )
-#' xy <- mk_track(xy, x, y)
-#'
-#' step_lengths(xy, lonlat = FALSE)
-#' step_lengths(xy, lonlat = TRUE) # in m, but coords are assumed in degrees
-#'
-#'
 
 
 

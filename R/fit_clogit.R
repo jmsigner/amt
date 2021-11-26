@@ -8,6 +8,12 @@
 #' @param summary_only `[logical(1)=FALSE]` \cr If `TRUE` only a `broom::tidy` summary of the model is returned.
 #' @param ... Additional arguments, passed to `survival::clogit`.
 #' @name fit_clogit
+#' @return A list with the following entries
+#' \itemize{
+#' \item model: The model output.
+#' \item sl_: The step length distribution.
+#' \tiem: ta_: The turn angle distribution.
+#' }
 #' @export
 
 fit_clogit <- function(data, formula, more = NULL, summary_only = FALSE, ...) {

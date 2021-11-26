@@ -5,6 +5,7 @@
 #' @param x `[SpatialPoints]` \cr Object to be converted to a track.
 #' @template dots_none
 #' @name as_track
+#' @return An object of class `track_xy(t)`.
 #' @examples
 #' xy <- sp::SpatialPoints(cbind(c(1, 3, 2, 1), c(3, 2, 2, 1)))
 #' as_track(xy)

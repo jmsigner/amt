@@ -68,6 +68,9 @@ distance \code{NA} is returned.}
 
 \item{name_covar}{\verb{[character(1)="time_var_covar"]} \cr The name of the new column.}
 }
+\value{
+A \code{tibble} with additional columns for covariate values.
+}
 \description{
 Extract the covariate values at relocations, or at the beginning or end of
 steps.
@@ -78,20 +81,19 @@ steps.
 \examples{
 data(deer)
 data(sh_forest)
-deer \%>\% extract_covariates(sh_forest)
-deer \%>\% steps \%>\% extract_covariates(sh_forest)
-deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
-\dontrun{
-data(deer) # relocation
-data("sh_forest") # env covar
-
-p1 <- deer \%>\% steps() \%>\% random_steps() \%>\%
+mini_deer <- deer[1:20, ]
+mini_deer \%>\% extract_covariates(sh_forest)
+mini_deer \%>\% steps \%>\% extract_covariates(sh_forest)
+mini_deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
+# Illustration of extracting covariates along the a step
+mini_deer \%>\% steps() \%>\% random_steps() \%>\%
   extract_covariates(sh_forest) \%>\% # extract at the endpoint
   mutate(for_path = extract_covariates_along(., sh_forest))  \%>\%
   # 1 = forest, lets calc the fraction of forest along the path
   mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
-}
 
+
+Illustration of extracting covariates for time varying covariates
 # Simulate some dummy data
 # Hourly data for 10 days: 24 * 10
 set.seed(123)
@@ -138,29 +140,5 @@ trk \%>\%
     rs, max_time = hours(6), when = "after", name_covar = "env_6h") \%>\%
   print(n = 25)
 
-# We can use different time scales: before
-trk \%>\%
-  extract_covariates_var_time(
-    rs, max_time = hours(2), when = "before", name_covar = "env_2h") \%>\%
-  extract_covariates_var_time(
-    rs, max_time = hours(4), when = "before", name_covar = "env_4h") \%>\%
-  extract_covariates_var_time(
-    rs, max_time = hours(6), when = "before", name_covar = "env_6h") \%>\%
-  print(n = 25)
-
-# The same works also for steps
-trk \%>\%
-  steps() \%>\%
-  extract_covariates_var_time(
-    rs, max_time = hours(2), when = "before", name_covar = "env_2h") \%>\%
-  print(n = 25)
-
-# also with start and end
-trk \%>\%
-  steps() \%>\%
-  extract_covariates_var_time(
-    rs, max_time = hours(2), when = "before", name_covar = "env_2h",
-    where = "both") \%>\%
-  print(n = 25)
 
 }

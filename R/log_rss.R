@@ -496,12 +496,13 @@ plot.log_rss <- function(x, x_var1 = "guess", x_var2 = "guess", ...){
 
 #' Append "_x1"
 #'
-#' Helper function to append "_x1" to variable names
+#' Helper function to append `_x1` to variable names
 #'
 #' @param string `[character]` Variable name to possibly append to
 #'
 #' @details The function first checks if "_x1" is already appended and adds it if
 #' it is not. This is meant for internal use in `\link{plot.log_rss}()`.
+#' @return A string.
 append_x1 <- function(string){
   #If string is NA, return NA
   if (is.na(string)){

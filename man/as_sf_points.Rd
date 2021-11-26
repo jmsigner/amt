@@ -11,9 +11,6 @@ as_sf_points(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 }
-\value{
-A \code{tibble} with a \code{sfc}-column
-}
 \description{
 Exports a track to points from the \code{sf} package.
 }

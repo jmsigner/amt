@@ -16,14 +16,15 @@ fit_ctmm(x, model, uere = NULL, ...)
 \item{...}{Additional parameters passed to \code{ctmm::ctmm.fit} or \code{ctmm::ctmm.select} for \code{model = "auto"}}
 }
 \value{
-A \code{ctmm} object.
+An object of class \code{ctmm} from the package ctmm.
 }
 \description{
 Fit a continuous time movement model with \code{ctmm}
 }
 \examples{
 data(deer)
-m1 <- fit_ctmm(deer, "iid")
+mini_dee <- deer[1:20, ]
+m1 <- fit_ctmm(mini_deer, "iid")
 summary(m1)
 }
 \references{

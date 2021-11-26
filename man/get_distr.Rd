@@ -8,7 +8,7 @@
 \alias{ta_distr}
 \alias{ta_distr.random_steps}
 \alias{ta_distr.fit_clogit}
-\title{Get distribution and parameters}
+\title{Obtain the step length and/or turn angle distributions from random steps or a fitted model.}
 \usage{
 sl_distr(x, ...)
 
@@ -27,6 +27,9 @@ ta_distr(x, ...)
 
 \item{...}{None implemented.}
 }
+\value{
+An amt distribution
+}
 \description{
-Get distribution and parameters
+Obtain the step length and/or turn angle distributions from random steps or a fitted model.
 }

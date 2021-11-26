@@ -1,4 +1,30 @@
 
+# Version 0.1.5
+
+## Round 1
+
+### Test environments
+- local: Ubuntu 20.04, R 4.1.2
+- win builder: R release and devel
+
+### R CMD check results
+
+There were no errors or warnings. There was one note. 
+
+1. That the package was archived.
+
+### What changed
+- Removed dependency on the `bcpa` package.
+- Fixed test errors (Email by B. Ripley on 2021-10-26)
+- support for `hnorm` and `lnorm` step-length distributions.
+- support for `st_crs` for CRS. Major updates for several functions
+- deprecated the function `dist_cent`.
+- Added `as_track` for `data.frames`.
+- Added argument `verbose` to `make_track()`. 
+- Fixed bug with `hr_isopleths()` for aKDE.
+- Fix issue #48 (https://github.com/jmsigner/amt/issues/48). Zero step lengths return now NA for direction.
+
+
 # Version 0.1.4
 
 ## Round 1

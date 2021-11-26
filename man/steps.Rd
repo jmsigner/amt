@@ -71,13 +71,15 @@ steps(x, ...)
 \code{step_lengths} can be use to calculate step lengths of a track. \code{direction_abs} and \code{direction_rel} calculate the absolute and relative direction of steps. \code{steps} converts a \verb{track_xy*} from a point representation to a step representation and automatically calculates step lengths and relative turning angles.
 }
 \details{
+\verb{dierctions_*()} returns \code{NA} for 0 step lengths.
+
 \code{step_lengths} calculates the step lengths between points a long the path. The last value returned is \code{NA}, because no observed step is 'started' at the last point. If \code{lonlat = TRUE}, \code{step_lengths()} wraps \code{\link[raster:pointDistance]{raster::pointDistance()}}.
 }
 \examples{
 
 xy <- tibble(
-  x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
-  y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
+  x = c(1, 4, 8, 8, 12, 12, 8, 0, 0, 4, 2),
+  y = c(0, 0, 0, 8, 12, 12, 12, 12, 8, 4, 2))
 trk <- make_track(xy, x, y)
 
 # append last
@@ -106,71 +108,5 @@ direction_abs(trk, full_circle = TRUE, zero_dir = "N", clockwise = TRUE)
 # Bearing (i.e. azimuth): only for lon/lat
 direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = FALSE, clockwise = TRUE)
 direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = TRUE, clockwise = TRUE)
-
-# How do results compare to other packages
-# adehabitatLT
-df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
-df[[1]]$abs.angle
-amt::direction_abs(trk)
-
-# bcpa
-df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(1:10))
-bcpa::GetVT(df)$Phi
-direction_abs(trk, full_circle = FALSE, append_last = FALSE)
-
-# move
-m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:10),
- proj = sp::CRS("+init=epsg:4326"))
-move::angle(m)
-direction_abs(trk, lonlat = TRUE, zero_dir = "E") \%>\% as_degree()
-
-# trajectories
-t1 <- trajectories::Track(
-  spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
-  lubridate::now(tzone = "UTC") + lubridate::hours(1:10), data = data.frame(1:10)))
-
-t1[["direction"]]
-direction_abs(trk, full_circle = TRUE, zero_dir = "N",
-  clockwise = TRUE, append_last = FALSE) \%>\% as_degree
-
-# moveHMM (only rel. ta)
-df <- data.frame(ID = 1, x = xy$x, y = xy$y)
-moveHMM::prepData(df, type = "UTM")$angle
-direction_rel(trk)
-# How do results compare to other packages
-xy <- tibble(
-  x = c(1, 4, 8, 8, 12, 8, 0, 0, 4, 2),
-  y = c(0, 0, 0, 8, 12, 12, 12, 8, 4, 2))
-trk <- mk_track(xy, x, y)
-# adehabitatLT
-df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
-df[[1]]$rel.angle
-amt::direction_rel(trk, degrees = FALSE, full_circle = FALSE)
-
-# trajectories
-t1 <- trajectories::Track(
-  spacetime::STIDF(sp::SpatialPoints(cbind(xy$x, xy$y)),
-  lubridate::now() + lubridate::hours(1:10), data = data.frame(1:10)))
-
-t1[["direction"]]
-direction_abs(trk, degrees = TRUE, full_circle = TRUE, zero_dir = "N",
-  clockwise = TRUE, append_last = FALSE)
-
-# moveHMM (only rel. ta)
-df <- data.frame(ID = 1, x = xy$x, y = xy$y)
-moveHMM::prepData(df, type = "UTM")
-
-trk
-
-# step_lengths ------------------------------------------------------------
-xy <- tibble(
-  x = c(0, 1, 2),
-  y = c(0, 1, 2)
-)
-xy <- mk_track(xy, x, y)
-
-step_lengths(xy, lonlat = FALSE)
-step_lengths(xy, lonlat = TRUE) # in m, but coords are assumed in degrees
-
 
 }
