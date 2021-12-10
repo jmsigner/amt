@@ -17,7 +17,7 @@ distributions should be returned.}
 \item{...}{none implemented.}
 }
 \value{
-A \code{tibble} with the purpose of the distribution (turn angles \link{ta} or step length \link{sl}) and the distribution name.
+A \code{tibble} with the purpose of the distribution (turn angles [ta] or step length [sl]) and the distribution name.
 }
 \description{
 Display available distributions for step lengths and turn angles.

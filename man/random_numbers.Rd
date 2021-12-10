@@ -10,6 +10,8 @@ random_numbers(x, n = 100, ...)
 \item{x}{\verb{[amt_distr]} \cr A distribution object.}
 
 \item{n}{\verb{[integer(1)=100]\{>0\}} \cr The number of random draws.}
+
+\item{...}{none implemented.}
 }
 \value{
 A numermic vector.

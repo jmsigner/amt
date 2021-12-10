@@ -23,6 +23,9 @@ time_of_day(x, ...)
 
 \item{where}{\verb{[character(1)="end"]\{"start", "end", "both"\}} For \code{steps}, should the start, end or both time points be used?}
 }
+\value{
+A \code{tibble} with an additional column \code{tod_} that contains the time of the day for each relocation.
+}
 \description{
 A convenience wrapper around \code{maptools::sunriset} and \code{maptools::crepuscule} to extract if a fix was taken during day or night (optionally also include dawn and dusk).
 }

@@ -5,7 +5,7 @@
 \alias{hr_overlap}
 \alias{hr_overlap.hr}
 \alias{hr_overlap.list}
-\title{Different Methods to calculate home-range overlaps}
+\title{Methods to calculate home-range overlaps}
 \usage{
 hr_overlap(x, ...)
 
@@ -21,7 +21,7 @@ hr_overlap(x, ...)
 )
 }
 \arguments{
-\item{x, y}{\code{hr} A home-range estimate}
+\item{x, y}{A home-range estimate}
 
 \item{...}{Further arguments, none implemented.}
 
@@ -41,5 +41,5 @@ used.}
 coordinate reference system.
 }
 \description{
-Different Methods to calculate home-range overlaps
+Methods to calculate the overlap of two or more home-range estimates.
 }

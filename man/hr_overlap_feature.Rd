@@ -19,5 +19,5 @@ hr_overlap_feature(x, sf, direction = "hr_with_feature", feature_names = NULL)
 A tibble
 }
 \description{
-Calculate the overlap between a home-range estimate and a polygon
+Sometimes the percentage overlap between a spatial polygon an a home-range is required.
 }

@@ -32,9 +32,3 @@ A vector of class \code{POSIXct}.
 \description{
 Function that returns the start (\code{from}), end (\code{to}), and the duration (\code{from_to}) of a track.
 }
-\examples{
-data(deer)
-from(deer)
-to(deer)
-from_to(deer)
-}

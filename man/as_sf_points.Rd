@@ -2,7 +2,7 @@
 % Please edit documentation in R/coercion.R
 \name{as_sf_points}
 \alias{as_sf_points}
-\title{Export track to points}
+\title{Coerces a track to points}
 \usage{
 as_sf_points(x, ...)
 }
@@ -11,6 +11,9 @@ as_sf_points(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 }
+\value{
+A data \code{data.frame} with a \code{sfc}-column
+}
 \description{
-Exports a track to points from the \code{sf} package.
+Coerces a track to points from the \code{sf} package.
 }

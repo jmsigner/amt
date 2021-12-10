@@ -18,6 +18,9 @@ track_align(x, ...)
 
 \item{tol}{The tolerance.}
 }
+\value{
+A \code{track_xyt}.
+}
 \description{
 Functions to only selects relocations that can be aligned with a new time series (within some tolerance).
 }

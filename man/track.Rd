@@ -35,7 +35,7 @@ make_track(
 track(x, y, t, ..., crs = NULL)
 }
 \arguments{
-\item{tbl}{\link{data.frame} \cr The \code{data.frame} from which a track should be
+\item{tbl}{\verb{[data.frame]} \cr The \code{data.frame} from which a track should be
 created.}
 
 \item{.x, .y, .t}{\verb{[expression(1)]} \cr Unquoted variable names of columns

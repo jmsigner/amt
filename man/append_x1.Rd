@@ -19,3 +19,4 @@ Helper function to append \verb{_x1} to variable names
 The function first checks if "_x1" is already appended and adds it if
 it is not. This is meant for internal use in \verb{\link{plot.log_rss}()}.
 }
+\keyword{internal}

@@ -3,7 +3,7 @@
 \name{hr_to_sf}
 \alias{hr_to_sf}
 \alias{hr_to_sf.tbl_df}
-\title{Convert}
+\title{Convert home ranges to \code{sfc}}
 \usage{
 hr_to_sf(x, ...)
 
@@ -12,7 +12,7 @@ hr_to_sf(x, ...)
 \arguments{
 \item{x}{A \code{tibble} with a \verb{list column} with individual home ranges.}
 
-\item{...}{Additional columns that should be transferred to the new \code{tible}.}
+\item{...}{Additional columns that should be transferred to the new \code{tibble}.}
 
 \item{col}{The column where the home}
 }
@@ -20,7 +20,7 @@ hr_to_sf(x, ...)
 A \code{data.frame} with a simple feature column (from the \code{sf}) package.
 }
 \description{
-Convert
+Convert a list column with many home-range estimates to a \code{tibble} with a geometry column (as used by the \code{sf}-package).
 }
 \examples{
 
@@ -33,10 +33,5 @@ hr <- amt_fisher \%>\% nest(data = -id) \%>\%
   mutate(hr = map(data, hr_kde), n = map_int(data, nrow)) \%>\%
   hr_to_sf(hr, id, n)
 
-
-\dontrun{
-ggplot(hr) + geom_sf()
-
-}
 
 }

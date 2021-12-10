@@ -19,12 +19,12 @@ as_track(x, ...)
 \method{as_track}{data.frame}(x, ...)
 }
 \arguments{
-\item{x}{\verb{[SpatialPoints]} \cr Object to be converted to a track.}
+\item{x}{Object to be converted to a track.}
 
 \item{...}{Further arguments, none implemented.}
 }
 \value{
-An object of class \code{track_xy(t)}.
+An object of class \code{track_xy(t)}
 }
 \description{
 Coerce other classes (currently implemented: \code{SpatialPoints}) to a \code{track_xy}.

@@ -20,6 +20,9 @@ track_resample(x, ...)
 
 \item{start}{A integer scalar, that gives the relocation at which the sampling rate starts.}
 }
+\value{
+A resampled \code{track_xyt}.
+}
 \description{
 Function to resample a track at a predefined sampling rate within some tolerance.
 }

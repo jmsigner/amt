@@ -11,6 +11,9 @@ hr_ud(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 }
+\value{
+\code{RasterLayer}
+}
 \description{
 Obtain the utilization distribution of a probabilistic home range
 }

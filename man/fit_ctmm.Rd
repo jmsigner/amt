@@ -22,10 +22,12 @@ An object of class \code{ctmm} from the package ctmm.
 Fit a continuous time movement model with \code{ctmm}
 }
 \examples{
+\donttest{
 data(deer)
-mini_dee <- deer[1:20, ]
+mini_deer <- deer[1:20, ]
 m1 <- fit_ctmm(mini_deer, "iid")
 summary(m1)
+}
 }
 \references{
 C. H. Fleming, J. M. Calabrese, T. Mueller, K.A. Olson, P. Leimgruber, W. F. Fagan, “From fine-scale foraging to home ranges: A semi-variance approach to identifying movement modes across spatiotemporal scales”, The American Naturalist, 183:5, E154-E167 (2014).

@@ -36,7 +36,13 @@ for a 95\% confidence interval.}
 intervals. Ignored if \code{ci != "boot"}.}
 }
 \value{
-Returns a \code{list} of class \code{log_rss}.
+Returns a \code{list} of class \code{log_rss} with four entries:
+\itemize{
+\item \code{df}: A \code{data.frame} with the covariates and the \code{log_rss}
+\item \code{x1}: A \code{data.frame} with covariate values for \code{x1}.
+\item \code{x2}: A \code{data.frame} with covariate values for \code{x2}.
+\item \code{formula}: The formula used to fit the model.
+}
 }
 \description{
 Calculate log-RSS(x1, x2) for a fitted RSF or (i)SSF
@@ -52,7 +58,7 @@ the terms in the model formula exactly.
 }
 \examples{
 
-\dontrun{
+\donttest{
 # RSF -------------------------------------------------------
 # Fit an RSF, then calculate log-RSS to visualize results.
 
@@ -135,9 +141,12 @@ ggplot(logRSS$df, aes(x = forest_x1, y = log_rss)) +
 }
 }
 \references{
-Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection
+\itemize{
+\item Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection
 Strength: Quantifying effect size in habitat- and step-selection inference.
 \emph{Ecology and Evolution}, 7, 5322–5330.
+\item Fieberg, J., Signer, J., Smith, B., & Avgar, T. (2021). A "How to" guide for interpreting parameters in habitat-selection analyses. \emph{Journal of Animal Ecology}, 90(5), 1027-1043.
+}
 }
 \seealso{
 See Avgar \emph{et al.} 2017 for details about relative

@@ -52,13 +52,3 @@ An object of the class to which coercion is performed to.
 \description{
 Several other packages provides methods to analyze movement data, and \code{amt} provides coercion methods to some packages.
 }
-\examples{
-data(deer)
-mini_deer <- deer[1:20, ]
-as_move(mini_deer)
-as_move(mini_deer, id = "foo")
-as_ltraj(mini_deer)
-as_ltraj(mini_deer, id = "animal_3")
-as_telemetry(deer)
-as_moveHMM(mini_deer)
-}

@@ -48,6 +48,9 @@ with each observed step.}
 
 \item{include_observed}{\verb{[logical(1) = TRUE]} \cr Indicates if observed steps are to be included in the result.}
 }
+\value{
+A \code{tibble} of class random_steps.
+}
 \description{
 Function to generate a given number of random steps for each observed step.
 }

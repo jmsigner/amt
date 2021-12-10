@@ -33,6 +33,9 @@ respective distributions.}
 
 \item{beta_cos_ta}{\verb{[numeric]} \cr The estimate of the coefficient of cosine of the turning angle.}
 }
+\value{
+A distribution
+}
 \description{
 Functions to update \code{amt_distr} from iSSF coefficients
 }

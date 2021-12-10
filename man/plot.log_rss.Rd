@@ -18,6 +18,9 @@ Either \code{"guess"} (default -- see Details), \code{NA}, or the variable name.
 \item{...}{\verb{[any]} Additional arguments to be passed to \verb{\link{plot}()}.
 \emph{Not currently implemented}.}
 }
+\value{
+A plot.
+}
 \description{
 Default plot method for an object of class \code{log_rss}
 }
@@ -41,7 +44,7 @@ change the default colors by specifying a custom \code{\link{palette}()} before
 calling the function.
 }
 \examples{
-
+\donttest{
 # Load data
 data("amt_fisher")
 data("amt_fisher_covar")
@@ -69,6 +72,6 @@ logRSS <- log_rss(object = m1, x1 = x1, x2 = x2)
 
 # Plot
 plot(logRSS)
-
+}
 
 }

@@ -21,6 +21,9 @@ transform_crs(x, ...)
 
 \item{crs_from}{\verb{[crs(1)]} \cr Coordinate reference system the data are currently in, see \code{sf::sf_crs}. If \code{crs_from} is missing, the \code{crs}-attribute of the track is used.}
 }
+\value{
+A track with transformed coordinates.
+}
 \description{
 Transforms the CRS for a track.
 }

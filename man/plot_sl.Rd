@@ -23,6 +23,9 @@ plot_sl(x, ...)
 
 \item{plot}{\verb{[logical(1)=TRUE]} \cr Indicates if a plot should be drawn or not.}
 }
+\value{
+A plot of the step-length distribution.
+}
 \description{
 Plot step-length distribution
 }

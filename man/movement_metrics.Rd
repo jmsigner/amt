@@ -30,6 +30,9 @@ tac(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 }
+\value{
+A numeric vector of length one.
+}
 \description{
 Functions to calculate metrics such as straightness, mean squared displacement (msd), intensity use,
 sinuosity, mean turn angle correlation (\code{tac}) of a track.
@@ -48,7 +51,9 @@ intensity_use(deer)
 
 }
 \references{
-\insertRef{abrahams2017}{amt}
-\insertRef{almeida2010}{amt}
-\insertRef{swihart1985}{amt}
+\itemize{
+\item \insertRef{abrahams2017}{amt}
+\item \insertRef{almeida2010}{amt}
+\item \insertRef{swihart1985}{amt}
+}
 }
