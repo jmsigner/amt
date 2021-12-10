@@ -1,17 +1,3 @@
-#' Relocations of 1 red deer
-#'
-#' 1500 GPS relocations of one red deer from northern Germany.
-#'
-#' @format A data frame with 1500 rows and 4 variables:
-#' \describe{
-#'   \item{x_epsg31467}{the x-coordinate}
-#'   \item{y_epsg31467}{the y-coordinate}
-#'   \item{day}{the day of the relocation}
-#'   \item{time}{the hour of the relocation}
-#' }
-#' @source Verein für Wildtierforschung Dresden und Göttingen e.V.
-"sh"
-
 #' GPS tracks from four fishers
 #'
 #' This file includes spatial data from 4 fisher (**Pekania pennanti**). These location data were collected via a 105g GPS tracking collar (manufactured by E-obs GmbH) and programmed to record the animal's location every 10 minutes, continuously. The data re projected in NAD84 (epsg: 5070). The data usage is permitted for exploratory purposes. For other purposes please get in contact (Scott LaPoint).

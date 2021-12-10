@@ -1,12 +1,13 @@
-#' Convert
+#' Convert home ranges to `sfc`
+#'
+#' Convert a list column with many home-range estimates to a `tibble` with a geometry column (as used by the `sf`-package).
 #'
 #' @param x A `tibble` with a `list column` with individual home ranges.
 #' @param col The column where the home
-#' @param ... Additional columns that should be transferred to the new `tible`.
+#' @param ... Additional columns that should be transferred to the new `tibble`.
 #'
 #' @return A `data.frame` with a simple feature column (from the `sf`) package.
 #' @export
-#' @name hr_to_sf
 #'
 #' @examples
 #'
@@ -19,11 +20,6 @@
 #'   mutate(hr = map(data, hr_kde), n = map_int(data, nrow)) %>%
 #'   hr_to_sf(hr, id, n)
 #'
-#'
-#' \dontrun{
-#' ggplot(hr) + geom_sf()
-#'
-#' }
 #'
 
 hr_to_sf <- function(x, ...) {

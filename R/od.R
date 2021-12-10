@@ -15,7 +15,7 @@
 #' @name od
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' data(deer)
 #' mini_deer <- deer[1:100, ]
 #' trast <- make_trast(mini_deer)
@@ -27,6 +27,7 @@
 #' }
 
 #' @export
+#' @rdname od
 rolling_od <- function(x, ...) {
   UseMethod("rolling_od", x)
 }

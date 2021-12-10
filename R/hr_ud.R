@@ -2,6 +2,7 @@
 #'
 #' @param x `[hr_prob]` The home-range estimate
 #' @template dots_none
+#' @return `RasterLayer`
 
 #' @export
 hr_ud <- function(x, ...) {

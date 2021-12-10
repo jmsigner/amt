@@ -28,7 +28,11 @@
 #'
 #' @author Brian J. Smith
 #'
-#' @return Returns a `list` of class `log_rss`.
+#' @return Returns a `list` of class `log_rss` with four entries:
+#' - `df`: A `data.frame` with the covariates and the `log_rss`
+#' - `x1`: A `data.frame` with covariate values for `x1`.
+#' - `x2`: A `data.frame` with covariate values for `x2`.
+#' - `formula`: The formula used to fit the model.
 #'
 #' @seealso See Avgar \emph{et al.} 2017 for details about relative
 #' selection strength.
@@ -36,14 +40,14 @@
 #' Default plotting method available: \code{\link{plot.log_rss}()}
 #'
 #' @references
-#'
-#' Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection
+#' - Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection
 #' Strength: Quantifying effect size in habitat- and step-selection inference.
-#' \emph{Ecology and Evolution}, 7, 5322–5330.
+#' *Ecology and Evolution*, 7, 5322–5330.
+#' - Fieberg, J., Signer, J., Smith, B., & Avgar, T. (2021). A "How to" guide for interpreting parameters in habitat-selection analyses. *Journal of Animal Ecology*, 90(5), 1027-1043.
 #'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' # RSF -------------------------------------------------------
 #' # Fit an RSF, then calculate log-RSS to visualize results.
 #'
@@ -368,8 +372,10 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #' change the default colors by specifying a custom \code{\link{palette}()} before
 #' calling the function.
 #'
-#' @examples
+#' @return A plot.
 #'
+#' @examples
+#' \donttest{
 #' # Load data
 #' data("amt_fisher")
 #' data("amt_fisher_covar")
@@ -397,7 +403,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #'
 #' # Plot
 #' plot(logRSS)
-#'
+#' }
 #'
 #' @export
 plot.log_rss <- function(x, x_var1 = "guess", x_var2 = "guess", ...){
@@ -503,6 +509,8 @@ plot.log_rss <- function(x, x_var1 = "guess", x_var2 = "guess", ...){
 #' @details The function first checks if "_x1" is already appended and adds it if
 #' it is not. This is meant for internal use in `\link{plot.log_rss}()`.
 #' @return A string.
+#' @keywords internal
+
 append_x1 <- function(string){
   #If string is NA, return NA
   if (is.na(string)){
@@ -543,68 +551,6 @@ append_x1 <- function(string){
 #'
 #' @keywords internal
 #'
-#' @examples
-#'
-#' \dontrun{
-#' #Load data
-#' data("amt_fisher")
-#'
-#' # Prepare data for RSF
-#' rsf_data <- amt_fisher %>%
-#'   filter(name == "Lupe") %>%
-#'   make_track(x_, y_, t_) %>%
-#'   random_points() %>%
-#'   extract_covariates(amt_fisher_covar$elevation) %>%
-#'   extract_covariates(amt_fisher_covar$popden) %>%
-#'   extract_covariates(amt_fisher_covar$landuse) %>%
-#'   mutate(lu = factor(landuse))
-#'
-#' # Fit RSF without factor
-#' m1 <- rsf_data %>%
-#'   fit_rsf(case_ ~ elevation + popden)
-#'
-#' # data.frame of x1s
-#' x1 <- data.frame(elevation = seq(90, 120, length.out = 100),
-#'                  popden = mean(rsf_data$popden))
-#' # data.frame of x2 (note factor levels should be same as model data)
-#' x2 <- data.frame(elevation = mean(rsf_data$elevation),
-#'                  popden = mean(rsf_data$popden))
-#'
-#' # Function should return NULL (no factors to check)
-#' check_factors(m1$model, x1, x2)
-#'
-#' # Fit RSF with factor
-#' m2 <- rsf_data %>%
-#'   fit_rsf(case_ ~ lu + elevation + popden)
-#'
-#' # data.frame of x1s
-#' x1 <- data.frame(lu = factor(50, levels = levels(rsf_data$lu)),
-#'                  elevation = seq(90, 120, length.out = 100),
-#'                  popden = mean(rsf_data$popden))
-#' # data.frame of x2 (note factor levels should be same as model data)
-#' x2 <- data.frame(lu = factor(50, levels = levels(rsf_data$lu)),
-#'                  elevation = mean(rsf_data$elevation),
-#'                  popden = mean(rsf_data$popden))
-#'
-#' # Function should return NULL (no discrepancies)
-#' check_factors(m2, x1, x2)
-#'
-#' # Now misspecify factor for x1
-#' x1 <- data.frame(lu = factor(50),
-#'                  elevation = seq(90, 120, length.out = 100),
-#'                  popden = mean(rsf_data$popden))
-#'
-#' # Function should return informative errors regarding data vs x1 and x1 vs x2
-#' check_factors(m2$model, x1, x2)
-#'
-#' # Also misspecify factor for x2
-#' x2 <- data.frame(lu = factor(50),
-#'                  elevation = mean(rsf_data$elevation),
-#'                  popden = mean(rsf_data$popden))
-#'
-#' # Function should return informative errors regarding data vs x1 and data vs x2
-#' check_factors(m2$model, x1, x2)
-#' }
 #'
 check_factors <- function(model, x1, x2){
   # Get original data from model

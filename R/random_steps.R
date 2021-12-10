@@ -12,6 +12,7 @@
 #' @param  rand_ta `[numeric]` \cr Numeric vector with relative turning angles an animal can make. This will usually be random numbers drawn from a suitable distribution (e.g., von Mises or uniform).
 #' @param include_observed `[logical(1) = TRUE]` \cr Indicates if observed steps are to be included in the result.
 #' @template dots_none
+#' @return A `tibble` of class random_steps.
 #' @export
 #' @name random_steps
 random_steps <- function(x, ...) {

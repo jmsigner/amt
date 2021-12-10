@@ -38,7 +38,7 @@ valid_distr_params <- function(dist_name, params) {
 #'   distributions should be returned.
 #' @param ... none implemented.
 #' @export
-#' @return A `tibble` with the purpose of the distribution (turn angles [ta] or step length [sl]) and the distribution name.
+#' @return A `tibble` with the purpose of the distribution (turn angles \[ta\] or step length \[sl\]) and the distribution name.
 #'
 available_distr <- function(which_dist = "all", names_only = FALSE, ...) {
 
@@ -152,15 +152,13 @@ make_gamma_distr <- function(shape = 1, scale = 1, vcov = NULL) {
                     vcov = vcov)
 }
 
-
-# Random numbers ----------------------------------------------------------
-
 #' Sample random numbers
 #'
 #' Sample radom numbers from a distribution created within the `amt` package.
 
 #' @param x `[amt_distr]` \cr A distribution object.
 #' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
+#' @param ... none implemented.
 #' @return A numermic vector.
 #' @export
 random_numbers <- function(x, n = 100, ...) {
@@ -511,7 +509,6 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
   return(new_dist)
 }
 
-# Manually update distribution --------------------------------------------
 #' Manually update `amt_distr`
 #'
 #' Functions to update `amt_distr` from iSSF coefficients
@@ -524,6 +521,7 @@ update_ta_distr <- function(object, beta_cos_ta = "cos_ta_", ...){
 #' @param dist `[amt_distr]` The tentative distribution to be updated
 #' respective distributions.
 #' @name update_distr_man
+#' @return A distribution
 #'
 #' @details These functions are called internally by
 #' \code{\link{update_sl_distr}()} and \code{\link{update_ta_distr}()}.
@@ -741,9 +739,16 @@ ta_distr_name.fit_clogit <- function(x, ...) {
 #'
 #' @param x `[amt_distr]`\cr A (fitted) distribution
 #' @param ... None
+#' @return A list with the parameters of the distribution.
 #'
 #' @name params
 #' @export
+#' @examples
+#' data(deer)
+#' d <- deer %>% steps() %>% random_steps()
+#' sl_distr_params(d)
+#' ta_distr_params(d)
+#'
 #'
 sl_distr_params <- function(x, ...) {
   UseMethod("sl_distr_params")

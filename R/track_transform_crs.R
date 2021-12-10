@@ -3,10 +3,12 @@
 #' Transforms the CRS for a track.
 #' @template track_xy_star
 #' @template dots_none
+#' @return A track with transformed coordinates.
 #'
 #' @export
 #' @seealso `sf::st_transform`
 #' @name transform_coords
+
 transform_coords <- function(x, ...) {
   UseMethod("transform_coords", x)
 }

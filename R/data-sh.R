@@ -1,4 +1,4 @@
-#' Relocations of 1 red deer
+#' Relocations of one Red Deer
 #'
 #' 1500 GPS relocations of one red deer from northern Germany.
 #'

@@ -1,10 +1,20 @@
-#' @rdname hr
+#' Home-range isopleths
+#'
+#' Obtain the isopleths of a home-range estimate, possible at different isopleth levels.
+#' @param x An object of class `hr`
+#' @param level `[numeric]` \cr The isopleth levels used for calculating home
+#'   ranges. Should be `0 < level < 1`.
+#' @param conf.level The confidence level for isopleths for `aKDE`.
+#' @return A `tibble` with the home-range level and a simple feature columns with the isoploth as multipolygon.
+#' @template dots_none
+#' @name hr_isopleths
 #' @export
 hr_isopleths <- function (x, ...) {
   UseMethod("hr_isopleths", x)
 }
 
 #' @export
+#' @rdname hr_isopleths
 hr_isopleths.RasterLayer <- function (x, level, ...) {
   con <- raster::rasterToContour(hr_cud(x), level = level)
   b <- sp::coordinates(con)
@@ -66,22 +76,26 @@ hr_isopleths.RasterLayer <- function (x, level, ...) {
 }
 
 #' @export
+#' @rdname hr_isopleths
 hr_isopleths.mcp <- function (x, ...) {
   x$mcp
 }
 
 #' @export
+#' @rdname hr_isopleths
 hr_isopleths.locoh <- function (x, ...) {
   x$locoh
 }
 
 #' @export
+#' @rdname hr_isopleths
 hr_isopleths.hr_prob <- function(x, ...) {
   iso <- hr_isopleths(x$ud, level = x$levels, ...)
   iso
 }
 
 #' @export
+#' @rdname hr_isopleths
 hr_isopleths.akde <- function(x, conf.level = 0.95, ...) {
 
   checkmate::assert_number(conf.level, lower = 0, upper = 1)

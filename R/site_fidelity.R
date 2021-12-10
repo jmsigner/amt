@@ -12,7 +12,7 @@
 #' @references Spencer, S. R., Cameron, G. N., & Swihart, R. K. (1990). Operationally defining home range: temporal dependence exhibited by hispid cotton rats. Ecology, 1817-1822.
 #' @examples
 #' # real data
-#' \dontrun{
+#' \donttest{
 #' data(deer)
 #' ds <- deer %>% steps_by_burst()
 #' site_fidelity(ds)

@@ -1,6 +1,8 @@
-#' Different Methods to calculate home-range overlaps
+#' Methods to calculate home-range overlaps
 #'
-#' @param x,y `hr` A home-range estimate
+#' Methods to calculate the overlap of two or more home-range estimates.
+#'
+#' @param x,y A home-range estimate
 #' @param type `[character](1)` \cr Type of index, should be one of `hr`, `phr`,
 #'   `vi`, `ba`, `udoi`, or `hd`.
 #' @param conditional `[logical](1)` \cr Whether or not conditional UDs are
@@ -10,17 +12,9 @@
 #' @return \code{data.frame} with the isopleth level and area in units of the
 #'   coordinate reference system.
 #' @name hr_overlaps
-NULL
-
-#' @rdname hr_overlaps
 #' @export
 hr_overlap <- function (x, ...) {
   UseMethod("hr_overlap", x )
-}
-
-#' @export
-hr_overlap.default <- function (x, ...) {
-  print("Not implemented for this class.")
 }
 
 #' @export
@@ -192,15 +186,15 @@ hr_overlap.list <- function(
 
 #' Calculate the overlap between a home-range estimate and a polygon
 #'
+#' Sometimes the percentage overlap between a spatial polygon an a home-range is required.
+#'
 #' @param x A home-range estimate.
 #' @param sf An object of class `sf` containing polygons
 #' @param direction The direction.
 #' @param feature_names  optional feature names
-#'
 #' @return A tibble
 #' @export
-#'
-#' @examples
+
 hr_overlap_feature <- function(x, sf, direction = "hr_with_feature", feature_names = NULL) {
 
   checkmate::assert_class(x, "hr")

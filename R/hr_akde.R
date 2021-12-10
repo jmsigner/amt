@@ -1,21 +1,13 @@
-#' @rdname hr
+#' @rdname hrest
 #' @export
-#' @references C. H. Fleming, W. F. Fagan, T. Mueller, K. A. Olson, P. Leimgruber, J. M. Calabrese, “Rigorous home-range estimation with movement data: A new autocorrelated kernel-density estimator”, Ecology, 96:5, 1182-1188 (2015).
-#' @examples
-#' # akde
-#' \dontrun{
-#' data(deer)
-#' ud1 <- hr_akde(deer) # uses an iid ctmm
-#' ud2 <- hr_akde(deer, model = fit_ctmm(deer, "ou")) # uses an OU ctmm
-#' }
+
 hr_akde <- function(x, ...) {
   UseMethod("hr_akde", x)
 }
 
 
 #' @export
-#' @param model A continuous time movement model. This can be fitted either with `ctmm::ctmm.fit` or `fit_ctmm`.
-#' @rdname hr
+#' @rdname hrest
 hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
                               trast = make_trast(x), levels = 0.95, ...) {
 

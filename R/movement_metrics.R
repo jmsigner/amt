@@ -9,10 +9,11 @@
 #' @template dots_none
 #' @name movement_metrics
 #' @export
+#' @return A numeric vector of length one.
 #' @references
-#' \insertRef{abrahams2017}{amt}
-#' \insertRef{almeida2010}{amt}
-#' \insertRef{swihart1985}{amt}
+#' - \insertRef{abrahams2017}{amt}
+#' - \insertRef{almeida2010}{amt}
+#' - \insertRef{swihart1985}{amt}
 #' @examples
 #' data(deer)
 #'

@@ -1,9 +1,9 @@
-#' @rdname hr
+#' @rdname hrest
 #' @export
 #' @references Fleming, C. H., Fagan, W. F., Mueller, T., Olson, K. A., Leimgruber, P., & Calabrese, J. M. (2016). Estimating where and how animals travel: an optimal framework for path reconstruction from autocorrelated tracking data. Ecology, 97(3), 576-582.
 #' @examples
 #' # od
-#' \dontrun{
+#' \donttest{
 #' data(deer)
 #' ud1 <- hr_od(deer) # uses an iid ctmm
 #' ud2 <- hr_akde(deer, model = fit_ctmm(deer, "ou")) # uses an OU ctmm
@@ -14,7 +14,6 @@ hr_od <- function(x, ...) {
 
 
 #' @export
-#' @rdname hr
 hr_od.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
                               trast = make_trast(x), levels = 0.95, ...) {
 

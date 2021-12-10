@@ -12,7 +12,7 @@
 #' \itemize{
 #' \item model: The model output.
 #' \item sl_: The step length distribution.
-#' \tiem: ta_: The turn angle distribution.
+#' \item ta_: The turn angle distribution.
 #' }
 #' @export
 

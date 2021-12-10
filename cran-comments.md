@@ -1,6 +1,22 @@
 
 # Version 0.1.5
 
+## Round 2
+
+### Test environments
+- local: Ubuntu 20.04, R 4.1.2
+- win builder: R release and devel
+
+### R CMD check results
+
+There were no errors or warnings. There was one note. 
+
+1. That the package was archived.
+
+### Additional notes
+
+I did major updates to the documentation following suggestions received by Email on the 16th of November. This included adding `\value` to all Rd files and removing all `\dontrun{ }`-statements from the examples.
+
 ## Round 1
 
 ### Test environments

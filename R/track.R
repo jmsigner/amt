@@ -4,7 +4,7 @@
 #' `track` is usually created from a set of `x` and `y` coordinates, possibly
 #' time stamps, and any number of optional columns, such as id, sex, age, etc.
 #'
-#' @param tbl [data.frame] \cr The `data.frame` from which a track should be
+#' @param tbl `[data.frame]` \cr The `data.frame` from which a track should be
 #'   created.
 #' @param .x,.y,.t `[expression(1)]` \cr Unquoted variable names of columns
 #'   containing the x and y coordinates, and optionally a time stamp.

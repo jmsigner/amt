@@ -1,11 +1,11 @@
-#' @rdname hr
+#' @rdname hrest
 #' @export
 hr_kde <- function(x, ...) {
   UseMethod("hr_kde", x)
 }
 
 #' @export
-#' @rdname hr
+#' @rdname hrest
 hr_kde.track_xy <- function(
   x, h = hr_kde_ref(x), trast = make_trast(x),
   levels = 0.95, keep.data = TRUE, ...) {
@@ -61,42 +61,6 @@ hr_kde.track_xy <- function(
 }
 
 
-#' @rdname hr
-#' @export
-hr_kde_ref <- function(x, ...) {
-  UseMethod("hr_kde_ref", x)
-}
-
-#' @export
-#' @rdname hr
-hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
-
-  if (!rescale %in% c("unitvar", "xvar", "none")) {
-    stop("hr_kde_ref: scale: not one of unitvar, xvar or none")
-  }
-
-  xs <- x$x_
-  ys <- x$y_
-
-  if (rescale == "unitvar") {
-    ## standardize x and y by unit variance
-    xs <- xs / sd(xs)
-    ys <- ys / sd(ys)
-
-  } else if (rescale == "xvar") {
-    ## standardize x and y by
-    ys <- (ys / sd(ys)) * sd(xs)
-  }
-
-  n <- nrow(x)
-  h <- sqrt(0.5 * (var(xs) +  var(ys))) * n^(-1/6)
-  h <- c(h, h)
-
-  if (rescale == "unitvar") {
-    h <- h * c(sd(x$x_), sd(x$y_))
-  }
-  h
-}
 
 
 #' Select a bandwidth for Kernel Density Estimation
@@ -179,21 +143,26 @@ hr_kde_ref_scaled <- function(
 
 
 #' `hr_kde_pi` wraps `KernSmooth::dpik` to select bandwidth for kernel density estimation the plug-in-the-equation method in two dimensions.
+#'
 #' This function calculates bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
+
+#' @template track_xy_star
+#' @template dots_none
+#' @param rescale `[character(1)]` \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".
+
 #' @param correct Logical scalar that indicates whether or not the estimate should be correct for the two dimensional case.
 #' @return The bandwidth, the standardization method and correction.
 #' @seealso \code{KernSmooth::dpik}
+#' @name bandwidth_pi
 #' @export
-#' @rdname hr
 #' @references Gitzen, R. A., Millspaugh, J. J., & Kernohan, B. J. (2006). Bandwidth selection for fixed-kernel analysis of animal utilization distributions. _Journal of Wildlife Management_, 70(5), 1334-1344.
 hr_kde_pi <- function(x, ...) {
   UseMethod("hr_kde_pi", x)
 }
 
 #' @export
-#' @rdname hr
+#' @rdname bandwidth_pi
 hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
-
 
   if (!rescale %in% c("unitvar", "xvar", "none")) {
     stop("rhrHpi: scale: not one of unitvar, xvar or none")
@@ -234,22 +203,26 @@ hr_kde_pi.track_xy <- function(x, rescale = "none", correct = TRUE, ...) {
   h
 }
 
+#' Least square cross validation bandwidth
+#'
 #' Use least square cross validation (lscv) to estimate bandwidth for kernel home-range estimation.
 
+#' @template track_xy_star
+#' @param trast A template raster.
 #' @param range numeric vector with different candidate h values.
 #' @param which_min A character indicating if the \code{global} or \code{local} minimum should be searched for.
+#' @param rescale `[character(1)]` \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".
 
 #' @details `hr_kde_lscv` calculates least square cross validation bandwidth. This implementation is based on Seaman and Powell (1996).  If \code{whichMin} is \code{"global"} the global minimum is returned, else the local minimum with the largest candidate bandwidth is returned.
 
-#' @return \code{vector} of length two
+#' @return \code{vector} of length two.
 #' @export
-#' @rdname hr
 #' @references Seaman, D. E., & Powell, R. A. (1996). An evaluation of the accuracy of kernel density estimators for home range analysis. _Ecology, 77(7)_, 2075-2085.
 #'
 
 hr_kde_lscv <- function(
   x,
-  range= do.call(seq, as.list(c(hr_kde_ref(x) * c(0.1, 2), length.out=100))),
+  range = do.call(seq, as.list(c(hr_kde_ref(x) * c(0.1, 2), length.out=100))),
   which_min = "global", rescale = "none",
   trast = raster(as_sp(x), nrow = 100, ncol = 100)) {
 
@@ -318,4 +291,49 @@ lscv <- function(x, hs) {
     out <- sum(exp(-f^2 / (4 * h^2)) - 4 * exp(-f^2 / (2 * h^2)))
     1.0 / (pi * h^2 * n) + (2 * out -3 * n)/(pi * 4. * h^2 * n^2);
   })
+}
+
+#' Reference bandwidth
+#'
+#' Calculate the reference bandwidth for kernel density home-range range estimates.
+#' @template track_xy_star
+#' @template dots_none
+#' @template return_bandwidth
+#' @param rescale `[character(1)]` \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".
+#' @name bandwidth_ref
+
+
+hr_kde_ref <- function(x, ...) {
+  UseMethod("hr_kde_ref", x)
+}
+
+#' @export
+#' @rdname bandwidth_ref
+hr_kde_ref.track_xy <- function(x, rescale = "none", ...) {
+
+  if (!rescale %in% c("unitvar", "xvar", "none")) {
+    stop("hr_kde_ref: scale: not one of unitvar, xvar or none")
+  }
+
+  xs <- x$x_
+  ys <- x$y_
+
+  if (rescale == "unitvar") {
+    ## standardize x and y by unit variance
+    xs <- xs / sd(xs)
+    ys <- ys / sd(ys)
+
+  } else if (rescale == "xvar") {
+    ## standardize x and y by
+    ys <- (ys / sd(ys)) * sd(xs)
+  }
+
+  n <- nrow(x)
+  h <- sqrt(0.5 * (var(xs) +  var(ys))) * n^(-1/6)
+  h <- c(h, h)
+
+  if (rescale == "unitvar") {
+    h <- h * c(sd(x$x_), sd(x$y_))
+  }
+  h
 }

@@ -1,11 +1,10 @@
-#' @rdname hr
+#' @rdname hrest
 #' @export
 hr_mcp <- function(x, ...) {
   UseMethod("hr_mcp", x)
 }
 
 #' @export
-#' @rdname hr
 hr_mcp.track_xy <- function(x, levels = 0.95, keep.data = TRUE, ...) {
 
   # check levels

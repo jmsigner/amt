@@ -10,10 +10,12 @@
 #'
 #' @return An object of class `ctmm` from the package ctmm.
 #' @examples
+#' \donttest{
 #' data(deer)
-#' mini_dee <- deer[1:20, ]
+#' mini_deer <- deer[1:20, ]
 #' m1 <- fit_ctmm(mini_deer, "iid")
 #' summary(m1)
+#' }
 fit_ctmm <- function(x, model, uere = NULL, ...) {
 
   if (!model %in% c("iid", "bm", "ou", "ouf", "auto")) {

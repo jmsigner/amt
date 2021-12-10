@@ -5,6 +5,7 @@
 #' @param nt The new time trajectory.
 #' @param tol The tolerance.
 #' @template dots_none
+#' @return A `track_xyt`.
 #' @name track_align
 #' @export
 

@@ -1,4 +1,5 @@
-#' @rdname hr
+#' @rdname hrest
+#' @param type `k`, `r` or `a`. Type of LoCoH.
 #' @export
 hr_locoh <- function(x, ...) {
   UseMethod("hr_locoh", x)
@@ -6,8 +7,7 @@ hr_locoh <- function(x, ...) {
 
 
 #' @export
-#' @param type `k`, `r` or `a`. Type of LoCoH.
-#' @rdname hr
+#' @rdname hrest
 hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = TRUE, rand_buffer = 1e-5, ...) {
 
   ## type

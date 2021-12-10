@@ -42,14 +42,13 @@ as_sp.steps_xy <- function(x, end = TRUE, ...) {
   }
 }
 
-# as_sf_points ----------------------------------------------------------------
-
-#' Export track to points
+#' Coerces a track to points
 #'
-#' Exports a track to points from the `sf` package.
+#' Coerces a track to points from the `sf` package.
 #'
 #' @template track_xy_star
 #' @template dots_none
+#' @return A data `data.frame` with a `sfc`-column
 #' @export
 
 as_sf_points <- function(x, ...) {
@@ -112,11 +111,7 @@ as_sf_lines.track_xy <- function(x, ...) {
 
 #' @export
 #' @rdname coercion
-#' @examples
-#' data(deer)
-#' mini_deer <- deer[1:20, ]
-#' as_move(mini_deer)
-#' as_move(mini_deer, id = "foo")
+
 as_move <- function(x, ...) {
   UseMethod("as_move", x)
 }
@@ -169,9 +164,7 @@ as_move.track_xyt <- function(x, id = "id", ...){
 
 #' @export
 #' @rdname coercion
-#' @examples
-#' as_ltraj(mini_deer)
-#' as_ltraj(mini_deer, id = "animal_3")
+
 as_ltraj <- function(x, ...) {
   UseMethod("as_ltraj", x)
 }
@@ -200,8 +193,6 @@ as_ltraj.track_xyt <- function(x, ...) {
 # as_telemetry -----------------------------------------------------------------
 #' @export
 #' @rdname coercion
-#' @examples
-#' as_telemetry(deer)
 as_telemetry <- function(x, ...) {
   UseMethod("as_telemetry", x)
 }
@@ -239,8 +230,6 @@ as_telemetry.track_xyt <- function(x, ...) {
 # as_moveHMM --------------------------------------------------------------
 #' @export
 #' @rdname coercion
-#' @examples
-#' as_moveHMM(mini_deer)
 
 as_moveHMM <- function(x, ...) {
   UseMethod("as_moveHMM", x)

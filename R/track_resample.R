@@ -8,6 +8,7 @@
 #' @param start A integer scalar, that gives the relocation at which the sampling rate starts.
 #' @template dots_none
 #' @name track_resample
+#' @return A resampled `track_xyt`.
 #' @export
 track_resample <- function(x, ...) {
   UseMethod("track_resample", x)

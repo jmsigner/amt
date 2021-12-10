@@ -7,6 +7,7 @@
 #' @param include.crepuscule `[logical(1)=TRUE]`\cr Should dawn and dusk be included.
 #' @param where `[character(1)="end"]{"start", "end", "both"}` For `steps`, should the start, end or both time points be used?
 #' @template dots_none
+#' @return A `tibble` with an additional column `tod_` that contains the time of the day for each relocation.
 #' @name time_of_day
 #' @export
 #' @examples

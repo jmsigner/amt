@@ -9,31 +9,27 @@
 #' @param presence `[track]` \cr The presence points, that will be added to the result.
 #' @param ... `[any]`\cr None implemented.
 #' @note For objects of class `track_xyt` the timestamp (`t_`) is lost.
+#' @return A `tibble` with the observed and random points and a new column `case_` that indicates if a point is observed (`case_ = TRUE`) or random (`case_ TRUE`).
 #' @name random_points
 #' @export
 #' @examples
 #'
+#' \donttest{
 #' data(deer)
 #'
 #' # track_xyt ---------------------------------------------------------------
 #' # Default settings
-#' \dontrun{
 #' rp1 <- random_points(deer)
 #'
 #' plot(rp1)
-#' }
 #'
-#'  \dontrun{
 #' trast <- raster(bbox(deer, buffer = 5000), res = 30)
 #' rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
 #'
 #' plot(rp3)
-#' }
-#'
 #'
 #' # Only one random point for each observed point
 #' rp <- random_points(deer, factor = 1)
-#' \dontrun{
 #' plot(rp)
 #'
 #' # Within a home range -----------------------------------------------------
@@ -51,6 +47,7 @@
 #' plot(rp)
 #' }
 #'
+
 random_points <- function(x, ...) {
   UseMethod("random_points", x)
 }
@@ -90,7 +87,7 @@ random_points.track_xy <- function(x, level = 1, hr = "mcp", n = nrow(x) * 10, t
   if (hr == "mcp") {
     hr <- hr_mcp(x, levels = level, ...) %>% hr_isopleths()
   } else if (hr == "kde") {
-    hr <- hr_kde(x, ...) %>% hr_isopleths(level = level)
+    hr <- hr_kde(x,level = level, ...) %>% hr_isopleths()
   } else {
     stop("Only mcp and kde home ranges are currently implemented.")
   }

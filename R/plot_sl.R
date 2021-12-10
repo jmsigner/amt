@@ -5,6 +5,7 @@
 #' @param n `[numeric(1)=1000]{>0}` \cr The number of breaks between `0` and `upper_quantile`.
 #' @param plot `[logical(1)=TRUE]` \cr Indicates if a plot should be drawn or not.
 #' @template dots_none
+#' @return A plot of the step-length distribution.
 #' @export
 #' @name plot_sl
 #' @examples
