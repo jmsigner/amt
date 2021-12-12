@@ -10,7 +10,9 @@ hr_kde.track_xy <- function(
   x, h = hr_kde_ref(x), trast = make_trast(x),
   levels = 0.95, keep.data = TRUE, ...) {
 
-  # ---------------------------------------------------------------------------- #
+  checkmate::assert_numeric(levels, lower = 0, upper = 1)
+  levels <- sort(levels)
+
   # Check bandwidth
   if (!is.numeric(h)) {
     stop("hr_kde: bandwidth should be numeric")
