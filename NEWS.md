@@ -1,5 +1,7 @@
 # amt 0.1.6
 
+- fixed issue #54
+
 # amt 0.1.5
 ## updates
 - support for `hnorm` and `lnorm` step-length distributions.

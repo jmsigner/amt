@@ -17,6 +17,9 @@
 #' deer %>% steps_by_burst %>% bbox(spatial = FALSE)
 #' deer %>% steps_by_burst %>% bbox(buffer = 100, spatial = FALSE)
 #' deer %>% steps_by_burst %>% random_steps %>% bbox(spatial = FALSE)
+#'
+#' # There is also the option to return a `sf`-object and then work with this further.
+#' deer %>% bbox(sf = TRUE) %>% sf::st_transform(4326)
 
 bbox <- function(x, ...) {
   UseMethod("bbox", x)
