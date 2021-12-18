@@ -99,6 +99,7 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   }
 
   rr <- do.call(rbind, qq)
+  sf::st_crs(rr) <- get_crs(x)
 
   qq2 <- cbind(level = round(pp[wlevel], 2), what = "estimate",
                area = sf::st_area(rr), rr)

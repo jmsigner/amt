@@ -79,3 +79,15 @@ expect_true(all(names(hr_isopleths(loc)) == c("level", "what", "area", "geometry
 expect_true(all(names(hr_isopleths(mcp)) == c("level", "what", "area", "geometry")))
 expect_true(all(names(hr_isopleths(kde)) == c("level", "what", "area", "geometry")))
 
+# Test units of hr_area
+# hr_locoh
+expect_true(is.numeric(hr_area(loc)$area))
+expect_true(is.numeric(hr_area(loc, units = FALSE)$area))
+expect_true(is(hr_area(loc, units = TRUE)$area, "units"))
+
+f1 <- make_track(mini_fisher, x_, y_)
+loc1 <- hr_locoh(f1)
+expect_true(is.numeric(hr_area(loc1)$area))
+expect_true(is.numeric(hr_area(loc1, units = FALSE)$area))
+expect_true(is.numeric(hr_area(loc1, units = TRUE)$area))
+expect_warning(hr_area(loc1, units = TRUE))
