@@ -91,3 +91,15 @@ expect_true(is.numeric(hr_area(loc1)$area))
 expect_true(is.numeric(hr_area(loc1, units = FALSE)$area))
 expect_true(is.numeric(hr_area(loc1, units = TRUE)$area))
 expect_warning(hr_area(loc1, units = TRUE))
+
+# hr_mcp
+expect_true(is.numeric(hr_area(mcp)$area))
+expect_true(is.numeric(hr_area(mcp, units = FALSE)$area))
+expect_true(is(hr_area(mcp, units = TRUE)$area, "units"))
+
+mcp1 <- hr_mcp(f1)
+expect_true(is.numeric(hr_area(loc1)$area))
+expect_true(is.numeric(hr_area(loc1, units = FALSE)$area))
+expect_true(is.numeric(hr_area(loc1, units = TRUE)$area))
+expect_warning(hr_area(loc1, units = TRUE))
+
