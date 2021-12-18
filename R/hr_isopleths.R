@@ -58,8 +58,7 @@ hr_isopleths.RasterLayer <- function (x, level, ...) {
 
   df <- data.frame(
     level = level,
-    what = "estimate",
-    area = rgeos::gArea(con, byid = TRUE))
+    what = "estimate")
   row.names(df) <- 1:length(level)
   con <- sp::SpatialPolygonsDataFrame(con, df)
 
@@ -71,7 +70,10 @@ hr_isopleths.RasterLayer <- function (x, level, ...) {
   else {
     attr(x, "crs_")
   }
-  con
+
+  # Add area
+  con$area <- sf::st_area(con)
+  con[, c("level", "what", "area", "geometry")]
 
 }
 

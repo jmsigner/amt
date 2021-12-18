@@ -1,8 +1,9 @@
 # amt 0.1.6
 
-- fixed issue #54
+- fixed issue #54.
 - fixed issue #43 by adding a an example. 
-- fixed issue #
+- fixed issue #57.
+- fixed issue #58.
 
 # amt 0.1.5
 ## updates
