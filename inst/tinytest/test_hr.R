@@ -113,3 +113,9 @@ expect_true(is.numeric(hr_area(kde1)$area))
 expect_true(is.numeric(hr_area(kde1, units = FALSE)$area))
 expect_true(is.numeric(hr_area(kde1, units = TRUE)$area))
 expect_warning(hr_area(kde1, units = TRUE))
+
+# hr_akde
+expect_true(is.numeric(hr_area(rd)$area))
+expect_true(is.numeric(hr_area(rd, units = FALSE)$area))
+expect_true(is(hr_area(rd, units = TRUE)$area, "units"))
+
