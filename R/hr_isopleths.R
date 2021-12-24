@@ -5,6 +5,7 @@
 #' @param level `[numeric]` \cr The isopleth levels used for calculating home
 #'   ranges. Should be `0 < level < 1`.
 #' @param conf.level The confidence level for isopleths for `aKDE`.
+#' @param descending `[logical = TRUE]` \cr Indicating if levels (and thus the polygons) should be ordered in descending (default) or not.
 #' @return A `tibble` with the home-range level and a simple feature columns with the isoploth as multipolygon.
 #' @template dots_none
 #' @name hr_isopleths
@@ -15,7 +16,7 @@ hr_isopleths <- function (x, ...) {
 
 #' @export
 #' @rdname hr_isopleths
-hr_isopleths.RasterLayer <- function (x, level, ...) {
+hr_isopleths.RasterLayer <- function (x, level, descending = TRUE, ...) {
   con <- raster::rasterToContour(hr_cud(x), level = level)
   b <- sp::coordinates(con)
 
@@ -73,32 +74,36 @@ hr_isopleths.RasterLayer <- function (x, level, ...) {
 
   # Add area
   con$area <- sf::st_area(con)
-  con[, c("level", "what", "area", "geometry")]
+  con <- con[, c("level", "what", "area", "geometry")]
+
+  if (descending) {
+    con[order(con$level, decreasing = TRUE), ]
+  }
 
 }
 
 #' @export
 #' @rdname hr_isopleths
-hr_isopleths.mcp <- function (x, ...) {
-  x$mcp
+hr_isopleths.mcp <- function (x, descending = TRUE, ...) {
+  x$mcp[order(x$mcp$level, decreasing = descending), ]
 }
 
 #' @export
 #' @rdname hr_isopleths
-hr_isopleths.locoh <- function (x, ...) {
-  x$locoh
+hr_isopleths.locoh <- function (x, descending = TRUE, ...) {
+  x$locoh[order(x$locoh$level, decreasing = descending), ]
 }
 
 #' @export
 #' @rdname hr_isopleths
-hr_isopleths.hr_prob <- function(x, ...) {
+hr_isopleths.hr_prob <- function(x, descending = TRUE, ...) {
   iso <- hr_isopleths(x$ud, level = x$levels, ...)
-  iso
+  iso[order(iso$level, decreasing = descending), ]
 }
 
 #' @export
 #' @rdname hr_isopleths
-hr_isopleths.akde <- function(x, conf.level = 0.95, ...) {
+hr_isopleths.akde <- function(x, conf.level = 0.95, descending = TRUE, ...) {
 
   checkmate::assert_number(conf.level, lower = 0, upper = 1)
   res <- ctmm::SpatialPolygonsDataFrame.UD(x$akde, level.UD = x$levels,
@@ -112,5 +117,6 @@ hr_isopleths.akde <- function(x, conf.level = 0.95, ...) {
                      paste0("uci (", conf.level,")")),
                    length(x$levels))
   res1$area = sf::st_area(res1)
-  res1[, c("level", "what", "area", "geometry")]
+  res1 <- res1[, c("level", "what", "area", "geometry")]
+  res1[order(res1$level, decreasing = descending), ]
 }

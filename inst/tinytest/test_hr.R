@@ -119,3 +119,22 @@ expect_true(is.numeric(hr_area(rd)$area))
 expect_true(is.numeric(hr_area(rd, units = FALSE)$area))
 expect_true(is(hr_area(rd, units = TRUE)$area, "units"))
 
+# Descending order of polygons
+
+mcp <- hr_mcp(mini_fisher, levels = c(0.5, 0.9))
+loc <- hr_locoh(mini_fisher, levels = c(0.5, 0.9))
+kde <- hr_kde(mini_fisher, levels = c(0.5, 0.9))
+
+m <- fit_ctmm(mini_fisher, "iid")
+rd <- hr_akde(mini_fisher, model = m, levels = c(0.5, 0.9))
+od <- hr_od(mini_fisher, model = m, levels = c(0.5, 0.9))
+
+for (x in list(mcp, loc, kde, rd, od)) {
+  i1 <- hr_isopleths(x)
+  i2 <- hr_isopleths(x, descending = FALSE)
+  expect_equal(i1$level, c(0.9, 0.5))
+  expect_equal(i2$level, c(0.5, 0.9))
+  expect_true(i1$area[1] > i1$area[2])
+  expect_true(i2$area[1] < i2$area[2])
+}
+

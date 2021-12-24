@@ -4,6 +4,8 @@
 - fixed issue #43 by adding a an example. 
 - fixed issue #57.
 - fixed issue #58.
+- fixed issue #56: levels for `akde`
+- added enhancement #55
 
 # amt 0.1.5
 ## updates
