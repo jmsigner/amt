@@ -6,6 +6,7 @@
 - fixed issue #58.
 - fixed issue #56: levels for `akde`
 - added enhancement #55
+- fixed small error in `steps()` for calculating the absolute direction. 
 
 # amt 0.1.5
 ## updates
