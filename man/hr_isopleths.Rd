@@ -11,15 +11,15 @@
 \usage{
 hr_isopleths(x, ...)
 
-\method{hr_isopleths}{RasterLayer}(x, level, ...)
+\method{hr_isopleths}{RasterLayer}(x, level, descending = TRUE, ...)
 
-\method{hr_isopleths}{mcp}(x, ...)
+\method{hr_isopleths}{mcp}(x, descending = TRUE, ...)
 
-\method{hr_isopleths}{locoh}(x, ...)
+\method{hr_isopleths}{locoh}(x, descending = TRUE, ...)
 
-\method{hr_isopleths}{hr_prob}(x, ...)
+\method{hr_isopleths}{hr_prob}(x, descending = TRUE, ...)
 
-\method{hr_isopleths}{akde}(x, conf.level = 0.95, ...)
+\method{hr_isopleths}{akde}(x, conf.level = 0.95, descending = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{hr}}
@@ -28,6 +28,8 @@ hr_isopleths(x, ...)
 
 \item{level}{\verb{[numeric]} \cr The isopleth levels used for calculating home
 ranges. Should be \verb{0 < level < 1}.}
+
+\item{descending}{\verb{[logical = TRUE]} \cr Indicating if levels (and thus the polygons) should be ordered in descending (default) or not.}
 
 \item{conf.level}{The confidence level for isopleths for \code{aKDE}.}
 }

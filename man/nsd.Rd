@@ -2,9 +2,21 @@
 % Please edit documentation in R/nsd.R
 \name{nsd}
 \alias{nsd}
+\alias{nsd.track_xy}
+\alias{add_nsd}
+\alias{add_nsd.track_xy}
+\alias{add_nsd.steps_xy}
 \title{Net squared displacement (nsd)}
 \usage{
 nsd(x, ...)
+
+\method{nsd}{track_xy}(x, ...)
+
+add_nsd(x, ...)
+
+\method{add_nsd}{track_xy}(x, ...)
+
+\method{add_nsd}{steps_xy}(x, ...)
 }
 \arguments{
 \item{x}{A track_xy{t}.}
@@ -12,8 +24,8 @@ nsd(x, ...)
 \item{...}{Further arguments, none implemented.}
 }
 \value{
-Numeric vector.
+Numeric vector (for \code{nsd()}) and a tillbe with the original data with a new column for \code{add_nsd()}.
 }
 \description{
-Calculate the net squared displacement (i.e., the squared distance from the first location of a track) for a track.
+The function \code{nsd()} calculates the net squared displacement (i.e., the squared distance from the first location of a track) for a track. The function \code{add_nsd()} add a new column to a track or steps object with the nsd (the column name is \code{nsd_}).
 }
