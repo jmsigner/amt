@@ -21,25 +21,7 @@ as_sp.track_xy <- function(x, ...) {
 #' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @rdname coercion
 as_sp.steps_xy <- function(x, end = TRUE, ...) {
-  if (end) {
-    sp::SpatialPoints(
-      coords = as.matrix(x[, c("x2_", "y2_")]),
-      proj4string = if (!is.null(attributes(x)$crs_)) {
-        as(attributes(x)$crs_, "CRS")
-      } else {
-        sp::CRS(as.character(NA))
-      }
-    )
-  } else {
-    sp::SpatialPoints(
-      coords = as.matrix(x[, c("x1_", "y1_")]),
-      proj4string = if (!is.null(attributes(x)$crs_)) {
-        as(attributes(x)$crs_, "CRS")
-      } else {
-        sp::CRS(as.character(NA))
-      }
-    )
-  }
+  sf::as_Spatial(as_sf_points(x, end = end, ....))
 }
 
 #' Coerces a track to points
@@ -47,6 +29,7 @@ as_sp.steps_xy <- function(x, end = TRUE, ...) {
 #' Coerces a track to points from the `sf` package.
 #'
 #' @template track_xy_star
+#' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @template dots_none
 #' @return A data `data.frame` with a `sfc`-column
 #' @export
@@ -64,6 +47,18 @@ as_sf_points.track_xy <- function(x, ...) {
   p
 }
 
+#' @export
+as_sf_points.steps_xy <- function(x, end = TRUE, ...) {
+
+  p <- if (end) {
+    sf::st_as_sf(x, coords = c("x2_", "y2_"))
+  } else {
+    sf::st_as_sf(x, coords = c("x1_", "y1_"))
+  }
+  p <- sf::st_set_crs(p, if (!is.null(attributes(x)$crs_))
+    attributes(x)$crs_ else sf::NA_crs_)
+  p
+}
 
 # as_sf_lines ----------------------------------------------------------------
 
