@@ -46,7 +46,9 @@ hr_kde.track_xy <- function(
                         ymn = yrange[1],
                         ymx = yrange[2])
 
-  raster::projection(kde)  <- as(get_crs(x), "CRS")
+  raster::projection(kde)  <- if (is.numeric(get_crs(x)))
+    sp::CRS(paste0("+init=epsg:", get_crs(x))) else
+    as(get_crs(x), "CRS")
   attr(kde, "crs_") <- get_crs(x) # needs to be fixed when updating to terra
 
   res <- list(
@@ -303,6 +305,7 @@ lscv <- function(x, hs) {
 #' @template return_bandwidth
 #' @param rescale `[character(1)]` \cr Rescaling method for reference bandwidth calculation. Must be one of "unitvar", "xvar", or "none".
 #' @name bandwidth_ref
+#' @export
 
 
 hr_kde_ref <- function(x, ...) {

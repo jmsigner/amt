@@ -151,7 +151,8 @@ as_move.track_xyt <- function(x, id = "id", ...){
     y= x$y_,
     time = x$t_,
     data = data.frame(x[!names(x) %in% c("x_","y_","t_")]),
-    proj = as(get_crs(x), "CRS"),
+    proj = if (is.numeric(get_crs(x))) sp::CRS(paste0("+init=epsg:", get_crs(x)))
+    else as(get_crs(x), "CRS"),
     animal = if (has_id) as.character(x[[id]]) else "unnamed")
 }
 
