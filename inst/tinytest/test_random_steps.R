@@ -69,19 +69,18 @@ expect_error(random_steps(s1, 1.5, sl_distr = make_unif_distr(10, 100), ta_distr
 
 
 xx <- random_steps(s1, 1, sl_distr = make_unif_distr(10, 100), ta_distr = make_vonmises_distr(kappa = 5))
-expect_equal(nrow(xx), 4)
-expect_equal(sum(!xx$case_), 2)
+expect_equal(nrow(xx), 6)
+expect_equal(sum(!xx$case_), 3)
 
 xx <- random_steps(s1, 10, sl_distr = make_unif_distr(10, 100), ta_distr = make_vonmises_distr(kappa = 5))
-expect_equal(nrow(xx), 22)
-expect_equal(sum(!xx$case_), 20)
+expect_equal(nrow(xx), 33)
+expect_equal(sum(!xx$case_), 30)
 
 
 # Check steps are correct, i.e., random steps have the right direction
 xy <- data.frame(x = 1:3, y = 1:3)
 xx <- make_track(xy, x, y)
 s1 <- xx %>% steps()
-s1
 
 rs <- random_steps(s1, 1, sl_distr = make_unif_distr(sqrt(2), sqrt(2)),
              ta_distr = make_unif_distr(0, 0))

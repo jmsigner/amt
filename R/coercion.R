@@ -21,7 +21,7 @@ as_sp.track_xy <- function(x, ...) {
 #' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @rdname coercion
 as_sp.steps_xy <- function(x, end = TRUE, ...) {
-  sf::as_Spatial(as_sf_points(x, end = end, ....))
+  sf::as_Spatial(as_sf_points(x, end = end, ...))
 }
 
 #' Coerces a track to points
@@ -29,8 +29,8 @@ as_sp.steps_xy <- function(x, end = TRUE, ...) {
 #' Coerces a track to points from the `sf` package.
 #'
 #' @template track_xy_star
-#' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @template dots_none
+#' @name as_sf_points
 #' @return A data `data.frame` with a `sfc`-column
 #' @export
 
@@ -47,7 +47,9 @@ as_sf_points.track_xy <- function(x, ...) {
   p
 }
 
+#' @rdname as_sf_points
 #' @export
+#' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 as_sf_points.steps_xy <- function(x, end = TRUE, ...) {
 
   p <- if (end) {

@@ -2,9 +2,12 @@
 % Please edit documentation in R/coercion.R
 \name{as_sf_points}
 \alias{as_sf_points}
+\alias{as_sf_points.steps_xy}
 \title{Coerces a track to points}
 \usage{
 as_sf_points(x, ...)
+
+\method{as_sf_points}{steps_xy}(x, end = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}

@@ -125,11 +125,8 @@ mcp <- hr_mcp(mini_fisher, levels = c(0.5, 0.9))
 loc <- hr_locoh(mini_fisher, levels = c(0.5, 0.9))
 kde <- hr_kde(mini_fisher, levels = c(0.5, 0.9))
 
-m <- fit_ctmm(mini_fisher, "iid")
-rd <- hr_akde(mini_fisher, model = m, levels = c(0.5, 0.9))
-od <- hr_od(mini_fisher, model = m, levels = c(0.5, 0.9))
 
-for (x in list(mcp, loc, kde, rd, od)) {
+for (x in list(mcp, loc, kde)) {
   i1 <- hr_isopleths(x)
   i2 <- hr_isopleths(x, descending = FALSE)
   expect_equal(i1$level, c(0.9, 0.5))
