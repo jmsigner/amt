@@ -114,6 +114,10 @@ expect_true(is.numeric(hr_area(kde1, units = FALSE)$area))
 expect_true(is.numeric(hr_area(kde1, units = TRUE)$area))
 expect_warning(hr_area(kde1, units = TRUE))
 
+expect_true(is.numeric(hr_kde_lscv(f1)$h))
+expect_true(is.numeric(hr_kde_ref(f1)))
+expect_true(is.numeric(hr_kde_pi(f1)))
+
 # hr_akde
 expect_true(is.numeric(hr_area(rd)$area))
 expect_true(is.numeric(hr_area(rd, units = FALSE)$area))

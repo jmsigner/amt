@@ -1,3 +1,13 @@
+# Version 0.1.6
+## Round 1
+### Test environments
+- local: Ubuntu 20.04, R 4.1.2
+- win builder: R release and devel
+- AppVeyor on GitHub
+
+### R CMD check results
+
+There were   warning no errors, warnings or notes.
 
 # Version 0.1.5
 
