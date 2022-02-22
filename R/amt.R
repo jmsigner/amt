@@ -26,7 +26,8 @@ methods::setOldClass(c("random_points", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("steps", "tbl_df", "tbl", "data.frame"))
 methods::setOldClass(c("random_steps", "tbl_df"))
 
-utils::globalVariables(c("burst_", "step_id_", "t_", ".data", "ts", "sl_", "xs", "ys", "x_", "y_")) # to omit CRAN notes
+utils::globalVariables(c("burst_", "step_id_", "t_", "case_", ".data",
+                         "ts", "sl_", "xs", "ys", "x_", "y_")) # to omit CRAN notes
 
 #' @useDynLib amt
 

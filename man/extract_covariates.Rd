@@ -48,15 +48,15 @@ extract_covariates_var_time(x, ...)
 \arguments{
 \item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}
 
-\item{...}{Further arguments, none implemented.}
+\item{...}{Additional arguments passed to \code{raster::extract()}.}
 
 \item{covariates}{\verb{[RasterLayer,RasterStack,RasterBrick]} \cr The
 (environmental) covariates. For \code{extract_covariates_var_time} the argument
 \code{covariates} need to have a \code{z}-column (i.e. the time stamp).}
 
-\item{where}{\verb{[character(1)="end"]\{"start", "end", "both"\}} \cr For \code{steps} this
-determines if the covariate values should be extracted at the beginning or
-the end of a step. or \code{end}.}
+\item{where}{\verb{[character(1)="end"]\{"start", "end", "both"\}} \cr For \code{steps}
+this determines if the covariate values should be extracted at the
+beginning or the end of a step. or \code{end}.}
 
 \item{when}{\verb{[character(1)="any"]\{"any", "before", "after"\}} \cr Specifies for
 for \code{extract_covariates_var_time} whether to look before, after or in both
@@ -85,6 +85,14 @@ mini_deer <- deer[1:20, ]
 mini_deer \%>\% extract_covariates(sh_forest)
 mini_deer \%>\% steps \%>\% extract_covariates(sh_forest)
 mini_deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
+
+# Buffer
+mini_deer \%>\% extract_covariates(sh_forest) # no buffer
+# The command buffer can be used, to buffer each point together with a
+# function to summarize the results.
+mini_deer \%>\% extract_covariates(sh_forest, buffer = 10, fun = mean)
+# This can also be a use-specified function.
+mini_deer \%>\% extract_covariates(sh_forest, buffer = 100, fun = function(x) length(x))
 \donttest{
 # Illustration of extracting covariates along the a step
 mini_deer \%>\% steps() \%>\% random_steps() \%>\%
