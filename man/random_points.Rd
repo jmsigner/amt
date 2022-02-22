@@ -58,8 +58,8 @@ rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger templat
 
 plot(rp3)
 
-# Only one random point for each observed point
-rp <- random_points(deer, factor = 1)
+# Ten random points for each observed point
+rp <- random_points(deer, n = nrow(deer) * 10)
 plot(rp)
 
 # Within a home range -----------------------------------------------------

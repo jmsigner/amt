@@ -1,3 +1,4 @@
+library(amt)
 # Check that angles are correct
 a <- round(-pi, 5)
 x1 <- random_steps(c(0, 0), n_control = 1, rand_sl = 1, rand_ta = a)
@@ -100,3 +101,13 @@ rs <- random_steps(s1, 1, sl_distr = make_unif_distr(1, 1),
 
 expect_true(all(rs$sl_ == 1))
 expect_true(all(rs$ta_[!rs$case_] == 0))
+
+# Test remove incomplete steps
+
+mini_deer <- deer[1:4, ]
+
+expect_equal(mini_deer %>% steps() %>% random_steps() %>%  nrow(), 33)
+expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata() %>% nrow(), 22)
+expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl_") %>% nrow(), 33)
+
+expect_error(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl"))

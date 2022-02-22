@@ -26,6 +26,7 @@ Other contributors:
   \item John Fieberg [contributor]
   \item Josh O'Brien [contributor]
   \item Bernardo Niebuhr [contributor]
+  \item Alec Robitaille [contributor]
   \item Scott LaPoint [data contributor]
 }
 

@@ -22,7 +22,7 @@
 #' @examples
 #' \donttest{
 #' data(deer)
-#' mini_deer <- deer[1:100, ]
+#' mini_deer <- deer[1:150, ]
 #'
 #' # MCP ---------------------------------------------------------------------
 #' mcp1 <- hr_mcp(mini_deer)

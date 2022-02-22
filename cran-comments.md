@@ -1,3 +1,17 @@
+# Version 0.1.7
+## Round 1
+
+I was asked to fix warnings that occured on one specific test environment: 
+
+> checking whether package ‘amt’ can be installed ... [38s/38s] WARNING
+Found the following significant warnings:
+  Warning: multiple methods tables found for ‘direction’
+  Warning: multiple methods tables found for ‘gridDistance’
+  
+using platform: x86_64-apple-darwin17.0 (64-bit) [https://www.r-project.org/nosvn/R.check/r-release-macos-x86_64/amt-00check.html]
+
+It seems that this issue is resolved, if packages `raster` and `terra` are newly installed, this was suggested by Roger Bivand here: https://stackoverflow.com/questions/70674136/r-package-warning-multiple-methods-tables-found-for-direction/70716776#70716776
+
 # Version 0.1.6
 ## Round 1
 ### Test environments
