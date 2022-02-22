@@ -20,6 +20,10 @@
 #' mini_deer %>% extract_covariates(sh_forest)
 #' mini_deer %>% steps %>% extract_covariates(sh_forest)
 #' mini_deer %>% steps %>% extract_covariates(sh_forest, where = "start")
+#'
+#' # buffer
+#' mini_deer %>% extract_covariates(sh_forest) # no buffer
+#' mini_deer %>% extract_covariates(sh_forest, buffer = 100, fun = median)
 
 extract_covariates <- function(x, ...) {
   UseMethod("extract_covariates", x)
