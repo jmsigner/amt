@@ -81,6 +81,7 @@ random_steps.steps_xy <- function(
 
  out <- dplyr::bind_rows(x, for_rand)
  out <- dplyr::arrange(out, step_id_)
+ out[["direction_p"]] <- NULL
 
  class(out) <- c("random_steps", class(out))
  attributes(out)$sl_ <- sl_distr
