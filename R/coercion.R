@@ -170,7 +170,7 @@ as_ltraj <- function(x, ...) {
 #' @export
 #' @rdname coercion
 as_ltraj.track_xy <- function(x, id = "animal_1", ...) {
-  xy <- setNames(coords(x), c("x", "y"))
+  xy <- stats::setNames(coords(x), c("x", "y"))
   if (is.null(list(...)[["id"]])) {
     adehabitatLT::as.ltraj(xy, typeII = FALSE, id = "animal_1", ...)
   } else {
@@ -181,7 +181,7 @@ as_ltraj.track_xy <- function(x, id = "animal_1", ...) {
 #' @export
 #' @rdname coercion
 as_ltraj.track_xyt <- function(x, ...) {
-  xy <- setNames(coords(x), c("x", "y"))
+  xy <- stats::setNames(coords(x), c("x", "y"))
   if (is.null(list(...)[["id"]])) {
     adehabitatLT::as.ltraj(xy, date = x$t_, typeII = TRUE, id = "animal_1", ...)
   } else {
