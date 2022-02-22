@@ -16,3 +16,4 @@ travis/*
 vignettes/rsconnect/*
 dev/*
 experimental/*
+^\.github$
