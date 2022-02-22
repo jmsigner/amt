@@ -27,7 +27,6 @@ First we load the required libraries and the relocation data (called `deer`)
 
 ```{r}
 library(lubridate)
-library(raster)
 library(amt)
 data("deer")
 deer

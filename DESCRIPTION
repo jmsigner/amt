@@ -1,7 +1,7 @@
 Package: amt
 Type: Package
 Title: Animal Movement Tools
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"), 
   person("Brian", "Smith", role = "ctb"), 
   person("Bjoern", "Reineking", role = "ctb"), 
@@ -9,6 +9,7 @@ Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigne
   person("John", "Fieberg", role = "ctb"), 
   person("Josh", "O'Brien", role = "ctb"),
   person("Bernardo", "Niebuhr", role = "ctb"),
+  person("Alec", "Robitaille", role = "ctb"),
   person("Scott", "LaPoint", role = "dtc"))
 Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate home ranges, track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses, and simulation of space-use from fitted step-selection functions.
 License: GPL-3
