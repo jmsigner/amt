@@ -6,11 +6,11 @@
 #' @param covariates `[RasterLayer,RasterStack,RasterBrick]` \cr The
 #'   (environmental) covariates. For `extract_covariates_var_time` the argument
 #'   `covariates` need to have a `z`-column (i.e. the time stamp).
-#' @param where `[character(1)="end"]{"start", "end", "both"}` \cr For `steps` this
-#'   determines if the covariate values should be extracted at the beginning or
-#'   the end of a step. or `end`.
+#' @param where `[character(1)="end"]{"start", "end", "both"}` \cr For `steps`
+#'   this determines if the covariate values should be extracted at the
+#'   beginning or the end of a step. or `end`.
+#' @param ... Additional arguments passed to `raster::extract()`.
 #' @return A `tibble` with additional columns for covariate values.
-#' @template dots_none
 #' @name extract_covariates
 #' @export
 #' @examples
@@ -21,9 +21,13 @@
 #' mini_deer %>% steps %>% extract_covariates(sh_forest)
 #' mini_deer %>% steps %>% extract_covariates(sh_forest, where = "start")
 #'
-#' # buffer
+#' # Buffer
 #' mini_deer %>% extract_covariates(sh_forest) # no buffer
-#' mini_deer %>% extract_covariates(sh_forest, buffer = 100, fun = median)
+#' # The command buffer can be used, to buffer each point together with a
+#' # function to summarize the results.
+#' mini_deer %>% extract_covariates(sh_forest, buffer = 10, fun = mean)
+#' # This can also be a use-specified function.
+#' mini_deer %>% extract_covariates(sh_forest, buffer = 100, fun = function(x) length(x))
 
 extract_covariates <- function(x, ...) {
   UseMethod("extract_covariates", x)
