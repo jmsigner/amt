@@ -99,14 +99,6 @@ hr_area(mcp1)
 get_crs(mini_deer)
 mcps <- hr_mcp(mini_deer, levels = c(0.5, 0.95, 1))
 has_crs(mcps)
-# Local Convex Hull (LoCoH) -----------------------------------------------
-locoh1 <- hr_locoh(mini_deer)
-hr_area(locoh1)
-
-# calculated Locoh at different levels
-locoh <- hr_locoh(mini_deer, levels = seq(0.3, 1, 0.1))
-hr_area(locoh)
-
 
 # Kernel density estimaiton (KDE) -----------------------------------------
 kde1 <- hr_kde(mini_deer)
