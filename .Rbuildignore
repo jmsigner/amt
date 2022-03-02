@@ -17,3 +17,4 @@ vignettes/rsconnect/*
 dev/*
 experimental/*
 ^\.github$
+^data-raw$
