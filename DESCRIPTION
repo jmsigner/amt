@@ -37,7 +37,8 @@ Imports:
     sp,
     survival,
     tibble,
-    tidyr (>= 1.0.0)
+    tidyr (>= 1.0.0),
+    MASS
 Suggests: 
   adehabitatLT,
   adehabitatMA,
