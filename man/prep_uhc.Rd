@@ -3,17 +3,25 @@
 \name{prep_uhc}
 \alias{prep_uhc}
 \alias{prep_uhc.glm}
-\title{Create UHC Plots for a Fitted Model}
+\title{Prepare Data for UHC Plots for a Fitted Model}
 \usage{
-prep_uhc(object, test_dat)
+prep_uhc(object, test_dat, n_samp = 1000, verbose = TRUE)
 
-\method{prep_uhc}{glm}()
+\method{prep_uhc}{glm}(object, test_dat, n_samp = 1000, verbose = TRUE)
 }
 \arguments{
-\item{object}{\verb{[fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.}
+\item{object}{\verb{[glm, fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.
+Should be fit to \emph{training} dataset separate from the testing data.}
 
 \item{test_dat}{\verb{[data.frame]} \cr A \code{data.frame} with \emph{testing} data from
-which to sample test points.}
+which to sample test points. Should be separate from the data used to train
+the model passed to \code{object}.}
+
+\item{n_samp}{\verb{[numeric = 1000]} A \code{vector} of length 1 giving the number of
+samples to use to characterize the used habitat distribution under the model.}
+
+\item{verbose}{\verb{[logical]} Should messages be displayed (\code{TRUE}) or not
+(\code{FALSE})?}
 }
 \value{
 Returns a \code{list} of class \code{uhc_sim} with elements:
@@ -22,14 +30,20 @@ Returns a \code{list} of class \code{uhc_sim} with elements:
 }
 }
 \description{
-Creates used-habitat calibration plots
+Creates data used to make used-habitat calibration plots
 }
 \details{
 TBD
 }
 \examples{
 
-#' \donttest{
+\donttest{
+
+# Load data
+data(uhc_hsf_locs)
+data(uhc_hab)
+
+#
 
 }
 }
@@ -42,5 +56,5 @@ models. \emph{Ecography} 41:737–752.
 \seealso{
 See Fieberg \emph{et al.} 2018 for details about UHC plots.
 
-Default plotting method available: \code{\link{plot.uhc_sim}()}
+Default plotting method available: \code{\link{plot.uhc_data}()}
 }

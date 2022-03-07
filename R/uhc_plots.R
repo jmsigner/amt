@@ -1,8 +1,8 @@
-#' Create UHC Plots for a Fitted Model
+#' Prepare Data for UHC Plots for a Fitted Model
 #'
-#' Creates used-habitat calibration plots
+#' Creates data used to make used-habitat calibration plots
 #'
-#' @param object `[fit_logit, fit_clogit]` \cr A fitted RSF or (i)SSF model.
+#' @param object `[glm, fit_logit, fit_clogit]` \cr A fitted RSF or (i)SSF model.
 #' Should be fit to *training* dataset separate from the testing data.
 #' @param test_dat `[data.frame]` \cr A `data.frame` with *testing* data from
 #' which to sample test points. Should be separate from the data used to train
@@ -19,7 +19,7 @@
 #'
 #' @seealso See Fieberg \emph{et al.} 2018 for details about UHC plots.
 #'
-#' Default plotting method available: \code{\link{plot.uhc_sim}()}
+#' Default plotting method available: \code{\link{plot.uhc_data}()}
 #'
 #' @references
 #' Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A.,
@@ -143,7 +143,10 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 
   # Construct list to return
   ll <- list(orig = dist_dat,
-             samp = pred_dist_cov)
+             samp = pred_dist_cov,
+             vars = l$vars,
+             type = l$type,
+             resp = l$resp)
 
   # Assign class
   class(ll) <- c("uhc_data", class(ll))
@@ -156,7 +159,7 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 #'
 #' Internal function to check and format `test_dat`
 #'
-#' @param object `[fit_logit, fit_clogit]` \cr A fitted RSF or (i)SSF model.
+#' @param object `[glm, fit_logit, fit_clogit]` \cr A fitted RSF or (i)SSF model.
 #' Should be fit to *training* dataset separate from the testing data.
 #' @param test_dat `[data.frame]` \cr A `data.frame` with *testing* data from
 #' which to sample test points. Should be separate from the data used to train
@@ -321,3 +324,175 @@ calc_w <- function(f, b, newdata) {
   # Return
   return(w)
 }
+
+#' Plot UHC plots
+#'
+#' Plot an object of class `uhc_data`
+#'
+#' @param uhc_data `[uhc_data]` An object of class `uch_data`, as returned
+#' by the function \code{\link{prep_uhc}()}.
+#'
+#' @details Makes plots mimicking those in Fieberg et al. (2018), with the
+#' bootstrapped distribution in gray, the observed distribution in black,
+#' and the available distribution as a dashed red line.
+#'
+#' @seealso \code{\link{prep_uhc}()}
+#'
+#' @export
+plot.uhc_data <- function(uhc_data) {
+  # Check input
+  if (!inherits(uhc_data, "uhc_data")) {
+    stop("Object 'uhc_data' must be of class 'uhc_data'. See ?prep_uhc.")
+  }
+
+  ## Determine x-limits
+  # Sampled x-lims
+  samp_xlim <- lapply(uhc_data$samp, function(cov) {
+    # Note: as.numeric() needed to handle factors as well as numeric variables
+    min <- min(as.numeric(cov$x), na.rm = TRUE)
+    max <- max(as.numeric(cov$x), na.rm = TRUE)
+    return(c("min" = min, "max" = max))
+  })
+
+  # Original x-lims
+  orig_xlim <- lapply(uhc_data$orig, function(cov) {
+    # Note: as.numeric() needed to handle factors as well as numeric variables
+    min <- min(as.numeric(cov$x), na.rm = TRUE)
+    max <- max(as.numeric(cov$x), na.rm = TRUE)
+    return(c("min" = min, "max" = max))
+  })
+
+  # Combine
+  cov_xlim <- lapply(uhc_data$vars, function(cov) {
+    min <- min(c(samp_xlim[[cov]][["min"]], orig_xlim[[cov]][["min"]]))
+    max <- max(c(samp_xlim[[cov]][["max"]], orig_xlim[[cov]][["max"]]))
+    return(c("min" = min, "max" = max))
+  })
+  names(cov_xlim) <- uhc_data$vars
+
+  ## Determine y-limits
+  # (Always set lower limit to 0)
+
+  # Sampled y-max
+  samp_ymax <- lapply(uhc_data$samp, function(cov) {
+    max(cov$y, na.rm = TRUE)
+  })
+
+  # Original y-max
+  orig_ymax <- lapply(uhc_data$orig, function(cov) {
+    max(cov$y, na.rm = TRUE)
+  })
+
+  # Combine
+  cov_ymax <- lapply(uhc_data$vars, function(cov) {
+    max(c(samp_ymax[[cov]], orig_ymax[[cov]]))
+  })
+  names(cov_ymax) <- uhc_data$vars
+
+  # Plot
+  for (cov in uhc_data$vars) {
+    # Is it numeric?
+    if (uhc_data$type[[cov]] == "numeric") {
+      # Subset the data
+      S <- uhc_data$samp[[cov]]
+      U <- uhc_data$orig[[cov]][which(uhc_data$orig[[cov]]$dist == "U"), ]
+      A <- uhc_data$orig[[cov]][which(uhc_data$orig[[cov]]$dist == "A"), ]
+      # Setup the plot
+      plot(NA, xlim = cov_xlim[[cov]], ylim = c(0, cov_ymax[[cov]]),
+           xlab = cov, ylab = "Probability Density", main = cov)
+      # Draw bootstrapped distributions
+      for (i in 1:max(S$iter)) {
+        SS <- S[which(S$iter == i), ]
+        lines(SS$x, SS$y, col = "gray80")
+      }
+      # Add used distribution
+      lines(U$x, U$y, col = "black")
+      # Add available distribution
+      lines(A$x, A$y, col = "red", lty = 2)
+
+    } else {
+      # Must be factor
+
+      # Subset the data
+      # Sampled
+      S <- uhc_data$samp[[cov]]
+      S$x_num <- as.numeric(S$x)
+      lev <- levels(S$x)
+      unq <- sort(unique(S$x_num))
+      # Original
+      U <- uhc_data$orig[[cov]][which(uhc_data$orig[[cov]]$dist == "U"), ]
+      A <- uhc_data$orig[[cov]][which(uhc_data$orig[[cov]]$dist == "A"), ]
+      # Setup the plot
+      plot(NA, xlim = cov_xlim[[cov]], ylim = c(0, cov_ymax[[cov]]),
+           xlab = cov, ylab = "Proportion", main = cov,
+           axes = FALSE)
+      axis(2)
+      axis(1, at = unq, labels = lev)
+      box()
+      # Draw bootstrapped proportions
+      points(S$x_num, S$y, col = "gray80",
+             pch = 16)
+      # Add used proportion
+      points(U$x, U$y, col = "black", pch = 16)
+      # Add available proportion
+      points(A$x, A$y, col = "red", pch = 1)
+    }
+  }
+
+  return(invisible(NULL))
+}
+
+#' Coerce a `uhc_data` object to `data.frame`
+#'
+#' Coerces `uhc_data` from `list` to `data.frame`
+#'
+#' @param uhc_data `[uhc_data]` An object of class `uch_data`, as returned
+#' by the function \code{\link{prep_uhc}()}.
+#'
+#' @export
+as.data.frame.uhc_data <- function(uhc_data) {
+  # Check input
+  if (!inherits(uhc_data, "uhc_data")) {
+    stop("Object 'uhc_data' must be of class 'uhc_data'. See ?prep_uhc.")
+  }
+
+  # Grab factor levels from any factors
+  fac <- uhc_data$vars[which(uhc_data$type == "factor")]
+  levs <- lapply(fac, function(cov) {
+    xx <- data.frame(label = levels(uhc_data$orig[[cov]]$x))
+    xx$x <- seq(1, nrow(xx), by = 1)
+    return(xx)
+  })
+  names(levs) <- fac
+  lev_df <- dplyr::bind_rows(levs, .id = "var")
+
+  # Now treat all as numeric
+
+  # Combine uch_data$orig into data.frame
+  orig <- dplyr::bind_rows(lapply(uhc_data$orig, function(cov) {
+    cov$x <- as.numeric(cov$x)
+    return(cov)
+  }), .id = "var")
+  orig$iter <- NA
+
+  # Combine uch_data$samp into data.frame
+  samp <- dplyr::bind_rows(lapply(uhc_data$samp, function(cov) {
+    cov$x <- as.numeric(cov$x)
+    return(cov)
+  }), .id = "var")
+  samp$dist <- "S"
+
+  # Combine 'orig' and 'samp'
+  comb <- dplyr::bind_rows(orig, samp)
+
+  # Join factor levels
+  suppressMessages(comb <- dplyr::left_join(comb, lev_df))
+
+  # Class
+  class(comb) <- c("uhc_data_frame", class(comb))
+
+  # Return
+  return(comb)
+}
+
+
