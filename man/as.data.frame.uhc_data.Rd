@@ -10,6 +10,25 @@
 \item{uhc_data}{\verb{[uhc_data]} An object of class \code{uch_data}, as returned
 by the function \code{\link{prep_uhc}()}.}
 }
+\value{
+Returns a \code{data.frame} with columns:
+\itemize{
+\item \code{var}: The name of the variable
+\item \code{x}: The x-coordinate of the density plot (the value of \code{var}).
+\item \code{y}: The y-coordinate of the density plot (the probability density for
+a numeric \code{var} and the proportion for a factor \code{var}).
+\item \code{dist}: The distribution represented. Either \code{"U"} for used, \code{"A"} for
+available, or \code{"S"} for sampled.
+\item \code{iter}: The iteration number if \code{dist == "S"}.
+\item \code{label}: The label if \code{var} is a factor.
+}
+}
 \description{
 Coerces \code{uhc_data} from \code{list} to \code{data.frame}
+}
+\details{
+This coercion aims to keep all of the information contained in
+the \code{uhc_data} \code{list} in the resulting \code{data.frame} representation. Factors
+are converted to numeric, but the levels are retained in the column
+\code{"label"}.
 }

@@ -24,16 +24,38 @@ samples to use to characterize the used habitat distribution under the model.}
 (\code{FALSE})?}
 }
 \value{
-Returns a \code{list} of class \code{uhc_sim} with elements:
+Returns a \code{list} of class \code{uhc_data} with elements:
 \itemize{
-\item \code{el1}: TBD
+\item \code{orig}: List of \code{data.frame}s, one per variable (see \code{vars}). Each
+\code{data.frame} contains the density plot data (\code{x} and \code{y}) for the original
+used (\code{dist == "U"}) and available (\code{dist == "A"}) data.
+\item \code{samp}: List of \code{data.frame}s, one per variable (see \code{vars}). Each
+\code{data.frame} contains the density plot data (\code{x} and \code{y}) for each iteration
+of bootstrap resampling (\code{iter}).
+\item \code{vars}: Character vector with names of the habitat variables for which to
+create UHC plots.
+\item \code{type}: Named character vector with the type for each of \code{vars} (either
+\code{"numeric"} or \code{"factor"}).
+\item \code{resp}: Character vector of length 1 with the name of the response
+variable.
 }
 }
 \description{
 Creates data used to make used-habitat calibration plots
 }
 \details{
-TBD
+This function performs the heavy lifting of creating UHC plots.
+It creates the data used later by the \code{plot()} method, which actually
+draws the UHC plots. This function (1) creates density plots of the used
+and available locations from the \emph{test} data, and (2) resamples the (a)
+fitted coefficients and (b) test data (weighted by the exponential habitat
+selection function) to create the distribution of used habitat under the
+model.
+
+Note that \code{test_dat} should contain at least all of the variables that
+appear in the model \code{object}. Any further habitat variables in \code{test_dat}
+will also have UHC plots generated, treating these variables as possible
+candidate variables that are simply not included in this particular model.
 }
 \examples{
 
