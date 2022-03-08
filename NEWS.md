@@ -1,3 +1,7 @@
+# amt 0.1.8
+## updates
+- `fit_clogit()` checks for strata.
+
 # amt 0.1.7
 ## updates
 - Accepted merge to have to have buffers for `extract_covariates()`.

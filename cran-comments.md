@@ -12,6 +12,20 @@ using platform: x86_64-apple-darwin17.0 (64-bit) [https://www.r-project.org/nosv
 
 It seems that this issue is resolved, if packages `raster` and `terra` are newly installed, this was suggested by Roger Bivand here: https://stackoverflow.com/questions/70674136/r-package-warning-multiple-methods-tables-found-for-direction/70716776#70716776
 
+I also fixed warnings that occurred within `\donttest{}`. 
+
+### Test environments
+
+- local: Ubuntu 20.04, R 4.1.2
+- R-cmd-check on gitHub: macOS-latest, windows-latest (release), ubuntu-latest (release, devel, oldrel-1)
+- AppVeyor on GitHub
+- macos-highsierra-release-cran on r-hub.
+
+### R CMD check results
+
+There were no errors, warnings or notes.
+
+
 # Version 0.1.6
 ## Round 1
 ### Test environments

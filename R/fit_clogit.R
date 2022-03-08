@@ -17,7 +17,14 @@
 #' @export
 
 fit_clogit <- function(data, formula, more = NULL, summary_only = FALSE, ...) {
+
+  # Ensure strata is provided
+  if (!any(grepl(pattern = "^strata\\(.+\\)$", attr(terms(formula), "term.labels")))) {
+    stop("No strata is provided, please make sure the formula includes a strata.")
+  }
+
   m <- survival::clogit(formula, data = data, ...)
+
 
   if (summary_only) {
     m <- list(model = broom::tidy(m),
