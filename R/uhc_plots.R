@@ -20,6 +20,7 @@
 #' @seealso See Fieberg \emph{et al.} 2018 for details about UHC plots.
 #'
 #' Default plotting method available: \code{\link{plot.uhc_data}()}
+#' Coercion to `data.frame`: \code{\link{as.data.frame.uhc_data}()}
 #'
 #' @references
 #' Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A.,
@@ -96,7 +97,7 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 
     ### Step 3b. Select points from test data
     # Calculate w(x) under the model
-    ww <- calc_w(f = formula(object), b = bb, newdata = l$data)
+    ww <- calc_w(f = stats::formula(object), b = bb, newdata = l$data)
 
     # Normalize for weights
     WW <- ww/sum(ww)
@@ -110,6 +111,114 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 
     # Get resulting rows from test_dat
     dd <- test_dat[rr, ]
+
+    ### Step 3c. Summarize covariates at these locations
+    # All of 'dd' should be treated as 'used' here
+    dd[[l$resp]] <- TRUE
+    cov_dens <- lapply(1:length(l$vars), function(ii){
+      # Summarize distributions
+      xx <- ua_distr(name = l$vars[ii], data = dd,
+                     type = l$type[ii], resp = l$resp,
+                     avail = FALSE)
+      # Label iteration
+      xx$iter <- i
+      # Rearrange
+      yy <- xx[, c("iter", "x", "y")]
+      # Return from covariate lapply
+      return(yy)
+    })
+
+    names(cov_dens) <- l$vars
+
+    # Return from lapply over samples
+    return(cov_dens)
+  })
+
+  # Now rearrange to combine all iterations for each covariate
+  pred_dist_cov <- lapply(l$vars, function(v) {
+    res <- do.call(rbind, lapply(pred_dist, getElement, v))
+    return(res)
+  })
+
+  names(pred_dist_cov) <- l$vars
+
+  # Construct list to return
+  ll <- list(orig = dist_dat,
+             samp = pred_dist_cov,
+             vars = l$vars,
+             type = l$type,
+             resp = l$resp)
+
+  # Assign class
+  class(ll) <- c("uhc_data", class(ll))
+
+  # Return
+  return(ll)
+}
+
+#' @export
+prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+
+  # Prep test_dat list
+  l <- prep_test_dat(object, test_dat, verbose = verbose)
+
+  # Steps follow steps in Fieberg et al. 2018
+
+  # Step 1. Summarize distribution of covariates
+  dist_dat <- lapply(1:length(l$vars), function(ii){
+    return(ua_distr(name = l$vars[ii], data = l$data,
+                    type = l$type[ii], resp = l$resp))
+  })
+
+  names(dist_dat) <- l$vars
+
+  # Step 2. Fit a model to the training data
+  # We've already fit the model, but we need the coefficient estimates and
+  # variance-covariance matrix here.
+  b <- coef(object$model)
+  S <- vcov(object$model)
+
+  # Step 3. Create predicted distribution
+  pred_dist <- lapply(1:n_samp, function(i) {
+    # Report progress
+    if (verbose) {
+      if (i == 1){
+        cat("Sampling...\n")
+      }
+      cat(i, "of", n_samp, "    \r")
+    }
+
+    ### Step 3a. Draw random values for the betas
+    bb <- MASS::mvrnorm(n = 1, mu = b, Sigma = S)
+
+    ### Step 3b. Select points from test data
+    # Get habitat formula
+    ff <- issf_w_form(object, l)
+
+    # Drop movement variables from the betas
+    bb <- bb[which(!names(bb) %in% l$move)]
+
+    # Calculate w(x) under the model
+    ww <- calc_w(f = ff, b = bb, newdata = l$data)
+
+    # Attach to data
+    l$data$w <- ww
+
+    # Stratified sampling for iSSF -- one step per stratum
+    dd <- do.call(rbind, lapply(unique(l$data[[l$strat]]), function(s) {
+      # Subset to stratum
+      strat <- l$data[which(l$data[[l$strat]] == s), ]
+
+      # Normalize weights
+      WW <- strat$w/sum(strat$w)
+
+      # Sample
+      rr <- sample.int(n = nrow(strat), size = 1, replace = TRUE,
+                       prob = WW)
+
+      # Return
+      return(strat[rr, ])
+    }))
 
     ### Step 3c. Summarize covariates at these locations
     # All of 'dd' should be treated as 'used' here
@@ -175,7 +284,7 @@ prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
 
   ## Check that 'test_dat' is consistent with 'object' formula.
   # Extract formula
-  f <- formula(object)
+  f <- stats::formula(object)
 
   # Check that all predictor variables appear in 'test_dat'
   preds <- all.vars(delete.response(terms(f)))
@@ -234,21 +343,141 @@ prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
       "\nThese variables in 'test_dat' will be treated as categorical: \n   ",
       paste(fac, collapse = ", "), "\n"
     ))
-
-    # Types of each variable
-    vars <- names(test_dat2)
-    type <- ifelse(vars %in% fac, "factor", "numeric")
-    names(type) <- vars
-
-    # Construct list to return
-    l <- list(data = test_dat,
-              vars = vars,
-              type = type,
-              resp = resp)
-
-    # Return
-    return(l)
   }
+
+  # Types of each variable
+  vars <- names(test_dat2)
+  type <- ifelse(vars %in% fac, "factor", "numeric")
+  names(type) <- vars
+
+  # Construct list to return
+  l <- list(data = test_dat,
+            vars = vars,
+            type = type,
+            resp = resp)
+
+  # Return
+  return(l)
+
+}
+
+prep_test_dat.fit_clogit <- function(object, test_dat, verbose = TRUE) {
+
+  # Check that 'test_dat' has no NAs
+  na_rows <- nrow(test_dat) - nrow(na.omit(test_dat))
+  if (na_rows > 0) {
+    stop("'test_dat' contains ", na_rows, " row(s) with NAs. ",
+    "Remove NAs before proceeding.")
+  }
+
+  ## Check that 'test_dat' is consistent with 'object' formula.
+  # Extract formula
+  f <- stats::formula(object$model)
+
+  # Check that all predictor variables appear in 'test_dat'
+  preds <- all.vars(delete.response(terms(f)))
+  if (any(!(preds %in% names(test_dat)))){
+    stop("All variables in fitted model must appear in 'test_dat'.")
+  }
+
+  # Get response variable
+  resp <- as.character(as.list(f)[[2]])[3]
+
+  # Check that response variable exists in test_dat
+  if (is.null(test_dat[[resp]])) {
+    stop("You must include the response variable in 'test_dat'.")
+  }
+
+  # Check that response variable has 0s and 1s
+  if (!any(test_dat[[resp]] == 0)) {
+    stop("You must include background locations (response = 0) in 'test_dat'.")
+  }
+  if (!any(test_dat[[resp]] == 1)) {
+    stop("You must include used locations (response = 1) in 'test_dat'.")
+  }
+
+  # Get stratum variable
+  pred_char <- as.character(as.list(f)[[3]])
+  strat <- pred_char[grep("strata(", pred_char, fixed = TRUE)]
+  strat <- gsub("strata(", "", strat, fixed = TRUE)
+  strat <- gsub(")", "", strat, fixed = TRUE)
+
+  # Remove from predictors
+  preds2 <- preds[which(preds != strat)]
+
+  # Check that stratum variable exists in test_dat
+  if (is.null(test_dat[[strat]])) {
+    stop("You must include the stratum variable in 'test_dat'.")
+  }
+
+  # Get movement variables
+  # Note: risk that users will use different names.
+  if (verbose) {
+    message("Assuming step-length variables contain the string 'sl_' and ",
+            "turn-angle variables contain the string 'ta_'.")
+  }
+
+  sl_vars <- preds[grep("sl_", preds, fixed = TRUE)]
+  ta_vars <- preds[grep("ta_", preds, fixed = TRUE)]
+  move_vars <- c(sl_vars, ta_vars)
+
+  # Remove from predictors
+  preds2 <- preds2[which(!preds2 %in% move_vars)]
+
+  # Columns to delete (coordinates, time, response, stratum, movement)
+  del <- c("x1_", "x2_", "y1_", "y2_", "t1_", "t2_", "dt_", "sl_", "ta_",
+           resp, strat, move_vars)
+  del <- unique(del)
+  # Remove them
+  test_dat2 <- test_dat
+  test_dat2[, del] <- NULL
+
+  ## Now assuming all columns in 'test_dat2' should be included in UHC plot
+  # Extract class of each column
+  cl <- sapply(test_dat2, class)
+
+  # None should be character
+  if (any(cl == "character")) {
+
+    chr <- names(cl[cl == "character"])
+
+    stop(paste0("All columns passed to 'test_dat' should be numeric or factor. ",
+                "Please convert the following character columns to factor or ",
+                "remove them from 'test_dat':\n   ",
+                paste(chr, collapse = ", ")))
+  }
+
+  # Extract factor columns
+  fac <- names(cl[cl == "factor"])
+
+  # Assuming all others can be treated as numeric (e.g., logical)
+  num <- names(cl[cl != "factor"])
+
+  # Report
+  if (verbose) {
+    message(paste0(
+      "\nThese variables in 'test_dat' will be treated as numeric: \n   ",
+      paste(num, collapse = ", "), "\n",
+      "\nThese variables in 'test_dat' will be treated as categorical: \n   ",
+      paste(fac, collapse = ", "), "\n"
+    ))
+  }
+
+  # Types of each variable
+  vars <- names(test_dat2)
+  type <- ifelse(vars %in% fac, "factor", "numeric")
+  names(type) <- vars
+
+  # Construct list to return
+  l <- list(data = test_dat,
+            vars = vars,
+            type = type,
+            resp = resp,
+            strat = strat,
+            move = move_vars)
+
+  # Return
+  return(l)
 }
 
 #' Summarize distribution of used and available
@@ -266,8 +495,8 @@ prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
 #' bootstrapped "used" samples.
 #'
 ua_distr <- function(name, type, data, resp, avail = TRUE) {
-  u <- data[[name]][which(data[[resp]] == 1)]
-  a <- data[[name]][which(data[[resp]] == 0)]
+  u <- na.omit(data[[name]][which(data[[resp]] == 1)])
+  a <- na.omit(data[[name]][which(data[[resp]] == 0)])
 
   # If 'type' is numeric
   if (type == "numeric") {
@@ -307,22 +536,62 @@ ua_distr <- function(name, type, data, resp, avail = TRUE) {
 #'
 calc_w <- function(f, b, newdata) {
   # Get terms object from formula
-  Terms <- stats::delete.response(terms(f))
+  Terms <- stats::delete.response(stats::terms(f))
+
+  # Remove intercept from betas
+  # (no intercept in fit_clogit)
+  if ("(Intercept)" %in% names(b)) {
+    b <- b[which(names(b) != "(Intercept)")]
+  }
 
   # Create data matrix
   X <- stats::model.matrix(Terms, data = newdata)
 
-  # Linear combination
-  l <- X %*% b
+  # Drop intercept from data matrix
+  X <- X[, -1]
 
-  # Subtract intercept
-  g <- l[, 1] - b[["(Intercept)"]]
+  # Linear combination
+  l <- as.vector(X %*% b)
 
   # Exponentiate
-  w <- exp(g)
+  w <- exp(l)
 
   # Return
   return(w)
+}
+
+#' Create habitat formula from iSSF
+#'
+#' Creates a formula without movement variables
+#'
+#' @param object `[fit_clogit]` Fitted iSSF.
+#' @param l `[list]` List returned by \code{\link{prep_test_dat.fit_clogit}()}
+issf_w_form <- function(object, l) {
+  # Get formula terms from object
+  tt <- terms(stats::formula(object$model))
+
+  # Pull out RHS and separate terms
+  rhs <- unlist(strsplit(as.character(tt)[[3]], " + ", fixed = TRUE))
+
+  # Get location of movement terms
+  mm <- unique(unname(unlist(sapply(l$move, function(x) {
+    return(grep(x, rhs))
+  }))))
+
+  # Get location of stratum
+  ss <- grep("strata(", rhs, fixed = TRUE)
+
+  # Combine
+  drops <- c(mm, ss)
+
+  # Keep only habitat terms
+  hab <- stats::drop.terms(tt, drops, keep.response = TRUE)
+
+  # Make formula
+  ff <- formula(hab)
+
+  # Return
+  return(ff)
 }
 
 #' Plot UHC plots
