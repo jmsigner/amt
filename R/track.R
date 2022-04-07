@@ -100,8 +100,7 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
 
   if (!is.na(crs)) {
     if (is(crs, "CRS")) {
-      .Deprecated("It looks like you used `CRS()` to create the crs,
-                  please use the ESPG directly.")
+      warning("It looks like you used `CRS()` to create the crs, please use the ESPG directly.")
       crs <- sf::st_crs(crs)
     } else {
       crs <- sf::st_crs(crs)
