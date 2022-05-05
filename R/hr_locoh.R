@@ -89,7 +89,8 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   for (i in seq_along(wlevel)) {
     ## buffer is necessary, to overcome some topology errors if the polygon is quasi a line
     p1 <- lapply(1:wlevel[i], function(i) sp::Polygon(mm[[i]]@polygons[[1]]@Polygons[[1]]@coords))
-    ff <- sp::SpatialPolygons(list(sp::Polygons(p1, ID=1)))
+    p2 <- lapply(seq_along(p1), function(i) sp::Polygons(p1[i], ID = i))
+    ff <- sp::SpatialPolygons(p2)
     ff <- if (length(ff@polygons) == 1) {
       ff
     } else {
