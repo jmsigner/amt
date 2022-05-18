@@ -13,15 +13,18 @@ hab <- uhc_hab
 
 # Coefficients ----
 # ... movement-free habitat selection ----
+# Avoidance of distance from center to keep track away from boundary
+beta_dist_cent = -1 * log(10)/500
+
 # Forage is resource
-beta_forage = log(10)/500
+beta_forage = log(8)/500
 
 # Temperature is condition (quadratic term)
 beta_temp2 = -1 * log(8)/36
 beta_temp = beta_temp2 * -26
 
 # Predator density is risk
-beta_pred = log(0.25)/5
+beta_pred = log(0.20)/5
 
 # Cover has 3 levels, forest > grassland > wetland
 # Grassland is intercept
@@ -58,9 +61,9 @@ data.frame(x = seq(-pi, pi, length.out = 100)) %>%
 
 # Setup simulation ----
 # Start with data.frame of times
-dat <- data.frame(time = seq(ymd_hms("2021-03-05 0:00:00", tz = "US/Mountain"),
-                             ymd_hms("2021-04-05 00:00:00", tz = "US/Mountain"),
-                             by = "2 hour"),
+dat <- data.frame(time = seq(ymd_hms("2021-02-15 0:00:00", tz = "US/Mountain"),
+                             ymd_hms("2021-05-15 00:00:00", tz = "US/Mountain"),
+                             by = "1 hour"),
                   x = NA,
                   y = NA)
 
@@ -170,7 +173,8 @@ for (i in 2:nrow(dat)) {
   ## Movement-free habitat kernel
   hab_kern_vals <- as.data.frame(cropped, xy = TRUE) %>%
     mutate(w = exp(
-      beta_forage * forage +
+      beta_dist_cent * dist_to_cent +
+        beta_forage * forage +
         beta_temp * temp +
         beta_temp2 * temp^2 +
         beta_pred * pred +

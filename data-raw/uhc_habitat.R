@@ -7,8 +7,8 @@ library(raster)
 library(mvtnorm)
 
 # Coordinates and distance matrix ----
-coords <- expand.grid("x" = seq(-1000, 950, by = 50),
-                      "y" = seq(-1000, 950, by = 50)) %>%
+coords <- expand.grid("x" = seq(-2000, 1950, by = 50),
+                      "y" = seq(-2000, 1950, by = 50)) %>%
   arrange(x, y) %>%
   as.matrix()
 
@@ -30,7 +30,7 @@ expcov <- function(dists, rho, sigma) {
 # ... forage ----
 # units are g/m2
 # reasonable values are 0 - 1000
-# make it 0 inflated (rocky outcrops?)
+# make it zero-inflated (rocky outcrops?)
 
 set.seed(20220105 + 1)
 forage <- rmvnorm(n = 1,
@@ -63,7 +63,7 @@ hist(temp, breaks = 30)
 
 set.seed(20220105 + 3)
 pred <- rmvnorm(n = 1,
-                mean = ((sin(1:nrow(coords)/100) + 1) * 5) + 10,
+                mean = ((sin(1:nrow(coords)/400) + 1) * 5) + 10,
                 sigma = expcov(dm, 5, 6))
 pred[pred < 0] <- 0
 
@@ -85,7 +85,7 @@ lc_kd <- density(c((rep(1, round(0.5 * nrow(coords)))),
                  bw = 0.3)
 
 set.seed(20220105 + 4)
-lc_m <- sort(sample(lc_kd$x, size = 1600, prob = lc_kd$y, replace = TRUE))
+lc_m <- sort(sample(lc_kd$x, size = length(forage), prob = lc_kd$y, replace = TRUE))
 
 lc_c <- rmvnorm(n = 1,
                 mean = lc_m,
@@ -109,14 +109,14 @@ g_dat <- data.frame(x = coords[, 1] + 447000,
                     pred = pred[1, ],
                     cover = lc[1, ])
 
-g_dat <- g_dat %>%
-  # SW corner
-  mutate(cover = case_when(
-    x <= 446250 & y <= 4625250 ~ 3,
-    TRUE ~ cover)) %>%
-  mutate(cover = case_when(
-    x <= 446150 & y > 4626825 ~ 3,
-    TRUE ~ cover))
+# g_dat <- g_dat %>%
+#   # SW corner
+#   mutate(cover = case_when(
+#     x <= 446250 & y <= 4625250 ~ 3,
+#     TRUE ~ cover)) %>%
+#   mutate(cover = case_when(
+#     x <= 446150 & y > 4626825 ~ 3,
+#     TRUE ~ cover))
 
 # Rasterize
 rast <- rasterFromXYZ(g_dat, res = 50, crs = 32612)
