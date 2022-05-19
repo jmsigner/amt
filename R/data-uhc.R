@@ -52,17 +52,18 @@
 #' These data were simulated assuming an movement model, i.e., iSSA.
 #'
 #' True movement-free habitat selection parameter values are:
-#' - `forage` = log(10)/500 (resource)
+#' - `forage` = log(8)/500 (resource)
 #' - `temp^2` = -1 * log(8)/36 (condition; quadratic term)
 #' - `temp` = (log(8)/36) * 26 (condition; linear term)
-#' - `pred` = log(0.25)/5 (risk)
+#' - `pred` = log(0.2)/5 (risk)
 #' - `cover == "forest"` = log(2) (grassland is intercept)
 #' - `cover == "wetland"` = log(1/2) (grassland is intercept)
+#' - `dist_to_cent` = -1 * log(10)/500 (keeps trajectory away from boundary)
 #'
 #' Note: `temp` is modeled as a quadratic term, with the strongest selection
 #' occurring at 13 °C and all other temperatures less selected.
 #'
-#' Note: `dist_to_water`, `dist_to_cent`, and `rand` have no real effect
+#' Note: `dist_to_water` and `rand` have no real effect
 #' on our animal's selection and are included for demonstration purposes.
 #'
 #' True selection-free movement distributions are:

@@ -36,11 +36,11 @@ beta_wetland <- log(1/2)
 
 # ... selection-free movement ----
 # Step-length distribution
-shp <- 3
-scl <- 25
+shp <- 5
+scl <- 75
 
 # Plot
-data.frame(x = seq(1, 600, length.out = 100)) %>%
+data.frame(x = seq(1, 2000, length.out = 100)) %>%
   mutate(y = dgamma(x, shape = shp, scale = scl)) %>%
   ggplot(aes(x = x, y = y)) +
   geom_line() +
@@ -67,8 +67,8 @@ dat <- data.frame(time = seq(ymd_hms("2021-02-15 0:00:00", tz = "US/Mountain"),
                   x = NA,
                   y = NA)
 
-# We'll start our animal just south of the middle of our map
-dat$x <- mean(c(extent(hab)@xmin,extent(hab)@xmax))
+# We'll start our animal in the middle of our map
+dat$x <- mean(c(extent(hab)@xmin, extent(hab)@xmax))
 dat$y <- mean(c(extent(hab)@ymin, extent(hab)@ymax))
 
 # Convert to steps
@@ -109,7 +109,7 @@ crop_raster <- function(r, cent, d) {
 
 # Maximum distance to calculate
 qgamma(0.999, shape = shp, scale = scl)
-max_d <- 300
+max_d <- 1100
 pgamma(max_d, shape = shp, scale = scl)
 
 # Loop over steps ----

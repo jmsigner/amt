@@ -61,10 +61,20 @@ hist(temp, breaks = 30)
 # reasonable values are 0 - 15 (think large predator like wolf)
 # want mean to vary through space
 
+# Create mean with sine waves in x and y coords
+sin_x <- sin(((coords[, "x"]/2000) * 2 * pi) * 1.5)
+sin_y <- sin(((coords[, "y"]/2000) * 2 * pi) * 1.5)
+mu_pred <- sin_x + sin_y + sin_x * sin_y
+
+# TT <- as.data.frame(coords) %>%
+#   mutate(pred = mu_pred) %>%
+#   rasterFromXYZ(res = 50, crs = 32612)
+# plot(TT)
+
 set.seed(20220105 + 3)
 pred <- rmvnorm(n = 1,
-                mean = ((sin(1:nrow(coords)/400) + 1) * 5) + 10,
-                sigma = expcov(dm, 5, 6))
+                mean = ((mu_pred + 1.75) * 3) + 4,
+                sigma = expcov(dm, 0.75, 3.5))
 pred[pred < 0] <- 0
 
 # Check
@@ -75,30 +85,58 @@ hist(pred, breaks = 30)
 #   - grassland (50%)
 #   - forest (30%)
 #   - wetland (20%)
-# generate with MV norm and then take ceiling to get integer and categorize
-# mean should vary to give desire ratios
+# generate some random centroids, then make patches with closest centroid
 
-# Smooth mean with KD smooth
-lc_kd <- density(c((rep(1, round(0.5 * nrow(coords)))),
-                   rep(2, round(0.3 * nrow(coords))),
-                   rep(3, round(0.2 * nrow(coords)))),
-                 bw = 0.3)
-
+# Cell numbers as potential centroids
 set.seed(20220105 + 4)
-lc_m <- sort(sample(lc_kd$x, size = length(forage), prob = lc_kd$y, replace = TRUE))
+cells <- sample.int(n = nrow(coords), size = 0.2 * nrow(coords), replace = FALSE)
 
-lc_c <- rmvnorm(n = 1,
-                mean = lc_m,
-                sigma = expcov(dm, 2, 0.4))
-lc <- round(lc_c)
-lc[lc > 3] <- 3
-lc[lc < 1] <- 1
+# Centroids of grassland
+g_cent <- sample(cells, size = 0.5 * length(cells), replace = FALSE)
+remain <- cells[which(!cells %in% g_cent)]
+
+# Centroids of forest
+f_cent <- sample(remain, size = 0.3 * length(cells), replace = FALSE)
+
+# Centroids of wetland
+w_cent <- remain[which(!remain %in% f_cent)]
+
+# Place in cells
+coord_df <- as.data.frame(coords)
+coord_df$grass <- coord_df$forest <- coord_df$wet <- NA
+coord_df$grass[g_cent] <- 1
+coord_df$forest[f_cent] <- 1
+coord_df$wet[w_cent] <- 1
+
+# Rasterize
+cent <- rasterFromXYZ(coord_df, res = 50, crs = 32612)
+
+# Distance to each
+dist_grass <- distance(cent$grass)
+dist_forest <- distance(cent$forest)
+dist_wet <- distance(cent$wet)
+dist_stack <- stack(dist_grass, dist_forest, dist_wet)
+names(dist_stack) <- c("grass", "forest", "wet")
+
+# Pick the type with smallest distance
+cover_df <- as.data.frame(dist_stack, xy = TRUE) %>%
+  pivot_longer(cols = grass:wet, names_to = "cover", values_to = "dist") %>%
+  # Jitter distances a tiny bit
+  mutate(dist = dist + rnorm(n = nrow(.))) %>%
+  group_by(x, y) %>%
+  filter(dist == min(dist)) %>%
+  # Convert back to numeric values
+  mutate(cover_num = case_when(
+    cover == "grass" ~ 1,
+    cover == "forest" ~ 2,
+    cover == "wet" ~ 3
+  ))
 
 # Check
-table(lc)/nrow(coords)
+table(cover_df$cover_num)/nrow(coords)
 
-# Note: add a patch of wetland in SW and NW corner after compiling
-# into data.frame
+# TT <- rasterFromXYZ(dplyr::select(cover_df, x, y, cover_num), res = 50, crs = 32612)
+# plot(TT)
 
 # Rasterize ----
 # Compile in data.frame
@@ -107,30 +145,22 @@ g_dat <- data.frame(x = coords[, 1] + 447000,
                     forage = forage[1, ],
                     temp = temp[1, ],
                     pred = pred[1, ],
-                    cover = lc[1, ])
-
-# g_dat <- g_dat %>%
-#   # SW corner
-#   mutate(cover = case_when(
-#     x <= 446250 & y <= 4625250 ~ 3,
-#     TRUE ~ cover)) %>%
-#   mutate(cover = case_when(
-#     x <= 446150 & y > 4626825 ~ 3,
-#     TRUE ~ cover))
+                    cover = cover_df$cover_num)
 
 # Rasterize
 rast <- rasterFromXYZ(g_dat, res = 50, crs = 32612)
+template <- rast[[1]]
+names(template) <- NA
 
 # Additional covariates ----
 
 # ... distance to water ----
-wat <- rast[[4]] == 3
-wat[wat == 0] <- NA
-
-dist_to_water <- distance(wat)
+h2o <- rast[[4]] == 3
+h2o[h2o == 0] <- NA
+dist_to_water <- distance(h2o)
 
 # ... distance to center ----
-cent <- wat
+cent <- template
 cent[] <- NA
 cent[cellFromXY(cent, apply(coordinates(cent), 2, mean))] <- 1
 
@@ -138,7 +168,7 @@ dist_to_cent <- distance(cent)
 
 # ... random ----
 set.seed(20220105 + 5)
-rand <- wat
+rand <- template
 rand[] <- round(rnorm(ncell(rand)))
 
 # Final stack ----
@@ -146,8 +176,8 @@ uhc_hab <- stack(rast, dist_to_water, dist_to_cent, rand)
 names(uhc_hab)[5:7] <- c("dist_to_water", "dist_to_cent", "rand")
 
 values(uhc_hab$cover) <- factor(values(uhc_hab$cover),
-                            levels = 1:3,
-                            labels = c("grassland", "forest", "wetland"))
+                                levels = 1:3,
+                                labels = c("grassland", "forest", "wetland"))
 
 # Check correlation ----
 dat <- as.data.frame(uhc_hab)
