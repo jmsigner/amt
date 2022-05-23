@@ -9,7 +9,7 @@ issf_w_form(object, l)
 \arguments{
 \item{object}{\verb{[fit_clogit]} Fitted iSSF.}
 
-\item{l}{\verb{[list]} List returned by \code{\link{prep_test_dat.fit_clogit}()}}
+\item{l}{\verb{[list]} List returned by \code{prep_test_dat.fit_clogit()}}
 }
 \description{
 Creates a formula without movement variables

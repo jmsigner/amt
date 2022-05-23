@@ -22,5 +22,5 @@ locations? Defaults to \code{TRUE}, but should be false when summarizing the
 bootstrapped "used" samples.}
 }
 \description{
-Summarizes distribution of numeric or factor variables
+Internal function to summarize distribution of numeric or factor variables
 }

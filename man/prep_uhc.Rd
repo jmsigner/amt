@@ -3,11 +3,17 @@
 \name{prep_uhc}
 \alias{prep_uhc}
 \alias{prep_uhc.glm}
+\alias{prep_uhc.fit_logit}
+\alias{prep_uhc.fit_clogit}
 \title{Prepare Data for UHC Plots for a Fitted Model}
 \usage{
 prep_uhc(object, test_dat, n_samp = 1000, verbose = TRUE)
 
 \method{prep_uhc}{glm}(object, test_dat, n_samp = 1000, verbose = TRUE)
+
+\method{prep_uhc}{fit_logit}(object, test_dat, n_samp = 1000, verbose = TRUE)
+
+\method{prep_uhc}{fit_clogit}(object, test_dat, n_samp = 1000, verbose = TRUE)
 }
 \arguments{
 \item{object}{\verb{[glm, fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.
@@ -57,18 +63,6 @@ appear in the model \code{object}. Any further habitat variables in \code{test_d
 will also have UHC plots generated, treating these variables as possible
 candidate variables that are simply not included in this particular model.
 }
-\examples{
-
-\donttest{
-
-# Load data
-data(uhc_hsf_locs)
-data(uhc_hab)
-
-#
-
-}
-}
 \references{
 Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A.,
 and Matthiopoulos, J. 2018. Used-habitat calibration plots: A new procedure
@@ -80,4 +74,7 @@ See Fieberg \emph{et al.} 2018 for details about UHC plots.
 
 Default plotting method available: \code{\link{plot.uhc_data}()}
 Coercion to \code{data.frame}: \code{\link{as.data.frame.uhc_data}()}
+}
+\author{
+Brian J. Smith
 }

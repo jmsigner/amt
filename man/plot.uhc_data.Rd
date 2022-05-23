@@ -4,11 +4,14 @@
 \alias{plot.uhc_data}
 \title{Plot UHC plots}
 \usage{
-\method{plot}{uhc_data}(uhc_data)
+\method{plot}{uhc_data}(x, ...)
 }
 \arguments{
-\item{uhc_data}{\verb{[uhc_data]} An object of class \code{uch_data}, as returned
+\item{x}{\verb{[uhc_data]} An object of class \code{uch_data}, as returned
 by the function \code{\link{prep_uhc}()}.}
+
+\item{...}{Included for consistency with generic
+\code{\link{plot}()}. Currently ignored.}
 }
 \description{
 Plot an object of class \code{uhc_data}
@@ -20,4 +23,7 @@ and the available distribution as a dashed red line.
 }
 \seealso{
 \code{\link{prep_uhc}()}
+}
+\author{
+Brian J. Smith
 }

@@ -16,18 +16,19 @@ These data were simulated assuming an movement model, i.e., iSSA.
 
 True movement-free habitat selection parameter values are:
 \itemize{
-\item \code{forage} = log(10)/500 (resource)
+\item \code{forage} = log(8)/500 (resource)
 \item \code{temp^2} = -1 * log(8)/36 (condition; quadratic term)
 \item \code{temp} = (log(8)/36) * 26 (condition; linear term)
-\item \code{pred} = log(0.25)/5 (risk)
+\item \code{pred} = log(0.2)/5 (risk)
 \item \code{cover == "forest"} = log(2) (grassland is intercept)
 \item \code{cover == "wetland"} = log(1/2) (grassland is intercept)
+\item \code{dist_to_cent} = -1 * log(10)/500 (keeps trajectory away from boundary)
 }
 
 Note: \code{temp} is modeled as a quadratic term, with the strongest selection
 occurring at 13 °C and all other temperatures less selected.
 
-Note: \code{dist_to_water}, \code{dist_to_cent}, and \code{rand} have no real effect
+Note: \code{dist_to_water} and \code{rand} have no real effect
 on our animal's selection and are included for demonstration purposes.
 
 True selection-free movement distributions are:

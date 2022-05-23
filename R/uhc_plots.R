@@ -25,6 +25,8 @@
 #' will also have UHC plots generated, treating these variables as possible
 #' candidate variables that are simply not included in this particular model.
 #'
+#' @author Brian J. Smith
+#'
 #' @return Returns a `list` of class `uhc_data` with elements:
 #' - `orig`: List of `data.frame`s, one per variable (see `vars`). Each
 #' `data.frame` contains the density plot data (`x` and `y`) for the original
@@ -50,17 +52,6 @@
 #' for validating species distribution, resource selection, and step-selection
 #' models. *Ecography* 41:737–752.
 #'
-#' @examples
-#'
-#' \donttest{
-#'
-#' # Load data
-#' data(uhc_hsf_locs)
-#' data(uhc_hab)
-#'
-#' #
-#'
-#' }
 #' @export
 prep_uhc <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 
@@ -178,6 +169,14 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
   return(ll)
 }
 
+#' @rdname prep_uhc
+#' @export
+prep_uhc.fit_logit <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+  prep_uhc.glm(object = object$model, test_dat = test_dat,
+           n_samp = n_samp, verbose = verbose)
+}
+
+#' @rdname prep_uhc
 #' @export
 prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 
@@ -504,7 +503,7 @@ prep_test_dat.fit_clogit <- function(object, test_dat, verbose = TRUE) {
 
 #' Summarize distribution of used and available
 #'
-#' Summarizes distribution of numeric or factor variables
+#' Internal function to summarize distribution of numeric or factor variables
 #'
 #' @param name `[character]` Name of the column to summarize.
 #' @param type `[character]` Either `"numeric"` or `"factor"` as returned by
@@ -570,7 +569,7 @@ calc_w <- function(f, b, newdata) {
   X <- stats::model.matrix(Terms, data = newdata)
 
   # Drop intercept from data matrix
-  X <- X[, -1]
+  X <- X[, -1, drop = FALSE]
 
   # Linear combination
   l <- as.vector(X %*% b)
@@ -629,6 +628,8 @@ issf_w_form <- function(object, l) {
 #' @details Makes plots mimicking those in Fieberg et al. (2018), with the
 #' bootstrapped distribution in gray, the observed distribution in black,
 #' and the available distribution as a dashed red line.
+#'
+#' @author Brian J. Smith
 #'
 #' @seealso \code{\link{prep_uhc}()}
 #'
@@ -753,6 +754,8 @@ plot.uhc_data <- function(x, ...) {
 #' the `uhc_data` `list` in the resulting `data.frame` representation. Factors
 #' are converted to numeric, but the levels are retained in the column
 #' `"label"`.
+#'
+#' @author Brian J. Smith
 #'
 #' @return Returns a `data.frame` with columns:
 #' - `var`: The name of the variable
