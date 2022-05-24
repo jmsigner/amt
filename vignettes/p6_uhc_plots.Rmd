@@ -1,0 +1,310 @@
+---
+title: "UHC Plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{UHC Plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, message = FALSE
+)
+```
+
+## Background
+
+Used-habitat calibration plots (UHC plots) are a graphical method for evaluating the calibration of a fitted HSF or (i)SSF model. The method uses a combination of parametric (to account for parameter uncertainty) and empirical bootstrapping to identify the distribution of used habitat, conditional on the fitted model and a test dataset. It can be used to identify problems in model specification, such as missing predictors and misspecified functional forms (e.g., linear rather than quadratic terms). For more details, see Fieberg et al. (2018).
+
+## Implementation in `amt`
+
+We currently have an implementation of UHC plots in `amt` for objects of class `fit_logit` and `glm` (HSFs) and `fit_clogit` (iSSFs). The approach for both models is similar, making use of generic functions with appropriate methods depending on the class.
+
+### General workflow
+
+For either an HSF or (i)SSF, the workflow is as follows:
+
+1. Prepare data for analysis
+2. Split data into **training** and **testing** datasets.
+3. Use **training** dataset to fit candidate model(s) [HSF or (i)SSF].
+4. Prepare UHC plots by passing the fitted model and the **testing** data to the function `prep_uhc()`.
+5. Create the UHC plots by calling `plot()` on the object returned in (4).
+
+## Examples
+
+`amt` contains a simulated habitat `RasterStack` and location data simulated under (1) an HSF and (2) an iSSF to demonstrate the UHC plot workflow.
+
+The `RasterStack` (`uhc_hab`) contains 7 layers:  
+
+- `forage`: forage biomass in g/m^2^ (a resource)
+- `temp`: mean annual temperature in °C (a condition)
+- `pred`: predator density in predators/100 km^2^ (a risk)
+- `cover`: land cover categories (1 = grassland, 2 = forest, 3 = wetland)
+- `dist_to_water`: distance to the wetland category in m (does not affect selection)
+- `dist_to_cent`: distance to the center of the raster in m (does not affect selection in HSF; avoidance of large distance to center in iSSF)
+- `rand`: random integer from -4 to 4 (does not affect selection)
+
+Note that `temp`, a condition, is modeled with a quadratic term in the simulations.
+
+True parameter values under the simulation are in the description for each dataset, *i.e.*, `?uhc_hsf_locs` and `?uhc_issf_locs`. 
+
+```{r habitat, fig.width = 7, fig.height = 4}
+# Load all the packages we need
+library(amt)
+library(dplyr)
+library(raster)
+library(sf)
+
+data(uhc_hab)
+
+# Affect habitat selection in simulation
+plot(uhc_hab[[1:4]])
+
+# Do not affect habitat selection in simulation
+plot(uhc_hab[[5:7]])
+```
+
+### HSF Example
+
+The following is a demonstration of the workflow for an HSF.
+
+#### Prepare data
+
+First, we combine steps (1) and (2) by splitting into train/test data and then generating available locations and attributing with covariates and model weights.
+
+```{r hsf prep}
+# Load data
+data(uhc_hsf_locs)
+
+# Split into train (80%) and test (20%)
+set.seed(1)
+uhc_hsf_locs$train <- rbinom(n = nrow(uhc_hsf_locs),
+                             size = 1, prob = 0.8)
+train <- uhc_hsf_locs[uhc_hsf_locs$train == 1, ]
+test <- uhc_hsf_locs[uhc_hsf_locs$train == 0, ]
+
+# Available locations (entire raster extent)
+avail_train <- random_points(st_as_sf(st_as_sfc(st_bbox(uhc_hab))),
+                             n = nrow(train) * 10)
+
+avail_test <- random_points(st_as_sf(st_as_sfc(st_bbox(uhc_hab))),
+                            n = nrow(test) * 10)
+
+# Combine with used
+train_dat <- train %>%
+  make_track(x, y, crs = 32612) %>%
+  mutate(case_ = TRUE) %>%
+  bind_rows(avail_train) %>%
+  # Attach covariates
+  extract_covariates(uhc_hab) %>%
+  # Factor cover
+  mutate(cover = factor(cover,
+                        levels = 1:3,
+                        labels = c("grassland", "forest", "wetland"))) %>%
+  # Assign large weights to available
+  mutate(weight = case_when(
+    case_ ~ 1,
+    !case_ ~ 5000
+  ))
+
+test_dat <- test %>%
+  make_track(x, y, crs = 32612) %>%
+  mutate(case_ = TRUE) %>%
+  bind_rows(avail_test) %>%
+  # Attach covariates
+  extract_covariates(uhc_hab) %>%
+  # Factor cover
+  mutate(cover = factor(cover,
+                        levels = 1:3,
+                        labels = c("grassland", "forest", "wetland")))
+
+# Note 'weight' column not created for test data
+# (we assume all variables in test are candidate habitat variables)
+```
+
+#### Fit model(s)
+
+Now we move onto step (3), where we fit candidate models. We'll start with a model that has an incorrect formulation. We will leave the quadratic term out for `temp` and leave `cover` out of the model.
+
+```{r hsf fit wrong}
+hsf_wrong <- glm(case_ ~ forage + temp + pred,
+                 data = train_dat, family = binomial(), weights = weight)
+```
+
+We will also fit the correct model, using the structure used to generate the data.
+
+```{r hsf fit right}
+hsf_right <- glm(case_ ~ forage + temp + I(temp^2) + pred + cover,
+                 data = train_dat, family = binomial(), weights = weight)
+```
+
+#### Prepare UHC plot data
+
+Next, onto step (4), where we use `prep_uhc()` to prepare the UHC data. This is the function that does most of the heavy lifting (*i.e.*, the boostrapping).
+
+```{r hsf prep_uhc}
+# Prep under wrong model
+uhc_hsf_wrong <- prep_uhc(object = hsf_wrong, test_dat = test_dat,
+                          n_samp = 1000, verbose = FALSE)
+
+# Prep under right model
+uhc_hsf_right <- prep_uhc(object = hsf_right, test_dat = test_dat,
+                          n_samp = 1000, verbose = FALSE)
+```
+
+#### Plot UHC plots
+
+Finally, we are ready to plot (step 5). First, the wrong model.
+
+```{r hsf plot wrong, fig.width = 7, fig.height = 4.5}
+plot(uhc_hsf_wrong)
+```
+
+Note that the used proportions for `cover == "forest"` and `cover == "wetland"` also fall above and below the modeled envelope, respectively. These are our clues that the model is incorrectly specified.
+
+Note that `dist_to_water` also shows a mismatch between observed and predicted values. If we didn't already know that this was an unimportant variable, we might consider including it in our model. However, as we will see in the next set of plots, the correct model specification does correctly capture `dist_to_water` *without* needing to include it in the model.
+
+Now, the right model. 
+
+```{r hsf plot right, fig.width = 7, fig.height = 4.5}
+plot(uhc_hsf_right)
+```
+
+We can see these issues have been resolved for our `cover` variables, indicating that our "right" model is, in fact, better calibrated than `hsf_wrong`. Additionally, there is no longer an issue with `dist_to_water`, confirming that we do not need to include it in the model.
+
+### iSSF Example
+The following is a demonstration of the workflow for an iSSF.
+
+#### Prepare data
+
+First, we combine steps (1) and (2) by splitting into train/test data and then generating available locations and attributing with covariates and model weights.
+
+```{r issf prep}
+# Load data
+data(uhc_issf_locs)
+
+# Format as steps
+steps <- uhc_issf_locs %>%
+  make_track(x, y, t, crs = 32612) %>%
+  steps()
+
+# Split into train (80%) and test (20%)
+set.seed(1)
+steps$train <- rbinom(n = nrow(steps),
+                      size = 1, prob = 0.8)
+train <- steps[steps$train == 1, ]
+test <- steps[steps$train == 0, ]
+
+# Generate available steps, attribute
+train_dat <- train %>%
+  random_steps(n_control = 15) %>%
+  # Attach covariates
+  extract_covariates(uhc_hab) %>%
+  # Factor cover
+  mutate(cover = factor(cover,
+                        levels = 1:3,
+                        labels = c("grassland", "forest", "wetland"))) %>%
+  # Additional movement parameters
+  mutate(log_sl_ = log(sl_),
+         cos_ta_ = cos(ta_)) %>%
+  # Drop 'train' column
+  dplyr::select(-train) %>% 
+  # Get rid of any NAs (sometimes available steps fall outside of raster)
+  na.omit()
+
+test_dat <- test %>%
+  random_steps(n_control = 15) %>%
+  # Attach covariates
+  extract_covariates(uhc_hab) %>%
+  # Factor cover
+  mutate(cover = factor(cover,
+                        levels = 1:3,
+                        labels = c("grassland", "forest", "wetland"))) %>%
+  # Additional movement parameters
+  mutate(log_sl_ = log(sl_),
+         cos_ta_ = cos(ta_)) %>%
+  # Drop 'train' column
+  dplyr::select(-train) %>% 
+  # Get rid of any NAs (sometimes available steps fall outside of raster)
+  na.omit()
+```
+
+#### Fit model(s)
+
+Now we move onto step (3), where we fit candidate models. We'll start with a model that has an incorrect formulation. 
+
+```{r issf fit wrong}
+issf_wrong <- fit_issf(train_dat, 
+                       case_ ~ 
+                         # Habitat
+                         forage + 
+                         # Movement
+                         sl_ + log_sl_ + cos_ta_ +
+                         # Strata
+                         strata(step_id_), model = TRUE)
+```
+
+We will also fit the correct model, using the structure used to generate the data.
+
+```{r issf fit right}
+issf_right <- fit_issf(train_dat, 
+                       case_ ~ 
+                         # Habitat
+                         forage + temp + I(temp^2) + pred + cover + dist_to_cent +
+                         # Movement
+                         sl_ + log_sl_ + cos_ta_ +
+                         # Strata
+                         strata(step_id_), model = TRUE)
+```
+
+#### Prepare UHC plot data
+
+Next, onto step (4), where we use `prep_uhc()` to prepare the UHC data. This is the function that does most of the heavy lifting (*i.e.*, the bootstrapping).
+
+```{r issf prep_uhc}
+# Prep under wrong model
+uhc_issf_wrong <- prep_uhc(object = issf_wrong, test_dat = test_dat,
+                           n_samp = 500, verbose = FALSE)
+
+# Prep under right model
+uhc_issf_right <- prep_uhc(object = issf_right, test_dat = test_dat,
+                           n_samp = 500, verbose = FALSE)
+```
+
+#### Plot UHC plots
+
+Finally, we are ready to plot (step 5). First, the wrong model.
+
+```{r issf plot wrong, fig.width = 7, fig.height = 4.5}
+plot(uhc_issf_wrong)
+```
+
+We can see that every variable besides `rand` shows a mismatch between observed and expected.
+
+Now, the right model. 
+
+```{r issf plot right, fig.width = 7, fig.height = 4.5}
+plot(uhc_issf_right)
+```
+
+Every variable now shows matches between observed and expected.
+
+## Additional Methods
+
+There is also a function to coerce a `uhc_data` object to `data.frame`. This would be useful, for example, if you wish to create a custom plot with `ggplot2` or another package.
+
+```{r as data frame}
+# Structure of `uhc_data` object
+str(uhc_issf_right, 1)
+
+# Coerce to data.frame
+head(as.data.frame(uhc_issf_right), 10)
+```
+
+## References
+
+Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A., and Matthiopoulos, J. 2018. Used-habitat calibration plots: A new procedure for validating species distribution, resource selection, and step-selection models. *Ecography* 41:737–752. [doi: 10.1111/ecog.03123](https://doi.org/10.1111/ecog.03123).
+
