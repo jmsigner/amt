@@ -8,6 +8,8 @@ sampling_period(x, ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt]} A \code{track_xyt} object.}
+
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Extracts sampling period from a \code{track_xyt} object

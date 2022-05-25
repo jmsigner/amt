@@ -2,9 +2,12 @@
 % Please edit documentation in R/cleaning.R
 \name{flag_fast_steps}
 \alias{flag_fast_steps}
+\alias{flag_fast_steps.track_xyt}
 \title{Flag Fast Steps}
 \usage{
 flag_fast_steps(x, delta, time_unit = "secs", ...)
+
+\method{flag_fast_steps}{track_xyt}(x, delta, time_unit = "secs", ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt]} A \code{track_xyt} object.}

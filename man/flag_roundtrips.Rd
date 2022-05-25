@@ -2,9 +2,12 @@
 % Please edit documentation in R/cleaning.R
 \name{flag_roundtrips}
 \alias{flag_roundtrips}
+\alias{flag_roundtrips.track_xyt}
 \title{Flag Fast Round Trips}
 \usage{
 flag_roundtrips(x, delta, epsilon, time_unit = "secs", ...)
+
+\method{flag_roundtrips}{track_xyt}(x, delta, epsilon, time_unit = "secs", ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt]} A \code{track_xyt} object.}

@@ -10,6 +10,7 @@
 #' Extracts sampling period from a `track_xyt` object
 #'
 #' @param x `[track_xyt]` A `track_xyt` object.
+#' @template dots_none
 #'
 #' @export
 sampling_period <- function(x, ...) {
@@ -21,6 +22,7 @@ sampling_period <- function(x, ...) {
 #' Summarizes step lengths for a `track_xy*` object
 #'
 #' @param x `[track_xy, track_xyt]` A `track_xy*` object.
+#' @template dots_none
 #'
 #' @export
 summarize_sl <- function(x, ...) {
@@ -32,6 +34,7 @@ summarize_sl <- function(x, ...) {
 #' Summarizes speeds for a `track_xyt` object
 #'
 #' @param x `[track_xyt]` A `track_xyt` object.
+#' @template dots_none
 #'
 #' @export
 summarize_speed <- function(x, ...) {
@@ -43,6 +46,8 @@ summarize_speed <- function(x, ...) {
 #' Subsets a `track_xyt` object
 #'
 #' @param x `[track_xy, track_xyt]` A `track_xy*` object.
+#' @param from `[POSIXt]` A date and time defining start of subset.
+#' @param to `[POSIXt]` A date and time defining end of subset.
 #'
 #' @export
 tracked_from_to <- function(x, from = min(x$t_), to = max(x$t_)) {
@@ -135,6 +140,7 @@ get_displacement <- function(delta, time_span) {
 #' `"secs"`, `"mins"`, or `"hours"`.
 #' @param append_na `[logical]` Should `NA` be appended to the end of the vector?
 #' Ensures `length(result) == nrow(x)` if appending as a column of `x`.
+#' @template dots_none
 #'
 #' @author Brian J. Smith and Johannes Signer
 #'
@@ -144,11 +150,15 @@ get_displacement <- function(delta, time_span) {
 #'
 #' @seealso \code{\link{calculate_sdr}()}, \code{\link{get_displacement}()}
 #'
+#' @name sdr
 #' @export
 sdr <- function(x, time_unit = "secs", append_na = TRUE, ...) {
   UseMethod("sdr", x)
 }
 
+
+#' @rdname sdr
+#' @export
 sdr.track_xyt <- function(x, time_unit = "secs", append_na = TRUE, ...) {
   ## Input checks
   # time_unit
@@ -195,6 +205,7 @@ sdr.track_xyt <- function(x, time_unit = "secs", append_na = TRUE, ...) {
 #' Check `time_unit` Parameter
 #'
 #' Internal function to check `time_unit` parameter in various cleaning functions.
+#' @param tu The `time_unit` parameter to check.
 #'
 check_time_unit <- function(tu) {
   # Time unit
@@ -256,12 +267,15 @@ check_time_unit <- function(tu) {
 #'
 #' @author Brian J. Smith, based on code by Johannes Signer and Tal Avgar
 #'
+#' @name flag_duplicates
 #' @export
 flag_duplicates <- function(x, gamma, time_unit = "mins",
                             DOP = "dop", ...) {
   UseMethod("flag_duplicates", x)
 }
 
+#' @rdname flag_duplicates
+#' @export
 flag_duplicates.track_xyt <- function(x, gamma, time_unit = "mins",
                                       DOP = "dop", ...) {
   ## Check inputs
@@ -412,11 +426,14 @@ flag_duplicates.track_xyt <- function(x, gamma, time_unit = "mins",
 #'
 #' @author Brian J. Smith, based on code by Johannes Signer and Tal Avgar
 #'
+#' @name flag_fast_steps
 #' @export
 flag_fast_steps <- function(x, delta, time_unit = "secs", ...) {
   UseMethod("flag_fast_steps", x)
 }
 
+#' @rdname flag_fast_steps
+#' @export
 flag_fast_steps.track_xyt <- function(x, delta, time_unit = "secs", ...) {
 
   ## Check inputs
@@ -525,12 +542,15 @@ flag_fast_steps.track_xyt <- function(x, delta, time_unit = "secs", ...) {
 #'
 #' @author Brian J. Smith, based on code by Johannes Signer and Tal Avgar
 #'
+#' @name flag_roundtrips
 #' @export
 flag_roundtrips <- function(x, delta, epsilon,
                             time_unit = "secs", ...) {
   UseMethod("flag_roundtrips", x)
 }
 
+#' @rdname flag_roundtrips
+#' @export
 flag_roundtrips.track_xyt <- function(x, delta, epsilon,
                                       time_unit = "secs", ...) {
 
@@ -608,12 +628,9 @@ flag_roundtrips.track_xyt <- function(x, delta, epsilon,
 #' Flags defunct clusters at the end of a track
 #'
 #' @param x `[track_xyt]` A `track_xyt` object.
-#' @param delta `[numeric]` The threshold SDR for flagging. Locations that imply
-#' both legs of a round trip with `SDR > delta/epsilon` are flagged. See details.
-#' @param epsilon `[numeric]` A discounting factor to create the threshold for
-#' flagging.
-#' @param time_unit `[character]` Character string giving time unit. Should be
-#' `"secs"`, `"mins"`, or `"hours"`. See details.
+#' @param zeta `[numeric]` See details.
+#' @param eta `[numeric]` See details.
+#' @param theta `[numeric]` See details.
 #' @param ... Addtional arguments. None currently implemented.
 #'
 #' @details
@@ -643,13 +660,17 @@ flag_roundtrips.track_xyt <- function(x, delta, epsilon,
 #'
 #' @author Brian J. Smith and Johannes Signer, based on code by Tal Avgar
 #'
+#' @name flag_defunct_clusters
 #' @export
 flag_defunct_clusters <- function(x, zeta, eta, theta, ...) {
   UseMethod("flag_defunct_clusters", x)
 }
 
 # Note: almost entirely using Johannes' code for this one
-flag_defunct_clusters.track_xyt <- function(x, zeta, eta, theta) {
+
+#' @rdname flag_defunct_clusters
+#' @export
+flag_defunct_clusters.track_xyt <- function(x, zeta, eta, theta, ...) {
 
   ## Check inputs
   # Check that x has rows (could have already been filtered)

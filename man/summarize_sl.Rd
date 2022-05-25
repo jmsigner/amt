@@ -8,6 +8,8 @@ summarize_sl(x, ...)
 }
 \arguments{
 \item{x}{\verb{[track_xy, track_xyt]} A \verb{track_xy*} object.}
+
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Summarizes step lengths for a \verb{track_xy*} object

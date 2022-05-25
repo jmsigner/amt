@@ -8,6 +8,8 @@ summarize_speed(x, ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt]} A \code{track_xyt} object.}
+
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Summarizes speeds for a \code{track_xyt} object

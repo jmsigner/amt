@@ -2,9 +2,12 @@
 % Please edit documentation in R/cleaning.R
 \name{sdr}
 \alias{sdr}
+\alias{sdr.track_xyt}
 \title{Calculate SDR for an Object}
 \usage{
 sdr(x, time_unit = "secs", append_na = TRUE, ...)
+
+\method{sdr}{track_xyt}(x, time_unit = "secs", append_na = TRUE, ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt]} Object to calculate SDR from. Currently implemented
@@ -15,6 +18,8 @@ for \code{track_xyt}.}
 
 \item{append_na}{\verb{[logical]} Should \code{NA} be appended to the end of the vector?
 Ensures \code{length(result) == nrow(x)} if appending as a column of \code{x}.}
+
+\item{...}{Further arguments, none implemented.}
 }
 \description{
 Calculates SDR for an object of certain class

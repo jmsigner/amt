@@ -2,9 +2,12 @@
 % Please edit documentation in R/cleaning.R
 \name{flag_duplicates}
 \alias{flag_duplicates}
+\alias{flag_duplicates.track_xyt}
 \title{Flag Low Quality Duplicates}
 \usage{
 flag_duplicates(x, gamma, time_unit = "mins", DOP = "dop", ...)
+
+\method{flag_duplicates}{track_xyt}(x, gamma, time_unit = "mins", DOP = "dop", ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt]} A \code{track_xyt} object.}

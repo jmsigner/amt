@@ -2,23 +2,23 @@
 % Please edit documentation in R/cleaning.R
 \name{flag_defunct_clusters}
 \alias{flag_defunct_clusters}
+\alias{flag_defunct_clusters.track_xyt}
 \title{Flag Defunct Clusters}
 \usage{
 flag_defunct_clusters(x, zeta, eta, theta, ...)
+
+\method{flag_defunct_clusters}{track_xyt}(x, zeta, eta, theta, ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt]} A \code{track_xyt} object.}
 
+\item{zeta}{\verb{[numeric]} See details.}
+
+\item{eta}{\verb{[numeric]} See details.}
+
+\item{theta}{\verb{[numeric]} See details.}
+
 \item{...}{Addtional arguments. None currently implemented.}
-
-\item{delta}{\verb{[numeric]} The threshold SDR for flagging. Locations that imply
-both legs of a round trip with \code{SDR > delta/epsilon} are flagged. See details.}
-
-\item{epsilon}{\verb{[numeric]} A discounting factor to create the threshold for
-flagging.}
-
-\item{time_unit}{\verb{[character]} Character string giving time unit. Should be
-\code{"secs"}, \code{"mins"}, or \code{"hours"}. See details.}
 }
 \value{
 Returns \code{x} (a \code{track_xyt}) with a flagging column added

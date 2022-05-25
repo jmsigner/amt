@@ -6,6 +6,9 @@
 \usage{
 check_time_unit(tu)
 }
+\arguments{
+\item{tu}{The \code{time_unit} parameter to check.}
+}
 \description{
 Calculates speed
 }

@@ -8,6 +8,10 @@ tracked_from_to(x, from = min(x$t_), to = max(x$t_))
 }
 \arguments{
 \item{x}{\verb{[track_xy, track_xyt]} A \verb{track_xy*} object.}
+
+\item{from}{\verb{[POSIXt]} A date and time defining start of subset.}
+
+\item{to}{\verb{[POSIXt]} A date and time defining end of subset.}
 }
 \description{
 Subsets a \code{track_xyt} object
