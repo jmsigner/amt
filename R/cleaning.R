@@ -601,7 +601,7 @@ flag_roundtrips.track_xyt <- function(x, delta, epsilon,
     if ((sdr1 > (delta / epsilon)) & (sdr2 > (delta / epsilon))) {
       # SDR for previous point (point 1) to next point (point 3)
       dsq3 <- (x2$x_[i - 1] - x2$x_[i + 1])^2 + (x2$y_[i - 1] - x2$y_[i + 1])^2
-      dt3 <- as.numeric(x2$t_[i - 1] - x2$t_[i + 1], units = time_unit)
+      dt3 <- as.numeric(x2$t_[i + 1] - x2$t_[i - 1], units = time_unit)
       sdr3 <- dsq3/dt3
     } else {
       sdr3 <- Inf
