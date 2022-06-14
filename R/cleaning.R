@@ -455,6 +455,12 @@ flag_fast_steps.track_xyt <- function(x, delta, time_unit = "secs", ...) {
   # Sort x by time
   x <- x[order(x$t_), ]
 
+  # Give x a unique identifier
+  # Choose a name unlikely to already be in use
+  # This will correspond perfectly with the row numbers of x,
+  # but will be useful for identifying flags later.
+  x$UUID_ <- 1:nrow(x)
+
   # Duplicate x to allow row removal as flags are identified
   x2 <- x
 
@@ -474,7 +480,7 @@ flag_fast_steps.track_xyt <- function(x, delta, time_unit = "secs", ...) {
     # If SDR exceeds delta
     if (SDR > delta) {
       # Flag that row (in original x)
-      x$fast_step_[i] <- TRUE
+      x$fast_step_[which(x$UUID_ == x2$UUID_[i])] <- TRUE
       # Remove that row in copy
       x2 <- x2[-i, ]
       # Update n
@@ -486,6 +492,9 @@ flag_fast_steps.track_xyt <- function(x, delta, time_unit = "secs", ...) {
       i <- i + 1
     }
   } # end while loop
+
+  # Get rid of unique ID column
+  x$UUID_ <- NULL
 
   # Return original data with flags
   return(x)
@@ -575,6 +584,12 @@ flag_roundtrips.track_xyt <- function(x, delta, epsilon,
   # Sort x by time
   x <- x[order(x$t_), ]
 
+  # Give x a unique identifier
+  # Choose a name unlikely to already be in use
+  # This will correspond perfectly with the row numbers of x,
+  # but will be useful for identifying flags later.
+  x$UUID_ <- 1:nrow(x)
+
   # Duplicate x to allow row removal as flags are identified
   x2 <- x
 
@@ -609,7 +624,7 @@ flag_roundtrips.track_xyt <- function(x, delta, epsilon,
 
     # Check whether it should be flagged
     if ((sdr1 > epsilon * sdr3) & (sdr2 > epsilon * sdr3)) {
-      x$fast_roundtrip_[i] <- TRUE
+      x$fast_roundtrip_[which(x$UUID_ == x2$UUID_[i])] <- TRUE
       x2 <- x2[-i, ]
       n <- nrow(x2)
     } else {
@@ -617,6 +632,10 @@ flag_roundtrips.track_xyt <- function(x, delta, epsilon,
       i <- i + 1
     }
   }
+
+  # Get rid of unique ID column
+  x$UUID_ <- NULL
+
   # Return
   return(x)
 }
