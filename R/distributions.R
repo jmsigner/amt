@@ -171,7 +171,7 @@ random_numbers.vonmises_distr <- function(x, n = 100, ...) {
   suppressWarnings(
     x <- do.call(circular::rvonmises, c(list(n = n), x$params)))
 
-  # turn angles for new stps
+  # turn angles for new steps
   x <- x %% (2 * pi)
   ifelse(x > base::pi, x - (2 * base::pi), x)
 }

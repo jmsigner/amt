@@ -70,7 +70,7 @@ od.track_xyt <- function(x, trast,
   krige <- ctmm::occurrence(as_telemetry(x), CTMM = model, res.space = res.space, res.time = res.time)
 
   r <- 1 - ctmm::raster(krige, DF = "CDF")
-  r <- raster::projectRaster(r, to = trast)
+  r <- raster::projectRaster(r, to = trast, res = raster::res(trast))
   r <- raster::resample(r, trast)
   v <- raster::getValues(r)
   v[is.na(v)] <- 0
