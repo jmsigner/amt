@@ -166,7 +166,7 @@ kernel_setup <- function(template, max.dist = 100, start) {
   checkmate::assert_class(start, "sim_start")
 
   p <- sf::st_sf(
-    geom = sf::st_sfc(sf::st_point(as.numeric(start[, c("x_", "y_")])))) |>
+    geom = sf::st_sfc(sf::st_point(as.numeric(start[, c("x_", "y_")])))) %>%
     sf::st_buffer(dist = max.dist)
 
   # 2. Rasterize buffer
@@ -182,7 +182,7 @@ kernel_setup <- function(template, max.dist = 100, start) {
     sl_ = sqrt((x - start$x_[1])^2 + (y - start$y_[1])^2))
 
   k$ta_ <- k$ta_ - start$ta_[1] - pi/2
-  k <- data.frame(k, "x1_" = start$x_[1], "y1_" = start$y_[1]) |>
+  k <- data.frame(k, "x1_" = start$x_[1], "y1_" = start$y_[1]) %>%
     dplyr::rename(x2_ = x, y2_ = y)
   class(k) <- c("steps_xy", "data.frame")
   k
@@ -255,7 +255,7 @@ redistribution_kernel <- function(
 
   ## Should we also provide an option for returning just a single step?
   r <- if (!as.raster) {
-    xy[sample.int(nrow(xy), size = n.sample, prob = w), ] |>
+    xy[sample.int(nrow(xy), size = n.sample, prob = w), ] %>%
       dplyr::select(x_ = x2_, y_ = y2_, t_)
   } else {
     if (stochastic) {
