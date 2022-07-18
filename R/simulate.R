@@ -334,7 +334,7 @@ simulate_path.redistribution_kernel <- function(
   mod <- x$args
 
   xy <- tibble(x_ = rep(NA, n.steps + 1), y_ = NA_real_,
-               t_ = start$t_ + start$dt * (0:n.steps + 1), dt = start$dt)
+               t_ = start$t_ + start$dt * (0:n.steps), dt = start$dt)
 
   xy$x_[1] <- start$x_
   xy$y_[1] <- start$y_
