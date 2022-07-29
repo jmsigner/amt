@@ -53,43 +53,45 @@ random_steps.steps_xy <- function(
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE, ...) {
 
-
   # Generate random points
   ns <- nrow(x)  # number of steps
-  case_for_control <- rep(1:ns, each = n_control)
+  case_for_control <- rep(2:ns, each = n_control)
 
-  stps <- which(!is.na(x$direction_p))
-  x$step_id_ <- 1:nrow(x)
+
   x$case_ <- TRUE
 
   # This could be moved to c++
-  xx <- lapply(stps, function(i) {
+  ##xx <- lapply(stps, function(i) {
+  xx <- lapply(2:nrow(x), function(i) {
     random_steps(c(x$x1_[i], x$y1_[i]), n_control = n_control,
-                 angle = x$direction_p[i],
+                 #angle = x$direction_p[i],
+                 angle = x$direction_p[i-1],
                  rand_sl = rand_sl, rand_ta = rand_ta)})
- xx <- do.call(rbind, xx)
+  xx <- do.call(rbind, xx)
 
- for_rand <- x[rep(stps, each = n_control), ]
- for_rand$case_ <- FALSE
+  x <- x[-1, ] # remove the first step
+  x$step_id_ <- 1:nrow(x)
 
- for_rand$x2_ <- xx[, "x2_"]
- for_rand$y2_ <- xx[, "y2_"]
+  for_rand <- x[rep(1:nrow(x), each = n_control), ]
+  for_rand$case_ <- FALSE
 
- for_rand$sl_ <- xx[, "sl_"]
- for_rand$ta_ <- xx[, "ta_"]
- x <- x[stps, ]
+  for_rand$x2_ <- xx[, "x2_"]
+  for_rand$y2_ <- xx[, "y2_"]
 
- out <- dplyr::bind_rows(x, for_rand)
- out <- dplyr::arrange(out, step_id_)
- out[["direction_p"]] <- NULL
+  for_rand$sl_ <- xx[, "sl_"]
+  for_rand$ta_ <- xx[, "ta_"]
 
- class(out) <- c("random_steps", class(out))
- attributes(out)$sl_ <- sl_distr
- attributes(out)$ta_ <- ta_distr
- attributes(out)$n_control_ <- n_control
- attr(out, "crs_") <- attr(x, "crs_")
+  out <- dplyr::bind_rows(x, for_rand)
+  out <- dplyr::arrange(out, step_id_)
+  out[["direction_p"]] <- NULL
 
- out
+  class(out) <- c("random_steps", class(out))
+  attributes(out)$sl_ <- sl_distr
+  attributes(out)$ta_ <- ta_distr
+  attributes(out)$n_control_ <- n_control
+  attr(out, "crs_") <- attr(x, "crs_")
+
+  out
 
 }
 

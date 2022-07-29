@@ -106,8 +106,9 @@ expect_true(all(rs$ta_[!rs$case_] == 0))
 
 mini_deer <- deer[1:4, ]
 
-expect_equal(mini_deer %>% steps() %>% random_steps() %>%  nrow(), 33)
+expect_equal(mini_deer %>% steps() %>% random_steps() %>%  nrow(), 22)
 expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata() %>% nrow(), 22)
-expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl_") %>% nrow(), 33)
+expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl_") %>% nrow(), 22)
 
 expect_error(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl"))
+
