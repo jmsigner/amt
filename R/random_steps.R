@@ -53,10 +53,6 @@ random_steps.steps_xy <- function(
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE, ...) {
 
-  if (FALSE) {
-    x <- stp[2:3, ]; rand_sl = 1; sl_distr = sld; ta_distr = make_vonmises_distr(kappa = 1); n_control = 200; rand_ta = ta_distr %>% random_numbers()
-  }
-
   # Generate random points
   ns <- nrow(x)  # number of steps
   case_for_control <- rep(2:ns, each = n_control)
