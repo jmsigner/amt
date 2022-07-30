@@ -70,12 +70,12 @@ expect_error(random_steps(s1, 1.5, sl_distr = make_unif_distr(10, 100), ta_distr
 
 
 xx <- random_steps(s1, 1, sl_distr = make_unif_distr(10, 100), ta_distr = make_vonmises_distr(kappa = 5))
-expect_equal(nrow(xx), 6)
-expect_equal(sum(!xx$case_), 3)
+expect_equal(nrow(xx), 4)
+expect_equal(sum(!xx$case_), 2)
 
 xx <- random_steps(s1, 10, sl_distr = make_unif_distr(10, 100), ta_distr = make_vonmises_distr(kappa = 5))
-expect_equal(nrow(xx), 33)
-expect_equal(sum(!xx$case_), 30)
+expect_equal(nrow(xx), 22)
+expect_equal(sum(!xx$case_), 20)
 
 
 # Check steps are correct, i.e., random steps have the right direction
@@ -106,8 +106,9 @@ expect_true(all(rs$ta_[!rs$case_] == 0))
 
 mini_deer <- deer[1:4, ]
 
-expect_equal(mini_deer %>% steps() %>% random_steps() %>%  nrow(), 33)
+expect_equal(mini_deer %>% steps() %>% random_steps() %>% nrow(), 22)
 expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata() %>% nrow(), 22)
-expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl_") %>% nrow(), 33)
+expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl_") %>% nrow(), 22)
 
 expect_error(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl"))
+
