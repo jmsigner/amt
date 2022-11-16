@@ -6,11 +6,12 @@
 #' @param sl The tentative step-length distribution.
 #' @param ta The tentative turn-angle distribution.
 #'
-#' @return
+#' @return An object of `fit_clogit`.
 #' @export
 #'
-#' @examples
-make_issf_model <- function(coefs = c("sl_" = 0), sl = make_exp_distr(), ta = make_unif_distr()) {
+make_issf_model <- function(
+  coefs = c("sl_" = 0), sl = make_exp_distr(), ta = make_unif_distr())
+{
   checkmate::assert_numeric(coefs, finite = TRUE)
   checkmate::assert_named(coefs)
   checkmate::assert_class(sl, "sl_distr")
@@ -19,17 +20,20 @@ make_issf_model <- function(coefs = c("sl_" = 0), sl = make_exp_distr(), ta = ma
   rhs <- c(names(coefs), "strata")
   structure(list(
     coefficients = coefs, sl_ = sl, ta_ = ta,
-    model = list(formula = as.formula(paste("Surv ~ ", paste(rhs, collapse = "+"))))
+    model = list(formula =
+                   stats::as.formula(paste("Surv ~ ", paste(rhs, collapse = "+"))))
   ),
   class = c("fit_clogit", "list")
   )
 }
 
+#' @export
 make_start <- function(x, ...) {
   UseMethod("make_start")
 }
 
-make_start.default <- function(
+#' @export
+make_start.numeric <- function(
   x = c(0, 0),
   ta_ = 0,
   time = Sys.time(), dt = hours(1), ...) {
@@ -42,18 +46,17 @@ make_start.default <- function(
   out
 }
 
+#' @export
 make_start.steps_xyt <- function(x, ...) {
   if (nrow(x) > 1) {
     warning("More than one step provided, only the first will be used as a starting step")
     x <- x[1, ]
   }
-
   out <- tibble::tibble(
     x_ = x$x1_[1], y_ = x$y1_[1], ta_ = x$ta_[1],
-    t_ = x$t1_, dt = x$dt_)
+    t_ = x$t1_[1], dt = x$dt_[1])
   class(out) <- c("sim_start", class(out))
   out
-
 }
 
 wrap_angle <- function(x) {
@@ -73,19 +76,27 @@ get_max_dist.fit_clogit <- function(x, p = 0.99, ...) {
 
 #' Simulate from an ssf model
 #'
-#' @param object Model object
-#' @param initial.step First step
-#' @param start.t Start time
-#' @param delta_t Step duration
-#' @param map Environmental layers
-#' @param fun Function to build environmental predictors
-#' @param n_steps How many steps to simulate
-#' @param n_control How many alternative steps are considered each step
+#' @param start First step
+#' @param n.control How many alternative steps are considered each step
 #' @param sl_model Step length model to use
 #' @param ta_model Turning angle model to use
 #' @return Simulated trajectory
 #' @export
-#'
+
+# Old documentation
+# #' @param object Model object
+# #' @param initial.step First step
+# #' @param start.t Start time
+# #' @param delta_t Step duration
+# #' @param map Environmental layers
+# #' @param fun Function to build environmental predictors
+# # #' @param n_steps How many steps to simulate
+# #' @param n.control How many alternative steps are considered each step
+# #' @param sl_model Step length model to use
+# #' @param ta_model Turning angle model to use
+# #' @return Simulated trajectory
+# #' @export
+# #'
 
 random_steps_simple <- function(start, sl_model, ta_model, n.control) {
 
@@ -114,6 +125,7 @@ random_steps_simple <- function(start, sl_model, ta_model, n.control) {
 #' Takes a `clogit` formula and returns a formula without the `strata` and the
 #' left-hand side
 #' @param formula A formula object
+#' @export
 #' @examples
 #' f1 <- case_ ~ x1 * x2 + strata(step_id_)
 #' ssf_formula(f1)
@@ -121,7 +133,7 @@ random_steps_simple <- function(start, sl_model, ta_model, n.control) {
 ssf_formula <- function(formula) {
   rhs <- strsplit(as.character(formula)[3], "\\+")[[1]]
   rhs <- rhs[-grep("strata", rhs)]
-  as.formula(paste("~", paste(rhs, collapse = "+")))
+  stats::as.formula(paste("~", paste(rhs, collapse = "+")))
 }
 
 #' Given a fitted ssf, and new location the weights for each location is
@@ -141,10 +153,10 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
   ff <- ssf_formula(object$model$formula)
   newdata <- xy
   attr(newdata, "na.action") <- "na.pass"
-  xyz <- stats::model.matrix.default(ff, data = newdata, na.action = na.pass)
+  xyz <- stats::model.matrix.default(ff, data = newdata, na.action = stats::na.pass)
   w <- as.matrix(xyz[, names(coefs)]) %*% coefs
   if (compensate.movement) {
-    phi <- movement_kernel(xy, object$sl_, object$ta_)
+    phi <- movement_kernel1(xy, object$sl_, object$ta_)
     w <- w + phi - log(xy$sl_)
   }
   w <- exp(w - mean(w[is.finite(w)], na.rm = TRUE))
@@ -152,12 +164,6 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
   w
 }
 
-coef.fit_clogit <- function(x, ...) {
-  if (is(x$model, "list"))
-    return(x$coefficients)
-  else
-    coef(x$model)
-}
 
 kernel_setup <- function(template, max.dist = 100, start) {
 
@@ -177,18 +183,19 @@ kernel_setup <- function(template, max.dist = 100, start) {
 
   k <- tibble(
     x = xy[, 1],
-    y = xy[, 2],
-    ta_ = base::atan2(y - start$y_[1], x - start$x_[1]) - pi/2,
-    sl_ = sqrt((x - start$x_[1])^2 + (y - start$y_[1])^2))
-
+    y = xy[, 2])
+  k$ta_ = base::atan2(k$y - start$y_[1], k$x - start$x_[1]) - pi/2
   k$ta_ <- k$ta_ - start$ta_[1] - pi/2
+
+  k$sl_ = sqrt((k$x - start$x_[1])^2 + (k$y - start$y_[1])^2)
+
   k <- data.frame(k, "x1_" = start$x_[1], "y1_" = start$y_[1]) %>%
     dplyr::rename(x2_ = x, y2_ = y)
   class(k) <- c("steps_xy", "data.frame")
   k
 }
 
-
+#' @export
 
 redistribution_kernel <- function(
   x = make_issf_model(), start = make_start(),
@@ -302,7 +309,7 @@ normalize <- function(x) {
 }
 
 
-movement_kernel <- function(x, sl.model, ta.model) {
+movement_kernel1 <- function(x, sl.model, ta.model) {
   phi <- switch(
     sl.model$name,
     gamma = -x$sl_ / sl.model$params$scale + log(x$sl_) * (sl.model$params$shape - 1),
@@ -313,14 +320,17 @@ movement_kernel <- function(x, sl.model, ta.model) {
   phi
 }
 
+#' @export
 simulate_path <- function(x, ...) {
   UseMethod("simulate_path")
 }
 
+#' @export
 simulate_path.default <- function(x, ...) {
   message("Please pass a redistribution kernel.")
 }
 
+#' @export
 simulate_path.redistribution_kernel <- function(
   x, n.steps = 100, start = x$args$start, verbose = FALSE, ...) {
 
