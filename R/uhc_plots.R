@@ -804,7 +804,10 @@ as.data.frame.uhc_data <- function(x, row.names = NULL, optional = FALSE, ...) {
   comb <- dplyr::bind_rows(orig, samp)
 
   # Join factor levels
-  suppressMessages(comb <- dplyr::left_join(comb, lev_df))
+  # (if factors exist)
+  if(nrow(lev_df) > 0) {
+    suppressMessages(comb <- dplyr::left_join(comb, lev_df))
+  }
 
   # Class
   class(comb) <- c("uhc_data_frame", class(comb))
