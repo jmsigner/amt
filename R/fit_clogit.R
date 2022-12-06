@@ -44,7 +44,10 @@ fit_clogit <- function(data, formula, more = NULL, summary_only = FALSE, ...) {
 
 #' @export
 coef.fit_clogit <- function(object, ...) {
-  stats::coef(object$model, ...)
+  if (is(object$model, "list"))
+    return(object$coefficients)
+  else
+    stats::coef(object$model, ...)
 }
 
 

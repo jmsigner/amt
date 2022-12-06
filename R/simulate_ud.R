@@ -4,7 +4,7 @@
 #'
 #' The habitat kernel is calculated by multiplying resources with their corresponding coefficients from the fitted (i)SSF.
 #'
-#' @param resources `[RasterLayer, RasterStack]` \cr The resources.
+# #' @param resources `[RasterLayer, RasterStack]` \cr The resources.
 #' @param movement_kernel `[RasterLayer]` \cr The movement kernel.
 #' @param habitat_kernel `[RasterLayer]` \cr The habitat kernel.
 #' @param start `[numeric(2)]` \cr Starting point of the simulation.
