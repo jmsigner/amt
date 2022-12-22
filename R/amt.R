@@ -64,8 +64,6 @@ dplyr::mutate
 #' @export
 dplyr::pull
 #' @export
-sp::CRS
-#' @export
 lubridate::hours
 #' @export
 lubridate::minutes
@@ -92,8 +90,4 @@ tidyr::unnest
 #' @export
 tibble::tibble
 #' @export
-magrittr::`%>%`
-#' @export
 survival::Surv
-#' @export
-raster::raster

@@ -1,7 +1,7 @@
 Package: amt
 Type: Package
 Title: Animal Movement Tools
-Version: 0.1.8
+Version: 0.2
 Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"), 
   person("Brian", "Smith", role = "ctb"), 
   person("Bjoern", "Reineking", role = "ctb"), 
@@ -17,7 +17,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/jmsigner/amt
 Depends: 
-    R (>= 3.5),
+    R (>= 4.1),
 Imports: 
     checkmate,
     circular,
@@ -26,7 +26,6 @@ Imports:
     data.table,
     fitdistrplus,
     lubridate,
-    magrittr,
     methods,
     purrr,
     Rdpack,
