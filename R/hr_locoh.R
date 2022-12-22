@@ -50,25 +50,22 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     })
   }
 
-  xysp <- sp::SpatialPointsDataFrame(x[, c("x_", "y_")], data=data.frame(id=1:nrow(x)))
-  zz <- lapply(1:length(aa), function(i) xysp[c(i, aa[[i]]), ])
-  mcps <- lapply(zz, function(x) rgeos::gBuffer(rgeos::gConvexHull(x), width = rand_buffer))
-  mcpAreas <- sapply(mcps, rgeos::gArea)
-
-
-  #With SF
-  # Slower, so stay with sp
-  #  xysp <- sf::st_as_sf(x, coords = c("x_", "y_"))
-  #  mcps <- mutate(xysp,
-  #    mcps =  purrr::map(aa, ~  sf::st_buffer(sf::st_convex_hull(sf::st_union(xysp[.x, ])),
-  #                                            dist = rand_buffer)))
-  #  mcps1 <- mutate(mcps, area = purrr::map_dbl(mcps, sf::st_area))
+  zz <- lapply(seq_along(aa), function(.x) {
+    zz <- x[c(.x, aa[[.x]]), ]
+    zz$id = c(.x, aa[[.x]])
+    zz
+  })
+  names(zz) <- seq_along(zz)
+  bb <- data.table::rbindlist(zz, idcol = "id")
+  mp <- sfheaders::sf_multipoint(
+    bb, x = "x_", y = "y_", multipoint_id = "id")
+  mcps <- sf::st_convex_hull(mp) |> sf::st_buffer(dist = rand_buffer)
+  mcpAreas <- sf::st_area(mcps)
 
   mcpAreasOrder <- order(mcpAreas)
 
   ff <- zz[mcpAreasOrder]
-  mm <- mcps[mcpAreasOrder]
-
+  mm <- mcps[mcpAreasOrder, ]
 
   ## Compute vector `pp`, which records what proportion of points,
   ## cumulatively, have been "seen" with introduction of the nth
@@ -85,28 +82,43 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   qq <- list()
   qq[[1]] <- mm[[1]]
 
+  ## Continue here
   wlevel <- sapply(levels, function(l) which.min(abs(pp - l)))
   for (i in seq_along(wlevel)) {
     ## buffer is necessary, to overcome some topology errors if the polygon is quasi a line
-    p1 <- lapply(1:wlevel[i], function(i) sp::Polygon(mm[[i]]@polygons[[1]]@Polygons[[1]]@coords))
-    p2 <- lapply(seq_along(p1), function(i) sp::Polygons(p1[i], ID = i))
-    ff <- sp::SpatialPolygons(p2)
-    ff <- if (length(ff@polygons) == 1) {
-      ff
-    } else {
-      rgeos::gUnaryUnion(ff)
-    }
-    qq[[i]] <- sf::st_union(sf::st_as_sf(ff), by_feature=TRUE)
+    #p1 <- lapply(1:wlevel[i], function(i) sp::Polygon(mm[[i]]@polygons[[1]]@Polygons[[1]]@coords))
+    p1 <- mm[1:wlevel[i], ]
+
+   # p2 <- lapply(seq_along(p1), function(i) sp::Polygons(p1[i], ID = i))
+   # ff <- sp::SpatialPolygons(p2)
+   # ff <- if (length(ff@polygons) == 1) {
+   #   ff
+   # } else {
+   #   rgeos::gUnaryUnion(ff)
+   # }
+   # qq[[i]] <- sf::st_union(sf::st_as_sf(ff), by_feature=TRUE)
+    qq[[i]] <- sf::st_union(p1, by_feature = FALSE)
   }
 
-  rr <- do.call(rbind, qq)
-  sf::st_crs(rr) <- get_crs(x)
+ # rr <- do.call(rbind, qq)
 
-  qq2 <- cbind(level = round(pp[wlevel], 2), what = "estimate",
-               area = sf::st_area(rr), rr)
+  #qq2 <- cbind(level = round(pp[wlevel], 2), what = "estimate",
+               #area = sf::st_area(rr), rr)
 
+  qq2 <- sf::st_sf(
+    level = round(pp[wlevel], 2),
+    what = "estimate",
+    geometry = sf::st_sfc(unlist(qq, recursive = FALSE))
+  )
+
+  # Add area
+  qq2$area <- sf::st_area(qq2)
+
+  # Add CRS
   if (!is.null(attr(x, "crs_"))) {
     sf::st_crs(qq2) <- sf::st_crs(attr(x, "crs_"))
+  } else {
+    sf::st_crs(rr) <- get_crs(x)
   }
 
   out <- list(locoh = qq2,
