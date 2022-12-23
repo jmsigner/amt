@@ -6,7 +6,7 @@
 #' @template dots_none
 #' @template track_xy_star
 #' @name trast
-#' @return A `RasterLayer` without values.
+#' @return A `RastLayer` without values.
 #' @export
 make_trast <- function(x, ...) {
   UseMethod("make_trast", x)
@@ -15,13 +15,12 @@ make_trast <- function(x, ...) {
 #' @export
 #' @rdname trast
 make_trast.track_xy <- function(x, factor = 1.5, res = max(c(extent_max(x) / 100, 1e-9)), ...) {
+  res = max(c(amt::extent_max(x) / 100, 1e-9))
 
   checkmate::assert_number(factor, lower = 1)
   checkmate::assert_number(res, lower = 1e-10)
 
-  me <- extent_max(x)
+  me <- amt::extent_max(x)
   bu <- me * factor - me
-  raster::raster(amt::bbox(x, buffer = bu), res = res)
-
-
+  terra::rast(terra::vect(amt::bbox(x, buffer = bu)), res = res)
 }

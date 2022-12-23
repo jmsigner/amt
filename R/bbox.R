@@ -1,8 +1,7 @@
 #' Get bounding box of a track.
 #' @template track_xy_star
-#' @param spatial `[logical(1)=TRUE]` \cr Whether or not to return a `SpatialPolygons`-object or not.
+#' @param spatial `[logical(1)=TRUE]` \cr Whether or not to return an object of class `sf-Polygon`-object or not.
 #' @param buffer `[numeric(0)=NULL]{NULL, >0}` \cr An optional buffer of the bounding box.
-#' @param sf `[logical(1)=FALSE]` \cr If `TRUE` a simple feature polygon is returned.
 #' @template dots_none
 #' @name bbox
 #' @return If `spatial = FALSE` a named vector of length four with the extent of the bounding box. Otherwise a `SpatialPolygon` or a simple freature polygon with the bounding box.
@@ -18,8 +17,8 @@
 #' deer %>% steps_by_burst %>% bbox(buffer = 100, spatial = FALSE)
 #' deer %>% steps_by_burst %>% random_steps %>% bbox(spatial = FALSE)
 #'
-#' # There is also the option to return a `sf`-object and then work with this further.
-#' deer %>% bbox(sf = TRUE) %>% sf::st_transform(4326)
+#' # Further manipulatoin are possible
+#' deer %>% sf::st_transform(4326)
 
 bbox <- function(x, ...) {
   UseMethod("bbox", x)
@@ -29,7 +28,7 @@ bbox <- function(x, ...) {
 #' @rdname bbox
 bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...) {
   bbx <- c(min(x$x_), max(x$x_), min(x$y_), max(x$y_))
-  bbox_base(bbx, spatial, buffer, sf, x)
+  bbox_base(bbx, spatial, buffer, x)
 }
 
 #' @export
@@ -39,14 +38,10 @@ bbox.steps_xy <- function(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...) {
            max(c(max(x$x1_), max(x$x2_))),
            min(c(min(x$y1_), min(x$y2_))),
            max(c(max(x$y1_), max(x$y2_))))
-  bbox_base(bbx, spatial, buffer, sf, x)
+  bbox_base(bbx, spatial, buffer, x)
 }
 
-bbox_base <- function(bbx, spatial, buffer, sf, x) {
-  if (sf && !spatial) {
-    warning("spatial has precedence over sf.")
-  }
-
+bbox_base <- function(bbx, spatial, buffer, x) {
   # bounds
   if (!is.null(buffer)) {
     bbx <- bbx + buffer * c(-1, 1, -1, 1)
@@ -64,11 +59,7 @@ bbox_base <- function(bbx, spatial, buffer, sf, x) {
   }
 
   if (spatial) {
-    if (sf) {
-      p
-    } else {
-      sf::as_Spatial(p)
-    }
+    p
   } else {
     sf::st_bbox(p)
   }
