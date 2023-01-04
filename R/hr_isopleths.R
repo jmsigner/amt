@@ -2,7 +2,7 @@
 #'
 #' Obtain the isopleths of a home-range estimate, possible at different isopleth levels.
 #' @param x An object of class `hr`
-#' @param level `[numeric]` \cr The isopleth levels used for calculating home
+#' @param levels `[numeric]` \cr The isopleth levels used for calculating home
 #'   ranges. Should be `0 < level < 1`.
 #' @param conf.level The confidence level for isopleths for `aKDE`.
 #' @param descending `[logical = TRUE]` \cr Indicating if levels (and thus the polygons) should be ordered in descending (default) or not.
@@ -16,70 +16,30 @@ hr_isopleths <- function (x, ...) {
 
 #' @export
 #' @rdname hr_isopleths
-hr_isopleths.RasterLayer <- function (x, level, descending = TRUE, ...) {
-  con <- raster::rasterToContour(hr_cud(x), level = level)
-  b <- sp::coordinates(con)
+hr_isopleths.SpatRaster <- function (x, levels, descending = TRUE, ...) {
 
-  # make sure there are at least 2 points
-  b <- lapply(b, function(x) Filter(function(x) nrow(x) > 2, x))
-
-  # Make spatial polyons
-  # Complete ring and create each Polygon
-  con <- lapply(b, function(x) {
-    if (length(x) == 1) {
-      lapply(x, function(xx) sp::Polygon(rbind(xx, xx[1,])[, 1:2], hole = FALSE))
-    } else {
-      bb <- sp::SpatialPolygons(lapply(seq(length(x)), function(i)
-        sp::Polygons(list(sp::Polygon(rbind(x[[i]], x[[i]][1, ])[, 1:2])), i)))
-      if (any((tm <- rgeos::gIntersects(bb, byid = TRUE))[upper.tri(tm)])) {
-
-        # some polygons intersect find out which and set as wholes
-        pos <- expand.grid(b=1:length(bb), s = 1:length(bb))
-        holes <- rep(FALSE, length(bb))
-
-        for (i in 1:nrow(pos)) {
-          if (rgeos::gContainsProperly(bb[pos[i,1]], bb[pos[i,2]])) {
-
-            # second poly is contained by the first
-            holes[pos[i,2]] <- TRUE
-          }
-        }
-        lapply(seq_along(x), function(i)
-          sp::Polygon(rbind(x[[i]], x[[i]][1,])[, 1:2], hole=holes[i]))
-      } else {
-        lapply(x, function(xx) sp::Polygon(rbind(xx, xx[1,])[, 1:2], hole=FALSE))
-      }
-    }
-  })
-
-  # Check holes, if more than 1 poly, make sp polygons, then check wholes
-  # create a list of Polygons for each level
-  con <- lapply(seq_along(con), function(i) sp::Polygons(con[[i]], i))
-  con <- sp::SpatialPolygons(con)
-
-  df <- data.frame(
-    level = level,
-    what = "estimate")
-  row.names(df) <- 1:length(level)
-  con <- sp::SpatialPolygonsDataFrame(con, df)
-
+  con <- terra::as.contour(hr_cud(x), levels = levels)
   con <- sf::st_as_sf(con)
-  con$area <- sf::st_area(con)
-  # Set projection
-  sf::st_crs(con) <- if (is.null(attr(x, "crs_"))) {
-    raster::projection(x)}
-  else {
-    attr(x, "crs_")
-  }
+  suppressWarnings(con <- sf::st_cast(con, "POLYGON"))
+
 
   # Add area
   con$area <- sf::st_area(con)
+  con$what <- "estimate"
   con <- con[, c("level", "what", "area", "geometry")]
+
+  # Set projection
+  sf::st_crs(con) <- if (is.null(attr(x, "crs_"))) {
+    raster::projection(x)
+  } else {
+    attr(x, "crs_")
+  }
 
   if (descending) {
     con[order(con$level, decreasing = TRUE), ]
   }
 
+  con
 }
 
 #' @export

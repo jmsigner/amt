@@ -1,8 +1,8 @@
-#' Obtain the utilization distribution of a probabilistic home range
+#' Obtain the utilization distribution of a probabilistic home-range estimate
 #'
 #' @param x `[hr_prob]` The home-range estimate
 #' @template dots_none
-#' @return `RasterLayer`
+#' @return `SpatRaster`
 
 #' @export
 hr_ud <- function(x, ...) {

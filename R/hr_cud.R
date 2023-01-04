@@ -14,13 +14,13 @@ hr_cud <- function (x, ...) {
 
 #' @export
 #' @rdname cum_ud
-hr_cud.RasterLayer <- function(x, ...) {
+hr_cud.SpatRaster <- function(x, ...) {
   r1 <- x
-  v <- raster::getValues(r1)
+  v <- terra::values(r1)
   v <- v / sum(v, na.rm = TRUE)  # standarize
-  udFromDat <- raster::setValues(r1, v)
   v <- cumsum(v[order(-v)])[order(order(-v))]
-  raster::setValues(r1, v)
+  terra::values(r1) <- v
+  r1
 }
 
 #' @export
