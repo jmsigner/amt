@@ -1,5 +1,5 @@
 # Simulate data
-library(raster)
+library(terra)
 library(lubridate)
 library(amt)
 
@@ -11,13 +11,14 @@ trk1 <- make_track(trk, x, y)
 trk2 <- make_track(trk, x, y, ts)
 
 # env covars
-r <- stack(map(1:15,
-    ~ raster(xmn = -100, xmx = 100, ymn = -100, ymx = 100,
+r <- rast(map(1:15,
+    ~ rast(xmin = -100, xmax = 100, ymin = -100, ymax = 100,
              res = 1, vals = runif(4e4, ., . + 1))))
 
 r1 <- r[[1]]
-r2 <- stack(r1, r1)
-rt <- setZ(r, ymd_hm("2019-01-01 00:00") + hours(0:14))
+r2 <- r[[1:2]]
+rt <- r
+time(rt) <- ymd_hm("2019-01-01 00:00") + hours(0:14)
 
 # track_xy
 expect_equal(ncol(extract_covariates(trk1, r1)), 3)
@@ -36,8 +37,8 @@ expect_equal(ncol(extract_covariates(rp, r2)), 5)
 expect_equal(ncol(extract_covariates(rp, rt)), 18)
 
 # steps
-s1 <- trk1 %>% steps()
-s2 <- trk2 %>% steps()
+s1 <- trk1 |> steps()
+s2 <- trk2 |> steps()
 
 expect_equal(ncol(extract_covariates(s1, r1, where = "start")), 8)
 expect_equal(ncol(extract_covariates(s1, r1, where = "end")), 8)

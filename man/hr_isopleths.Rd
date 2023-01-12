@@ -2,7 +2,7 @@
 % Please edit documentation in R/hr_isopleths.R
 \name{hr_isopleths}
 \alias{hr_isopleths}
-\alias{hr_isopleths.RasterLayer}
+\alias{hr_isopleths.SpatRaster}
 \alias{hr_isopleths.mcp}
 \alias{hr_isopleths.locoh}
 \alias{hr_isopleths.hr_prob}
@@ -11,7 +11,7 @@
 \usage{
 hr_isopleths(x, ...)
 
-\method{hr_isopleths}{RasterLayer}(x, level, descending = TRUE, ...)
+\method{hr_isopleths}{SpatRaster}(x, levels, descending = TRUE, ...)
 
 \method{hr_isopleths}{mcp}(x, descending = TRUE, ...)
 
@@ -26,7 +26,7 @@ hr_isopleths(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{level}{\verb{[numeric]} \cr The isopleth levels used for calculating home
+\item{levels}{\verb{[numeric]} \cr The isopleth levels used for calculating home
 ranges. Should be \verb{0 < level < 1}.}
 
 \item{descending}{\verb{[logical = TRUE]} \cr Indicating if levels (and thus the polygons) should be ordered in descending (default) or not.}

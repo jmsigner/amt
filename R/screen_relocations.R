@@ -80,8 +80,8 @@ round_one <- function(i, df, win, what){
 #sqrt((deer$y_[15] - rolling_median(deer$y_[1:30], 5))^2)
 #sqrt((deer$x_[15] - rolling_median(deer$x_[1:30], 5))^2)
 #
-#deer %>% mutate(
-#  screening_flag = ifelse(sqrt(((x_ - rolling_median(x_, 5))^2 + (y_ - rolling_median(y_, 5))^2)) > median_crit, 1, 0)) %>%
+#deer |> mutate(
+#  screening_flag = ifelse(sqrt(((x_ - rolling_median(x_, 5))^2 + (y_ - rolling_median(y_, 5))^2)) > median_crit, 1, 0)) |>
 #  mutate(
 #    screening_flag = case_when(
 #      screening_flag == 0 ~ ifelse(sqrt((x_ - rolling_mean(x_, 10))^2 + (y_ - rolling_mean(y_, 10))^2) > mean_crit, 2, screening_flag)),

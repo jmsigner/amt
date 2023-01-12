@@ -1,21 +1,18 @@
 #' @importFrom dplyr arrange filter group_by select summarize summarise ungroup rename
-#' @importFrom dplyr distinct ungroup mutate mutate_at pull %>% bind_rows select_vars n
+#' @importFrom dplyr distinct ungroup mutate mutate_at pull bind_rows select_vars n
 #' @importFrom graphics plot legend lines par points
 #' @importFrom grDevices adjustcolor
-#' @importFrom lubridate hours minutes seconds now days weeks
-#' @importFrom magrittr %>%
+#' @importFrom lubridate hours minutes seconds now days weeks %within%
 #' @importFrom stats coef dgamma median na.omit qgamma quantile runif sd var formula reformulate qnorm
 #' @importFrom tidyr nest unnest
 #' @importFrom tibble tibble tribble is_tibble as_tibble
 #' @importFrom utils data head tail
 #' @importFrom sf NA_crs_
-#' @importFrom sp CRS
 #' @importFrom stats dexp qexp terms predict
 #' @importFrom methods as is
 #' @importFrom purrr map map_int
 #' @importFrom Rcpp evalCpp
 #' @importFrom rlang quo quos enquo quo_name
-#' @importFrom raster raster
 #' @import survival
 #' @import Rdpack
 #' @export

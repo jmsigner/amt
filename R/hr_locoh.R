@@ -56,7 +56,9 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     zz
   })
   names(zz) <- seq_along(zz)
-  bb <- data.table::rbindlist(zz, idcol = "id")
+  # data.table would be much faster here, but decided against it, otherwise would have another dependency.
+  # bb <- data.table::rbindlist(zz, idcol = "id")
+  bb <- dplyr::bind_rows(zz, .id = "id")
   mp <- sfheaders::sf_multipoint(
     bb, x = "x_", y = "y_", multipoint_id = "id")
   mcps <- sf::st_convex_hull(mp) |> sf::st_buffer(dist = rand_buffer)
@@ -82,37 +84,17 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
   qq <- list()
   qq[[1]] <- mm[[1]]
 
-  ## Continue here
   wlevel <- sapply(levels, function(l) which.min(abs(pp - l)))
   for (i in seq_along(wlevel)) {
-    ## buffer is necessary, to overcome some topology errors if the polygon is quasi a line
-    #p1 <- lapply(1:wlevel[i], function(i) sp::Polygon(mm[[i]]@polygons[[1]]@Polygons[[1]]@coords))
-    p1 <- mm[1:wlevel[i], ]
-
-   # p2 <- lapply(seq_along(p1), function(i) sp::Polygons(p1[i], ID = i))
-   # ff <- sp::SpatialPolygons(p2)
-   # ff <- if (length(ff@polygons) == 1) {
-   #   ff
-   # } else {
-   #   rgeos::gUnaryUnion(ff)
-   # }
-   # qq[[i]] <- sf::st_union(sf::st_as_sf(ff), by_feature=TRUE)
-    qq[[i]] <- sf::st_union(p1, by_feature = FALSE)
+    qq[[i]] <- sf::st_union(mm[1:wlevel[i], ], by_feature = FALSE)
   }
 
- # rr <- do.call(rbind, qq)
-
-  #qq2 <- cbind(level = round(pp[wlevel], 2), what = "estimate",
-               #area = sf::st_area(rr), rr)
 
   qq2 <- sf::st_sf(
     level = round(pp[wlevel], 2),
     what = "estimate",
     geometry = sf::st_sfc(unlist(qq, recursive = FALSE))
   )
-
-  # Add area
-  qq2$area <- sf::st_area(qq2)
 
   # Add CRS
   if (!is.null(attr(x, "crs_"))) {
@@ -121,7 +103,10 @@ hr_locoh.track_xy <- function(x, n = 10, type = "k", levels = 0.95, keep.data = 
     sf::st_crs(rr) <- get_crs(x)
   }
 
-  out <- list(locoh = qq2,
+  # Add area
+  qq2$area <- sf::st_area(qq2)
+
+  out <- list(locoh = qq2[, c("level", "what", "area", "geometry")],
               levels = levels, type = type, n = n, estimator = "locoh",
               crs = get_crs(x),
               data = if (keep.data) x else NULL)

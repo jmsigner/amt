@@ -15,14 +15,6 @@ hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
     warning("Brownian motion was chosen as movement model, akde will not work")
   }
 
-  ##
-  x <- deer
-  model = fit_ctmm(x, "iid")
-  keep.data = TRUE
-  trast = make_trast(x)
-  levels = 0.95
-  ##
-
   suppressMessages(suppressWarnings(dat <- as_telemetry(x)))
   ud <- ctmm::akde(dat, model)
 

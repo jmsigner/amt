@@ -41,8 +41,8 @@ hr_overlap.hr <- function(x, y, type = "hr", conditional = FALSE, ...) {
       yud <- hr_ud(y)
 
       # Check that both are of the same raster extent
-      if (identical(raster::extent(xud), raster::extent(yud)) &
-          all(raster::res(xud) == raster::res(yud))) {
+      if (identical(terra::ext(xud), terra::ext(yud)) &
+          all(terra::res(xud) == terra::res(yud))) {
 
         # Do I have to get conditional uds?
         if (conditional) {
@@ -169,17 +169,17 @@ hr_overlap.list <- function(
   grid <- if (which == "consecutive") {
     tibble(from = nn[-length(nn)], to = nn[-1])
   } else if (which == "all") {
-    tidyr::expand_grid(from = nn, to = nn) %>%
+    tidyr::expand_grid(from = nn, to = nn) |>
       dplyr::filter(from != to)
   } else if (which == "one_to_all") {
     tibble(from = nn[1], to = nn[-1])
   }
 
 
-  grid %>%
+  grid |>
     dplyr::mutate(overlap = purrr::map2(from, to, function(i, j) {
       hr_overlap(x[[i]], x[[j]], type = type, conditional = conditional)
-    })) %>%
+    })) |>
     tidyr::unnest(cols = "overlap")
 }
 
@@ -224,10 +224,10 @@ hr_overlap_feature <- function(x, sf, direction = "hr_with_feature", feature_nam
   names_sf <- if(is.null(feature_names)) 1:nrow(sf) else feature_names
 
   if (direction == "hr_with_feature") {
-    hr_feature(hr_isopleths(x), sf) %>%
+    hr_feature(hr_isopleths(x), sf) |>
       mutate(from = names_hr[from], to = names_sf[to])
   } else if (direction == "feature_with_hr") {
-    hr_feature(sf, hr_isopleths(x)) %>%
+    hr_feature(sf, hr_isopleths(x)) |>
       mutate(from = names_sf[from], to = names_hr[to])
   }
 }

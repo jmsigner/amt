@@ -18,9 +18,9 @@ expect_equal({set.seed(123); rexp(10, 0.5)},
 
 # fitted models
 data(deer)
-d2 <- deer %>% steps_by_burst() %>% mutate(a = 1, b = 2) %>%
+d2 <- deer |> steps_by_burst() |> mutate(a = 1, b = 2) |>
   random_steps()
-d3 <- d2 %>% fit_clogit(case_ ~ sl_ + strata(step_id_))
+d3 <- d2 |> fit_clogit(case_ ~ sl_ + strata(step_id_))
 
 expect_equal(sl_distr_name(d2), "gamma")
 expect_equal(ta_distr_name(d2), "vonmises")

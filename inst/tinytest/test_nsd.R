@@ -1,8 +1,8 @@
 data(deer)
 
-nsd0 <- deer %>% nsd()
-nsd1 <- deer %>% add_nsd()
-nsd2 <- deer %>% steps() %>% add_nsd()
+nsd0 <- deer |> nsd()
+nsd1 <- deer |> add_nsd()
+nsd2 <- deer |> steps() |> add_nsd()
 
 expect_true(is(nsd0, "numeric"))
 expect_true(is(nsd1, "data.frame"))

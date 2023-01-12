@@ -71,7 +71,7 @@ tr4
 
 ### Coordinate reference system
 
-`make_track` has one further optional argument (`crs`), which allows the user to set a coordinate reference system (CRS) of the track. The CRS needs to be provided as valid `proj4string`, see the documentation of `sp::CRS` for further details. 
+`make_track` has one further optional argument (`crs`), which allows the user to set a coordinate reference system (CRS) of the track. The CRS needs to be provided as valid EPSG code.
 
 ### An example with one real animal
 
@@ -122,7 +122,7 @@ The column names of the data set already indicate the CRS of the data. We can ad
 
 ```{r}
 tr1 <- make_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month, 
-                crs = sp::CRS("+init=epsg:31467"))
+                crs = 31467)
 ```
 
 ### A note on pipes (`%>%`)
@@ -138,7 +138,7 @@ tr2 <- sh %>% filter(complete.cases(.)) %>%
   ) %>% 
   filter(!duplicated(ts)) %>% 
   make_track(x_epsg31467, y_epsg31467, ts, id = id, month = month, 
-           crs = sp::CRS("+init=epsg:31467"))
+           crs = 31467)
 tr2
 ```
 
@@ -162,7 +162,7 @@ class(tr3)
 If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper around `sp::spTransform`). For illustration, we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
 
 ```{r}
-transform_coords(tr2, sp::CRS("+init=epsg:4326"))
+transform_coords(tr2, 4326)
 ```
 
 ### Some initial data exploration

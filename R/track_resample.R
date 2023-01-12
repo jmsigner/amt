@@ -52,10 +52,10 @@ filter_min_n_burst.track_xy <- function(x, min_n = 3, ...) {
     stop("column 'burst_' not found.")
   }
   #pred <- lazyeval::interp(~ col >= min_n, col = as.name("n"))
-  x_select <- group_by(x, !!quo(burst_)) %>% summarise(n = n()) %>%
+  x_select <- group_by(x, !!quo(burst_)) |> summarise(n = n()) |>
     filter(!!quo(n >= min_n))
   #pred <- lazyeval::interp(~ col %in% x_select$burst_, col = as.name("burst_"))
-  #x %>% filter_(pred)
+  #x |> filter_(pred)
   xx <- x[x$burst_ %in% x_select$burst_, ]
   class(xx) <- class(x)
   xx

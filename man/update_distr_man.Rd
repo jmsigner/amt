@@ -53,10 +53,10 @@ their selection-free movement distributions.
 # Fit an SSF, then update movement parameters.
 
  #Prepare data for SSF
-ssf_data <- deer \%>\%
-  steps_by_burst() \%>\%
-  random_steps(n = 15) \%>\%
-  extract_covariates(sh_forest) \%>\%
+ssf_data <- deer |>
+  steps_by_burst() |>
+  random_steps(n = 15) |>
+  extract_covariates(sh_forest) |>
   mutate(forest = factor(sh.forest, levels = 1:2,
                     labels = c("forest", "non-forest")),
   cos_ta_ = cos(ta_),
@@ -69,7 +69,7 @@ attr(ssf_data, "sl_")
 attr(ssf_data, "ta_")
 
 # Fit an iSSF (note model = TRUE necessary for predict() to work)
-m1 <- ssf_data \%>\%
+m1 <- ssf_data |>
   fit_issf(case_ ~ forest * (sl_ + log_sl_ + cos_ta_) +
                strata(step_id_), model = TRUE)
 

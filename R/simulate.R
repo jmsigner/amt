@@ -27,11 +27,26 @@ make_issf_model <- function(
   )
 }
 
+#' Create an initial step for simulations
+#'
+#' An initial step for simulations. This step can either be created by defining a step from
+#' scratch or by using an observed step.
+#'
+#' @param x `[steps_xyt,numeric(2)]` \cr A step of class `steps_xyt` or the start coordinates..
+#' @param ta_ `[numeric(1)]{0}` \cr The initial turn-angle.
+#' @param time `[POSIXt(1)]{Sys.time()}` \cr The timestamp when the simulation
+#'   starts.
+#' @param dt `[Period(1)]{hours(1)}` \cr The sampling rate of the
+#'   simulations.
+#' @template dots_none
+#' @name make_start
+#'
 #' @export
 make_start <- function(x, ...) {
   UseMethod("make_start")
 }
 
+#' @rdname make_start
 #' @export
 make_start.numeric <- function(
   x = c(0, 0),
@@ -46,6 +61,7 @@ make_start.numeric <- function(
   out
 }
 
+#' @rdname make_start
 #' @export
 make_start.steps_xyt <- function(x, ...) {
   if (nrow(x) > 1) {
@@ -64,10 +80,22 @@ wrap_angle <- function(x) {
   ifelse(x > pi, x - (2*pi), x)
 }
 
+#' Get the maximum distance
+#'
+#' Helper function to get the maximum distance from a fitted model.
+#'
+#' @export
+#' @name get_max_dist
+
 get_max_dist <- function(x, ...) {
   UseMethod("get_max_dist")
 }
 
+#' @param x `[fitted_issf]` \cr A fitted integrated step-selection function.
+#' @param p `[numeric(1)]{0.99}` The quantile of the step-length distribution.
+#' @template dots_none
+#' @export
+#' @rdname get_max_dist
 get_max_dist.fit_clogit <- function(x, p = 0.99, ...) {
   checkmate::assert_number(p, lower = 0, upper = 1)
   ceiling(do.call(paste0("q", x$sl_$name), c(list("p" = p), x$sl_$params)))
@@ -82,21 +110,6 @@ get_max_dist.fit_clogit <- function(x, p = 0.99, ...) {
 #' @param ta_model Turning angle model to use
 #' @return Simulated trajectory
 #' @export
-
-# Old documentation
-# #' @param object Model object
-# #' @param initial.step First step
-# #' @param start.t Start time
-# #' @param delta_t Step duration
-# #' @param map Environmental layers
-# #' @param fun Function to build environmental predictors
-# # #' @param n_steps How many steps to simulate
-# #' @param n.control How many alternative steps are considered each step
-# #' @param sl_model Step length model to use
-# #' @param ta_model Turning angle model to use
-# #' @return Simulated trajectory
-# #' @export
-# #'
 
 random_steps_simple <- function(start, sl_model, ta_model, n.control) {
 
@@ -167,19 +180,19 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
 
 kernel_setup <- function(template, max.dist = 100, start) {
 
-  checkmate::assert_class(template, "RasterStack")
+  checkmate::assert_class(template, "SpatRaster")
   checkmate::assert_number(max.dist, lower = 0)
   checkmate::assert_class(start, "sim_start")
 
   p <- sf::st_sf(
-    geom = sf::st_sfc(sf::st_point(as.numeric(start[, c("x_", "y_")])))) %>%
+    geom = sf::st_sfc(sf::st_point(as.numeric(start[, c("x_", "y_")])))) |>
     sf::st_buffer(dist = max.dist)
 
   # 2. Rasterize buffer
-  r1 <- raster::rasterize(p, raster::crop(template, p))
+  r1 <- terra::rasterize(terra::vect(p), terra::crop(template, p))
 
   # 3. Get xy from buffer
-  xy <- raster::rasterToPoints(r1)
+  xy <- terra::as.points(r1)
 
   k <- tibble(
     x = xy[, 1],
@@ -189,12 +202,31 @@ kernel_setup <- function(template, max.dist = 100, start) {
 
   k$sl_ = sqrt((k$x - start$x_[1])^2 + (k$y - start$y_[1])^2)
 
-  k <- data.frame(k, "x1_" = start$x_[1], "y1_" = start$y_[1]) %>%
+  k <- data.frame(k, "x1_" = start$x_[1], "y1_" = start$y_[1]) |>
     dplyr::rename(x2_ = x, y2_ = y)
   class(k) <- c("steps_xy", "data.frame")
   k
 }
 
+#' Create a redistribution kernel
+#'
+#' From a fitted integrated step-selection function for a given position a
+#' redistribution kernel is calculated (i.e., the product of the movement kernel
+#' and the selection function).
+#
+#' @param x `[fit_issf]` \cr A fitted integrated step-selection function. Generated either with `fit_issf()` or make `make_issf_model()`.
+#' @param start `[sim_start]` \cr The start position in space and time. See `make_start()`.
+#' @param map `[SpatRaster]` \cr A SpatRaster stack with all covariates.
+#' @param fun `[function]` \cr A function that is executed on each location of the redistribution kernel. The default function is `extract_covariates()`.
+#' @param max.dist `[numeric(1)]` \cr The maximum distance of the redistribution kernel.
+#' @param n.control `[integer(1)]{1e6}` \cr The number of points of the redistribution kernel (this is only important if `stochastic = TRUE`).
+#' @param n.sample `[integer(1)]{1}` \cr The number of points sampled from the redistribution kernel (this is only important if `as.rast = FALSE`).
+#' @param stochastic `[logical(1)]{FALSE}` \cr If `TRUE` the redistribution kernel is sampled using a random sample of size `n.control`. Otherwise each cell in the redistribution kernel is used.
+#' @param normalize `[logical(1)]{TRUE}` \cr If `TRUE` the redistribution kernel is normalized to sum to one.
+#' @param interpolate `[logical(1)]{FALSE}` \cr If `TRUE` a stochastic redistribution kernel is interpolated to return a raster layer. Note, this is just for completeness and is computationally inefficient in most situations.
+#' @param as.rast `[logical(1)]{TRUE}` \cr If `TRUE` a `SpatRaster` should be returned.
+#' @param tolerance.outside `[numeric(1)]{0}` \cr The proportion of the redistribution kernel that is allowed to be outside the `map`.
+#'
 #' @export
 
 redistribution_kernel <- function(
@@ -209,7 +241,7 @@ redistribution_kernel <- function(
   stochastic = FALSE,
   normalize = TRUE,
   interpolate = FALSE,
-  as.raster = TRUE,
+  as.rast = TRUE,
   tolerance.outside = 0) {
 
   arguments <- as.list(environment())
@@ -226,7 +258,7 @@ redistribution_kernel <- function(
     stochastic = x$args$stochastic
     normalize = TRUE
     interpolate = FALSE
-    as.raster = FALSE
+    as.rast = FALSE
     tolerance.outside = x$args$tolerance.outside
   }
 
@@ -240,9 +272,11 @@ redistribution_kernel <- function(
   }
 
   # Check for the fraction of steps that is outside the landscape
-  bb.map <- raster::bbox(map)
-  fraction.outside <- mean(xy$x2_ < bb.map[1, 1] | xy$x2_ > bb.map[1, 2] |
-                             xy$y2_ < bb.map[2, 1] | xy$y2_ > bb.map[2, 2])
+  bb.map <- as.vector(terra::ext(map))
+  fraction.outside <- mean(
+    xy$x2_ < bb.map["xmin"] | xy$x2_ > bb.map["xmax"] |
+      xy$y2_ < bb.map["ymin"] | xy$y2_ > bb.map["ymax"]
+  )
   if (fraction.outside > tolerance.outside) {
     warning(paste0(round(fraction.outside * 100, 2),
                    "% of steps are ending outside the study area but only ",
@@ -261,20 +295,18 @@ redistribution_kernel <- function(
   w <- ssf_weights(xy, x, compensate.movement = !stochastic)
 
   ## Should we also provide an option for returning just a single step?
-  r <- if (!as.raster) {
-    xy[sample.int(nrow(xy), size = n.sample, prob = w), ] %>%
+  r <- if (!as.rast) {
+    xy[sample.int(nrow(xy), size = n.sample, prob = w), ] |>
       dplyr::select(x_ = x2_, y_ = y2_, t_)
   } else {
     if (stochastic) {
-      rasterize(
-        xy[, c("x2_", "y2_")], w,
-        as.numeric(start$x_[1], start$y_[1]), map, max.dist, interpolate)
+      stop("Not implemented")
     } else {
-      raster::rasterFromXYZ(data.frame(xy[, c("x2_", "y2_")], w))
+      terra::rast(data.frame(xy[, c("x2_", "y2_")], w))
     }
   }
 
-  if (as.raster & normalize) {
+  if (as.rast & normalize) {
     r <- normalize(r)
   }
 
@@ -286,26 +318,24 @@ redistribution_kernel <- function(
   res
 }
 
-rasterize <- function(xy, w, position, map, max.dist, interpolate = FALSE) {
-  w <- tibble::tibble(
-    x = xy$x2_,
-    y = xy$y2_,
-    w = w
-  )
-  weights <- sf::st_as_sf(w, coords = c("x", "y"))
-  p <- sf::st_sf(geom = sf::st_sfc(sf::st_point(position))) %>%
-    sf::st_buffer(dist = max.dist)
-  rr <- raster::crop(raster(map, 1), p)
-  rr <- raster::rasterize(p, rr)
-  r1 <- raster::rasterize(weights, rr, field = "w", fun = sum, background = 0)
-  r1 <- raster::mask(r1, rr)
-  r1
-}
+# rasterize <- function(xy, w, position, map, max.dist, interpolate = FALSE) {
+#   w <- tibble::tibble(
+#     x = xy$x2_,
+#     y = xy$y2_,
+#     w = w
+#   )
+#   weights <- sf::st_as_sf(w, coords = c("x", "y"))
+#   p <- sf::st_sf(geom = sf::st_sfc(sf::st_point(position))) |>
+#     sf::st_buffer(dist = max.dist)
+#   rr <- raster::crop(raster(map, 1), p)
+#   rr <- raster::rasterize(p, rr)
+#   r1 <- raster::rasterize(weights, rr, field = "w", fun = sum, background = 0)
+#   r1 <- raster::mask(r1, rr)
+#   r1
+# }
 
 normalize <- function(x) {
-  x / sum(raster::getValues(x), na.rm = TRUE)
-  #  raster::setValues(x, raster::getValues(x) /
-  #                      sum(raster::getValues(x), na.rm = TRUE))
+  x / sum(x[], na.rm = TRUE)
 }
 
 
@@ -320,17 +350,30 @@ movement_kernel1 <- function(x, sl.model, ta.model) {
   phi
 }
 
+#' Simulate a movement trajectory.
+#'
+#' Function to simulate a movement trajectory (path) from a redistribution kernel.
+#' @param x `[redstirubtion_kernel(1)]` \cr An object of class `redistribution_kernel`.
+#' @template dots_none
+#' @name simulate_path
+#'
+#'
 #' @export
 simulate_path <- function(x, ...) {
   UseMethod("simulate_path")
 }
 
 #' @export
+#' @rdname simulate_path
 simulate_path.default <- function(x, ...) {
   message("Please pass a redistribution kernel.")
 }
 
+#' @param n.steps `[integer(1)]{100}` \cr The number of simulation steps.
+#' @param start `[sim_start]` \cr The starting point in time and space for the simulations (see `make_start()`).
+#' @param verbose `[logical(1)]{FALSE}` If `TRUE` progress of simulations is displayed.
 #' @export
+#' @rdname simulate_path
 simulate_path.redistribution_kernel <- function(
   x, n.steps = 100, start = x$args$start, verbose = FALSE, ...) {
 
@@ -362,7 +405,7 @@ simulate_path.redistribution_kernel <- function(
       stochastic = mod$stochastic,
       normalize = TRUE,
       interpolate = FALSE,
-      as.raster = FALSE,
+      as.rast = FALSE,
       tolerance.outside = mod$tolerance.outside
     )$redistribution.kernel
 

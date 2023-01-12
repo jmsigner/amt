@@ -2,8 +2,9 @@
 % Please edit documentation in R/coercion.R
 \name{coercion}
 \alias{coercion}
+\alias{as_sf}
+\alias{as_sf.steps_xy}
 \alias{as_sp}
-\alias{as_sp.steps_xy}
 \alias{as_move}
 \alias{as_move.track_xyt}
 \alias{as_ltraj}
@@ -15,9 +16,11 @@
 \alias{as_moveHMM.track_xy}
 \title{Coerce a track to other formats.}
 \usage{
-as_sp(x, ...)
+as_sf(x, ...)
 
-\method{as_sp}{steps_xy}(x, end = TRUE, ...)
+\method{as_sf}{steps_xy}(x, end = TRUE, ...)
+
+as_sp(x, ...)
 
 as_move(x, ...)
 

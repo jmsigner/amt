@@ -13,12 +13,12 @@
 #' bbox(deer, buffer = 100, spatial = FALSE)
 #'
 #' # For steps
-#' deer %>% steps_by_burst %>% bbox(spatial = FALSE)
-#' deer %>% steps_by_burst %>% bbox(buffer = 100, spatial = FALSE)
-#' deer %>% steps_by_burst %>% random_steps %>% bbox(spatial = FALSE)
+#' deer |> steps_by_burst() |> bbox(spatial = FALSE)
+#' deer |> steps_by_burst() |> bbox(buffer = 100, spatial = FALSE)
+#' deer |> steps_by_burst() |> random_steps() |> bbox(spatial = FALSE)
 #'
-#' # Further manipulatoin are possible
-#' deer %>% sf::st_transform(4326)
+#' # Further manipulations are possible
+#' deer |> bbox() |> sf::st_transform(4326)
 
 bbox <- function(x, ...) {
   UseMethod("bbox", x)
@@ -26,14 +26,14 @@ bbox <- function(x, ...) {
 
 #' @export
 #' @rdname bbox
-bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...) {
+bbox.track_xy <- function(x, spatial = TRUE, buffer = NULL, ...) {
   bbx <- c(min(x$x_), max(x$x_), min(x$y_), max(x$y_))
   bbox_base(bbx, spatial, buffer, x)
 }
 
 #' @export
 #' @rdname bbox
-bbox.steps_xy <- function(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...) {
+bbox.steps_xy <- function(x, spatial = TRUE, buffer = NULL, ...) {
   bbx <- c(min(c(min(x$x1_), min(x$x2_))),
            max(c(max(x$x1_), max(x$x2_))),
            min(c(min(x$y1_), min(x$y2_))),

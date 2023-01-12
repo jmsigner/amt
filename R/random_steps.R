@@ -80,20 +80,20 @@ random_steps.steps_xy <- function(
   for_rand$sl_ <- xx[, "sl_"]
 
   for_rand <- dplyr::left_join(
-    for_rand %>% dplyr::mutate(step_id_1 = step_id_ - 1),
+    for_rand |> dplyr::mutate(step_id_1 = step_id_ - 1),
       dplyr::select(x, x0_ = x1_, y0_ = y1_, step_id_),
     by = c("step_id_1" = "step_id_"))
 
-  for_rand <- for_rand %>% dplyr::mutate(
+  for_rand <- for_rand |> dplyr::mutate(
     abs.dir1 = atan2(y1_ - y0_, x1_ - x0_),
     abs.dir2 = atan2(y2_ - y1_, x2_ - x1_),
     rel.dir = abs.dir2 - abs.dir1,
     rel.dir = ifelse(rel.dir <= -pi, rel.dir + 2 * pi, rel.dir),
-    rel.dir = ifelse(rel.dir >= pi, rel.dir - 2 * pi, rel.dir)) %>%
-    dplyr::select(-abs.dir1, -abs.dir2, -x0_, -y0_, -ta_, -step_id_1) %>%
+    rel.dir = ifelse(rel.dir >= pi, rel.dir - 2 * pi, rel.dir)) |>
+    dplyr::select(-abs.dir1, -abs.dir2, -x0_, -y0_, -ta_, -step_id_1) |>
     dplyr::rename(ta_ = rel.dir)
 
-  out <- dplyr::bind_rows(x, for_rand) %>%
+  out <- dplyr::bind_rows(x, for_rand) |>
     dplyr::filter(step_id_ > 1)
   out <- dplyr::arrange(out, step_id_)
   out[["direction_p"]] <- NULL
@@ -143,7 +143,7 @@ plot.random_steps <- function(x, ...) {
 #' mini_deer <- deer[1:4, ]
 #'
 #' # The first step is removed, because we have `NA` turn angles.
-#' mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata() %>%
+#' mini_deer |> steps() |> random_steps() |> remove_incomplete_strata() |>
 #'   select(case_, ta_, step_id_)
 
 #' @export

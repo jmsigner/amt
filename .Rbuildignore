@@ -18,3 +18,5 @@ dev/*
 experimental/*
 ^\.github$
 ^data-raw$
+^doc$
+^Meta$

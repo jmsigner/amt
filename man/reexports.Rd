@@ -13,7 +13,6 @@
 \alias{distinct}
 \alias{mutate}
 \alias{pull}
-\alias{CRS}
 \alias{hours}
 \alias{minutes}
 \alias{seconds}
@@ -27,9 +26,7 @@
 \alias{nest}
 \alias{unnest}
 \alias{tibble}
-\alias{\%>\%}
 \alias{Surv}
-\alias{raster}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -41,15 +38,9 @@ below to see their documentation.
 
   \item{lubridate}{\code{\link[lubridate:period]{days}}, \code{\link[lubridate:period]{hours}}, \code{\link[lubridate:period]{minutes}}, \code{\link[lubridate:period]{seconds}}, \code{\link[lubridate:period]{weeks}}}
 
-  \item{magrittr}{\code{\link[magrittr:pipe]{\%>\%}}}
-
   \item{purrr}{\code{\link[purrr]{map}}, \code{\link[purrr:map]{map_int}}}
 
-  \item{raster}{\code{\link[raster]{raster}}}
-
   \item{sf}{\code{\link[sf:st_crs]{NA_crs_}}}
-
-  \item{sp}{\code{\link[sp:CRS-class]{CRS}}}
 
   \item{survival}{\code{\link[survival]{Surv}}, \code{\link[survival]{clogit}}, \code{\link[survival]{strata}}}
 

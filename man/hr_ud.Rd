@@ -2,7 +2,7 @@
 % Please edit documentation in R/hr_ud.R
 \name{hr_ud}
 \alias{hr_ud}
-\title{Obtain the utilization distribution of a probabilistic home range}
+\title{Obtain the utilization distribution of a probabilistic home-range estimate}
 \usage{
 hr_ud(x, ...)
 }
@@ -12,8 +12,8 @@ hr_ud(x, ...)
 \item{...}{Further arguments, none implemented.}
 }
 \value{
-\code{RasterLayer}
+\code{SpatRaster}
 }
 \description{
-Obtain the utilization distribution of a probabilistic home range
+Obtain the utilization distribution of a probabilistic home-range estimate
 }

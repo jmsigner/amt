@@ -63,7 +63,7 @@ expect_error(random_steps(c(0, 0), n_control = 1, rand_sl = 11, rand_ta = c(-10,
 # Check that it works with `steps`
 xy <- data.frame(x = c(1, 10, 50, 90), y = -c(10, -10, 10, 90))
 xx <- make_track(xy, x, y)
-s1 <- xx %>% steps()
+s1 <- xx |> steps()
 
 expect_error(random_steps(xx, sl_distr = make_unif_distr(10, 100), ta_distr = make_vonmises_distr(kappa = 5)))
 expect_error(random_steps(s1, 1.5, sl_distr = make_unif_distr(10, 100), ta_distr = make_vonmises_distr(kappa = 5)))
@@ -81,7 +81,7 @@ expect_equal(sum(!xx$case_), 20)
 # Check steps are correct, i.e., random steps have the right direction
 xy <- data.frame(x = 1:3, y = 1:3)
 xx <- make_track(xy, x, y)
-s1 <- xx %>% steps()
+s1 <- xx |> steps()
 
 rs <- random_steps(s1, 1, sl_distr = make_unif_distr(sqrt(2), sqrt(2)),
              ta_distr = make_unif_distr(0, 0))
@@ -94,7 +94,7 @@ rs <- random_steps(s1, 1, sl_distr = make_unif_distr(sqrt(2), sqrt(2)),
 xy <- data.frame(x = c(1, 1, 2, 2, 3, 3, 4, 4, 5, 4, 4),
                  y = c(1, 2, 2, 1, 1, 0, 0, 1, 1, 1, 0))
 xx <- make_track(xy, x, y)
-s1 <- xx %>% steps()
+s1 <- xx |> steps()
 
 rs <- random_steps(s1, 1, sl_distr = make_unif_distr(1, 1),
              ta_distr = make_unif_distr(0, 0))
@@ -106,9 +106,9 @@ expect_true(all(rs$ta_[!rs$case_] == 0))
 
 mini_deer <- deer[1:4, ]
 
-expect_equal(mini_deer %>% steps() %>% random_steps() %>% nrow(), 22)
-expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata() %>% nrow(), 22)
-expect_equal(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl_") %>% nrow(), 22)
+expect_equal(mini_deer |> steps() |> random_steps() |> nrow(), 22)
+expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata() |> nrow(), 22)
+expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(col = "sl_") |> nrow(), 22)
 
-expect_error(mini_deer %>% steps() %>% random_steps() %>% remove_incomplete_strata(col = "sl"))
+expect_error(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(col = "sl"))
 

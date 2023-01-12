@@ -48,7 +48,7 @@ amt::summarize_sampling_rate(deer)
 
 data(amt_fisher)
 # Add the month
-amt_fisher \%>\% mutate(yday = lubridate::yday(t_)) \%>\%
+amt_fisher |> mutate(yday = lubridate::yday(t_)) |>
 summarize_sampling_rate_many(c("id", "yday"))
 
 }

@@ -20,7 +20,7 @@ make_trast(x, ...)
 \item{res}{\verb{[numeric(1)]}\cr Resolution of the output raster.}
 }
 \value{
-A \code{RasterLayer} without values.
+A \code{RastLayer} without values.
 }
 \description{
 For some home-range estimation methods (e.g., KDE) a template raster is needed. This functions helps to quickly create such a template raster.

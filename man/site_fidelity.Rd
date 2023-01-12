@@ -28,7 +28,7 @@ Calculates two indices (mean squared displacement and linearity) to test for sit
 # real data
 \donttest{
 data(deer)
-ds <- deer \%>\% steps_by_burst()
+ds <- deer |> steps_by_burst()
 site_fidelity(ds)
 }
 }

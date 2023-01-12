@@ -27,6 +27,6 @@ Remove strata with missing values for observed steps
 mini_deer <- deer[1:4, ]
 
 # The first step is removed, because we have `NA` turn angles.
-mini_deer \%>\% steps() \%>\% random_steps() \%>\% remove_incomplete_strata() \%>\%
+mini_deer |> steps() |> random_steps() |> remove_incomplete_strata() |>
   select(case_, ta_, step_id_)
 }

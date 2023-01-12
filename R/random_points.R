@@ -3,7 +3,7 @@
 #' Functions to generate random points within an animals home range. This is usually the first step for investigating habitat selection via Resource Selection Functions (RSF).
 #' @template track_xy_star
 #' @param n `[integer(1)]` \cr The number of random points.
-#' @param type `[character(1)]` \cr Argument passed to `sp::spsample type`. The default is `random`.
+#' @param type `[character(1)]` \cr Argument passed to `sf::st_sample`. The default is `random`.
 #' @param level `[numeric(1)]` \cr Home-range level of the minimum convex polygon, used for generating the background samples.
 #' @param hr `[character(1)]` \cr The home range estimator to be used. Currently only MCP is implemented.
 #' @param presence `[track]` \cr The presence points, that will be added to the result.
@@ -22,11 +22,6 @@
 #' rp1 <- random_points(deer)
 #'
 #' plot(rp1)
-#'
-#' trast <- raster(bbox(deer, buffer = 5000), res = 30)
-#' rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
-#'
-#' plot(rp3)
 #'
 #' # Ten random points for each observed point
 #' rp <- random_points(deer, n = nrow(deer) * 10)
@@ -74,20 +69,12 @@ random_points.sf <- function(x, n = 100, type = "random", presence = NULL, ...) 
 
 #' @export
 #' @rdname random_points
-random_points.SpatialPolygons <- function(x, n = 100, type = "random", presence = NULL, ...) {
-  as_track(sp::spsample(x, n = n, type = type, ...))
-  random_points_base(poly = sf::st_as_sf(x), presence = presence,
-                     type = type, n = n)
-}
-
-#' @export
-#' @rdname random_points
 random_points.track_xy <- function(x, level = 1, hr = "mcp", n = nrow(x) * 10, type = "random", ...) {
 
   if (hr == "mcp") {
-    hr <- hr_mcp(x, levels = level, ...) %>% hr_isopleths()
+    hr <- hr_mcp(x, levels = level, ...) |> hr_isopleths()
   } else if (hr == "kde") {
-    hr <- hr_kde(x,level = level, ...) %>% hr_isopleths()
+    hr <- hr_kde(x,level = level, ...) |> hr_isopleths()
   } else {
     stop("Only mcp and kde home ranges are currently implemented.")
   }

@@ -14,7 +14,7 @@
 #' # real data
 #' \donttest{
 #' data(deer)
-#' ds <- deer %>% steps_by_burst()
+#' ds <- deer |> steps_by_burst()
 #' site_fidelity(ds)
 #' }
 

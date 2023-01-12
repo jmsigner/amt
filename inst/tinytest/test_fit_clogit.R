@@ -1,6 +1,6 @@
 library(amt)
-d <- amt_fisher %>% filter(name == "Leroy") %>%
-  steps() %>% random_steps()
+d <- amt_fisher |> filter(name == "Leroy") |>
+  steps() |> random_steps()
 
 # Missing strata
 f <- case_ ~ sl_ + log_sl_

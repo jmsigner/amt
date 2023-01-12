@@ -25,12 +25,12 @@ Convert a list column with many home-range estimates to a \code{tibble} with a g
 \examples{
 
 data("amt_fisher")
-hr <- amt_fisher \%>\% nest(data = -id) \%>\%
-  mutate(hr = map(data, hr_mcp), n = map_int(data, nrow)) \%>\%
+hr <- amt_fisher |> nest(data = -id) |>
+  mutate(hr = map(data, hr_mcp), n = map_int(data, nrow)) |>
   hr_to_sf(hr, id, n)
 
-hr <- amt_fisher \%>\% nest(data = -id) \%>\%
-  mutate(hr = map(data, hr_kde), n = map_int(data, nrow)) \%>\%
+hr <- amt_fisher |> nest(data = -id) |>
+  mutate(hr = map(data, hr_kde), n = map_int(data, nrow)) |>
   hr_to_sf(hr, id, n)
 
 

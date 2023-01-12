@@ -48,9 +48,9 @@ extract_covariates_var_time(x, ...)
 \arguments{
 \item{x}{\code{[track_xy, track_xyt, steps]} \cr Either a track created with \code{mk_track} or \code{track}, or \code{steps}.}
 
-\item{...}{Additional arguments passed to \code{raster::extract()}.}
+\item{...}{Additional arguments passed to \code{terra::extract()}.}
 
-\item{covariates}{\verb{[RasterLayer,RasterStack,RasterBrick]} \cr The
+\item{covariates}{\verb{[SpatRaster]} \cr The
 (environmental) covariates. For \code{extract_covariates_var_time} the argument
 \code{covariates} need to have a \code{z}-column (i.e. the time stamp).}
 
@@ -82,23 +82,16 @@ steps.
 data(deer)
 data(sh_forest)
 mini_deer <- deer[1:20, ]
-mini_deer \%>\% extract_covariates(sh_forest)
-mini_deer \%>\% steps \%>\% extract_covariates(sh_forest)
-mini_deer \%>\% steps \%>\% extract_covariates(sh_forest, where = "start")
+mini_deer |> extract_covariates(sh_forest)
+mini_deer |> steps() |> extract_covariates(sh_forest)
+mini_deer |> steps() |> extract_covariates(sh_forest, where = "start")
 
-# Buffer
-mini_deer \%>\% extract_covariates(sh_forest) # no buffer
-# The command buffer can be used, to buffer each point together with a
-# function to summarize the results.
-mini_deer \%>\% extract_covariates(sh_forest, buffer = 10, fun = mean)
-# This can also be a use-specified function.
-mini_deer \%>\% extract_covariates(sh_forest, buffer = 100, fun = function(x) length(x))
 \donttest{
 # Illustration of extracting covariates along the a step
-mini_deer \%>\% steps() \%>\% random_steps() \%>\%
-  extract_covariates(sh_forest) \%>\% # extract at the endpoint
-  mutate(for_path = extract_covariates_along(., sh_forest))  \%>\%
+mini_deer |> steps() |> random_steps() |>
+  extract_covariates(sh_forest) |> # extract at the endpoint
+  (\(.) mutate(., for_path = extract_covariates_along(., sh_forest)))()  |>
   # 1 = forest, lets calc the fraction of forest along the path
-  mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
+  mutate(for_per = purrr::map_dbl(for_path, function(x) mean(x == 1)))
 }
 }
