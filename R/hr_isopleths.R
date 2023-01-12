@@ -20,8 +20,14 @@ hr_isopleths.SpatRaster <- function (x, levels, descending = TRUE, ...) {
 
   con <- terra::as.contour(hr_cud(x), levels = levels)
   con <- sf::st_as_sf(con)
-  suppressWarnings(con <- sf::st_cast(con, "POLYGON"))
-
+  suppressWarnings(con <- lapply(split(con, con$level), function(l) {
+    l |> sf::st_cast("LINESTRING") |> sf::st_cast("POLYGON") |>
+      sf::st_union() |> sf::st_cast("MULTIPOLYGON")
+  }
+  ))
+  con <- do.call(c, con)
+  con <- sf::st_as_sf(con) |> dplyr::rename(geometry = x) |>
+    dplyr::mutate(level = levels)
 
   # Add area
   con$area <- sf::st_area(con)
@@ -30,7 +36,7 @@ hr_isopleths.SpatRaster <- function (x, levels, descending = TRUE, ...) {
 
   # Set projection
   sf::st_crs(con) <- if (is.null(attr(x, "crs_"))) {
-    raster::projection(x)
+    terra::crs(x)
   } else {
     attr(x, "crs_")
   }

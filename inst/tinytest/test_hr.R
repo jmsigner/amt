@@ -129,7 +129,6 @@ mcp <- hr_mcp(mini_fisher, levels = c(0.5, 0.9))
 loc <- hr_locoh(mini_fisher, levels = c(0.5, 0.9))
 kde <- hr_kde(mini_fisher, levels = c(0.5, 0.9))
 
-
 for (x in list(mcp, loc, kde)) {
   i1 <- hr_isopleths(x)
   i2 <- hr_isopleths(x, descending = FALSE)

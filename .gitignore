@@ -17,3 +17,5 @@ help/*
 *.swp
 inst/doc
 dev/*
+/doc/
+/Meta/

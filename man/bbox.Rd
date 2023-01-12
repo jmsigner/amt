@@ -8,20 +8,18 @@
 \usage{
 bbox(x, ...)
 
-\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...)
+\method{bbox}{track_xy}(x, spatial = TRUE, buffer = NULL, ...)
 
-\method{bbox}{steps_xy}(x, spatial = TRUE, buffer = NULL, sf = FALSE, ...)
+\method{bbox}{steps_xy}(x, spatial = TRUE, buffer = NULL, ...)
 }
 \arguments{
 \item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented.}
 
-\item{spatial}{\verb{[logical(1)=TRUE]} \cr Whether or not to return a \code{SpatialPolygons}-object or not.}
+\item{spatial}{\verb{[logical(1)=TRUE]} \cr Whether or not to return an object of class \code{sf-Polygon}-object or not.}
 
 \item{buffer}{\verb{[numeric(0)=NULL]\{NULL, >0\}} \cr An optional buffer of the bounding box.}
-
-\item{sf}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE} a simple feature polygon is returned.}
 }
 \value{
 If \code{spatial = FALSE} a named vector of length four with the extent of the bounding box. Otherwise a \code{SpatialPolygon} or a simple freature polygon with the bounding box.
@@ -36,10 +34,10 @@ bbox(deer, spatial = FALSE)
 bbox(deer, buffer = 100, spatial = FALSE)
 
 # For steps
-deer \%>\% steps_by_burst \%>\% bbox(spatial = FALSE)
-deer \%>\% steps_by_burst \%>\% bbox(buffer = 100, spatial = FALSE)
-deer \%>\% steps_by_burst \%>\% random_steps \%>\% bbox(spatial = FALSE)
+deer |> steps_by_burst() |> bbox(spatial = FALSE)
+deer |> steps_by_burst() |> bbox(buffer = 100, spatial = FALSE)
+deer |> steps_by_burst() |> random_steps() |> bbox(spatial = FALSE)
 
-# There is also the option to return a `sf`-object and then work with this further.
-deer \%>\% bbox(sf = TRUE) \%>\% sf::st_transform(4326)
+# Further manipulations are possible
+deer |> bbox() |> sf::st_transform(4326)
 }

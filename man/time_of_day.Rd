@@ -8,16 +8,14 @@
 \usage{
 time_of_day(x, ...)
 
-\method{time_of_day}{track_xyt}(x, solar.dep = 6, include.crepuscule = FALSE, ...)
+\method{time_of_day}{track_xyt}(x, include.crepuscule = FALSE, ...)
 
-\method{time_of_day}{steps_xyt}(x, solar.dep = 6, include.crepuscule = FALSE, where = "end", ...)
+\method{time_of_day}{steps_xyt}(x, include.crepuscule = FALSE, where = "end", ...)
 }
 \arguments{
 \item{x}{\verb{[track_xyt,steps_xyt]}\cr A track or steps.}
 
 \item{...}{Further arguments, none implemented.}
-
-\item{solar.dep}{\verb{[numeric(1,n)=6]}\cr The angle of the sun below the horizon in degrees. Passed to \code{maptools::crepuscule}.}
 
 \item{include.crepuscule}{\verb{[logical(1)=TRUE]}\cr Should dawn and dusk be included.}
 
@@ -27,14 +25,14 @@ time_of_day(x, ...)
 A \code{tibble} with an additional column \code{tod_} that contains the time of the day for each relocation.
 }
 \description{
-A convenience wrapper around \code{maptools::sunriset} and \code{maptools::crepuscule} to extract if a fix was taken during day or night (optionally also include dawn and dusk).
+A convenience wrapper around \code{suncalc::getSunlightTimes} to annotate if a fix was taken during day or night (optionally also include dawn and dusk).
 }
 \examples{
 data(deer)
-deer \%>\% time_of_day()
-deer \%>\% steps_by_burst \%>\% time_of_day()
-deer \%>\% steps_by_burst \%>\% time_of_day(where = "start")
-deer \%>\% steps_by_burst \%>\% time_of_day(where = "end")
-deer \%>\% steps_by_burst \%>\% time_of_day(where = "both")
+deer |> time_of_day()
+deer |> steps_by_burst() |> time_of_day()
+deer |> steps_by_burst() |> time_of_day(where = "start")
+deer |> steps_by_burst() |> time_of_day(where = "end")
+deer |> steps_by_burst() |> time_of_day(where = "both")
 
 }

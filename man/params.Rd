@@ -35,7 +35,7 @@ Get parameters from a (fitted) distribution
 }
 \examples{
 data(deer)
-d <- deer \%>\% steps() \%>\% random_steps()
+d <- deer |> steps() |> random_steps()
 sl_distr_params(d)
 ta_distr_params(d)
 

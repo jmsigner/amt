@@ -9,7 +9,7 @@ hr_kde_lscv(
   range = do.call(seq, as.list(c(hr_kde_ref(x) * c(0.1, 2), length.out = 100))),
   which_min = "global",
   rescale = "none",
-  trast = raster(as_sp(x), nrow = 100, ncol = 100)
+  trast = make_trast(x)
 )
 }
 \arguments{

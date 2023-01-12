@@ -73,7 +73,7 @@ steps(x, ...)
 \details{
 \verb{dierctions_*()} returns \code{NA} for 0 step lengths.
 
-\code{step_lengths} calculates the step lengths between points a long the path. The last value returned is \code{NA}, because no observed step is 'started' at the last point. If \code{lonlat = TRUE}, \code{step_lengths()} wraps \code{\link[raster:pointDistance]{raster::pointDistance()}}.
+\code{step_lengths} calculates the step lengths between points a long the path. The last value returned is \code{NA}, because no observed step is 'started' at the last point. If \code{lonlat = TRUE}, \code{step_lengths()} wraps \code{\link[sf:geos_measures]{sf::st_distance()}}.
 }
 \examples{
 
@@ -87,13 +87,13 @@ direction_abs(trk, append_last = TRUE)
 direction_abs(trk, append_last = FALSE)
 
 # degrees
-direction_abs(trk) \%>\% as_degree
+direction_abs(trk) |> as_degree()
 
 # full circle or not: check
 direction_abs(trk, full_circle = TRUE)
 direction_abs(trk, full_circle = FALSE)
-direction_abs(trk, full_circle = TRUE) \%>\% as_degree()
-direction_abs(trk, full_circle = FALSE) \%>\% as_degree()
+direction_abs(trk, full_circle = TRUE) |> as_degree()
+direction_abs(trk, full_circle = FALSE) |> as_degree()
 
 # direction of 0
 direction_abs(trk, full_circle = TRUE, zero_dir = "N")

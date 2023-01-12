@@ -23,7 +23,6 @@ Imports:
     circular,
     ctmm,
     dplyr (>= 0.7.0),
-    data.table,
     fitdistrplus,
     lubridate,
     methods,
@@ -33,7 +32,9 @@ Imports:
     rlang,
     sf,
     sfheaders,
+    suncalc,
     survival,
+    terra,
     tibble,
     tidyr (>= 1.0.0),
     MASS
@@ -53,8 +54,7 @@ Suggests:
   spacetime,
   trajectories,
   knitr,
-  rmarkdown, tinytest, tidygraph,
-  maptools
+  rmarkdown, tinytest, tidygraph,sp
 LinkingTo: Rcpp
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)

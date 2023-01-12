@@ -50,15 +50,15 @@ data("amt_fisher")
 data("amt_fisher_covar")
 
 # Prepare data for RSF
-rsf_data <- amt_fisher \%>\%
-  filter(name == "Leroy") \%>\%
-  make_track(x_, y_, t_) \%>\%
-  random_points() \%>\%
-  extract_covariates(amt_fisher_covar$landuse) \%>\%
+rsf_data <- amt_fisher |>
+  filter(name == "Leroy") |>
+  make_track(x_, y_, t_) |>
+  random_points() |>
+  extract_covariates(amt_fisher_covar$landuse) |>
   mutate(lu = factor(landuse))
 
 # Fit RSF
-m1 <- rsf_data \%>\%
+m1 <- rsf_data |>
   fit_rsf(case_ ~ lu)
 
 # Calculate log-RSS

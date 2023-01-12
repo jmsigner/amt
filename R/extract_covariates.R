@@ -17,17 +17,10 @@
 #' data(deer)
 #' data(sh_forest)
 #' mini_deer <- deer[1:20, ]
-#' mini_deer %>% extract_covariates(sh_forest)
-#' mini_deer %>% steps %>% extract_covariates(sh_forest)
-#' mini_deer %>% steps %>% extract_covariates(sh_forest, where = "start")
+#' mini_deer |> extract_covariates(sh_forest)
+#' mini_deer |> steps() |> extract_covariates(sh_forest)
+#' mini_deer |> steps() |> extract_covariates(sh_forest, where = "start")
 #'
-#' # Buffer
-#' mini_deer %>% extract_covariates(sh_forest) # no buffer
-#' # The command buffer can be used, to buffer each point together with a
-#' # function to summarize the results.
-#' mini_deer %>% extract_covariates(sh_forest, buffer = 10, fun = mean)
-#' # This can also be a use-specified function.
-#' mini_deer %>% extract_covariates(sh_forest, buffer = 100, fun = function(x) length(x))
 
 extract_covariates <- function(x, ...) {
   UseMethod("extract_covariates", x)
@@ -49,30 +42,29 @@ extract_covariates.random_points <- function(x, covariates, ...) {
 #' @rdname extract_covariates
 extract_covariates.steps_xy <- function(x, covariates, where = "end", ...) {
 
-  if (class(covariates) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {
-    if (where == "both") {
-      x_start <- terra::extract(covariates, as.matrix(x[, c("x1_", "y1_")]), ...)
-      names(x_start) <- paste0(names(x_start), "_start")
-      x_end <- terra::extract(covariates, as.matrix(x[, c("x2_", "y2_")]), ...)
-      names(x_end) <- paste0(names(x_end), "_end")
-      x_all <- cbind(x_start, x_end)
-      x[names(x_all)] <- as.data.frame(x_all)
-    } else {
-      x[names(covariates)] <- if (where == "end") {
-        terra::extract(covariates, as.matrix(x[, c("x2_", "y2_")]), ...)
-      } else if (where == "start") {
-        terra::extract(covariates, as.matrix(x[, c("x1_", "y1_")]), ...)
-      }
-    }
-    x
+  validate_covars(covariates)
+  if (where == "both") {
+    x_start <- terra::extract(covariates, as.matrix(x[, c("x1_", "y1_")]), ...)
+    names(x_start) <- paste0(names(x_start), "_start")
+    x_end <- terra::extract(covariates, as.matrix(x[, c("x2_", "y2_")]), ...)
+    names(x_end) <- paste0(names(x_end), "_end")
+    x_all <- cbind(x_start, x_end)
+    x[names(x_all)] <- x_all
   } else {
-    stop("no raster")
+    x[names(covariates)] <- if (where == "end") {
+      terra::extract(covariates, as.matrix(x[, c("x2_", "y2_")]), ...)
+    } else if (where == "start") {
+      terra::extract(covariates, as.matrix(x[, c("x1_", "y1_")]), ...)
+    }
   }
+  x
 }
 
 extract_covar_base <- function(x, covars, ...) {
   covars <- validate_covars(covars)
-  x[names(covars)] <- terra::extract(covars, x[, c("x_", "y_")], ...)
+  x[names(covars)] <- terra::extract(covars, x[, c("x_", "y_")],
+                                     ID = FALSE, ...)
+  x
 }
 
 
@@ -85,11 +77,11 @@ extract_covar_base <- function(x, covars, ...) {
 #' @examples
 #' \donttest{
 #' # Illustration of extracting covariates along the a step
-#' mini_deer %>% steps() %>% random_steps() %>%
-#'   extract_covariates(sh_forest) %>% # extract at the endpoint
-#'   mutate(for_path = extract_covariates_along(., sh_forest))  %>%
+#' mini_deer |> steps() |> random_steps() |>
+#'   extract_covariates(sh_forest) |> # extract at the endpoint
+#'   (\(.) mutate(., for_path = extract_covariates_along(., sh_forest)))()  |>
 #'   # 1 = forest, lets calc the fraction of forest along the path
-#'   mutate(for_per = purrr::map_dbl(for_path, ~ mean(. == 1)))
+#'   mutate(for_per = purrr::map_dbl(for_path, function(x) mean(x == 1)))
 #' }
 
 extract_covariates_along <- function(x, ...) {
@@ -100,10 +92,11 @@ extract_covariates_along <- function(x, ...) {
 #' @rdname extract_covariates
 extract_covariates_along.steps_xy <- function(x, covariates, ...) {
   covariates <- validate_covars(covariates)
+
   wkt <- with(x, paste0("LINESTRING (", x1_, " ", y1_, ",", x2_, " ", y2_, ")"))
   ll <- sf::st_as_sfc(wkt)
   l2 <- terra::extract(covariates, terra::vect(ll), ...)
-  setNames(split(l2[, -1], l2[, 1]), NULL)
+  stats::setNames(split(l2[, -1], l2[, 1]), NULL)
 }
 
 # Extract covariates varying time -----------------------------------------
@@ -165,7 +158,7 @@ extract_covar_var_time_base <- function(
   max_diff, ...) {
 
   if (is.null(terra::time(covariates))) {
-    stop("Covariates do not have a Z column.")
+    stop("Covariates do not have a time stamp. Use `terra::time()` to assign one.")
   }
 
   if (!is(max_diff, "Period")) {
@@ -199,12 +192,6 @@ extract_covar_var_time_base <- function(
   return(cov_val)
 }
 
-validate_covars <- function(x) {
-  if (!is(x, "SpatRaster")) {
-    x <- raster_to_terra(x)
-  }
-  checkmate::assert_class(x, "SpatRaster")
-}
 
 raster_to_terra <- function(x) {
   if (class(x) %in% paste0("Raster", c("Layer", "Stack", "Brick"))) {

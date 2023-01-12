@@ -17,7 +17,7 @@ hr_od <- function(x, ...) {
 hr_od.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
                               trast = make_trast(x), levels = 0.95, ...) {
 
-  est <- od(x, model = model, trast = trast, res.space = raster::res(trast)[1], ...)
+  est <- od(x, model = model, trast = trast, res.space = terra::res(trast)[1], ...)
 
   res <- list(ud = est, model = model, levels = levels, trast = trast,
               estimator = "od",

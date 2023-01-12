@@ -3,12 +3,12 @@
 \name{cum_ud}
 \alias{cum_ud}
 \alias{hr_cud}
-\alias{hr_cud.RasterLayer}
+\alias{hr_cud.SpatRaster}
 \title{Calculate a cumulative UD}
 \usage{
 hr_cud(x, ...)
 
-\method{hr_cud}{RasterLayer}(x, ...)
+\method{hr_cud}{SpatRaster}(x, ...)
 }
 \arguments{
 \item{x}{\verb{[RasterLayer]} \cr Containing the Utilization Distribution (UD).}

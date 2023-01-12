@@ -1,7 +1,7 @@
 library(amt)
 data(deer)
 data("sh_forest")
-d <- deer[1:50, ] %>% random_points() %>% extract_covariates(sh_forest) %>%
+d <- deer[1:50, ] |> random_points() |> extract_covariates(sh_forest) |>
   mutate(w = ifelse(case_, 1, 1000))
 
 f1 <- glm(case_ ~ sh.forest, data = d, family = binomial())
@@ -20,18 +20,18 @@ expect_equal(rss1, rss2)
 data("amt_fisher")
 
 # Prepare data for RSF
-rsf_data <- amt_fisher %>%
-  filter(name == "Lupe") %>%
-  dplyr::slice_sample(n = 250) %>%
-  make_track(x_, y_, t_) %>%
-  random_points() %>%
-  extract_covariates(amt_fisher_covar$elevation) %>%
-  extract_covariates(amt_fisher_covar$popden) %>%
-  extract_covariates(amt_fisher_covar$landuse) %>%
+rsf_data <- amt_fisher |>
+  filter(name == "Lupe") |>
+  dplyr::slice_sample(n = 250) |>
+  make_track(x_, y_, t_) |>
+  random_points() |>
+  extract_covariates(amt_fisher_covar$elevation) |>
+  extract_covariates(amt_fisher_covar$popden) |>
+  extract_covariates(amt_fisher_covar$landuse) |>
   mutate(lu = factor(landuse))
 
 # Fit RSF without factor
-m1 <- rsf_data %>%
+m1 <- rsf_data |>
   fit_rsf(case_ ~ elevation + popden)
 
 # data.frame of x1s
@@ -45,7 +45,7 @@ x2 <- data.frame(elevation = mean(rsf_data$elevation),
 expect_null(amt:::check_factors(m1$model, x1, x2))
 
 # Fit RSF with factor
-m2 <- rsf_data %>%
+m2 <- rsf_data |>
   fit_rsf(case_ ~ lu + elevation + popden)
 
 # data.frame of x1s

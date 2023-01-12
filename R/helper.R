@@ -9,7 +9,7 @@
 #'
 #' # The default unit of turning angles is rad.
 #' data(deer)
-#' deer %>% steps() %>% mutate(ta_ = as_degree(ta_))
+#' deer |> steps() |> mutate(ta_ = as_degree(ta_))
 
 as_rad <- function(x) {
   x * pi / 180

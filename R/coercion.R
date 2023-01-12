@@ -8,20 +8,26 @@
 #' @name coercion
 #' @return An object of the class to which coercion is performed to.
 #' @export
-as_sp <- function(x, ...) {
-  UseMethod("as_sp", x)
+as_sf <- function(x, ...) {
+  UseMethod("as_sf", x)
 }
 
 #' @export
-as_sp.track_xy <- function(x, ...) {
-  sf::as_Spatial(as_sf_points(x))
+as_sf.track_xy <- function(x, ...) {
+  as_sf_points(x)
 }
 
 #' @export
 #' @param end `[logical(1)=TRUE]` \cr For steps, should the end or start points be used?
 #' @rdname coercion
-as_sp.steps_xy <- function(x, end = TRUE, ...) {
-  sf::as_Spatial(as_sf_points(x, end = end, ...))
+as_sf.steps_xy <- function(x, end = TRUE, ...) {
+  as_sf_points(x, end = end, ...)
+}
+
+#' @export
+#' @rdname coercion
+as_sp <- function(x, ...) {
+  .Deprecated("as_sf")
 }
 
 #' Coerces a track to points

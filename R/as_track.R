@@ -1,26 +1,14 @@
 #' Coerce to track
 #'
-#' Coerce other classes (currently implemented: `SpatialPoints`) to a `track_xy`.
+#' Coerce other classes to a `track_xy`.
 #' @export
 #' @param x Object to be converted to a track.
 #' @template dots_none
 #' @name as_track
 #' @return An object of class `track_xy(t)`
-#' @examples
-#' xy <- sp::SpatialPoints(cbind(c(1, 3, 2, 1), c(3, 2, 2, 1)))
-#' as_track(xy)
 as_track <- function(x, ...) {
   UseMethod("as_track", x)
 }
-
-#' @export
-#' @rdname as_track
-as_track.SpatialPoints <- function(x, ...) {
-  xx <- sp::coordinates(x)
-  track(x = xx[, 1], y = xx[, 2], crs = sf::st_crs(sp::proj4string(x)))
-}
-
-
 
 #' @export
 #' @rdname as_track
@@ -38,7 +26,7 @@ as_track.steps_xyt <- function(x, ...) {
   crs <- get_crs(x)
 
   if ("burst_" %in% names(x)) {
-    xx <- tidyr::nest(x, data = -c(burst_)) %>%
+    xx <- tidyr::nest(x, data = -c(burst_)) |>
       dplyr::mutate(data = purrr::map(data, function(y) {
         n1 <- nrow(y)
         tibble::tibble(
@@ -46,7 +34,7 @@ as_track.steps_xyt <- function(x, ...) {
           ys = c(y$y1_, y$y2_[n1]),
           t = c(y$t1_, y$t2_[n1])
         )
-      })) %>% tidyr::unnest(cols = data)
+      })) |> tidyr::unnest(cols = data)
     make_track(xx, xs, ys, t, burst_ = burst_,
                crs = crs)
   } else {

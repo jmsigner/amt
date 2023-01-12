@@ -29,7 +29,7 @@ od(x, ...)
 
 \item{...}{Further arguments, none implemented.}
 
-\item{trast}{\verb{[RasterLayer]} \cr A template raster for the extent and resolution of the result.}
+\item{trast}{\verb{[SpatRaster]} \cr A template raster for the extent and resolution of the result.}
 
 \item{model}{\verb{[An output of fit_ctmm]} \cr The autocorrelation model that should be fit to the data. \code{bm} corresponds to Brownian motion, \code{ou} to an Ornstein-Uhlenbeck process, \code{ouf} to an Ornstein-Uhlenbeck forage process.}
 
@@ -51,7 +51,7 @@ data(deer)
 mini_deer <- deer[1:100, ]
 trast <- make_trast(mini_deer)
 md <- od(mini_deer, trast = trast)
-raster::plot(md)
+terra::plot(md)
 
 # rolling ud
 xx <- rolling_od(mini_deer, trast)

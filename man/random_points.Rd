@@ -4,7 +4,6 @@
 \alias{random_points}
 \alias{random_points.hr}
 \alias{random_points.sf}
-\alias{random_points.SpatialPolygons}
 \alias{random_points.track_xy}
 \title{Generate random points}
 \usage{
@@ -13,8 +12,6 @@ random_points(x, ...)
 \method{random_points}{hr}(x, n = 100, type = "random", presence = NULL, ...)
 
 \method{random_points}{sf}(x, n = 100, type = "random", presence = NULL, ...)
-
-\method{random_points}{SpatialPolygons}(x, n = 100, type = "random", presence = NULL, ...)
 
 \method{random_points}{track_xy}(x, level = 1, hr = "mcp", n = nrow(x) * 10, type = "random", ...)
 }
@@ -25,7 +22,7 @@ random_points(x, ...)
 
 \item{n}{\verb{[integer(1)]} \cr The number of random points.}
 
-\item{type}{\verb{[character(1)]} \cr Argument passed to \verb{sp::spsample type}. The default is \code{random}.}
+\item{type}{\verb{[character(1)]} \cr Argument passed to \code{sf::st_sample}. The default is \code{random}.}
 
 \item{presence}{\verb{[track]} \cr The presence points, that will be added to the result.}
 
@@ -52,11 +49,6 @@ data(deer)
 rp1 <- random_points(deer)
 
 plot(rp1)
-
-trast <- raster(bbox(deer, buffer = 5000), res = 30)
-rp3 <- random_points(deer, hr = "kde", trast = trast) # we need a larger template raster
-
-plot(rp3)
 
 # Ten random points for each observed point
 rp <- random_points(deer, n = nrow(deer) * 10)

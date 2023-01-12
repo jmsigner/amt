@@ -4,7 +4,7 @@
 #'
 #'
 #' @template track_xyt
-#' @param trast `[RasterLayer]` \cr A template raster for the extent and resolution of the result.
+#' @param trast `[SpatRaster]` \cr A template raster for the extent and resolution of the result.
 #' @param model `[An output of fit_ctmm]` \cr The autocorrelation model that should be fit to the data. `bm` corresponds to Brownian motion, `ou` to an Ornstein-Uhlenbeck process, `ouf` to an Ornstein-Uhlenbeck forage process.
 #' @param res.space `[numeric(1)=10]` \cr Number of grid point along each axis, relative to the average diffusion (per median timestep) from a stationary point. See also `help(ctmm::occurrence)`.
 #' @param res.time `[numeric(1)=10]` \cr Number of temporal grid points per median timestep.
@@ -20,7 +20,7 @@
 #' mini_deer <- deer[1:100, ]
 #' trast <- make_trast(mini_deer)
 #' md <- od(mini_deer, trast = trast)
-#' raster::plot(md)
+#' terra::plot(md)
 #'
 #' # rolling ud
 #' xx <- rolling_od(mini_deer, trast)
@@ -39,15 +39,17 @@ rolling_od.track_xyt <- function(
   n.points = 5, show.progress = TRUE, ...) {
   res <- list()
 
-  if (show.progress) pb <- utils::txtProgressBar(style = 3, max = nrow(x), min = n.points + 1)
+  if (show.progress) {
+    pb <- utils::txtProgressBar(style = 3, max = nrow(x), min = n.points + 1)
+  }
   for (i in (n.points + 1):nrow(x)) {
     if (show.progress) utils::setTxtProgressBar(pb, i)
     j <- i - n.points
     suppressWarnings(res[[j]] <- od(x[j:i, ], trast = trast, model = model,
                                     res.space = res.space, res.time = res.time))
   }
-  res <- raster::stack(res)
-  res <- raster::setZ(res, x$t_[(n.points + 1):nrow(x)])
+  res <- terra::rast(res)
+  terra::time(res) <-  x$t_[(n.points + 1):nrow(x)]
   res
 }
 
@@ -64,17 +66,17 @@ od.track_xyt <- function(x, trast,
                          model = fit_ctmm(x, "bm"),
                          res.space = 10, res.time = 10, ...) {
 
-  if (is.na(raster::projection(trast))) {
+  if (is.na(terra::crs(trast) == "")) {
     stop("trast, needs a cooridnate reference system (crs).")
   }
-  krige <- ctmm::occurrence(as_telemetry(x), CTMM = model, res.space = res.space, res.time = res.time)
+  krige <- ctmm::occurrence(as_telemetry(x),
+                            CTMM = model, res.space = res.space, res.time = res.time)
 
-  r <- 1 - ctmm::raster(krige, DF = "CDF")
-  r <- raster::projectRaster(r, to = trast, res = raster::res(trast))
-  r <- raster::resample(r, trast)
-  v <- raster::getValues(r)
-  v[is.na(v)] <- 0
-  r <- raster::setValues(r, v)
+  r <- 1 - terra::rast(ctmm::raster(krige, DF = "CDF"))
+  r <- terra::project(r, y = trast, method = "bilinear", gdal = TRUE,
+                      res = terra::res(trast))
+  r <- terra::resample(r, trast) # needed?
+  r <- terra::ifel(is.na(r), 0, r)
   attr(r, "model") <- model
   r
 }

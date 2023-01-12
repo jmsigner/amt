@@ -60,7 +60,7 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
     if (verbose) {
       message(".t missing, creating `track_xy`.")
     }
-    out <- tbl %>%
+    out <- tbl |>
       dplyr::select(x_ = !!.x,
              y_ = !!.y,
              !!!vars)
@@ -76,7 +76,7 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
     if (order_by_ts) {
       tbl <- arrange(tbl, !!(.t))
     }
-    tt <- dplyr::select(tbl, t = !!.t) %>% pull(t)
+    tt <- dplyr::select(tbl, t = !!.t) |> pull(t)
 
     if (check_duplicates & any(duplicated(tt))) {
       stop("duplicated time stamps.")
@@ -90,7 +90,7 @@ mk_track <- function(tbl, .x, .y, .t, ..., crs = NA_crs_, order_by_ts = TRUE,
       stop("negative time diffs.")
     }
 
-    out <- tbl %>%
+    out <- tbl |>
       dplyr::select(x_ = !!.x,
                     y_ = !!.y,
                     t_ = !!.t,

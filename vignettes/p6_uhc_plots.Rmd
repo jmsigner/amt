@@ -148,11 +148,11 @@ Next, onto step (4), where we use `prep_uhc()` to prepare the UHC data. This is 
 ```{r hsf prep_uhc}
 # Prep under wrong model
 uhc_hsf_wrong <- prep_uhc(object = hsf_wrong, test_dat = test_dat,
-                          n_samp = 1000, verbose = FALSE)
+                          n_samp = 20, verbose = FALSE) # In reality n_samp should be around 1000.
 
 # Prep under right model
 uhc_hsf_right <- prep_uhc(object = hsf_right, test_dat = test_dat,
-                          n_samp = 1000, verbose = FALSE)
+                          n_samp = 20, verbose = FALSE)
 ```
 
 #### Plot UHC plots
@@ -267,11 +267,11 @@ Next, onto step (4), where we use `prep_uhc()` to prepare the UHC data. This is 
 ```{r issf prep_uhc}
 # Prep under wrong model
 uhc_issf_wrong <- prep_uhc(object = issf_wrong, test_dat = test_dat,
-                           n_samp = 500, verbose = FALSE)
+                           n_samp = 20, verbose = FALSE)
 
 # Prep under right model
 uhc_issf_right <- prep_uhc(object = issf_right, test_dat = test_dat,
-                           n_samp = 500, verbose = FALSE)
+                           n_samp = 20, verbose = FALSE)
 ```
 
 #### Plot UHC plots
