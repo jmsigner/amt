@@ -192,13 +192,13 @@ kernel_setup <- function(template, max.dist = 100, start) {
   r1 <- terra::rasterize(terra::vect(p), terra::crop(template, p))
 
   # 3. Get xy from buffer
-  xy <- terra::as.points(r1)
+  xy <- terra::crds(r1)
 
   k <- tibble(
     x = xy[, 1],
     y = xy[, 2])
   k$ta_ = base::atan2(k$y - start$y_[1], k$x - start$x_[1]) - pi/2
-  k$ta_ <- k$ta_ - start$ta_[1] - pi/2
+  k$ta_ <- k$ta_ - start$ta_[1] # - pi/2 JS rm
 
   k$sl_ = sqrt((k$x - start$x_[1])^2 + (k$y - start$y_[1])^2)
 
@@ -216,7 +216,7 @@ kernel_setup <- function(template, max.dist = 100, start) {
 #
 #' @param x `[fit_issf]` \cr A fitted integrated step-selection function. Generated either with `fit_issf()` or make `make_issf_model()`.
 #' @param start `[sim_start]` \cr The start position in space and time. See `make_start()`.
-#' @param map `[SpatRaster]` \cr A SpatRaster stack with all covariates.
+#' @param map `[SpatRaster]` \cr A SpatRaster with all covariates.
 #' @param fun `[function]` \cr A function that is executed on each location of the redistribution kernel. The default function is `extract_covariates()`.
 #' @param max.dist `[numeric(1)]` \cr The maximum distance of the redistribution kernel.
 #' @param n.control `[integer(1)]{1e6}` \cr The number of points of the redistribution kernel (this is only important if `stochastic = TRUE`).
