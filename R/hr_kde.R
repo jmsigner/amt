@@ -41,9 +41,7 @@ hr_kde.track_xy <- function(
 
   # Finish output
   kde1 <- trast
-  # This is needed because SpatRaster starts with cell #1 in the top left corner
-  # and the matrix from the KDE starts with cell #1 at the bottom left corner.
-  kde1[] <- as.vector(kde$fhat[nrow(kde$fhat):1, ])
+  kde1[] <- as.vector(kde$fhat[, ncol(kde$fhat):1])
 
   attr(kde1, "crs_") <- get_crs(x) # needs to be fixed when updating to terra
 
