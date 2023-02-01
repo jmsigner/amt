@@ -108,8 +108,8 @@ tac <- function(x, ...) {
 tac.track_xy <- function(x, ...) {
   # following abrahams 2017 and dray 2010
   x <- steps(x)
-  ta <- x$ta_[-1] * pi/180
-  1/nrow(x) * sum(diff(cos(ta))^2 + diff(cos(ta))^2)
+  ta <- x$ta_[-1]
+  1/nrow(x) * sum(diff(cos(ta))^2 + diff(sin(ta))^2)
 
 
 }
