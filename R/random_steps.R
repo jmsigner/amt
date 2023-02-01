@@ -34,11 +34,20 @@ random_steps.numeric <- function(
   checkmate::assert_numeric(rand_ta, lower = -pi, upper = pi)
 
   rs <- random_steps_cpp_one_step(
-    n_control,  # number of controll steps
+    n_control,  # number of control steps
     x[1], x[2],
     angle,
     rand_sl, rand_ta)
   rs
+
+  # The same in R (slighty slower ~ 1%)
+  # slr <- sample(rand_sl, n_control, replace = TRUE)
+  # tar <- sample(rand_ta, n_control, replace = TRUE)
+  # new.x <- x[1] + slr * cos(tar + angle)
+  # new.y <- x[2] + slr * sin(tar + angle)
+  # out <- cbind(x[1], x[2], new.x, new.y, slr, tar + angle)
+  # colnames(out) <- c("x1_", "y1_", "x2_", "y2_", "sl_", "ta_")
+  # out
 }
 
 
@@ -105,6 +114,27 @@ random_steps.steps_xy <- function(
   attr(out, "crs_") <- attr(x, "crs_")
 
   out
+
+}
+
+#' @export
+#' @rdname random_steps
+#'
+random_steps.bursted_steps_xyt <- function(
+  x, n_control = 10,
+  sl_distr = fit_distr(x$sl_, "gamma"), # this argument could be remove
+  ta_distr = fit_distr(x$ta_, "vonmises"), # this argument could be remove
+  rand_sl = random_numbers(sl_distr, n = 1e5),
+  rand_ta = random_numbers(ta_distr, n = 1e5),
+  include_observed = TRUE, ...) {
+
+  data.table::rbindlist(
+    lapply(split(x, x$burst_), function(q) {
+      class(q) <- class(q)[-1]
+      random_steps(q, n_control = n_control, rand_sl = rand_sl,
+                   rand_ta = rand_ta, include_observed = include_observed, ...)
+    })
+  )
 
 }
 

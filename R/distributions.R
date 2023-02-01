@@ -138,7 +138,8 @@ make_unif_distr <- function(min = -pi, max = pi) {
 #' @param kappa `[double(1)>=0]` \cr Concentration parameter of the von Mises distribution.
 make_vonmises_distr <- function(kappa = 1, vcov = NULL) {
   checkmate::check_number(kappa, lower = 0)
-  make_distribution(name = "vonmises", params = list(kappa = kappa, mu = 0),
+  mu <- circular::circular(x = 0)
+  make_distribution(name = "vonmises", params = list(kappa = kappa, mu = mu),
                     vcov = vcov)
 }
 

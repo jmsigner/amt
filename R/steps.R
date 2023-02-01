@@ -226,7 +226,7 @@ steps_by_burst.track_xyt <- function(x, lonlat = FALSE,
 
   ss[head(togo, -1) + 1, "ta_"] <- NA
   ss <- ss[-togo, ]
-  class(ss) <- c("steps_xyt", "steps_xy", class(x)[-(1:2)])
+  class(ss) <- c("bursted_steps_xyt", "steps_xyt", "steps_xy", class(x)[-(1:2)])
   attr(ss, "crs_") <- attr(x, "crs_")
   ss
 }

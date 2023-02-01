@@ -8,7 +8,7 @@ hr_kde <- function(x, ...) {
 #' @rdname hrest
 hr_kde.track_xy <- function(
   x, h = hr_kde_ref(x), trast = make_trast(x),
-  levels = 0.95, keep.data = TRUE, ...) {
+  levels = 0.95, keep.data = TRUE, wrap = FALSE, ...) {
 
   checkmate::assert_numeric(levels, lower = 0, upper = 1)
   levels <- sort(levels)
@@ -48,8 +48,8 @@ hr_kde.track_xy <- function(
   res <- list(
     estimator = "kde",
     h = h,
-    ud = kde1,
-    trast = trast,
+    ud = if (wrap) terra::wrap(kde1) else kde1,
+    trast = if (wrap) terra::wrap(trast) else trast,
     levels = levels,
     crs = get_crs(x),
     data = if(keep.data) x else NULL
