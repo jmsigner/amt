@@ -4,6 +4,7 @@
 \alias{random_steps}
 \alias{random_steps.numeric}
 \alias{random_steps.steps_xy}
+\alias{random_steps.bursted_steps_xyt}
 \title{Generate Random Steps}
 \usage{
 random_steps(x, ...)
@@ -18,6 +19,17 @@ random_steps(x, ...)
 )
 
 \method{random_steps}{steps_xy}(
+  x,
+  n_control = 10,
+  sl_distr = fit_distr(x$sl_, "gamma"),
+  ta_distr = fit_distr(x$ta_, "vonmises"),
+  rand_sl = random_numbers(sl_distr, n = 1e+05),
+  rand_ta = random_numbers(ta_distr, n = 1e+05),
+  include_observed = TRUE,
+  ...
+)
+
+\method{random_steps}{bursted_steps_xyt}(
   x,
   n_control = 10,
   sl_distr = fit_distr(x$sl_, "gamma"),
