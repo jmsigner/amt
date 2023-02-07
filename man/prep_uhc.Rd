@@ -7,9 +7,9 @@
 \alias{prep_uhc.fit_clogit}
 \title{Prepare Data for UHC Plots for a Fitted Model}
 \usage{
-prep_uhc(object, test_dat, n_samp = 1000, verbose = TRUE)
+prep_uhc(object, test_dat, n_samp = 1000, n_dens = 512, verbose = TRUE)
 
-\method{prep_uhc}{glm}(object, test_dat, n_samp = 1000, verbose = TRUE)
+\method{prep_uhc}{glm}(object, test_dat, n_samp = 1000, n_dens = 512, verbose = TRUE)
 
 \method{prep_uhc}{fit_logit}(object, test_dat, n_samp = 1000, verbose = TRUE)
 
@@ -25,6 +25,11 @@ the model passed to \code{object}.}
 
 \item{n_samp}{\verb{[numeric = 1000]} A \code{vector} of length 1 giving the number of
 samples to use to characterize the used habitat distribution under the model.}
+
+\item{n_dens}{\verb{[numeric = 512]} A \code{numeric} vector of length 1 giving the
+number of equally spaced points at which density (used, available, and
+sampled) is estimated. Passed to \code{stats::density.default()}, which indicates
+that \code{n} should usually be specified as a power of 2.}
 
 \item{verbose}{\verb{[logical]} Should messages be displayed (\code{TRUE}) or not
 (\code{FALSE})?}
@@ -63,6 +68,94 @@ appear in the model \code{object}. Any further habitat variables in \code{test_d
 will also have UHC plots generated, treating these variables as possible
 candidate variables that are simply not included in this particular model.
 }
+\examples{
+
+\donttest{
+# Load packages
+library(amt)
+library(dplyr)
+library(terra)
+library(sf)
+
+# HSF ----------------------------------------------
+# Load data
+data(uhc_hsf_locs)
+data(uhc_hab)
+hab <- rast(uhc_hab, type = "xyz", crs = "epsg:32612")
+# Convert "cover" layer to factor
+levels(hab[[4]]) <- data.frame(id = 1:3,
+                               cover = c("grass", "forest", "wetland"))
+
+# Split into train (80\%) and test (20\%)
+set.seed(1)
+uhc_hsf_locs$train <- rbinom(n = nrow(uhc_hsf_locs),
+                             size = 1, prob = 0.8)
+train <- uhc_hsf_locs[uhc_hsf_locs$train == 1, ]
+test <- uhc_hsf_locs[uhc_hsf_locs$train == 0, ]
+
+# Available locations
+avail_train <- random_points(st_as_sf(st_as_sfc(st_bbox(hab))),
+                             n = nrow(train) * 10)
+
+avail_test <- random_points(st_as_sf(st_as_sfc(st_bbox(hab))),
+                            n = nrow(test) * 10)
+
+# Combine with used
+train_dat <- train |>
+  make_track(x, y, crs = 32612) |>
+  mutate(case_ = TRUE) |>
+  bind_rows(avail_train) |>
+  # Attach covariates
+  extract_covariates(hab) |>
+  # Assign large weights to available
+  mutate(weight = case_when(
+    case_ ~ 1,
+    !case_ ~ 5000
+  ))
+
+test_dat <- test |>
+  make_track(x, y, crs = 32612) |>
+  mutate(case_ = TRUE) |>
+  bind_rows(avail_test) |>
+  # Attach covariates
+  extract_covariates(hab) |>
+  # Assign large weights to available
+  mutate(weight = case_when(
+    case_ ~ 1,
+    !case_ ~ 5000
+  ))
+
+# Fit (correct) HSF
+hsf1 <- glm(case_ ~ forage + temp + I(temp^2) + pred + cover,
+            data = train_dat, family = binomial(), weights = weight)
+
+# Drop weights from 'test_dat'
+test_dat$weight <- NULL
+
+# Prep UHC plots
+uhc_dat <- prep_uhc(object = hsf1, test_dat = test_dat,
+                    n_samp = 500, verbose = TRUE)
+
+# Plot all variables
+plot(uhc_dat)
+
+# Plot only first variable
+plot(uhc_dat[1])
+
+# Plot only "cover" variable
+plot(uhc_dat["cover"])
+
+# Coerce to data.frame
+df <- as.data.frame(uhc_dat)
+
+# Simplify sampled lines to confidence envelopes
+conf <- conf_envelope(df)
+
+# Default plot for the envelopes version
+plot(conf)
+}
+
+}
 \references{
 Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A.,
 and Matthiopoulos, J. 2018. Used-habitat calibration plots: A new procedure
@@ -74,6 +167,7 @@ See Fieberg \emph{et al.} 2018 for details about UHC plots.
 
 Default plotting method available: \code{\link{plot.uhc_data}()}
 Coercion to \code{data.frame}: \code{\link{as.data.frame.uhc_data}()}
+Subsetting method: \code{\link{`[.uhc_data`}}
 }
 \author{
 Brian J. Smith

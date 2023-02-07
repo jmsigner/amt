@@ -32,6 +32,7 @@ hr_kde(x, ...)
   trast = make_trast(x),
   levels = 0.95,
   keep.data = TRUE,
+  wrap = FALSE,
   ...
 )
 

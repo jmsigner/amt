@@ -8,7 +8,9 @@ redistribution_kernel(
   x = make_issf_model(),
   start = make_start(),
   map,
-  fun = function(xy, map) {     extract_covariates(xy, map, where = "both") },
+  fun = function(xy, map) {
+     extract_covariates(xy, map, where = "both")
+ },
   max.dist = get_max_dist(x),
   n.control = 1e+06,
   n.sample = 1,
@@ -24,7 +26,7 @@ redistribution_kernel(
 
 \item{start}{\verb{[sim_start]} \cr The start position in space and time. See \code{make_start()}.}
 
-\item{map}{\verb{[SpatRaster]} \cr A SpatRaster stack with all covariates.}
+\item{map}{\verb{[SpatRaster]} \cr A SpatRaster with all covariates.}
 
 \item{fun}{\verb{[function]} \cr A function that is executed on each location of the redistribution kernel. The default function is \code{extract_covariates()}.}
 
