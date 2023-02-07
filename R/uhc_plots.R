@@ -48,8 +48,10 @@
 #' @seealso See Fieberg \emph{et al.} 2018 for details about UHC plots.
 #'
 #' Default plotting method available: \code{\link{plot.uhc_data}()}
+#'
 #' Coercion to `data.frame`: \code{\link{as.data.frame.uhc_data}()}
-#' Subsetting method: \code{\link{`Extract.uhc_data`}}
+#'
+#' Subsetting method: \code{\link{Extract.uhc_data}}
 #'
 #' @references
 #' Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A.,
