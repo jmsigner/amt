@@ -166,8 +166,10 @@ models. \emph{Ecography} 41:737–752.
 See Fieberg \emph{et al.} 2018 for details about UHC plots.
 
 Default plotting method available: \code{\link{plot.uhc_data}()}
+
 Coercion to \code{data.frame}: \code{\link{as.data.frame.uhc_data}()}
-Subsetting method: \code{\link{`Extract.uhc_data`}}
+
+Subsetting method: \code{\link{Extract.uhc_data}}
 }
 \author{
 Brian J. Smith
