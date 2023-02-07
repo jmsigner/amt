@@ -49,7 +49,7 @@
 #'
 #' Default plotting method available: \code{\link{plot.uhc_data}()}
 #' Coercion to `data.frame`: \code{\link{as.data.frame.uhc_data}()}
-#' Subsetting method: \code{\link{`[.uhc_data`}}
+#' Subsetting method: \code{\link{`Extract.uhc_data`}}
 #'
 #' @references
 #' Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A.,
@@ -989,6 +989,8 @@ as.data.frame.uhc_data <- function(x, row.names = NULL, optional = FALSE, ...) {
 #'
 #' @param x `[uhc_data]` An object of class `uhc_data_frame`, as returned
 #' by the function \code{\link{as.data.frame.uhc_data}()}.
+#' @param levels `[numeric]` A numeric vector specifying the desired confidence
+#' levels. Defaults to `c(0.95, 1)` to create 95% and 100% confidence intervals.
 #'
 #' @details This can dramatically improve plotting time for UHC plots by
 #' simplifying the many sampled lines down to the boundaries of a polygon.
@@ -1039,10 +1041,10 @@ conf_envelope <- function(x, levels = c(0.95, 1.00)) {
     # Summarize
     suppressMessages({ # don't want dplyr::summarize() messages
       summ <- s |>
-        dplyr::group_by(var, x, label) |>
+        dplyr::group_by(.data$var, .data$x, .data$label) |>
         dplyr::summarize(lwr = stats::quantile(y, prob = qs[[qnm]][1]),
                          upr = stats::quantile(y, prob = qs[[qnm]][2])) |>
-        dplyr::arrange(var, x) |>
+        dplyr::arrange(.data$var, .data$x) |>
         as.data.frame()
     })
     # Append CI name to lwr and upr
@@ -1056,8 +1058,8 @@ conf_envelope <- function(x, levels = c(0.95, 1.00)) {
 
   # Pivot 'ua' from long to wide data
   uaw <- ua |>
-    dplyr::select(-iter) |>
-    tidyr::pivot_wider(names_from = dist,
+    dplyr::select(-.data$iter) |>
+    tidyr::pivot_wider(names_from = .data$dist,
                        values_from = y) |>
     dplyr::arrange(var, x) |>
     as.data.frame()
@@ -1112,9 +1114,9 @@ plot.uhc_envelopes <- function(x, ...) {
     ci_nums <- unique(gsub("CI", "",
                            sapply(strsplit(ci_nams, "_"), getElement, 1)))
     # Decide colors for each confidence level
-    line_col <- gray.colors(n = length(ci_nums),
-                            start = 0.3, end = 0.9,
-                            alpha = 0.5)
+    line_col <- grDevices::gray.colors(n = length(ci_nums),
+                                       start = 0.3, end = 0.9,
+                                       alpha = 0.5)
     # Decide line widths (only applicable to factors)
     line_wid <- seq(2, 4, length.out = length(ci_nums))
 
@@ -1136,17 +1138,17 @@ plot.uhc_envelopes <- function(x, ...) {
 
       # Add confidence envelopes
       for (i in length(ci_nums):1) {
-        segments(x0 = XX$x,
-                 x1 = XX$x,
-                 y0 = XX[[paste0("CI", ci_nums[i], "_lwr")]],
-                 y1 = XX[[paste0("CI", ci_nums[i], "_upr")]],
-                 col = line_col[i],
-                 lwd = line_wid[i])
+        graphics::segments(x0 = XX$x,
+                           x1 = XX$x,
+                           y0 = XX[[paste0("CI", ci_nums[i], "_lwr")]],
+                           y1 = XX[[paste0("CI", ci_nums[i], "_upr")]],
+                           col = line_col[i],
+                           lwd = line_wid[i])
       }
 
       # Add used and available
-      points(x = XX$x, y = XX$U, col = "black", pch = 16)
-      points(x = XX$x, y = XX$A, col = "red", pch = 1)
+      graphics::points(x = XX$x, y = XX$U, col = "black", pch = 16)
+      graphics::points(x = XX$x, y = XX$A, col = "red", pch = 1)
 
     } else {
 
@@ -1156,16 +1158,16 @@ plot.uhc_envelopes <- function(x, ...) {
 
       # Add confidence envelopes
       for (i in length(ci_nums):1) {
-        polygon(x = c(XX$x, rev(XX$x)),
-                y = c(XX[[paste0("CI", ci_nums[i], "_lwr")]],
-                      rev(XX[[paste0("CI", ci_nums[i], "_upr")]])),
-                col = line_col[i],
-                border = line_col[i])
+        graphics::polygon(x = c(XX$x, rev(XX$x)),
+                          y = c(XX[[paste0("CI", ci_nums[i], "_lwr")]],
+                                rev(XX[[paste0("CI", ci_nums[i], "_upr")]])),
+                          col = line_col[i],
+                          border = line_col[i])
       }
 
       # Add used and available
-      lines(x = XX$x, y = XX$U, col = "black", lty = 1)
-      lines(x = XX$x, y = XX$A, col = "red", lty = 2)
+      graphics::lines(x = XX$x, y = XX$U, col = "black", lty = 1)
+      graphics::lines(x = XX$x, y = XX$A, col = "red", lty = 2)
     }
 
     return(invisible(NULL))
@@ -1175,10 +1177,14 @@ plot.uhc_envelopes <- function(x, ...) {
   return(invisible(x))
 }
 
-#' Subset a `uhc_data` object
+#' @name Extract.uhc_data
 #'
+#' @title Subset a `uhc_data` object
+#'
+#' @param x `[uhc_data]` A `uhc_data` object to subset.
 #' @param i `[numeric` or `character]` A numeric vector to subset variables
 #' by position or a character vector to subset variables by name.
+#'
 #' @export
 `[.uhc_data` <- function(x, i) {
 

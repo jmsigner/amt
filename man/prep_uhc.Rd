@@ -11,9 +11,9 @@ prep_uhc(object, test_dat, n_samp = 1000, n_dens = 512, verbose = TRUE)
 
 \method{prep_uhc}{glm}(object, test_dat, n_samp = 1000, n_dens = 512, verbose = TRUE)
 
-\method{prep_uhc}{fit_logit}(object, test_dat, n_samp = 1000, verbose = TRUE)
+\method{prep_uhc}{fit_logit}(object, test_dat, n_samp = 1000, n_dens = 512, verbose = TRUE)
 
-\method{prep_uhc}{fit_clogit}(object, test_dat, n_samp = 1000, verbose = TRUE)
+\method{prep_uhc}{fit_clogit}(object, test_dat, n_samp = 1000, n_dens = 512, verbose = TRUE)
 }
 \arguments{
 \item{object}{\verb{[glm, fit_logit, fit_clogit]} \cr A fitted RSF or (i)SSF model.
@@ -167,7 +167,7 @@ See Fieberg \emph{et al.} 2018 for details about UHC plots.
 
 Default plotting method available: \code{\link{plot.uhc_data}()}
 Coercion to \code{data.frame}: \code{\link{as.data.frame.uhc_data}()}
-Subsetting method: \code{\link{`[.uhc_data`}}
+Subsetting method: \code{\link{`Extract.uhc_data`}}
 }
 \author{
 Brian J. Smith

@@ -9,6 +9,9 @@ conf_envelope(x, levels = c(0.95, 1))
 \arguments{
 \item{x}{\verb{[uhc_data]} An object of class \code{uhc_data_frame}, as returned
 by the function \code{\link{as.data.frame.uhc_data}()}.}
+
+\item{levels}{\verb{[numeric]} A numeric vector specifying the desired confidence
+levels. Defaults to \code{c(0.95, 1)} to create 95\% and 100\% confidence intervals.}
 }
 \value{
 Returns a \code{data.frame} with columns:
