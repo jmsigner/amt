@@ -3,13 +3,18 @@
 
 # Load packages ----
 library(tidyverse)
-library(raster)
+# library(raster) # Convert to terra
+library(terra)
 library(circular)
 library(lubridate)
 
 # Habitat data ----
 attach("data/uhc_hab.rda")
-hab <- uhc_hab
+data(uhc_hab)
+hab <- rast(uhc_hab, type = "xyz", crs = "epsg:32612")
+# Convert "cover" layer to factor
+levels(hab[[4]]) <- data.frame(id = 1:3,
+                               cover = c("grass", "forest", "wetland"))
 
 # Coefficients ----
 # ... movement-free habitat selection ----
@@ -68,8 +73,8 @@ dat <- data.frame(time = seq(ymd_hms("2021-02-15 0:00:00", tz = "US/Mountain"),
                   y = NA)
 
 # We'll start our animal in the middle of our map
-dat$x <- mean(c(extent(hab)@xmin, extent(hab)@xmax))
-dat$y <- mean(c(extent(hab)@ymin, extent(hab)@ymax))
+dat$x <- mean(c(ext(hab)[1], ext(hab)[2]))
+dat$y <- mean(c(ext(hab)[3], ext(hab)[4]))
 
 # Convert to steps
 dat <- dat %>%
@@ -102,8 +107,8 @@ jitter <- function(x, y, min = -25, max = 25) {
 #   cent = vector of length 2 with xy-coordinates of centroid
 #   d = distance (radius) of crop
 crop_raster <- function(r, cent, d) {
-  ext <- extent(cent[1] - d, cent[1] + d, cent[2] - d, cent[2] + d)
-  res <- crop(r, ext)
+  e <- ext(cent[1] - d, cent[1] + d, cent[2] - d, cent[2] + d)
+  res <- crop(r, e)
   return(res)
 }
 
@@ -127,7 +132,7 @@ for (i in 2:nrow(dat)) {
   # Crop raster
   cropped <- crop_raster(hab, start, max_d)
   # Get coordinates of cropped raster
-  coords <- coordinates(cropped)
+  coords <- crds(cropped)
   # Distances along x and y to every cell
   dx <- coords[, 1] - start[, 1]
   dy <- coords[, 2] - start[, 2]
@@ -178,8 +183,8 @@ for (i in 2:nrow(dat)) {
         beta_temp * temp +
         beta_temp2 * temp^2 +
         beta_pred * pred +
-        beta_forest * (cover_VALUE == "forest") +
-        beta_wetland * (cover_VALUE == "grassland")
+        beta_forest * (cover == "forest") +
+        beta_wetland * (cover == "grassland")
     )) %>%
     # Normalize
     mutate(w_prime = w/sum(w)) %>%

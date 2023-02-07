@@ -3,7 +3,8 @@
 
 # Load packages ----
 library(tidyverse)
-library(raster)
+# library(raster) # Convert to terra
+library(terra)
 library(mvtnorm)
 
 # Coordinates and distance matrix ----
@@ -109,13 +110,13 @@ coord_df$forest[f_cent] <- 1
 coord_df$wet[w_cent] <- 1
 
 # Rasterize
-cent <- rasterFromXYZ(coord_df, res = 50, crs = 32612)
+cent <- rast(coord_df, type = "xyz", crs = "epsg:32612")
 
 # Distance to each
 dist_grass <- distance(cent$grass)
 dist_forest <- distance(cent$forest)
 dist_wet <- distance(cent$wet)
-dist_stack <- stack(dist_grass, dist_forest, dist_wet)
+dist_stack <- c(dist_grass, dist_forest, dist_wet)
 names(dist_stack) <- c("grass", "forest", "wet")
 
 # Pick the type with smallest distance
@@ -135,9 +136,6 @@ cover_df <- as.data.frame(dist_stack, xy = TRUE) %>%
 # Check
 table(cover_df$cover_num)/nrow(coords)
 
-# TT <- rasterFromXYZ(dplyr::select(cover_df, x, y, cover_num), res = 50, crs = 32612)
-# plot(TT)
-
 # Rasterize ----
 # Compile in data.frame
 g_dat <- data.frame(x = coords[, 1] + 447000,
@@ -148,7 +146,7 @@ g_dat <- data.frame(x = coords[, 1] + 447000,
                     cover = cover_df$cover_num)
 
 # Rasterize
-rast <- rasterFromXYZ(g_dat, res = 50, crs = 32612)
+rast <- rast(g_dat, type = "xyz", crs = "epsg:32612")
 template <- rast[[1]]
 names(template) <- NA
 
@@ -158,11 +156,12 @@ names(template) <- NA
 h2o <- rast[[4]] == 3
 h2o[h2o == 0] <- NA
 dist_to_water <- distance(h2o)
+names(dist_to_water) <- "dist_to_water"
 
 # ... distance to center ----
 cent <- template
 cent[] <- NA
-cent[cellFromXY(cent, apply(coordinates(cent), 2, mean))] <- 1
+cent[cellFromXY(cent, cbind(mean(g_dat$x), mean(g_dat$y)))] <- 1
 
 dist_to_cent <- distance(cent)
 
@@ -172,19 +171,11 @@ rand <- template
 rand[] <- round(rnorm(ncell(rand)))
 
 # Final stack ----
-uhc_hab <- stack(rast, dist_to_water, dist_to_cent, rand)
-names(uhc_hab)[5:7] <- c("dist_to_water", "dist_to_cent", "rand")
-
-values(uhc_hab$cover) <- factor(values(uhc_hab$cover),
-                                levels = 1:3,
-                                labels = c("grassland", "forest", "wetland"))
-
-# Check correlation ----
-dat <- as.data.frame(uhc_hab)
-dat$cover_VALUE <- NULL
-r <- cor(dat)
-diag(r) <- NA
-range(r, na.rm = TRUE)
+uhc_rast <- c(rast, dist_to_water, dist_to_cent, rand)
+names(uhc_rast)[5:7] <- c("dist_to_water", "dist_to_cent", "rand")
 
 # Save ----
+# The terra package doesn't work properly (due to broken C++ pointers) when
+# saving to *.rda. Instead, need to save the values.
+uhc_hab <- as.data.frame(uhc_rast, xy = TRUE)
 usethis::use_data(uhc_hab, overwrite = TRUE)
