@@ -272,14 +272,18 @@ prep_uhc.glm <- function(object, test_dat,
 
 #' @rdname prep_uhc
 #' @export
-prep_uhc.fit_logit <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+prep_uhc.fit_logit <- function(object, test_dat,
+                               n_samp = 1000, n_dens = 512,
+                               verbose = TRUE) {
   prep_uhc.glm(object = object$model, test_dat = test_dat,
                n_samp = n_samp, verbose = verbose)
 }
 
 #' @rdname prep_uhc
 #' @export
-prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+prep_uhc.fit_clogit <- function(object, test_dat,
+                                n_samp = 1000, n_dens = 512,
+                                verbose = TRUE) {
 
   # Prep test_dat list
   l <- prep_test_dat(object, test_dat, verbose = verbose)
