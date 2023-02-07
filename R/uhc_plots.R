@@ -1159,7 +1159,8 @@ plot.uhc_envelopes <- function(x, ...) {
         polygon(x = c(XX$x, rev(XX$x)),
                 y = c(XX[[paste0("CI", ci_nums[i], "_lwr")]],
                       rev(XX[[paste0("CI", ci_nums[i], "_upr")]])),
-                col = line_col[i])
+                col = line_col[i],
+                border = line_col[i])
       }
 
       # Add used and available
