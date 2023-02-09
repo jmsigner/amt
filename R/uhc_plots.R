@@ -1024,6 +1024,11 @@ conf_envelope <- function(x, levels = c(0.95, 1.00)) {
   # levels
   checkmate::assert_numeric(levels, lower = 0, upper = 1)
 
+  # If the column 'label' doesn't exist in x, add it
+  if (is.null(x$label)) {
+    x$label <- NA
+  }
+
   # Separate sampled distribution from used and available
   ua <- x[which(x$dist %in% c("U", "A")), ]
   s <- x[which(x$dist == "S"), ]
