@@ -3,11 +3,16 @@
 
 # Load packages ----
 library(tidyverse)
-library(raster)
+# library(raster) # Convert to terra
+library(terra)
 
 # Habitat data ----
 attach("data/uhc_hab.rda")
-hab <- uhc_hab
+data(uhc_hab)
+hab <- rast(uhc_hab, type = "xyz", crs = "epsg:32612")
+# Convert "cover" layer to factor
+levels(hab[[4]]) <- data.frame(id = 1:3,
+                                    cover = c("grass", "forest", "wetland"))
 
 # Coefficients ----
 # Forage is resource
@@ -31,7 +36,6 @@ beta_wetland <- log(1/2)
 # Calculate w(x) ----
 # Get our raster data into a data.frame
 dat <- as.data.frame(hab, xy = TRUE) %>%
-  rename(cover = cover_VALUE) %>%
   # Calculate g(x) [linear predictor]
   mutate(g =
            # forage
@@ -46,7 +50,6 @@ dat <- as.data.frame(hab, xy = TRUE) %>%
            beta_wetland * (cover == "wetland")) %>%
   # Calculate w(x)
   mutate(w = exp(g))
-
 
 
 # Draw random points ----

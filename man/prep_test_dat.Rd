@@ -2,7 +2,7 @@
 % Please edit documentation in R/uhc_plots.R
 \name{prep_test_dat}
 \alias{prep_test_dat}
-\title{Prepares \code{test_dat} for \code{uch_prep()}}
+\title{Prepares \code{test_dat} for \code{uhc_prep()}}
 \usage{
 prep_test_dat(object, test_dat, verbose = TRUE)
 }

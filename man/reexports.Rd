@@ -42,7 +42,7 @@ below to see their documentation.
 
   \item{sf}{\code{\link[sf:st_crs]{NA_crs_}}}
 
-  \item{survival}{\code{\link[survival]{Surv}}, \code{\link[survival]{clogit}}, \code{\link[survival]{strata}}}
+  \item{survival}{\code{\link[survival]{clogit}}, \code{\link[survival]{strata}}, \code{\link[survival]{Surv}}}
 
   \item{tibble}{\code{\link[tibble]{tibble}}}
 

@@ -7,7 +7,7 @@
 \method{plot}{uhc_data}(x, ...)
 }
 \arguments{
-\item{x}{\verb{[uhc_data]} An object of class \code{uch_data}, as returned
+\item{x}{\verb{[uhc_data]} An object of class \code{uhc_data}, as returned
 by the function \code{\link{prep_uhc}()}.}
 
 \item{...}{Included for consistency with generic
@@ -22,7 +22,8 @@ bootstrapped distribution in gray, the observed distribution in black,
 and the available distribution as a dashed red line.
 }
 \seealso{
-\code{\link{prep_uhc}()}
+\code{\link{prep_uhc}()}, \code{\link{conf_envelope}()},
+\code{\link{plot.uhc_envelopes}()}
 }
 \author{
 Brian J. Smith
