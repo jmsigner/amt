@@ -56,7 +56,7 @@ Suggests:
   knitr,
   rmarkdown, tinytest, tidygraph,sp
 LinkingTo: Rcpp
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 RdMacros: Rdpack
 VignetteBuilder: knitr

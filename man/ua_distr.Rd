@@ -4,7 +4,7 @@
 \alias{ua_distr}
 \title{Summarize distribution of used and available}
 \usage{
-ua_distr(name, type, data, resp, avail = TRUE)
+ua_distr(name, type, data, lims, resp, n_dens, avail = TRUE)
 }
 \arguments{
 \item{name}{\verb{[character]} Name of the column to summarize.}
@@ -15,7 +15,17 @@ ua_distr(name, type, data, resp, avail = TRUE)
 \item{data}{\verb{[data.frame]} The \code{data.frame} containing the columns and the
 response variable.}
 
+\item{lims}{\verb{[numeric(2)]} A \code{numeric} vector of length 2 containing the
+range for the density calculation for all variables where \code{type == "numeric"}
+as returned by \code{\link{prep_test_dat}()}. Will be passed to
+\code{stats::density.default()} arguments \code{from} and \code{to}.}
+
 \item{resp}{\verb{[character]} Name of the response variable.}
+
+\item{n_dens}{\verb{[numeric]} A \code{numeric} vector of length 1 giving the number of
+equally spaced points at which density (used, available, and sampled) is
+estimated. Passed to \code{stats::density.default()}, which indicates that \code{n}
+should usually be specified as a power of 2.}
 
 \item{avail}{\verb{[logical]} Should distribution be calculated for the available
 locations? Defaults to \code{TRUE}, but should be false when summarizing the

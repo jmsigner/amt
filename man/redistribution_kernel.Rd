@@ -8,7 +8,9 @@ redistribution_kernel(
   x = make_issf_model(),
   start = make_start(),
   map,
-  fun = function(xy, map) {     extract_covariates(xy, map, where = "both") },
+  fun = function(xy, map) {
+     extract_covariates(xy, map, where = "both")
+ },
   covars = NULL,
   max.dist = get_max_dist(x),
   n.control = 1e+06,

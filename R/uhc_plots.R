@@ -9,6 +9,10 @@
 #' the model passed to `object`.
 #' @param n_samp `[numeric = 1000]` A `vector` of length 1 giving the number of
 #' samples to use to characterize the used habitat distribution under the model.
+#' @param n_dens `[numeric = 512]` A `numeric` vector of length 1 giving the
+#' number of equally spaced points at which density (used, available, and
+#' sampled) is estimated. Passed to `stats::density.default()`, which indicates
+#' that `n` should usually be specified as a power of 2.
 #' @param verbose `[logical]` Should messages be displayed (`TRUE`) or not
 #' (`FALSE`)?
 #'
@@ -44,7 +48,10 @@
 #' @seealso See Fieberg \emph{et al.} 2018 for details about UHC plots.
 #'
 #' Default plotting method available: \code{\link{plot.uhc_data}()}
+#'
 #' Coercion to `data.frame`: \code{\link{as.data.frame.uhc_data}()}
+#'
+#' Subsetting method: \code{\link{Extract.uhc_data}}
 #'
 #' @references
 #' Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A.,
@@ -52,8 +59,97 @@
 #' for validating species distribution, resource selection, and step-selection
 #' models. *Ecography* 41:737–752.
 #'
+#' @examples
+#'
+#' \donttest{
+#' # Load packages
+#' library(amt)
+#' library(dplyr)
+#' library(terra)
+#' library(sf)
+#'
+#' # HSF ----------------------------------------------
+#' # Load data
+#' data(uhc_hsf_locs)
+#' data(uhc_hab)
+#' hab <- rast(uhc_hab, type = "xyz", crs = "epsg:32612")
+#' # Convert "cover" layer to factor
+#' levels(hab[[4]]) <- data.frame(id = 1:3,
+#'                                cover = c("grass", "forest", "wetland"))
+#'
+#' # Split into train (80%) and test (20%)
+#' set.seed(1)
+#' uhc_hsf_locs$train <- rbinom(n = nrow(uhc_hsf_locs),
+#'                              size = 1, prob = 0.8)
+#' train <- uhc_hsf_locs[uhc_hsf_locs$train == 1, ]
+#' test <- uhc_hsf_locs[uhc_hsf_locs$train == 0, ]
+#'
+#' # Available locations
+#' avail_train <- random_points(st_as_sf(st_as_sfc(st_bbox(hab))),
+#'                              n = nrow(train) * 10)
+#'
+#' avail_test <- random_points(st_as_sf(st_as_sfc(st_bbox(hab))),
+#'                             n = nrow(test) * 10)
+#'
+#' # Combine with used
+#' train_dat <- train |>
+#'   make_track(x, y, crs = 32612) |>
+#'   mutate(case_ = TRUE) |>
+#'   bind_rows(avail_train) |>
+#'   # Attach covariates
+#'   extract_covariates(hab) |>
+#'   # Assign large weights to available
+#'   mutate(weight = case_when(
+#'     case_ ~ 1,
+#'     !case_ ~ 5000
+#'   ))
+#'
+#' test_dat <- test |>
+#'   make_track(x, y, crs = 32612) |>
+#'   mutate(case_ = TRUE) |>
+#'   bind_rows(avail_test) |>
+#'   # Attach covariates
+#'   extract_covariates(hab) |>
+#'   # Assign large weights to available
+#'   mutate(weight = case_when(
+#'     case_ ~ 1,
+#'     !case_ ~ 5000
+#'   ))
+#'
+#' # Fit (correct) HSF
+#' hsf1 <- glm(case_ ~ forage + temp + I(temp^2) + pred + cover,
+#'             data = train_dat, family = binomial(), weights = weight)
+#'
+#' # Drop weights from 'test_dat'
+#' test_dat$weight <- NULL
+#'
+#' # Prep UHC plots
+#' uhc_dat <- prep_uhc(object = hsf1, test_dat = test_dat,
+#'                     n_samp = 500, verbose = TRUE)
+#'
+#' # Plot all variables
+#' plot(uhc_dat)
+#'
+#' # Plot only first variable
+#' plot(uhc_dat[1])
+#'
+#' # Plot only "cover" variable
+#' plot(uhc_dat["cover"])
+#'
+#' # Coerce to data.frame
+#' df <- as.data.frame(uhc_dat)
+#'
+#' # Simplify sampled lines to confidence envelopes
+#' conf <- conf_envelope(df)
+#'
+#' # Default plot for the envelopes version
+#' plot(conf)
+#' }
+#'
 #' @export
-prep_uhc <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+prep_uhc <- function(object, test_dat,
+                     n_samp = 1000, n_dens = 512,
+                     verbose = TRUE) {
 
   # Check inputs
   ## object
@@ -68,13 +164,18 @@ prep_uhc <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
   ## n_samp
   checkmate::assert_integerish(n_samp, lower = 1)
 
+  ## n_dens
+  checkmate::assert_integerish(n_dens, lower = 2)
+
   # Pass to correct method
   UseMethod("prep_uhc", object)
 }
 
 #' @rdname prep_uhc
 #' @export
-prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+prep_uhc.glm <- function(object, test_dat,
+                         n_samp = 1000, n_dens = 512,
+                         verbose = TRUE) {
 
   # Prep test_dat list
   l <- prep_test_dat(object, test_dat, verbose = verbose)
@@ -83,8 +184,9 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 
   # Step 1. Summarize distribution of covariates
   dist_dat <- lapply(1:length(l$vars), function(ii){
-    return(ua_distr(name = l$vars[ii], data = l$data,
-                    type = l$type[ii], resp = l$resp))
+    return(ua_distr(name = l$vars[[ii]], data = l$data,
+                    lims = l$lims[[ii]], type = l$type[[ii]],
+                    resp = l$resp, n_dens = n_dens))
   })
 
   names(dist_dat) <- l$vars
@@ -130,8 +232,8 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
     dd[[l$resp]] <- TRUE
     cov_dens <- lapply(1:length(l$vars), function(ii){
       # Summarize distributions
-      xx <- ua_distr(name = l$vars[ii], data = dd,
-                     type = l$type[ii], resp = l$resp,
+      xx <- ua_distr(name = l$vars[[ii]], data = dd, lims = l$lims[[ii]],
+                     type = l$type[[ii]], resp = l$resp, n_dens = n_dens,
                      avail = FALSE)
       # Label iteration
       xx$iter <- i
@@ -159,6 +261,7 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
   ll <- list(orig = dist_dat,
              samp = pred_dist_cov,
              vars = l$vars,
+             lims = l$lims,
              type = l$type,
              resp = l$resp)
 
@@ -171,14 +274,18 @@ prep_uhc.glm <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
 
 #' @rdname prep_uhc
 #' @export
-prep_uhc.fit_logit <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+prep_uhc.fit_logit <- function(object, test_dat,
+                               n_samp = 1000, n_dens = 512,
+                               verbose = TRUE) {
   prep_uhc.glm(object = object$model, test_dat = test_dat,
-           n_samp = n_samp, verbose = verbose)
+               n_samp = n_samp, verbose = verbose)
 }
 
 #' @rdname prep_uhc
 #' @export
-prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE) {
+prep_uhc.fit_clogit <- function(object, test_dat,
+                                n_samp = 1000, n_dens = 512,
+                                verbose = TRUE) {
 
   # Prep test_dat list
   l <- prep_test_dat(object, test_dat, verbose = verbose)
@@ -187,8 +294,9 @@ prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE)
 
   # Step 1. Summarize distribution of covariates
   dist_dat <- lapply(1:length(l$vars), function(ii){
-    return(ua_distr(name = l$vars[ii], data = l$data,
-                    type = l$type[ii], resp = l$resp))
+    return(ua_distr(name = l$vars[[ii]], data = l$data,
+                    lims = l$lims[[ii]], type = l$type[[ii]],
+                    resp = l$resp, n_dens = n_dens))
   })
 
   names(dist_dat) <- l$vars
@@ -246,8 +354,8 @@ prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE)
     dd[[l$resp]] <- TRUE
     cov_dens <- lapply(1:length(l$vars), function(ii){
       # Summarize distributions
-      xx <- ua_distr(name = l$vars[ii], data = dd,
-                     type = l$type[ii], resp = l$resp,
+      xx <- ua_distr(name = l$vars[[ii]], data = dd, lims = l$lims[[ii]],
+                     type = l$type[[ii]], resp = l$resp, n_dens = n_dens,
                      avail = FALSE)
       # Label iteration
       xx$iter <- i
@@ -275,6 +383,7 @@ prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE)
   ll <- list(orig = dist_dat,
              samp = pred_dist_cov,
              vars = l$vars,
+             lims = l$lims,
              type = l$type,
              resp = l$resp)
 
@@ -285,7 +394,7 @@ prep_uhc.fit_clogit <- function(object, test_dat, n_samp = 1000, verbose = TRUE)
   return(ll)
 }
 
-#' Prepares `test_dat` for `uch_prep()`
+#' Prepares `test_dat` for `uhc_prep()`
 #'
 #' Internal function to check and format `test_dat`
 #'
@@ -371,10 +480,30 @@ prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
   type <- ifelse(vars %in% fac, "factor", "numeric")
   names(type) <- vars
 
+  # Calculate 'from' and 'to' for stats::density.default()
+  #   Following the default for density() which calculates 'from' and 'to'
+  #   as the range +/- bandwidth * 3. Only need to do this so that 'from'
+  #   and 'to' are the same for both used and available.
+  lims <- lapply(vars, function(vv) {
+    if (type[vv] == "numeric") {
+      # Range of data
+      rng <- range(test_dat[[vv]], na.rm = TRUE)
+      # Difference from the range
+      rng_diff <- stats::bw.nrd0(test_dat[[vv]]) * 3
+      from <- rng[1] - rng_diff
+      to <- rng[2] + rng_diff
+      return(c(from, to))
+    } else {
+      return(c(NA, NA))
+    }
+  })
+  names(lims) <- vars
+
   # Construct list to return
   l <- list(data = test_dat,
             vars = vars,
             type = type,
+            lims = lims,
             resp = resp)
 
   # Return
@@ -388,7 +517,7 @@ prep_test_dat.fit_clogit <- function(object, test_dat, verbose = TRUE) {
   na_rows <- nrow(test_dat) - nrow(na.omit(test_dat))
   if (na_rows > 0) {
     stop("'test_dat' contains ", na_rows, " row(s) with NAs. ",
-    "Remove NAs before proceeding.")
+         "Remove NAs before proceeding.")
   }
 
   ## Check that 'test_dat' is consistent with 'object' formula.
@@ -489,10 +618,32 @@ prep_test_dat.fit_clogit <- function(object, test_dat, verbose = TRUE) {
   type <- ifelse(vars %in% fac, "factor", "numeric")
   names(type) <- vars
 
+
+
+  # Calculate 'from' and 'to' for stats::density.default()
+  #   Following the default for density() which calculates 'from' and 'to'
+  #   as the range +/- bandwidth * 3. Only need to do this so that 'from'
+  #   and 'to' are the same for both used and available.
+  lims <- lapply(vars, function(vv) {
+    if (type[vv] == "numeric") {
+      # Range of data
+      rng <- range(test_dat[[vv]], na.rm = TRUE)
+      # Difference from the range
+      rng_diff <- stats::bw.nrd0(test_dat[[vv]]) * 3
+      from <- rng[1] - rng_diff
+      to <- rng[2] + rng_diff
+      return(c(from, to))
+    } else {
+      return(c(NA, NA))
+    }
+  })
+  names(lims) <- vars
+
   # Construct list to return
   l <- list(data = test_dat,
             vars = vars,
             type = type,
+            lims = lims,
             resp = resp,
             strat = strat,
             move = move_vars)
@@ -510,21 +661,32 @@ prep_test_dat.fit_clogit <- function(object, test_dat, verbose = TRUE) {
 #' \code{\link{prep_test_dat}()}.
 #' @param data `[data.frame]` The `data.frame` containing the columns and the
 #' response variable.
+#' @param lims `[numeric(2)]` A `numeric` vector of length 2 containing the
+#' range for the density calculation for all variables where `type == "numeric"`
+#' as returned by \code{\link{prep_test_dat}()}. Will be passed to
+#' `stats::density.default()` arguments `from` and `to`.
 #' @param resp `[character]` Name of the response variable.
+#' @param n_dens `[numeric]` A `numeric` vector of length 1 giving the number of
+#' equally spaced points at which density (used, available, and sampled) is
+#' estimated. Passed to `stats::density.default()`, which indicates that `n`
+#' should usually be specified as a power of 2.
 #' @param avail `[logical]` Should distribution be calculated for the available
 #' locations? Defaults to `TRUE`, but should be false when summarizing the
 #' bootstrapped "used" samples.
 #'
-ua_distr <- function(name, type, data, resp, avail = TRUE) {
+ua_distr <- function(name, type, data, lims, resp,
+                     n_dens, avail = TRUE) {
   u <- na.omit(data[[name]][which(data[[resp]] == 1)])
   a <- na.omit(data[[name]][which(data[[resp]] == 0)])
 
   # If 'type' is numeric
   if (type == "numeric") {
-    f_u <- stats::density(u)
+    f_u <- stats::density(u, bw = "nrd0", n = n_dens,
+                          from = lims[1], to = lims[2])
     f_u_df <- data.frame(x = f_u$x, y = f_u$y, dist = "U")
     if (avail) {
-      f_a <- stats::density(a)
+      f_a <- stats::density(a, bw = "nrd0", n = n_dens,
+                            from = lims[1], to = lims[2])
       f_a_df <- data.frame(x = f_a$x, y = f_a$y, dist = "A")
       df <- rbind(f_u_df, f_a_df)
     } else {
@@ -620,7 +782,7 @@ issf_w_form <- function(object, l) {
 #'
 #' Plot an object of class `uhc_data`
 #'
-#' @param x `[uhc_data]` An object of class `uch_data`, as returned
+#' @param x `[uhc_data]` An object of class `uhc_data`, as returned
 #' by the function \code{\link{prep_uhc}()}.
 #' @param ... Included for consistency with generic
 #' \code{\link{plot}()}. Currently ignored.
@@ -631,7 +793,8 @@ issf_w_form <- function(object, l) {
 #'
 #' @author Brian J. Smith
 #'
-#' @seealso \code{\link{prep_uhc}()}
+#' @seealso \code{\link{prep_uhc}()}, \code{\link{conf_envelope}()},
+#' \code{\link{plot.uhc_envelopes}()}
 #'
 #' @export
 plot.uhc_data <- function(x, ...) {
@@ -719,7 +882,7 @@ plot.uhc_data <- function(x, ...) {
       A <- x$orig[[cov]][which(x$orig[[cov]]$dist == "A"), ]
       # Setup the plot
       plot(NA, xlim = cov_xlim[[cov]], ylim = c(0, cov_ymax[[cov]]),
-           xlab = cov, ylab = "Proportion", main = cov,
+           xlab = cov, ylab = "Probability Mass", main = cov,
            axes = FALSE)
       graphics::axis(2)
       graphics::axis(1, at = unq, labels = lev)
@@ -741,7 +904,7 @@ plot.uhc_data <- function(x, ...) {
 #'
 #' Coerces `uhc_data` from `list` to `data.frame`
 #'
-#' @param x `[uhc_data]` An object of class `uch_data`, as returned
+#' @param x `[uhc_data]` An object of class `uhc_data`, as returned
 #' by the function \code{\link{prep_uhc}()}.
 #' @param row.names Included for consistency with generic
 #' \code{\link{as.data.frame}()}. Currently ignored.
@@ -767,6 +930,8 @@ plot.uhc_data <- function(x, ...) {
 #' - `iter`: The iteration number if `dist == "S"`.
 #' - `label`: The label if `var` is a factor.
 #'
+#' @seealso \code{\link{prep_uhc}()}, \code{\link{conf_envelope}()}
+#'
 #' @export
 as.data.frame.uhc_data <- function(x, row.names = NULL, optional = FALSE, ...) {
   # Check input
@@ -775,25 +940,29 @@ as.data.frame.uhc_data <- function(x, row.names = NULL, optional = FALSE, ...) {
   }
 
   # Grab factor levels from any factors
-  fac <- x$vars[which(x$type == "factor")]
-  levs <- lapply(fac, function(cov) {
-    xx <- data.frame(label = levels(x$orig[[cov]]$x))
-    xx$x <- seq(1, nrow(xx), by = 1)
-    return(xx)
-  })
-  names(levs) <- fac
-  lev_df <- dplyr::bind_rows(levs, .id = "var")
+  if (any(x$type == "factor")) {
+    fac <- x$vars[which(x$type == "factor")]
+    levs <- lapply(fac, function(cov) {
+      xx <- data.frame(label = levels(x$orig[[cov]]$x))
+      xx$x <- seq(1, nrow(xx), by = 1)
+      return(xx)
+    })
+    names(levs) <- fac
+    lev_df <- dplyr::bind_rows(levs, .id = "var")
+  } else {
+    lev_df <- data.frame()
+  }
 
   # Now treat all as numeric
 
-  # Combine uch_data$orig into data.frame
+  # Combine uhc_data$orig into data.frame
   orig <- dplyr::bind_rows(lapply(x$orig, function(cov) {
     cov$x <- as.numeric(cov$x)
     return(cov)
   }), .id = "var")
   orig$iter <- NA
 
-  # Combine uch_data$samp into data.frame
+  # Combine uhc_data$samp into data.frame
   samp <- dplyr::bind_rows(lapply(x$samp, function(cov) {
     cov$x <- as.numeric(cov$x)
     return(cov)
@@ -816,4 +985,235 @@ as.data.frame.uhc_data <- function(x, row.names = NULL, optional = FALSE, ...) {
   return(comb)
 }
 
+#' Create confidence envelopes from a `uhc_data_frame`
+#'
+#' Simplifies sampled distributions in a `uhc_data_frame` to confidence envelopes
+#'
+#' @param x `[uhc_data]` An object of class `uhc_data_frame`, as returned
+#' by the function \code{\link{as.data.frame.uhc_data}()}.
+#' @param levels `[numeric]` A numeric vector specifying the desired confidence
+#' levels. Defaults to `c(0.95, 1)` to create 95% and 100% confidence intervals.
+#'
+#' @details This can dramatically improve plotting time for UHC plots by
+#' simplifying the many sampled lines down to the boundaries of a polygon.
+#'
+#' @author Brian J. Smith
+#'
+#' @return Returns a `data.frame` with columns:
+#' - `var`: The name of the variable
+#' - `x`: The x-coordinate of the density plot (the value of `var`).
+#' - `label`: If `var` is a `factor`, the label for the value given by `x`.
+#' - `U`: The y-coordinate of the density plot for the use distribution.
+#' - `A`: The y-coordinate of the density plot for the availability distribution.
+#' - `CI*_lwr`: The lower bound of the confidence envelope for the corresponding
+#' confidence level.
+#' - `CI*_upr`: The upper bound of the confidence envelope for the corresponding
+#' confidence level.
+#'
+#' @seealso \code{\link{prep_uhc}()}, \code{\link{plot.uhc_envelopes}()}
+#'
+#' @export
+conf_envelope <- function(x, levels = c(0.95, 1.00)) {
+  ## Check inputs
+
+  # x
+  if (!inherits(x, "uhc_data_frame")) {
+    stop("Object 'x' must be of class 'uhc_data_frame'. See ?as.data.frame.uhc_data.")
+  }
+
+  # levels
+  checkmate::assert_numeric(levels, lower = 0, upper = 1)
+
+  # Separate sampled distribution from used and available
+  ua <- x[which(x$dist %in% c("U", "A")), ]
+  s <- x[which(x$dist == "S"), ]
+
+  # Get quantiles for each confidence limit
+  qs <- lapply(levels, function(lv) {
+    lwr <- (1 - lv)/2
+    upr <- 1 - lwr
+    return(c(lwr, upr))
+  })
+
+  # Name quantiles
+  names(qs) <- paste0("CI", levels * 100)
+
+  # Summarize samples at each quantile
+  ss <- lapply(names(qs), function(qnm) {
+    # Summarize
+    suppressMessages({ # don't want dplyr::summarize() messages
+      summ <- s |>
+        dplyr::group_by(.data$var, .data$x, .data$label) |>
+        dplyr::summarize(lwr = stats::quantile(y, prob = qs[[qnm]][1]),
+                         upr = stats::quantile(y, prob = qs[[qnm]][2])) |>
+        dplyr::arrange(.data$var, .data$x) |>
+        as.data.frame()
+    })
+    # Append CI name to lwr and upr
+    names(summ)[4:5] <- paste0(qnm, "_", c("lwr", "upr"))
+
+    # Return summarized quantiles
+    return(summ)
+  })
+
+  # Construct final data.frame
+
+  # Pivot 'ua' from long to wide data
+  uaw <- ua |>
+    dplyr::select(-.data$iter) |>
+    tidyr::pivot_wider(names_from = .data$dist,
+                       values_from = y) |>
+    dplyr::arrange(var, x) |>
+    as.data.frame()
+
+  # Now join each element of 'ss'
+  for (i in 1:length(ss)) {
+    uaw <- dplyr::left_join(uaw, ss[[i]], by = c("var", "x", "label"))
+  }
+
+  # Set class
+  class(uaw) <- c("uhc_envelopes", class(uaw))
+
+  # Return
+  return(uaw)
+}
+
+#' Plot simplified UHC plots
+#'
+#' Plot an object of class `uhc_envelopes`
+#'
+#' @param x `[uhc_envelopes]` An object of class `uhc_envelopes`, as returned
+#' by the function \code{\link{conf_envelope}()}.
+#' @param ... Included for consistency with generic
+#' \code{\link{plot}()}. Currently ignored.
+#'
+#' @details Makes plots mimicking those in Fieberg et al. (2018), with the
+#' bootstrapped distribution in gray, the observed distribution in black,
+#' and the available distribution as a dashed red line. This differs from
+#' \code{\link{plot.uhc_data}()} in that the bootstrapped distribution
+#' (in gray) is drawn as a polygon rather than (many) lines, speeding up
+#' plotting performance.
+#'
+#' @author Brian J. Smith
+#'
+#' @seealso \code{\link{prep_uhc}()}, \code{\link{conf_envelope}()},
+#' \code{\link{plot.uhc_data}()}
+#'
+#' @export
+plot.uhc_envelopes <- function(x, ...) {
+  # Check input
+  if (!inherits(x, "uhc_envelopes")) {
+    stop("Object 'x' must be of class 'uhc_envelopes'. See ?conf_envelope.")
+  }
+
+  # Split data by variable
+  xx <- split(x, x$var)
+
+  # Plot each variable
+  lapply(xx, function(XX) {
+    # Determine existing confidence levels
+    ci_nams <- names(XX)[grep("CI", names(XX))]
+    ci_nums <- unique(gsub("CI", "",
+                           sapply(strsplit(ci_nams, "_"), getElement, 1)))
+    # Decide colors for each confidence level
+    line_col <- grDevices::gray.colors(n = length(ci_nums),
+                                       start = 0.3, end = 0.9,
+                                       alpha = 0.5)
+    # Decide line widths (only applicable to factors)
+    line_wid <- seq(2, 4, length.out = length(ci_nums))
+
+    # Determine plot limits
+    xlims <- range(XX$x)
+    ylims <- c(0, max(XX[[ncol(XX)]]))
+
+    # Determine if XX is numeric or factor
+    fac <- all(!is.na(XX$label))
+
+    if (isTRUE(fac)) {
+      # Setup blank plot
+      plot(NA, xlim = xlims, ylim = ylims,
+           xlab = XX$var[1], ylab = "Probability Mass", main = XX$var[1],
+           axes = FALSE)
+      graphics::axis(2)
+      graphics::axis(1, at = XX$x, labels = XX$label)
+      graphics::box()
+
+      # Add confidence envelopes
+      for (i in length(ci_nums):1) {
+        graphics::segments(x0 = XX$x,
+                           x1 = XX$x,
+                           y0 = XX[[paste0("CI", ci_nums[i], "_lwr")]],
+                           y1 = XX[[paste0("CI", ci_nums[i], "_upr")]],
+                           col = line_col[i],
+                           lwd = line_wid[i])
+      }
+
+      # Add used and available
+      graphics::points(x = XX$x, y = XX$U, col = "black", pch = 16)
+      graphics::points(x = XX$x, y = XX$A, col = "red", pch = 1)
+
+    } else {
+
+      # Setup blank plot
+      plot(NA, xlim = xlims, ylim = ylims,
+           xlab = XX$var[1], ylab = "Probability Density", main = XX$var[1])
+
+      # Add confidence envelopes
+      for (i in length(ci_nums):1) {
+        graphics::polygon(x = c(XX$x, rev(XX$x)),
+                          y = c(XX[[paste0("CI", ci_nums[i], "_lwr")]],
+                                rev(XX[[paste0("CI", ci_nums[i], "_upr")]])),
+                          col = line_col[i],
+                          border = line_col[i])
+      }
+
+      # Add used and available
+      graphics::lines(x = XX$x, y = XX$U, col = "black", lty = 1)
+      graphics::lines(x = XX$x, y = XX$A, col = "red", lty = 2)
+    }
+
+    return(invisible(NULL))
+  })
+
+  # Invisibly return x
+  return(invisible(x))
+}
+
+#' @name Extract.uhc_data
+#'
+#' @title Subset a `uhc_data` object
+#'
+#' @param x `[uhc_data]` A `uhc_data` object to subset.
+#' @param i `[numeric` or `character]` A numeric vector to subset variables
+#' by position or a character vector to subset variables by name.
+#'
+#' @export
+`[.uhc_data` <- function(x, i) {
+
+  # i can be either numeric or character
+  if (is.numeric(i)) {
+    xx <- list(orig = x$orig[i],
+               samp = x$samp[i],
+               vars = x$vars[i],
+               lims = x$lims[i],
+               type = x$type[i],
+               resp = x$resp)
+    class(xx) <- class(x)
+    return(xx)
+  }
+
+  if (is.character(i)) {
+    xx <- list(orig = x$orig[i],
+               samp = x$samp[i],
+               vars = i,
+               lims = x$lims[i],
+               type = x$type[i],
+               resp = x$resp)
+    class(xx) <- class(x)
+    return(xx)
+  }
+
+  # If neither numeric or character
+  stop("You may subset a 'uhc_data' object with a numeric or character vector.")
+}
 

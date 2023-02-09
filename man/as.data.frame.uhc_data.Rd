@@ -7,7 +7,7 @@
 \method{as.data.frame}{uhc_data}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
-\item{x}{\verb{[uhc_data]} An object of class \code{uch_data}, as returned
+\item{x}{\verb{[uhc_data]} An object of class \code{uhc_data}, as returned
 by the function \code{\link{prep_uhc}()}.}
 
 \item{row.names}{Included for consistency with generic
@@ -40,6 +40,9 @@ This coercion aims to keep all of the information contained in
 the \code{uhc_data} \code{list} in the resulting \code{data.frame} representation. Factors
 are converted to numeric, but the levels are retained in the column
 \code{"label"}.
+}
+\seealso{
+\code{\link{prep_uhc}()}, \code{\link{conf_envelope}()}
 }
 \author{
 Brian J. Smith
