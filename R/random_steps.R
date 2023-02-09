@@ -130,14 +130,17 @@ random_steps.bursted_steps_xyt <- function(
 
   out <- lapply(split(x, x$burst_), function(q) {
     class(q) <- class(q)[-1]
-    random_steps(q, n_control = n_control, rand_sl = rand_sl,
-                 rand_ta = rand_ta, include_observed = include_observed, ...)
+    if (nrow(q) > 1) {
+      random_steps(q, n_control = n_control, rand_sl = rand_sl,
+                   rand_ta = rand_ta, include_observed = include_observed, ...)
+    }
   })
+
+  out <- out[!sapply(out, is.null)]
 
   cls <- class(out[[1]])
 
-
-  data.table::rbindlist(
+  out <- data.table::rbindlist(
     out
   ) |> tibble::as_tibble()
 
@@ -147,7 +150,6 @@ random_steps.bursted_steps_xyt <- function(
   attributes(out)$n_control_ <- n_control
   attr(out, "crs_") <- attr(x, "crs_")
   out
-
 }
 
 

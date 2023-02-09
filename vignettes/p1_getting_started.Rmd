@@ -125,18 +125,18 @@ tr1 <- make_track(sh, x_epsg31467, y_epsg31467, ts, id = id, month = month,
                 crs = 31467)
 ```
 
-### A note on pipes (`%>%`)
+### A note on pipes (`|>`)
 `amt` was heavily inspired through workflows suggested by the popular packages from the `tidyverse`. The above steps could easily be connected using pipes. Note that result will be exactly the same.
 
 ```{r}
 data(sh)
-tr2 <- sh %>% filter(complete.cases(.)) %>% 
+tr2 <- sh |> filter(complete.cases(sh)) |> 
   mutate(
     ts = as.POSIXct(lubridate::ymd(day) + lubridate::hms(time)), 
     id = "Animal 1", 
     month = lubridate::month(ts)
-  ) %>% 
-  filter(!duplicated(ts)) %>% 
+  ) |> 
+  filter(!duplicated(ts)) |> 
   make_track(x_epsg31467, y_epsg31467, ts, id = id, month = month, 
            crs = 31467)
 tr2
@@ -150,7 +150,7 @@ tr2
 Remember, that a `track_xy*` behaves like regular a `data.frame`. This means that we can use all data manipulation verbs that we are used to from `base` R or the `tidyverse`. For example, we can filter a track based on some characteristic. As an example we extract all relocations from the month May. 
 
 ```{r}
-tr3 <- tr2 %>% filter(month == 5)
+tr3 <- tr2 |> filter(month == 5)
 
 # we are left with a track
 class(tr3)
@@ -159,7 +159,7 @@ class(tr3)
 
 #### Transforming CRS
 
-If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper around `sp::spTransform`). For illustration, we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
+If we set the CRS when creating a track (we can verify this with `has_crs`), we can transform the CRS of the coordinates with the function `transform_coords` (a wrapper around `sf::st_transform()`). For illustration, we will transform the CRS of `tr2` to geographical coordinates (EPSG:4326).
 
 ```{r}
 transform_coords(tr2, 4326)
@@ -190,7 +190,7 @@ summarize_sampling_rate(tr2)
 This suggests that a sampling rate for 6 hours might be adequate. We can then use the function `track_resample` to resample the track and only keep relocations that are approximately 6 hours apart (within some tolerance, that can be specified). We will use the function `lubridate::hours` to specify the sampling rate and `lubridate::minutes` to specify the tolerance. Both arguments `rate` and `tolerance` are expected to be a `Period`.
 
 ```{r}
-tr3 <- tr2 %>% track_resample(rate = hours(6), tolerance = minutes(20))
+tr3 <- tr2 |> track_resample(rate = hours(6), tolerance = minutes(20))
 tr3
 ```
 
@@ -202,19 +202,18 @@ tr3
 
 In many situations we are more interested in steps (that is the animal moving from one relocation to an other, or the straight line between a start and a end point), that in the individual relocations. `amt` supports `steps` as an other way to represent movement data. The transition from a track to steps can be done via two functions.
 
-1. `steps`: Takes as an input a track, converts the track to step and calculating some derived quantities (e.g., step lengths, turning angles). The function `steps` to receive a track with regular sampling rates.
-2. `steps_by_burst`: Takes as an input a resampled track (i.e., a track with several bursts) and will calculate derived quantities per burst.
+1. `steps()`: Takes as an input a track, converts the track to step and calculating some derived quantities (e.g., step lengths, turning angles). The function `steps()` expects a track with regular sampling rates.
+2. `steps_by_burst()`: Takes as an input a resampled track (i.e., a track with several bursts) and will calculate derived quantities per burst.
 
 
 
 ## How to deal with several animals
 
-Up to now we have only considered situations with one animal. However, in most telemetry studies more than one animal are tracked and we often want to calculated movement relevant characteristics for several animals individually. `amt` does not provide a infrastructure for dealing with several animal, however, `list`-columns from the `tidyverse` can be used to manage many animals. Because a track is just a `data_frame` all `tidyverse` verbs can be used. The general strategy consists of 4 steps:
+Up to now we have only considered situations with one animal. However, in most telemetry studies more than one animal are tracked and we often want to calculated movement relevant characteristics for several animals individually. `amt` does not provide a infrastructure for dealing with several animal, however, `list`-columns from the `tidyverse` can be used to manage many animals. Because a track is just a `tibble` all `tidyverse` verbs can be used. The general strategy consists of three steps:
 
-1. Group a track by one or more grouping variables using the function `group_by`.
-2. Nest a grouped track. This retains the unique values of the grouping variable(s) and creates a new column called `data`. The data column is a so called `list`-column. This means it is an R list that contains a `data_frame` for each group. 
-3. Now we can perform operations on the grouped data creating a new list column. This can be done in a combination with `mutate` and `map` (instead of `map` also `lapply` could be used). 
-4. Select the relevant columns and unnest. With `select` we can select columns of interest and reverse the nesting with the function `unnest`.
+1. Nest a track by one or more columns. This retains the unique values of the grouping variable(s) and creates a new `list`-column with tracks. 
+2. Now we can perform operations on the grouped data creating a new list column. This can be done in a combination with `mutate` and `map` (instead of `map` also `lapply` could be used). 
+3. Select the relevant columns and unnest. With `select()` we can select columns of interest and reverse the nesting with the function `unnest()`.
 
 As an example we will use a second data set included in `amt` on tracks of four fishers. We will load the data, create a track, resample the tracks individually to 30 min and create a histogram of step lengths (accounting for bursts).
 
@@ -224,6 +223,7 @@ We start by loading the data and creating a track of all individuals together
 data("amt_fisher")
 trk <- amt_fisher %>% make_track(x_, y_, t_, id = id)
 ```
+
 Next, we group the track by `id` and nest the track.
 
 ```{r}
@@ -241,6 +241,7 @@ x <- trk1$data[[1]]
 x %>% track_resample(rate = minutes(30), tolerance = minutes(5)) %>%
   steps_by_burst()
 ```
+
 We now want to apply exactly the same logic to all animals. We can do this by using a `map` and save the results to a new column using `mutate`.
 
 ```{r}
@@ -261,6 +262,7 @@ trk2 %>% select(id, steps) %>% unnest(cols = steps) %>%
 
 
 ## Session
+
 ```{r}
 sessioninfo::session_info()
 ```

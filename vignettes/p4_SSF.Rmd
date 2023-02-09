@@ -55,7 +55,7 @@ sh_forest
 Before fitting a SSF we have to do some data preparation. First, we change from a point representation to a step representation, using the function `steps_by_burst`, which in contrast to the `steps` function accounts for bursts.
 
 ```{r}
-ssf1 <- deer %>% steps_by_burst()
+ssf1 <- deer |> steps_by_burst()
 ```
 
 ### Control/random steps
@@ -78,7 +78,7 @@ The function `random_steps` has seven arguments. For most use cases the defaults
 In most situations the following code snippet should work^[And how it was implemented in `amt` up to version 0.0.6. This **should** be backward compatible and not break existing code.]. 
 
 ```{r}
-ssf1 <- ssf1 %>% random_steps(n_control = 15)
+ssf1 <- ssf1 |> random_steps(n_control = 15)
 ```
 
 #### A exponential distribution for step lengths
@@ -120,7 +120,7 @@ summary(m2)
 
 ### Interpretation of coefficients
 
-See the discussion in Fieberg et al 2020.
+See the discussion in Fieberg et al 2021.
 
 ## A note on piping
 

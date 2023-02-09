@@ -14,6 +14,9 @@
 - Rewrite parts of `hr_akde()` to use `terra` instead of `raster`.
 - Rewrite parts of `hr_locoh()` to use `sf` instead of `rgeos`.
 
+## Fixes
+- Fixed error in `ta_correlation()` reported by Ines Khazar. 
+
 # amt 0.1.8
 ## updates
 - `fit_clogit()` checks for strata.

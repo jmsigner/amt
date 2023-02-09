@@ -2,6 +2,7 @@
 % Please edit documentation in R/hr_isopleths.R
 \name{hr_isopleths}
 \alias{hr_isopleths}
+\alias{hr_isopleths.PackedSpatRaster}
 \alias{hr_isopleths.SpatRaster}
 \alias{hr_isopleths.mcp}
 \alias{hr_isopleths.locoh}
@@ -10,6 +11,8 @@
 \title{Home-range isopleths}
 \usage{
 hr_isopleths(x, ...)
+
+\method{hr_isopleths}{PackedSpatRaster}(x, levels, descending = TRUE, ...)
 
 \method{hr_isopleths}{SpatRaster}(x, levels, descending = TRUE, ...)
 

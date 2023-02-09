@@ -8,7 +8,14 @@
 \usage{
 make_start(x, ...)
 
-\method{make_start}{numeric}(x = c(0, 0), ta_ = 0, time = Sys.time(), dt = hours(1), ...)
+\method{make_start}{numeric}(
+  x = c(0, 0),
+  ta_ = 0,
+  time = Sys.time(),
+  dt = hours(1),
+  crs = NA,
+  ...
+)
 
 \method{make_start}{steps_xyt}(x, ...)
 }
@@ -19,11 +26,13 @@ make_start(x, ...)
 
 \item{ta_}{\verb{[numeric(1)]\{0\}} \cr The initial turn-angle.}
 
-\item{time}{\verb{[POSIXt(1)]\{Sys.time()\}} \cr The timestamp when the simulation
+\item{time}{\verb{[POSIXt(1)]\{Sys.time()\}} \cr The time stamp when the simulation
 starts.}
 
 \item{dt}{\verb{[Period(1)]\{hours(1)\}} \cr The sampling rate of the
 simulations.}
+
+\item{crs}{\verb{[int(1)]\{NA\}} \cr The coordinate reference system of the start location given as EPSG code.}
 }
 \description{
 An initial step for simulations. This step can either be created by defining a step from

@@ -185,8 +185,8 @@ ggraph(graph, layout = 'stress') +
 The function `hr_overlap_feature` allows to calculate percentage overlap ($HR$ index) between a home. To illustrate this feature, we will use again the data from `lupe` and calculate the intersection with an arbitrary polygon. 
 
 ```{r}
-poly <- bbox(lupe, buffer = -500, sf = TRUE)
-poly1 <- bbox(lupe, sf = TRUE)
+poly <- amt::bbox(lupe, buffer = -500, sf = TRUE)
+poly1 <- amt::bbox(lupe, sf = TRUE)
 hr <- hr_mcp(lupe)
 ggplot() + geom_sf(data = hr_isopleths(hr)) + 
   geom_sf(data = poly, fill = NA, col = "red") +

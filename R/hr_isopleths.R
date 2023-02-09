@@ -16,6 +16,12 @@ hr_isopleths <- function (x, ...) {
 
 #' @export
 #' @rdname hr_isopleths
+hr_isopleths.PackedSpatRaster <- function (x, levels, descending = TRUE, ...) {
+  hr_isopleths(terra::unwrap(x), levels = levels, descending = descending, ...)
+}
+
+#' @export
+#' @rdname hr_isopleths
 hr_isopleths.SpatRaster <- function (x, levels, descending = TRUE, ...) {
 
   con <- terra::as.contour(hr_cud(x), levels = levels)

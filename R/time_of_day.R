@@ -51,7 +51,7 @@ time_of_day.steps_xyt <- function(x, include.crepuscule = FALSE, where = "end", 
   x
 }
 
-time_of_day_base <- function(x, t, solar.dep, include.crepuscule, end = TRUE) {
+time_of_day_base <- function(x, t, include.crepuscule, end = TRUE) {
 
   if (!requireNamespace("suncalc", quietly = TRUE)) {
     stop("Please install package `maptools` first.")

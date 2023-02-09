@@ -9,7 +9,8 @@ hr_akde <- function(x, ...) {
 #' @export
 #' @rdname hrest
 hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
-                              trast = make_trast(x), levels = 0.95, ...) {
+                              trast = make_trast(x), levels = 0.95, wrap = FALSE,
+                              ...) {
 
   if (grepl("bm", tolower(summary(model)$name))) {
     warning("Brownian motion was chosen as movement model, akde will not work")
@@ -30,8 +31,11 @@ hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
 
   point.est <- ctmm2rast(ud, trast)
 
-  res <- list(ud = point.est, akde = ud,
-              model = model, levels = levels, trast = trast, estimator = "adke",
+  res <- list(ud = if(wrap) terra::wrap(point.est) else point.est,
+              akde = ud,
+              model = model, levels = levels,
+              trast = if (wrap) terra::wrap(trast) else trast,
+              estimator = "akde",
               crs = get_crs(x),
               data = if (keep.data) x else NULL)
   class(res) <- c("akde", "hr_prob", "hr", class(res))

@@ -49,7 +49,7 @@ as_sf_points.track_xy <- function(x, ...) {
 
   p <- sf::st_as_sf(x, coords = c("x_", "y_"))
   p <- sf::st_set_crs(p, if (!is.null(attributes(x)$crs_))
-    attributes(x)$crs_ else sf::NA_crs_)
+    attributes(x)$crs else sf::NA_crs_)
   p
 }
 
@@ -63,8 +63,8 @@ as_sf_points.steps_xy <- function(x, end = TRUE, ...) {
   } else {
     sf::st_as_sf(x, coords = c("x1_", "y1_"))
   }
-  p <- sf::st_set_crs(p, if (!is.null(attributes(x)$crs_))
-    attributes(x)$crs_ else sf::NA_crs_)
+  p <- sf::st_set_crs(p, if (!is.null(attributes(x)$crs))
+    attributes(x)$crs else sf::NA_crs_)
   p
 }
 

@@ -41,7 +41,7 @@ hr_overlap.hr <- function(x, y, type = "hr", conditional = FALSE, ...) {
       yud <- hr_ud(y)
 
       # Check that both are of the same raster extent
-      if (identical(terra::ext(xud), terra::ext(yud)) &
+      if (all.equal(terra::ext(xud), terra::ext(yud)) &
           all(terra::res(xud) == terra::res(yud))) {
 
         # Do I have to get conditional uds?
