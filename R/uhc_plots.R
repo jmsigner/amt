@@ -950,7 +950,7 @@ as.data.frame.uhc_data <- function(x, row.names = NULL, optional = FALSE, ...) {
     names(levs) <- fac
     lev_df <- dplyr::bind_rows(levs, .id = "var")
   } else {
-    lev_df <- data.frame()
+    lev_df <- data.frame(var = NA, label = NA)
   }
 
   # Now treat all as numeric
@@ -973,10 +973,7 @@ as.data.frame.uhc_data <- function(x, row.names = NULL, optional = FALSE, ...) {
   comb <- dplyr::bind_rows(orig, samp)
 
   # Join factor levels
-  # (if factors exist)
-  if(nrow(lev_df) > 0) {
-    suppressMessages(comb <- dplyr::left_join(comb, lev_df))
-  }
+  suppressMessages(comb <- dplyr::left_join(comb, lev_df))
 
   # Class
   class(comb) <- c("uhc_data_frame", class(comb))
@@ -1023,6 +1020,13 @@ conf_envelope <- function(x, levels = c(0.95, 1.00)) {
 
   # levels
   checkmate::assert_numeric(levels, lower = 0, upper = 1)
+
+  # If the column 'label' doesn't exist in x, add it
+  # Note: this fixed an earlier bug and may no longer be needed
+  # (but shouldn't hurt)
+  if (is.null(x$label)) {
+    x$label <- NA
+  }
 
   # Separate sampled distribution from used and available
   ua <- x[which(x$dist %in% c("U", "A")), ]
