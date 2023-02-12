@@ -34,10 +34,11 @@ make_issf_model <- function(
 #'
 #' @param x `[steps_xyt,numeric(2)]` \cr A step of class `steps_xyt` or the start coordinates..
 #' @param ta_ `[numeric(1)]{0}` \cr The initial turn-angle.
-#' @param time `[POSIXt(1)]{Sys.time()}` \cr The timestamp when the simulation
+#' @param time `[POSIXt(1)]{Sys.time()}` \cr The time stamp when the simulation
 #'   starts.
 #' @param dt `[Period(1)]{hours(1)}` \cr The sampling rate of the
 #'   simulations.
+#' @param crs `[int(1)]{NA}` \cr The coordinate reference system of the start location given as EPSG code.
 #' @template dots_none
 #' @name make_start
 #'
@@ -51,13 +52,15 @@ make_start <- function(x, ...) {
 make_start.numeric <- function(
   x = c(0, 0),
   ta_ = 0,
-  time = Sys.time(), dt = hours(1), ...) {
+  time = Sys.time(), dt = hours(1),
+  crs = NA, ...) {
 
   cc <- x
   out <- tibble::tibble(
     x_ = cc[1], y_ = cc[2], ta_ = ta_,
     t_ = time, dt = dt)
   class(out) <- c("sim_start", class(out))
+  attr(out, "crs") <- crs
   out
 }
 
@@ -72,6 +75,7 @@ make_start.steps_xyt <- function(x, ...) {
     x_ = x$x1_[1], y_ = x$y1_[1], ta_ = x$ta_[1],
     t_ = x$t1_[1], dt = x$dt_[1])
   class(out) <- c("sim_start", class(out))
+  attr(out, "crs") <- get_crs(x)
   out
 }
 
@@ -113,12 +117,25 @@ get_max_dist.fit_clogit <- function(x, p = 0.99, ...) {
 
 random_steps_simple <- function(start, sl_model, ta_model, n.control) {
 
+  ###
+  if (FALSE) {
+    start
+    sl_model <- x$sl_
+    ta_model <- x$ta_
+    n.control <- 1e5
+    ta_model$params$kappa = 10
+    hist(tar)
+  }
+
+  ###
+
   checkmate::assert_class(sl_model, "sl_distr")
   checkmate::assert_class(ta_model, "ta_distr")
   checkmate::assert_number(n.control, lower = 1)
 
   slr <- random_numbers(sl_model, n = n.control)
   tar <- random_numbers(ta_model, n = n.control)
+
 
   new_x <- start$x_[1] + slr * cos(start$ta_[1] + tar)
   new_y <- start$y_[1] + slr * sin(start$ta_[1] + tar)
@@ -130,7 +147,8 @@ random_steps_simple <- function(start, sl_model, ta_model, n.control) {
     "y2_" = new_y,
     "sl_" = slr,
     "ta_" = tar)
-  class(s1) <- c("steps_xy", "data.frame")
+  attr(s1, "crs") <- attr(start, "crs")
+  class(s1) <- c("steps_xyt", "steps_xy", "data.frame")
   s1
 }
 
@@ -170,7 +188,7 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
   w <- as.matrix(xyz[, names(coefs)]) %*% coefs
   if (compensate.movement) {
     phi <- movement_kernel1(xy, object$sl_, object$ta_)
-    w <- w + phi - log(xy$sl_)
+    w <- w + phi - log(xy$sl_) # -log(xy$sl) divides by the sl and accounts for the transformation
   }
   w <- exp(w - mean(w[is.finite(w)], na.rm = TRUE))
   w[!is.finite(w)] <- 0
@@ -178,7 +196,7 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
 }
 
 
-kernel_setup <- function(template, max.dist = 100, start) {
+kernel_setup <- function(template, max.dist = 100, start, covars) {
 
   checkmate::assert_class(template, "SpatRaster")
   checkmate::assert_number(max.dist, lower = 0)
@@ -197,14 +215,25 @@ kernel_setup <- function(template, max.dist = 100, start) {
   k <- tibble(
     x = xy[, 1],
     y = xy[, 2])
-  k$ta_ = base::atan2(k$y - start$y_[1], k$x - start$x_[1]) - pi/2
-  k$ta_ <- k$ta_ - start$ta_[1] # - pi/2 JS rm
+  k$ta_ = base::atan2(k$y - start$y_[1], k$x - start$x_[1])
+
+  # Adjust angles
+  k$ta_ <- ifelse(k$ta_ < 0, 2 * pi + k$ta_, k$ta_) # To full circle
+  k$ta_ <- (k$ta_ - start$ta_[1]) %% (2 * pi) # for start direction
+  k$ta_ <- ifelse(k$ta_ > pi, (2 * pi - k$ta_) * -1, k$ta_) # only use half circle
 
   k$sl_ = sqrt((k$x - start$x_[1])^2 + (k$y - start$y_[1])^2)
 
   k <- data.frame(k, "x1_" = start$x_[1], "y1_" = start$y_[1]) |>
     dplyr::rename(x2_ = x, y2_ = y)
-  class(k) <- c("steps_xy", "data.frame")
+
+  if (!is.null(covars)) {
+    checkmate::assert_tibble(covars, max.rows = 1)
+    k <- dplyr::bind_cols(k, covars, .name_repair = "check_unique")
+  }
+
+  class(k) <- c("steps_xyt", "steps_xy", class(k))
+  attr(k, "crs") <- attr(start, "crs")
   k
 }
 
@@ -230,45 +259,49 @@ kernel_setup <- function(template, max.dist = 100, start) {
 #' @export
 
 redistribution_kernel <- function(
-  x = make_issf_model(), start = make_start(),
+  x = make_issf_model(),
+  start = make_start(),
   map,
   fun = function(xy, map) {
     extract_covariates(xy, map, where = "both")
   },
+  covars = NULL,
   max.dist = get_max_dist(x),
   n.control = 1e6,
   n.sample = 1,
   stochastic = FALSE,
+  compensate.movement = !stochastic,
   normalize = TRUE,
   interpolate = FALSE,
-  as.rast = TRUE,
+  as.rast = FALSE,
   tolerance.outside = 0) {
+
+  ###
+  if (FALSE) {
+  x = m
+  start = s
+  map  = map
+  fun = function(xy, map) extract_covariates(xy, map, where = "both") |> time_of_day()
+  covars = NULL
+  max.dist = get_max_dist(x)
+  n.control = 1e5
+  n.sample = 1e3
+  stochastic = TRUE
+  normalize = TRUE
+  interpolate = FALSE
+  as.rast = TRUE
+  tolerance.outside = 0
+  }
+  ###
 
   arguments <- as.list(environment())
   checkmate::assert_class(start, "sim_start")
-
-  if (FALSE) {
-    x = k2$args$x
-    start = start
-    map = x$args$map
-    fun = x$args$fun
-    max.dist = x$args$max.dist
-    n.control = x$args$n.control
-    n.sample = 1
-    stochastic = x$args$stochastic
-    normalize = TRUE
-    interpolate = FALSE
-    as.rast = FALSE
-    tolerance.outside = x$args$tolerance.outside
-  }
-
-
 
   if (stochastic) {
     xy <- random_steps_simple(start, sl_model = x$sl_,
                               ta_model = x$ta_, n.control = n.control)
   } else {
-    xy <- kernel_setup(map, max.dist, start)
+    xy <- kernel_setup(map, max.dist, start, covars)
   }
 
   # Check for the fraction of steps that is outside the landscape
@@ -287,20 +320,21 @@ redistribution_kernel <- function(
   }
 
   # Add time stamp
-  xy$t_ <- start$t_
+  xy$t1_ <- start$t_
+  xy$t2_ <- start$t_ + start$dt
 
   # Extract covariate values
   xy <- fun(xy, map)
 
-  w <- ssf_weights(xy, x, compensate.movement = !stochastic)
+  w <- ssf_weights(xy, x, compensate.movement = compensate.movement)
 
   ## Should we also provide an option for returning just a single step?
   r <- if (!as.rast) {
     xy[sample.int(nrow(xy), size = n.sample, prob = w), ] |>
-      dplyr::select(x_ = x2_, y_ = y2_, t_)
+      dplyr::select(x_ = x2_, y_ = y2_, t2_)
   } else {
     if (stochastic) {
-      stop("Not implemented")
+      stop("`as.rast` not implemented for `stochastic = TRUE`")
     } else {
       terra::rast(data.frame(xy[, c("x2_", "y2_")], w))
     }
@@ -377,15 +411,7 @@ simulate_path.default <- function(x, ...) {
 simulate_path.redistribution_kernel <- function(
   x, n.steps = 100, start = x$args$start, verbose = FALSE, ...) {
 
-
-  if (FALSE) {
-    x = k2
-    n.steps = 100
-    start = x$args$start
-  }
-
   mod <- x$args
-
   xy <- tibble(x_ = rep(NA, n.steps + 1), y_ = NA_real_,
                t_ = start$t_ + start$dt * (0:n.steps), dt = start$dt)
 
@@ -410,13 +436,12 @@ simulate_path.redistribution_kernel <- function(
     )$redistribution.kernel
 
     # Check that we do not have error (i.e., because stepping outside the landscape)
-
     # Make new start
     new.ta <- atan2(rk$y_[1] - start$y_[1], rk$x_[1] - start$x_[1])
 
-    xy$x_[i] <- rk$x_[1]
-    xy$y_[i] <- rk$y_[1]
-    start <- make_start(as.numeric(xy[i, c("x_", "y_")]), new.ta)
+    xy$x_[i + 1] <- rk$x_[1]
+    xy$y_[i + 1] <- rk$y_[1]
+    start <- make_start(as.numeric(xy[i + 1, c("x_", "y_")]), new.ta)
   }
   return(xy)
 }

@@ -155,7 +155,7 @@ NumericMatrix dispersal_kernel_cpp (
     IntegerVector other_covars_indicator,
     int stop
 ) {
-  int p_hab = 0, p_other = 0, p = 0, npot, cell, cell_cur, new_x, new_y;
+  int p_hab = 0, p_other = 0, p = 0, npot, cell, new_x, new_y;
 
   if (other_covars_indicator[0] == 1) {
     p_hab = hab.ncol();
@@ -409,3 +409,4 @@ NumericVector get_angle_cpp2(NumericMatrix xy, double dir = 0) {
   }
   return res;
 }
+

@@ -7,7 +7,7 @@ NumericVector track_align_cpp(IntegerVector t1, IntegerVector nt, int time_tol, 
   // Create variables
   int burst = 1;  // burst
   // int i = 0;  // obs
-  int j = 0;  // new traj
+  // int j = 0;  // new traj
 
   int n_obs = t1.size(); // number of points
   int n_new = nt.size(); // number of new points
@@ -251,34 +251,35 @@ NumericVector mk_reg_old(NumericVector relocs_time, int time_dist, int time_tol,
 //  return out;
 //}
 
-// [[Rcpp::export]]
-NumericVector track_immobility(NumericVector t, NumericVector x, NumericVector y, double period, double tol) {
-
-  int n = x.length();
-  NumericVector out(n);
-  for (int i = 0; i < n; i++) out(i) = -1;
-  double immobile_period = 0;
-  int immo_started;
-
-  int i = 0;
-
-  while (i < n && immobile_period < period) {
-    double dist = sqrt(pow(x[i] - x[i + 1], 2) + pow(y[i] - y[i + 1], 2));
-    if (dist < tol) {
-      immobile_period += t[i+1] - t[i];
-    } else {
-      immobile_period = 0;
-      immo_started = i + 1;
-    }
-    out[i] = 1;
-    i++;
-  }
-
-  for (int k = immo_started; k < i; k++)
-    out[k] = -1;
-
-  return out;
-}
-
-
-
+// // [[Rcpp::export]]
+// NumericVector track_immobility(NumericVector t, NumericVector x, NumericVector y, double period, double tol) {
+//
+//   int n = x.length();
+//   NumericVector out(n);
+//   for (int i = 0; i < n; i++) out(i) = -1;
+//   double immobile_period = 0;
+//   int immo_started;
+//
+//   int i = 0;
+//
+//   while (i < n && immobile_period < period) {
+//     double dist = sqrt(pow(x[i] - x[i + 1], 2) + pow(y[i] - y[i + 1], 2));
+//     if (dist < tol) {
+//       immobile_period += t[i+1] - t[i];
+//     } else {
+//       immobile_period = 0;
+//       immo_started = i + 1;
+//     }
+//     out[i] = 1;
+//     i++;
+//   }
+//
+//   for (int k = immo_started; k < i; k++)
+//     out[k] = -1;
+//
+//   return out;
+// }
+//
+//
+//
+//

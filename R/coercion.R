@@ -108,6 +108,19 @@ as_sf_lines.track_xy <- function(x, ...) {
   l
 }
 
+#' @export
+as_sf_lines.steps_xy <- function(x, ...) {
+  xx <- data.table::setDT(x)
+  xx[, linestring_id := .I]
+  l <- data.table::melt(xx,
+            id.vars = "linestring_id",
+            measure.vars = list(x = c("x1_", "x2_"), y = c("y1_", "y2_"))) |>
+    data.table::setorder(linestring_id) |>
+    sfheaders::sf_line()
+  sf::st_set_crs(l,  if (!is.null(attributes(x)$crs_)) attributes(x)$crs_ else sf::NA_crs_)
+
+}
+
 
 
 # as_move() ---------------------------------------------------------------
