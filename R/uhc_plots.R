@@ -412,6 +412,13 @@ prep_test_dat <- function(object, test_dat, verbose = TRUE) {
 
 prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
 
+  # Check that 'test_dat' has no NAs
+  na_rows <- nrow(test_dat) - nrow(na.omit(test_dat))
+  if (na_rows > 0) {
+    stop("'test_dat' contains ", na_rows, " row(s) with NAs. ",
+         "Remove NAs before proceeding.")
+  }
+
   ## Check that 'test_dat' is consistent with 'object' formula.
   # Extract formula
   f <- stats::formula(object)
