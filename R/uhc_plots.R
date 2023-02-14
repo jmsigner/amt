@@ -194,7 +194,7 @@ prep_uhc.glm <- function(object, test_dat,
   # Step 2. Fit a model to the training data
   # We've already fit the model, but we need the coefficient estimates and
   # variance-covariance matrix here.
-  b <- coef(object)
+  b <- stats::coef(object)
   S <- stats::vcov(object)
 
   # Step 3. Create predicted distribution
@@ -215,10 +215,10 @@ prep_uhc.glm <- function(object, test_dat,
     ww <- calc_w(f = stats::formula(object), b = bb, newdata = l$data)
 
     # Normalize for weights
-    WW <- ww/sum(ww)
+    WW <- ww/sum(ww, na.rm = TRUE)
 
     # How many points to sample? One for each used point.
-    nn <- sum(l$data[[l$resp]])
+    nn <- sum(l$data[[l$resp]], na.rm = TRUE)
 
     # Sample
     rr <- sample.int(n = nrow(test_dat), size = nn, replace = TRUE,
@@ -339,7 +339,7 @@ prep_uhc.fit_clogit <- function(object, test_dat,
       strat <- l$data[which(l$data[[l$strat]] == s), ]
 
       # Normalize weights
-      WW <- strat$w/sum(strat$w)
+      WW <- strat$w/sum(strat$w, na.rm = TRUE)
 
       # Sample
       rr <- sample.int(n = nrow(strat), size = 1, replace = TRUE,
@@ -1048,8 +1048,10 @@ conf_envelope <- function(x, levels = c(0.95, 1.00)) {
     suppressMessages({ # don't want dplyr::summarize() messages
       summ <- s |>
         dplyr::group_by(.data$var, .data$x, .data$label) |>
-        dplyr::summarize(lwr = stats::quantile(y, prob = qs[[qnm]][1]),
-                         upr = stats::quantile(y, prob = qs[[qnm]][2])) |>
+        dplyr::summarize(lwr = stats::quantile(y, prob = qs[[qnm]][1],
+                                               na.rm = TRUE),
+                         upr = stats::quantile(y, prob = qs[[qnm]][2],
+                                               na.rm = TRUE)) |>
         dplyr::arrange(.data$var, .data$x) |>
         as.data.frame()
     })
