@@ -489,7 +489,7 @@ prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
       # Range of data
       rng <- range(test_dat[[vv]], na.rm = TRUE)
       # Difference from the range
-      rng_diff <- stats::bw.nrd0(test_dat[[vv]]) * 3
+      rng_diff <- stats::bw.nrd0(na.omit(test_dat[[vv]])) * 3
       from <- rng[1] - rng_diff
       to <- rng[2] + rng_diff
       return(c(from, to))
@@ -629,7 +629,7 @@ prep_test_dat.fit_clogit <- function(object, test_dat, verbose = TRUE) {
       # Range of data
       rng <- range(test_dat[[vv]], na.rm = TRUE)
       # Difference from the range
-      rng_diff <- stats::bw.nrd0(test_dat[[vv]]) * 3
+      rng_diff <- stats::bw.nrd0(na.omit(test_dat[[vv]])) * 3
       from <- rng[1] - rng_diff
       to <- rng[2] + rng_diff
       return(c(from, to))
