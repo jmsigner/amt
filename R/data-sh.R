@@ -1,6 +1,6 @@
 #' Relocations of one Red Deer
 #'
-#' 1500 GPS relocations of one red deer from northern Germany.
+#' 1500 GPS fixes of one red deer from northern Germany.
 #'
 #' @format A data frame with 1500 rows and 4 variables:
 #' \describe{
@@ -14,9 +14,9 @@
 
 #' Forest cover
 #'
-#' Forest cover for the home range of one red deer in northern Germany.
+#' Forest cover for the home range of one red deer from northern Germany.
 #'
-#' @format A `RasterLAyer` \describe{ \item{1}{forest} \item{2}{non-forest} }
+#' @format A `SpatRast` \describe{ \item{0}{other} \item{1}{forest} }
 #' @source JRC
 #' @references A. Pekkarinen, L. Reithmaier, P. Strobl (2007): Pan-European
 #'   Forest/Non-Forest mapping with Landsat ETM+ and CORINE Land Cover 2000
@@ -34,3 +34,17 @@
 #'   points belongs to.} }
 #' @source Verein für Wildtierforschung Dresden und Göttingen e.V.
 "deer"
+
+#' Helper function to get forest cover
+#'
+#' The current version of `terra` (1.7.12) requires `SpatRast`ers to be wrapped in order to be saved locally. This function unwraps the the forest layer and returns a `SpatRast`.
+#'
+#' @return A `SpatRast` with forest cover.
+#' @export
+
+get_sh_forest <- function() {
+  #e <- new.env()
+  #x <- data("sh_forest", envir = e)[1]
+  sh_forest <- readRDS(system.file("external", "sh_forest.rds", package = "amt"))
+  terra::unwrap(sh_forest)
+}

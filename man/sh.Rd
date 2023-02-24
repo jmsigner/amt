@@ -20,6 +20,6 @@ Verein für Wildtierforschung Dresden und Göttingen e.V.
 sh
 }
 \description{
-1500 GPS relocations of one red deer from northern Germany.
+1500 GPS fixes of one red deer from northern Germany.
 }
 \keyword{datasets}

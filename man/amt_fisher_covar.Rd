@@ -5,7 +5,7 @@
 \alias{amt_fisher_covar}
 \title{Environmental data for fishers}
 \format{
-A list with three where each entry is a \code{RasterLayer}.
+A list with three where each entry is a \code{SpatRast}.
 }
 \source{
 \verb{https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table}

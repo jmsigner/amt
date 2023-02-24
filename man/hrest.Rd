@@ -60,12 +60,14 @@ hr_od(x, ...)
 
 \item{model}{A continuous time movement model. This can be fitted either with \code{ctmm::ctmm.fit} or \code{fit_ctmm}.}
 
-\item{keep.data}{\verb{[logic(2)]} \cr Should the original tracking data be included in the estimate?}
+\item{keep.data}{\verb{[logic(1)]} \cr Should the original tracking data be included in the estimate?}
 
-\item{trast}{\verb{[RasterLayer]} \cr A template raster for kernel density home-ranges.}
+\item{trast}{\verb{[SpatRast]} \cr A template raster for kernel density home-ranges.}
 
 \item{levels}{\verb{[numeric]} \cr The isopleth levels used for calculating home
 ranges. Should be \verb{0 < level < 1}.}
+
+\item{wrap}{\verb{[logical(1)]} \cr If \code{TRUE} the UD is wrapped (see \code{terra::wrap()}).}
 
 \item{h}{\verb{[numeric(2)]} \cr The bandwidth for kernel density estimation.}
 

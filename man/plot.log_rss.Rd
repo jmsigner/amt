@@ -47,7 +47,7 @@ calling the function.
 \donttest{
 # Load data
 data("amt_fisher")
-data("amt_fisher_covar")
+amt_fisher_covar <- get_amt_fisher_covars()
 
 # Prepare data for RSF
 rsf_data <- amt_fisher |>

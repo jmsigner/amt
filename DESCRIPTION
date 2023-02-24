@@ -23,6 +23,7 @@ Imports:
     circular,
     ctmm,
     dplyr (>= 0.7.0),
+    data.table,
     fitdistrplus,
     lubridate,
     methods,

@@ -41,10 +41,10 @@ summarize_sampling_rate(deer)
 The median sampling rate is 6h, which is what we aimed for.
 
 
-Next, we have to get the environmental covariates. A forest layer is included in the package. Note, that this a regular `RasterLayer`. 
+Next, we have to get the environmental covariates. A forest layer is included in the package. Note, that this a regular `SpatRast`. 
 
 ```{r}
-data("sh_forest")
+sh_forest <- get_sh_forest()
 sh_forest
 ```
 
@@ -100,7 +100,7 @@ Since the forest layers is coded as `1 = forest` and `2 != forest`, we create a 
 
 ```{r}
 ssf1 <- ssf1 %>% 
-  mutate(forest = factor(sh.forest, levels = 1:2, labels = c("forest", "non-forest")), 
+  mutate(forest = factor(forest, levels = 1:0, labels = c("forest", "non-forest")), 
          cos_ta = cos(ta_), 
         log_sl = log(sl_)) 
 ```
@@ -130,7 +130,7 @@ All steps described above, could easily be wrapped into one piped workflow:
 m1 <- deer %>% 
   steps_by_burst() %>% random_steps(n = 15) %>% 
   extract_covariates(sh_forest) %>% 
-  mutate(forest = factor(sh.forest, levels = 1:2, labels = c("forest", "non-forest")), 
+  mutate(forest = factor(forest, levels = 1:0, labels = c("forest", "non-forest")), 
          cos_ta = cos(ta_), 
          log_sl = log(sl_)) %>% 
   fit_clogit(case_ ~ forest + forest:cos_ta + forest:sl_ + sl_ * cos_ta + strata(step_id_))

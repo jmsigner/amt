@@ -9,10 +9,10 @@ mcp <- hr_mcp(mini_fisher)
 loc <- hr_locoh(mini_fisher)
 kde <- hr_kde(mini_fisher)
 
-mini_fisher1 <- amt_fisher[11:50, ]
+mini_fisher1 <- amt_fisher[11:400, ]
 mcp1 <- hr_mcp(mini_fisher1)
 loc1 <- hr_locoh(mini_fisher1)
-kde1 <- hr_kde(mini_fisher1, tr = tr)
+kde1 <- hr_kde(mini_fisher1)
 
 # MCP and KDE have the right class
 

@@ -23,5 +23,17 @@
 #' @source `https://lpdaac.usgs.gov/dataset_discovery/aster/aster_products_table`
 #' @source `http://dup.esrin.esa.it/page_globcover.php`
 #' @source `http://sedac.ciesin.columbia.edu/data/collection/gpw-v3/sets/browse`
-#' @format A list with three where each entry is a `RasterLayer`.
+#' @format A list with three where each entry is a `SpatRast`.
 "amt_fisher_covar"
+
+#' Helper function to get fisher covars
+#'
+#' The current version of `terra` (1.7.12) requires `SpatRast`ers to be wrapped in order to be saved locally. This function unwraps the covariates for the fisher data and returns a list.
+#'
+#' @return A list with covariates
+#' @export
+
+get_amt_fisher_covars <- function() {
+ amt_fisher_covar <- readRDS(system.file("external", "amt_fisher_covar.rds", package = "amt"))
+ lapply(amt_fisher_covar, terra::unwrap)
+}

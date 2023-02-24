@@ -3,6 +3,7 @@
 \name{make_start}
 \alias{make_start}
 \alias{make_start.numeric}
+\alias{make_start.track_xyt}
 \alias{make_start.steps_xyt}
 \title{Create an initial step for simulations}
 \usage{
@@ -16,6 +17,8 @@ make_start(x, ...)
   crs = NA,
   ...
 )
+
+\method{make_start}{track_xyt}(x, ta_ = 0, dt = hours(1), ...)
 
 \method{make_start}{steps_xyt}(x, ...)
 }

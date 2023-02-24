@@ -34,7 +34,7 @@ hr_akde.track_xyt <- function(x, model = fit_ctmm(x, "iid"), keep.data = TRUE,
   res <- list(ud = if(wrap) terra::wrap(point.est) else point.est,
               akde = ud,
               model = model, levels = levels,
-              trast = if (wrap) terra::wrap(trast) else trast,
+              trast = if (wrap) suppressWarnings(terra::wrap(trast)) else trast,
               estimator = "akde",
               crs = get_crs(x),
               data = if (keep.data) x else NULL)

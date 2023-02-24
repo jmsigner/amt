@@ -30,11 +30,10 @@ deer
 ```
 
 
-Next, we have to get the environmental covariates. A forest layer is included in the package. Note, that this a regular `RasterLayer`. 
+Next, we have to get the environmental covariates. A forest layer is included in the package. Note, that this a regular `SpatRast`. 
 
 ```{r}
-data("sh_forest")
-sh_forest
+sh_forest <- get_sh_forest()
 ```
 
 ## Prepare Data for RSF
@@ -108,8 +107,7 @@ As the next step we have to extract the covariates at point. We can do this with
 
 ```{r}
 rsf1 <- deer %>% random_points() %>% 
-  extract_covariates(sh_forest) %>% 
-  mutate(forest = sh.forest == 1)
+  extract_covariates(sh_forest) 
 ```
 
 

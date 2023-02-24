@@ -41,13 +41,15 @@ Update tentative step length or turning angle distribution from a fitted iSSF.
 \examples{
 
 # Fit an SSF, then update movement parameters.
+data(deer)
+sh_forest <- get_sh_forest()
 
 # Prepare data for SSF
 ssf_data <- deer |>
   steps_by_burst() |>
   random_steps(n = 15) |>
   extract_covariates(sh_forest) |>
-  mutate(forest = factor(sh.forest, levels = 1:2,
+  mutate(forest = factor(forest, levels = 1:0,
                     labels = c("forest", "non-forest")),
   cos_ta_ = cos(ta_),
   log_sl_ = log(sl_))

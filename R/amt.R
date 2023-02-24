@@ -27,7 +27,8 @@ utils::globalVariables(
   c("burst_", "step_id_", "t_", "case_", ".data",
     "ts", "sl_", "xs", "ys", "x_", "y_", "x1_", "y1_",
     "y0_", "x0_", "y2_", "x2_", "abs.dir2", "rel.dir", "ta_",
-    "step_id_1", "abs.dir1", "x", "y")) # to omit CRAN notes
+    "step_id_1", "abs.dir1", "x", "y", ":=", ".I", "t2_",
+    "linestring_id")) # to omit CRAN notes
 
 #' @useDynLib amt
 

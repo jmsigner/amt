@@ -10,9 +10,10 @@
 #'   local convex hulls.
 #' @param rand_buffer `[numeric(1)]` \cr Random buffer to avoid polygons with
 #'   area 0 (if coordinates are numerically identical).
-#' @param trast `[RasterLayer]` \cr A template raster for kernel density home-ranges.
-#' @param keep.data `[logic(2)]` \cr Should the original tracking data be included in the estimate?
+#' @param trast `[SpatRast]` \cr A template raster for kernel density home-ranges.
+#' @param keep.data `[logic(1)]` \cr Should the original tracking data be included in the estimate?
 #' @param model A continuous time movement model. This can be fitted either with `ctmm::ctmm.fit` or `fit_ctmm`.
+#' @param wrap `[logical(1)]` \cr If `TRUE` the UD is wrapped (see `terra::wrap()`).
 #' @template dots_none
 #' @param h `[numeric(2)]` \cr The bandwidth for kernel density estimation.
 #' @return A `hr`-estimate.

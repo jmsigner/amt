@@ -32,6 +32,8 @@ redistribution_kernel(
 
 \item{fun}{\verb{[function]} \cr A function that is executed on each location of the redistribution kernel. The default function is \code{extract_covariates()}.}
 
+\item{covars}{\verb{[tibble]} \cr Additional covariates that might be used in the model (e.g., time of day).}
+
 \item{max.dist}{\verb{[numeric(1)]} \cr The maximum distance of the redistribution kernel.}
 
 \item{n.control}{\verb{[integer(1)]\{1e6\}} \cr The number of points of the redistribution kernel (this is only important if \code{stochastic = TRUE}).}
@@ -39,6 +41,8 @@ redistribution_kernel(
 \item{n.sample}{\verb{[integer(1)]\{1\}} \cr The number of points sampled from the redistribution kernel (this is only important if \code{as.rast = FALSE}).}
 
 \item{stochastic}{\verb{[logical(1)]\{FALSE\}} \cr If \code{TRUE} the redistribution kernel is sampled using a random sample of size \code{n.control}. Otherwise each cell in the redistribution kernel is used.}
+
+\item{compensate.movement}{\verb{[logical(1)]} \cr Indicates if movement parameters are corrected or not. This only relevant if \code{stochastic = FALSE}.}
 
 \item{normalize}{\verb{[logical(1)]\{TRUE\}} \cr If \code{TRUE} the redistribution kernel is normalized to sum to one.}
 

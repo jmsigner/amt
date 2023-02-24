@@ -65,8 +65,9 @@ the terms in the model formula exactly.
 # Load packages
 library(ggplot2)
 
-#Load data
+# Load data
 data("amt_fisher")
+amt_fisher_covar <- get_amt_fisher_covars()
 
 # Prepare data for RSF
 rsf_data <- amt_fisher |>
@@ -107,12 +108,16 @@ ggplot(logRSS$df, aes(x = elevation_x1, y = log_rss)) +
 # SSF -------------------------------------------------------
 # Fit an SSF, then calculate log-RSS to visualize results.
 
- #Prepare data for SSF
+# Load data
+data(deer)
+sh_forest <- get_sh_forest()
+
+# Prepare data for SSF
 ssf_data <- deer |>
   steps_by_burst() |>
   random_steps(n = 15) |>
   extract_covariates(sh_forest) |>
-  mutate(forest = factor(sh.forest, levels = 1:2,
+  mutate(forest = factor(forest, levels = 1:0,
                     labels = c("forest", "non-forest")),
   cos_ta = cos(ta_),
   log_sl = log(sl_))

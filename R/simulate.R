@@ -66,6 +66,21 @@ make_start.numeric <- function(
 
 #' @rdname make_start
 #' @export
+make_start.track_xyt <- function(x, ta_ = 0, dt = hours(1), ...) {
+  if (nrow(x) > 1) {
+    warning("More than one point provided, only the first will be used as a starting step")
+    x <- x[1, ]
+  }
+  out <- tibble::tibble(
+    x_ = x$x_[1], y_ = x$y_[1], ta_ = ta_,
+    t_ = x$t_[1], dt = dt)
+  class(out) <- c("sim_start", class(out))
+  attr(out, "crs") <- get_crs(x)
+  out
+}
+
+#' @rdname make_start
+#' @export
 make_start.steps_xyt <- function(x, ...) {
   if (nrow(x) > 1) {
     warning("More than one step provided, only the first will be used as a starting step")
@@ -186,11 +201,14 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
   attr(newdata, "na.action") <- "na.pass"
   xyz <- stats::model.matrix.default(ff, data = newdata, na.action = stats::na.pass)
   w <- as.matrix(xyz[, names(coefs)]) %*% coefs
-  if (compensate.movement) {
-    phi <- movement_kernel1(xy, object$sl_, object$ta_)
-    w <- w + phi - log(xy$sl_) # -log(xy$sl) divides by the sl and accounts for the transformation
-  }
+  # if (compensate.movement) {
+  #   phi <- movement_kernel1(xy, object$sl_, object$ta_)
+  #   w <- w + phi - log(xy$sl_) # -log(xy$sl) divides by the sl and accounts for the transformation
+  # }
   w <- exp(w - mean(w[is.finite(w)], na.rm = TRUE))
+  if (compensate.movement) {
+    w <- w / xy$sl
+  }
   w[!is.finite(w)] <- 0
   w
 }
@@ -255,6 +273,8 @@ kernel_setup <- function(template, max.dist = 100, start, covars) {
 #' @param interpolate `[logical(1)]{FALSE}` \cr If `TRUE` a stochastic redistribution kernel is interpolated to return a raster layer. Note, this is just for completeness and is computationally inefficient in most situations.
 #' @param as.rast `[logical(1)]{TRUE}` \cr If `TRUE` a `SpatRaster` should be returned.
 #' @param tolerance.outside `[numeric(1)]{0}` \cr The proportion of the redistribution kernel that is allowed to be outside the `map`.
+#' @param covars `[tibble]` \cr Additional covariates that might be used in the model (e.g., time of day).
+#' @param compensate.movement `[logical(1)]` \cr Indicates if movement parameters are corrected or not. This only relevant if `stochastic = FALSE`.
 #'
 #' @export
 
@@ -278,19 +298,27 @@ redistribution_kernel <- function(
 
   ###
   if (FALSE) {
-  x = m
-  start = s
-  map  = map
-  fun = function(xy, map) extract_covariates(xy, map, where = "both") |> time_of_day()
-  covars = NULL
-  max.dist = get_max_dist(x)
-  n.control = 1e5
-  n.sample = 1e3
-  stochastic = TRUE
-  normalize = TRUE
-  interpolate = FALSE
-  as.rast = TRUE
-  tolerance.outside = 0
+    m1 <- deer |> steps() |> random_steps() |>
+      extract_covariates(map, where = "both") |>
+      time_of_day() |>
+      fit_ssf(case_ ~ forest_end + forest_end:tod_end_ + sl_ + log(sl_) + cos(ta_) + log(sl_):forest_start + strata(step_id_))
+
+    start <- make_start(as.numeric(deer[1, c("x_", "y_")]), crs = 3035)
+    d1 <- deer[1, ]
+
+    x = m1
+    start = start
+    map  = map
+    fun = function(xy, map) extract_covariates(xy, map, where = "both") |> time_of_day()
+    covars = NULL
+    max.dist = get_max_dist(x)
+    n.control = 1e5
+    n.sample = 1e3
+    stochastic = TRUE
+    normalize = TRUE
+    interpolate = FALSE
+    as.rast = TRUE
+    tolerance.outside = 0
   }
   ###
 
@@ -311,12 +339,12 @@ redistribution_kernel <- function(
       xy$y2_ < bb.map["ymin"] | xy$y2_ > bb.map["ymax"]
   )
   if (fraction.outside > tolerance.outside) {
-    warning(paste0(round(fraction.outside * 100, 2),
+    warning(paste0(round(fraction.outside * 100, 3),
                    "% of steps are ending outside the study area but only ",
-                   round(tolerance.outside * 100, 2),
+                   round(tolerance.outside * 100, 3),
                    "% is allowed. ",
                    "Terminating simulations here."))
-    return(NA) # Make sure something meaningful is returned
+    return(NULL) # Make sure something meaningful is returned
   }
 
   # Add time stamp
@@ -433,7 +461,14 @@ simulate_path.redistribution_kernel <- function(
       interpolate = FALSE,
       as.rast = FALSE,
       tolerance.outside = mod$tolerance.outside
-    )$redistribution.kernel
+    )
+
+    if (is.null(rk)) {
+      warning(paste0("Simulation stopped after ", i - 1, " time steps, because the animal stepped out of the landscape."))
+      return(xy)
+    }
+
+    rk <- rk$redistribution.kernel
 
     # Check that we do not have error (i.e., because stepping outside the landscape)
     # Make new start
@@ -441,7 +476,7 @@ simulate_path.redistribution_kernel <- function(
 
     xy$x_[i + 1] <- rk$x_[1]
     xy$y_[i + 1] <- rk$y_[1]
-    start <- make_start(as.numeric(xy[i + 1, c("x_", "y_")]), new.ta)
+    start <- make_start(as.numeric(xy[i + 1, c("x_", "y_")]), new.ta, crs = attr(x$args$start, "crs"))
   }
   return(xy)
 }

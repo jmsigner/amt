@@ -49,49 +49,49 @@ covariates, the user will want to manually access these functions to update
 their selection-free movement distributions.
 }
 \examples{
-
-# Fit an SSF, then update movement parameters.
-
- #Prepare data for SSF
-ssf_data <- deer |>
-  steps_by_burst() |>
-  random_steps(n = 15) |>
-  extract_covariates(sh_forest) |>
-  mutate(forest = factor(sh.forest, levels = 1:2,
-                    labels = c("forest", "non-forest")),
-  cos_ta_ = cos(ta_),
-  log_sl_ = log(sl_))
-
-# Check tentative distributions
-#    Step length
-attr(ssf_data, "sl_")
-#    Turning angle
-attr(ssf_data, "ta_")
-
-# Fit an iSSF (note model = TRUE necessary for predict() to work)
-m1 <- ssf_data |>
-  fit_issf(case_ ~ forest * (sl_ + log_sl_ + cos_ta_) +
-               strata(step_id_), model = TRUE)
-
-# Update forest step lengths (the reference level)
-forest_sl <- update_gamma(m1$sl_,
-                          beta_sl = m1$model$coefficients["sl_"],
-                          beta_log_sl = m1$model$coefficients["log_sl_"])
-
-# Update non-forest step lengths
-nonforest_sl <- update_gamma(m1$sl_,
-                             beta_sl = m1$model$coefficients["sl_"] +
-                               m1$model$coefficients["forestnon-forest:sl_"],
-                             beta_log_sl = m1$model$coefficients["log_sl_"] +
-                               m1$model$coefficients["forestnon-forest:log_sl_"])
-
-# Update forest turn angles (the reference level)
-forest_ta <- update_vonmises(m1$ta_,
-                             beta_cos_ta = m1$model$coefficients["cos_ta_"])
-
-# Update non-forest turn angles
-nonforest_ta <- update_vonmises(m1$ta_,
-                                beta_cos_ta = m1$model$coefficients["cos_ta_"] +
-                                  m1$model$coefficients["forestnon-forest:cos_ta_"])
-
+#  sh_forest <- get_sh_forest()
+#  # Fit an SSF, then update movement parameters.
+#
+#   #Prepare data for SSF
+#  ssf_data <- deer |>
+#    steps_by_burst() |>
+#    random_steps(n = 15) |>
+#    extract_covariates(sh_forest) |>
+#    mutate(forest = factor(forest, levels = 1:0,
+#                      labels = c("forest", "non-forest")),
+#    cos_ta_ = cos(ta_),
+#    log_sl_ = log(sl_))
+#
+#  # Check tentative distributions
+#  #    Step length
+#  attr(ssf_data, "sl_")
+#  #    Turning angle
+#  attr(ssf_data, "ta_")
+#
+#  # Fit an iSSF (note model = TRUE necessary for predict() to work)
+#  m1 <- ssf_data |>
+#    fit_issf(case_ ~ forest * (sl_ + log_sl_ + cos_ta_) +
+#                 strata(step_id_), model = TRUE)
+#
+#  # Update forest step lengths (the reference level)
+#  forest_sl <- update_gamma(m1$sl_,
+#                            beta_sl = m1$model$coefficients["sl_"],
+#                            beta_log_sl = m1$model$coefficients["log_sl_"])
+#
+#  # Update non-forest step lengths
+#  nonforest_sl <- update_gamma(m1$sl_,
+#                               beta_sl = m1$model$coefficients["sl_"] +
+#                                 m1$model$coefficients["forestnon-forest:sl_"],
+#                               beta_log_sl = m1$model$coefficients["log_sl_"] +
+#                                 m1$model$coefficients["forestnon-forest:log_sl_"])
+#
+#  # Update forest turn angles (the reference level)
+#  forest_ta <- update_vonmises(m1$ta_,
+#                               beta_cos_ta = m1$model$coefficients["cos_ta_"])
+#
+#  # Update non-forest turn angles
+#  nonforest_ta <- update_vonmises(m1$ta_,
+#                                  beta_cos_ta = m1$model$coefficients["cos_ta_"] +
+#                                    m1$model$coefficients["forestnon-forest:cos_ta_"])
+#
 }

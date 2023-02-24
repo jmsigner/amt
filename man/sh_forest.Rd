@@ -5,7 +5,7 @@
 \alias{sh_forest}
 \title{Forest cover}
 \format{
-A \code{RasterLAyer} \describe{ \item{1}{forest} \item{2}{non-forest} }
+A \code{SpatRast} \describe{ \item{0}{other} \item{1}{forest} }
 }
 \source{
 JRC
@@ -14,7 +14,7 @@ JRC
 sh_forest
 }
 \description{
-Forest cover for the home range of one red deer in northern Germany.
+Forest cover for the home range of one red deer from northern Germany.
 }
 \references{
 A. Pekkarinen, L. Reithmaier, P. Strobl (2007): Pan-European

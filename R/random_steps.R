@@ -131,7 +131,7 @@ random_steps.bursted_steps_xyt <- function(
   out <- lapply(split(x, x$burst_), function(q) {
     class(q) <- class(q)[-1]
     if (nrow(q) > 1) {
-      random_steps(q, n_control = n_control, rand_sl = rand_sl,
+      random_steps(q, n_control = n_control, sl_distr = NULL, ta_distr = NULL, rand_sl = rand_sl,
                    rand_ta = rand_ta, include_observed = include_observed, ...)
     }
   })

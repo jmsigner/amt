@@ -54,8 +54,9 @@
 #' # Load packages
 #' library(ggplot2)
 #'
-#' #Load data
+#' # Load data
 #' data("amt_fisher")
+#' amt_fisher_covar <- get_amt_fisher_covars()
 #'
 #' # Prepare data for RSF
 #' rsf_data <- amt_fisher |>
@@ -96,12 +97,16 @@
 #' # SSF -------------------------------------------------------
 #' # Fit an SSF, then calculate log-RSS to visualize results.
 #'
-#'  #Prepare data for SSF
+#' # Load data
+#' data(deer)
+#' sh_forest <- get_sh_forest()
+#'
+#' # Prepare data for SSF
 #' ssf_data <- deer |>
 #'   steps_by_burst() |>
 #'   random_steps(n = 15) |>
 #'   extract_covariates(sh_forest) |>
-#'   mutate(forest = factor(sh.forest, levels = 1:2,
+#'   mutate(forest = factor(forest, levels = 1:0,
 #'                     labels = c("forest", "non-forest")),
 #'   cos_ta = cos(ta_),
 #'   log_sl = log(sl_))
@@ -130,7 +135,7 @@
 #' }
 #' @export
 log_rss <- function(object, ...){
-  #Check inputs
+  # Check inputs
   if(!inherits(object, c("glm", "fit_logit", "fit_clogit"))){
     stop("'object' should be an object of class 'fit_logit' or 'fit_clogit'.")
   }
@@ -378,7 +383,7 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 #' \donttest{
 #' # Load data
 #' data("amt_fisher")
-#' data("amt_fisher_covar")
+#' amt_fisher_covar <- get_amt_fisher_covars()
 #'
 #' # Prepare data for RSF
 #' rsf_data <- amt_fisher |>

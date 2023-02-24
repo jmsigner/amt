@@ -49,7 +49,7 @@ hr_kde.track_xy <- function(
     estimator = "kde",
     h = h,
     ud = if (wrap) terra::wrap(kde1) else kde1,
-    trast = if (wrap) terra::wrap(trast) else trast,
+    trast = if (wrap) suppressWarnings(terra::wrap(trast)) else trast,
     levels = levels,
     crs = get_crs(x),
     data = if(keep.data) x else NULL

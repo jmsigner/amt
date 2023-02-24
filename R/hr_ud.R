@@ -12,6 +12,9 @@ hr_ud <- function(x, ...) {
 #' @export
 hr_ud.hr_prob <- function(x, ...) {
   ud <- x$ud
+  if (is(ud, "PackedSpatRaster")) {
+    ud <- terra::unwrap(ud)
+  }
   ud[] <- ud[] / sum(ud[], na.rm = TRUE)
   ud
 }
