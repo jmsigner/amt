@@ -132,18 +132,6 @@ get_max_dist.fit_clogit <- function(x, p = 0.99, ...) {
 
 random_steps_simple <- function(start, sl_model, ta_model, n.control) {
 
-  ###
-  if (FALSE) {
-    start
-    sl_model <- x$sl_
-    ta_model <- x$ta_
-    n.control <- 1e5
-    ta_model$params$kappa = 10
-    hist(tar)
-  }
-
-  ###
-
   checkmate::assert_class(sl_model, "sl_distr")
   checkmate::assert_class(ta_model, "ta_distr")
   checkmate::assert_number(n.control, lower = 1)
@@ -201,14 +189,12 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
   attr(newdata, "na.action") <- "na.pass"
   xyz <- stats::model.matrix.default(ff, data = newdata, na.action = stats::na.pass)
   w <- as.matrix(xyz[, names(coefs)]) %*% coefs
-  # if (compensate.movement) {
-  #   phi <- movement_kernel1(xy, object$sl_, object$ta_)
-  #   w <- w + phi - log(xy$sl_) # -log(xy$sl) divides by the sl and accounts for the transformation
-  # }
-  w <- exp(w - mean(w[is.finite(w)], na.rm = TRUE))
+
   if (compensate.movement) {
-    w <- w / xy$sl
+     phi <- movement_kernel1(xy, object$sl_, object$ta_)
+     w <- w + phi - log(xy$sl_) # -log(xy$sl) divides by the sl and accounts for the transformation
   }
+  w <- exp(w - mean(w[is.finite(w)], na.rm = TRUE))
   w[!is.finite(w)] <- 0
   w
 }
@@ -296,32 +282,6 @@ redistribution_kernel <- function(
   as.rast = FALSE,
   tolerance.outside = 0) {
 
-  ###
-  if (FALSE) {
-    m1 <- deer |> steps() |> random_steps() |>
-      extract_covariates(map, where = "both") |>
-      time_of_day() |>
-      fit_ssf(case_ ~ forest_end + forest_end:tod_end_ + sl_ + log(sl_) + cos(ta_) + log(sl_):forest_start + strata(step_id_))
-
-    start <- make_start(as.numeric(deer[1, c("x_", "y_")]), crs = 3035)
-    d1 <- deer[1, ]
-
-    x = m1
-    start = start
-    map  = map
-    fun = function(xy, map) extract_covariates(xy, map, where = "both") |> time_of_day()
-    covars = NULL
-    max.dist = get_max_dist(x)
-    n.control = 1e5
-    n.sample = 1e3
-    stochastic = TRUE
-    normalize = TRUE
-    interpolate = FALSE
-    as.rast = TRUE
-    tolerance.outside = 0
-  }
-  ###
-
   arguments <- as.list(environment())
   checkmate::assert_class(start, "sim_start")
 
@@ -356,7 +316,6 @@ redistribution_kernel <- function(
 
   w <- ssf_weights(xy, x, compensate.movement = compensate.movement)
 
-  ## Should we also provide an option for returning just a single step?
   r <- if (!as.rast) {
     xy[sample.int(nrow(xy), size = n.sample, prob = w), ] |>
       dplyr::select(x_ = x2_, y_ = y2_, t2_)
@@ -404,7 +363,9 @@ normalize <- function(x) {
 movement_kernel1 <- function(x, sl.model, ta.model) {
   phi <- switch(
     sl.model$name,
-    gamma = -x$sl_ / sl.model$params$scale + log(x$sl_) * (sl.model$params$shape - 1),
+    # gamma = -x$sl_ / sl.model$params$scale + log(x$sl_) * (sl.model$params$shape - 1),
+    gamma = -1 / sl.model$params$scale * x$sl_ + # this is the adjustment term for scale
+      log(x$sl_) * (sl.model$params$shape - 1),
     exp = -x$sl_ * sl.model$params$rate)
   if(ta.model$name == "vonmises") {
     phi <- phi + cos(x$ta_) * ta.model$params$kappa

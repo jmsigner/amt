@@ -40,22 +40,26 @@ Imports:
     tidyr (>= 1.0.0),
     MASS
 Suggests: 
-  adehabitatLT,
-  adehabitatMA,
-  broom,
-  ggplot2,
-  ggraph,
-  geosphere,
-  KernSmooth,
-  FNN,
-  leaflet,
-  moveHMM,
-  move,
-  sessioninfo,
-  spacetime,
-  trajectories,
-  knitr,
-  rmarkdown, tinytest, tidygraph,sp
+    adehabitatLT,
+    adehabitatMA,
+    broom,
+    ggplot2,
+    ggraph,
+    geosphere,
+    KernSmooth,
+    FNN,
+    leaflet,
+    moveHMM,
+    move,
+    sessioninfo,
+    spacetime,
+    trajectories,
+    knitr,
+    rmarkdown,
+    tinytest,
+    tidygraph,
+    sp,
+    covr
 LinkingTo: Rcpp
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

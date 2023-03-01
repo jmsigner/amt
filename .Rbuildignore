@@ -20,3 +20,4 @@ experimental/*
 ^data-raw$
 ^doc$
 ^Meta$
+^codecov\.yml$
