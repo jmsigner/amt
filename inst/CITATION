@@ -1,7 +1,7 @@
 bibentry(
 "Article",
 title        = "Animal movement tools (amt): R package for managing tracking data and conducting habitat selection analyses",
-author       = "Johannes Signer, John Fieberg, Tal Avgar"),
+author       = "Johannes Signer, John Fieberg, Tal Avgar",
 journal      = "Ecology and Evolution",
 year         = "2019",
 volume       = "9",
