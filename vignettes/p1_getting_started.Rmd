@@ -170,7 +170,11 @@ transform_coords(tr2, 4326)
 Several functions for calculating derived quantities are available. We will start with looking at step length. The function `step_lengths` can be used for this.
 
 ```{r}
+<<<<<<< HEAD
 tr2 <- tr2 |> mutate(sl_ = step_lengths(tr2))
+=======
+tr2 <- tr2  |>  mutate(sl_ = step_lengths(.))
+>>>>>>> 541ba46a2b7f1859e8037dd9bad07d61800e7d89
 ```
 
 If we look at a summary of `sl_` we note two things:
