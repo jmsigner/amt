@@ -1,14 +1,15 @@
 # amt 0.2
 ## updates
+- Removed dependency on Rccp, all code is now in R. 
 - `extract_covariates()` no longer accepts a buffer. 
-- updated `time_of_day()` to use `suncalc` instead of `maptools`.
+- Updated `time_of_day()` to use `suncalc` instead of `maptools`.
 - Updated `hr_overlap()` from `raster` to `terra`. 
 - Updated `od()` and `hr_od()` from `raster` to `terra`. 
 - Updated `hr_isopleths()` from `raster`/`sp` to `terra`/`sf`. 
 - `hr_cud()` updated from `raster` to `terra`. 
 - `extrackt_covariates*()` updated from `raster` to `terra`.
 - `distance_to_center()` was removed. 
-- Updated `step.R`, it now uses `sf::st_distance()` instead of `raster::distance()`. 
+- Updated `step`, it now uses `sf::st_distance()` instead of `raster::distance()`. 
 - Dependency on `raster`, `sp`, `rgeos` and `spdep` were removed. 
 - `as_sp()` is now `as_sf()` and replaced the function call in the whole package.
 - Rewrite parts of `hr_akde()` to use `terra` instead of `raster`.

@@ -170,7 +170,7 @@ transform_coords(tr2, 4326)
 Several functions for calculating derived quantities are available. We will start with looking at step length. The function `step_lengths` can be used for this.
 
 ```{r}
-tr2 <- tr2 %>% mutate(sl_ = step_lengths(.))
+tr2 <- tr2  |>  mutate(sl_ = step_lengths(.))
 ```
 
 If we look at a summary of `sl_` we note two things:
@@ -221,13 +221,13 @@ We start by loading the data and creating a track of all individuals together
 
 ```{r}
 data("amt_fisher")
-trk <- amt_fisher %>% make_track(x_, y_, t_, id = id)
+trk <- amt_fisher |> make_track(x_, y_, t_, id = id)
 ```
 
 Next, we group the track by `id` and nest the track.
 
 ```{r}
-trk1 <- trk %>% nest(data = -"id")
+trk1 <- trk |> nest(data = -"id")
 trk1
 ```
 
@@ -238,16 +238,16 @@ We now want to resample each track to 30 minutes with a tolerance of 5 minutes a
 x <- trk1$data[[1]]
 
 # apply the data analysis
-x %>% track_resample(rate = minutes(30), tolerance = minutes(5)) %>%
+x |> track_resample(rate = minutes(30), tolerance = minutes(5)) |>
   steps_by_burst()
 ```
 
 We now want to apply exactly the same logic to all animals. We can do this by using a `map` and save the results to a new column using `mutate`.
 
 ```{r}
-trk2 <- trk1 %>% 
+trk2 <- trk1 |> 
   mutate(steps = map(data, function(x) 
-    x %>% track_resample(rate = minutes(30), tolerance = minutes(5)) %>% steps_by_burst()))
+    x |> track_resample(rate = minutes(30), tolerance = minutes(5)) |> steps_by_burst()))
 
 trk2
 ```
@@ -255,7 +255,7 @@ trk2
 Finally, we can select `id` and `steps`, unnest the new `data_frame` and create a plot of the step-length distributions.
 
 ```{r}
-trk2 %>% select(id, steps) %>% unnest(cols = steps) %>% 
+trk2 |> select(id, steps) |> unnest(cols = steps) |> 
   ggplot(aes(sl_, fill = factor(id))) + geom_density(alpha = 0.4)
 ```
 

@@ -81,7 +81,7 @@ Finally, we can work with the home range and for example a buffer and then gener
 
 
 ```{r, fig.width=4, fig.height=4}
-hr <- hr_mcp(deer) %>% hr_isopleths() %>% 
+hr <- hr_mcp(deer) |> hr_isopleths() |> 
   sf::st_buffer(dist =3e4) # add a 30km buffer
 r1 <- random_points(hr, n = 500)
 plot(r1)
@@ -90,7 +90,7 @@ plot(r1)
 And we can also add the observed points.
 
 ```{r, fig.width=4, fig.height=4}
-hr <- hr_mcp(deer) %>% hr_isopleths() %>% 
+hr <- hr_mcp(deer) |> hr_isopleths() |> 
   sf::st_buffer(dist =3e4) # add a 30km buffer
 r1 <- random_points(hr, n = 500, presence = deer)
 plot(r1)
@@ -106,7 +106,7 @@ Of course we are not restricted to the `sf::st_buffer` function. All geometric o
 As the next step we have to extract the covariates at point. We can do this with `extract_covariates`.
 
 ```{r}
-rsf1 <- deer %>% random_points() %>% 
+rsf1 <- deer |> random_points() |> 
   extract_covariates(sh_forest) 
 ```
 
@@ -116,7 +116,7 @@ rsf1 <- deer %>% random_points() %>%
 Now all pieces are there to fit a RSF. We will use `fit_rsf`, which is just a wrapper around `stats::glm` with `family = binomial(link = "logit")`.
 
 ```{r}
-rsf1 %>% fit_rsf(case_ ~ forest) %>% 
+rsf1 |> fit_rsf(case_ ~ forest) |> 
   summary()
 
 ```

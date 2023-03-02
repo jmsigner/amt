@@ -91,7 +91,7 @@ ssf1 <- ssf1 |> random_steps(n_control = 15)
 As a last step, we have to extract the covariates at the end point of each step. We can do this with `extract_covariates`.
 
 ```{r}
-ssf1 <- ssf1 %>% extract_covariates(sh_forest) 
+ssf1 <- ssf1 |> extract_covariates(sh_forest) 
 ```
 
 
@@ -99,7 +99,7 @@ Since the forest layers is coded as `1 = forest` and `2 != forest`, we create a 
 
 
 ```{r}
-ssf1 <- ssf1 %>% 
+ssf1 <- ssf1 |> 
   mutate(forest = factor(forest, levels = 1:0, labels = c("forest", "non-forest")), 
          cos_ta = cos(ta_), 
         log_sl = log(sl_)) 
@@ -110,9 +110,9 @@ ssf1 <- ssf1 %>%
 Now all pieces are there to fit a SSF. We will use `fit_clogit`, which is a wrapper around `survival::clogit`.
 
 ```{r}
-m0 <- ssf1 %>% fit_clogit(case_ ~ forest + strata(step_id_))
-m1 <- ssf1 %>% fit_clogit(case_ ~ forest + forest:cos_ta + forest:log_sl + log_sl * cos_ta + strata(step_id_))
-m2 <- ssf1 %>% fit_clogit(case_ ~ forest + forest:cos_ta + forest:log_sl + log_sl + cos_ta + strata(step_id_))
+m0 <- ssf1 |> fit_clogit(case_ ~ forest + strata(step_id_))
+m1 <- ssf1 |> fit_clogit(case_ ~ forest + forest:cos_ta + forest:log_sl + log_sl * cos_ta + strata(step_id_))
+m2 <- ssf1 |> fit_clogit(case_ ~ forest + forest:cos_ta + forest:log_sl + log_sl + cos_ta + strata(step_id_))
 summary(m0)
 summary(m1)
 summary(m2)
@@ -127,12 +127,12 @@ See the discussion in Fieberg et al 2021.
 All steps described above, could easily be wrapped into one piped workflow:
 
 ```{r}
-m1 <- deer %>% 
-  steps_by_burst() %>% random_steps(n = 15) %>% 
-  extract_covariates(sh_forest) %>% 
+m1 <- deer |> 
+  steps_by_burst() |> random_steps(n = 15) |> 
+  extract_covariates(sh_forest) |> 
   mutate(forest = factor(forest, levels = 1:0, labels = c("forest", "non-forest")), 
          cos_ta = cos(ta_), 
-         log_sl = log(sl_)) %>% 
+         log_sl = log(sl_)) |> 
   fit_clogit(case_ ~ forest + forest:cos_ta + forest:sl_ + sl_ * cos_ta + strata(step_id_))
 ```
 
