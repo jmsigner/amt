@@ -1,67 +1,73 @@
-Package: amt
 Type: Package
+Package: amt
 Title: Animal Movement Tools
 Version: 0.2
-Authors@R: c(person("Johannes","Signer", role = c("aut", "cre"), email = "jsigner@gwdg.de"), 
-  person("Brian", "Smith", role = "ctb"), 
-  person("Bjoern", "Reineking", role = "ctb"), 
-  person("Ulrike", "Schlaegel", role = "ctb"), 
-  person("John", "Fieberg", role = "ctb"), 
-  person("Josh", "O'Brien", role = "ctb"),
-  person("Bernardo", "Niebuhr", role = "ctb"),
-  person("Alec", "Robitaille", role = "ctb"),
-  person("Scott", "LaPoint", role = "dtc"))
-Description: Manage and analyze animal movement data. The functionality of 'amt' includes methods to calculate home ranges, track statistics (e.g. step lengths, speed, or turning angles), prepare data for fitting habitat selection analyses, and simulation of space-use from fitted step-selection functions.
+Authors@R: c(
+    person("Johannes", "Signer", , "jsigner@gwdg.de", role = c("aut", "cre")),
+    person("Brian", "Smith", role = "ctb"),
+    person("Bjoern", "Reineking", role = "ctb"),
+    person("Ulrike", "Schlaegel", role = "ctb"),
+    person("John", "Fieberg", role = "ctb"),
+    person("Josh", "O'Brien", role = "ctb"),
+    person("Bernardo", "Niebuhr", role = "ctb"),
+    person("Alec", "Robitaille", role = "ctb"),
+    person("Scott", "LaPoint", role = "dtc")
+  )
+Description: Manage and analyze animal movement data. The functionality of
+    'amt' includes methods to calculate home ranges, track statistics
+    (e.g. step lengths, speed, or turning angles), prepare data for
+    fitting habitat selection analyses, and simulation of space-use from
+    fitted step-selection functions.
 License: GPL-3
-Encoding: UTF-8
-LazyData: true
 URL: https://github.com/jmsigner/amt
 Depends: 
-    R (>= 4.1),
+    R (>= 4.1)
 Imports: 
     checkmate,
     circular,
     ctmm,
-    dplyr (>= 0.7.0),
     data.table,
+    dplyr (>= 0.7.0),
     fitdistrplus,
+    FNN,
+    graphics,
+    grDevices,
+    KernSmooth,
     lubridate,
+    MASS,
     methods,
     purrr,
     Rdpack,
-    Rcpp (>= 0.12.7),
     rlang,
     sf,
     sfheaders,
-    suncalc,
+    stats,
     survival,
     terra,
     tibble,
     tidyr (>= 1.0.0),
-    MASS
+    utils
 Suggests: 
     adehabitatLT,
-    adehabitatMA,
     broom,
     ggplot2,
     ggraph,
     geosphere,
-    KernSmooth,
-    FNN,
-    leaflet,
-    moveHMM,
-    move,
-    sessioninfo,
-    spacetime,
-    trajectories,
     knitr,
+    leaflet,
+    move, 
+    moveHMM,
     rmarkdown,
-    tinytest,
-    tidygraph,
+    sessioninfo,
+    suncalc,
     sp,
-    covr
-LinkingTo: Rcpp
-RoxygenNote: 7.2.3
+    tidygraph,
+    tinytest
+VignetteBuilder: 
+    knitr
+RdMacros: 
+    Rdpack
+Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
-RdMacros: Rdpack
-VignetteBuilder: knitr
+RoxygenNote: 7.2.3

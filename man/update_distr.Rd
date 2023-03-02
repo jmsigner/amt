@@ -42,10 +42,11 @@ Update tentative step length or turning angle distribution from a fitted iSSF.
 
 # Fit an SSF, then update movement parameters.
 data(deer)
+mini_deer <- deer[1:100, ]
 sh_forest <- get_sh_forest()
 
 # Prepare data for SSF
-ssf_data <- deer |>
+ssf_data <- mini_deer |>
   steps_by_burst() |>
   random_steps(n = 15) |>
   extract_covariates(sh_forest) |>

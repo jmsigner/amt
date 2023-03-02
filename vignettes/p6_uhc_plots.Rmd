@@ -329,5 +329,5 @@ head(as.data.frame(uhc_issf_right), 10)
 
 ## References
 
-Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A., and Matthiopoulos, J. 2018. Used-habitat calibration plots: A new procedure for validating species distribution, resource selection, and step-selection models. *Ecography* 41:737–752. [doi: 10.1111/ecog.03123](https://doi.org/10.1111/ecog.03123).
+Fieberg, J.R., Forester, J.D., Street, G.M., Johnson, D.H., ArchMiller, A.A., and Matthiopoulos, J. 2018. Used-habitat calibration plots: A new procedure for validating species distribution, resource selection, and step-selection models. *Ecography* 41:737–752. 
 

@@ -33,21 +33,15 @@ random_steps.numeric <- function(
   checkmate::assert_numeric(rand_sl, lower = 0)
   checkmate::assert_numeric(rand_ta, lower = -pi, upper = pi)
 
-  rs <- random_steps_cpp_one_step(
-    n_control,  # number of control steps
-    x[1], x[2],
-    angle,
-    rand_sl, rand_ta)
-  rs
+  slr <- rand_sl[sample.int(length(rand_sl), n_control, replace = TRUE)]
+  tar <- rand_ta[sample.int(length(rand_ta), n_control, replace = TRUE)]
 
-  # The same in R (slighty slower ~ 1%)
-  # slr <- sample(rand_sl, n_control, replace = TRUE)
-  # tar <- sample(rand_ta, n_control, replace = TRUE)
-  # new.x <- x[1] + slr * cos(tar + angle)
-  # new.y <- x[2] + slr * sin(tar + angle)
-  # out <- cbind(x[1], x[2], new.x, new.y, slr, tar + angle)
-  # colnames(out) <- c("x1_", "y1_", "x2_", "y2_", "sl_", "ta_")
-  # out
+  new.x <- x[1] + slr * cos(tar + angle)
+  new.y <- x[2] + slr * sin(tar + angle)
+
+  out <- cbind(x[1], x[2], new.x, new.y, slr, tar + angle)
+  colnames(out) <- c("x1_", "y1_", "x2_", "y2_", "sl_", "ta_")
+  out
 }
 
 

@@ -9,11 +9,10 @@ citEntry(entry = "Article",
          year         = "2019",
          volume       = "9",
          pages        = "880--890",
-         url          = "https://doi.org/10.1002/ece3.4823",
 
          textVersion  =
            paste("Signer J., Fieberg J., Avgar T. (2011).",
                  "Animal movement tools (amt): R package for managing tracking data and conducting habitat selection analyses.",
                  "Ecology and Evolution, 2019 9, 880-890.",
-                 "URL https://doi.org/10.1002/ece3.4823.")
+                 "DOI: 10.1002/ece3.4823")
 )

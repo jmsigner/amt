@@ -17,7 +17,7 @@ diff_x <- function(x, ...) {
 
 #' @export
 diff_x.track_xy <- function(x, ...) {
-   c(diff_rcpp(x$x_), NA)
+   diff_dt(x$x_)
 }
 
 #' @export
@@ -28,8 +28,10 @@ diff_y <- function(x, ...) {
 
 #' @export
 diff_y.track_xy <- function(x, ...) {
-   c(diff_rcpp(x$y_), NA)
+   diff_dt(x$y_)
 }
 
-
+diff_dt <- function(x) {
+  data.table::shift(x, n = -1) - x
+}
 

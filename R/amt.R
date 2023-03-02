@@ -11,7 +11,6 @@
 #' @importFrom stats dexp qexp terms predict
 #' @importFrom methods as is
 #' @importFrom purrr map map_int
-#' @importFrom Rcpp evalCpp
 #' @importFrom rlang quo quos enquo quo_name
 #' @import survival
 #' @import Rdpack
@@ -29,10 +28,6 @@ utils::globalVariables(
     "y0_", "x0_", "y2_", "x2_", "abs.dir2", "rel.dir", "ta_",
     "step_id_1", "abs.dir1", "x", "y", ":=", ".I", "t2_",
     "linestring_id")) # to omit CRAN notes
-
-#' @useDynLib amt
-
-"_PACKAGE"
 
 
 # exports from other packages ---------------------------------------------

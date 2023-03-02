@@ -1,3 +1,18 @@
+# Version 0.2.0
+## Round 1
+
+### Test environments
+
+- local: Ubuntu 22.04, R 4.2.2
+- R-cmd-check on gitHub: macOS-latest, windows-latest (release), ubuntu-latest (release, devel, oldrel-1)
+- AppVeyor on GitHub
+- macos-highsierra-release-cran on r-hub.
+
+### R CMD check results
+
+There were no errors, warnings or notes.
+
+
 # Version 0.1.7
 ## Round 1
 

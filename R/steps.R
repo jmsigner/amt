@@ -58,31 +58,6 @@ NULL
 #' direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = FALSE, clockwise = TRUE)
 #' direction_abs(trk, full_circle = FALSE, zero_dir = "N", lonlat = TRUE, clockwise = TRUE)
 #'
-## #' # How do results compare to other packages
-## #' # adehabitatLT
-## #' df <- adehabitatLT::as.ltraj(data.frame(x = xy$x, y = xy$y), typeII = FALSE, id = 1)
-## #' df[[1]]$abs.angle
-## #' amt::direction_abs(trk)
-## #'
-## #' # bcpa
-## #' df <- bcpa::MakeTrack(xy$x, xy$y, lubridate::now() +  lubridate::hours(0:10))
-## #' bcpa::GetVT(df)$Phi
-## #' direction_abs(trk, full_circle = FALSE, append_last = FALSE)
-## #'
-## #' # move
-## #' m <- move::move(xy$x, xy$y, lubridate::now() + lubridate::hours(1:11),
-## #'  proj = sp::CRS("+init=epsg:4326"))
-## #' move::angle(m)
-## #' direction_abs(trk, lonlat = TRUE, zero_dir = "E") |> as_degree()
-## #'
-## #' t1[["direction"]]
-## #' direction_abs(trk, full_circle = TRUE, zero_dir = "N",
-## #'   clockwise = TRUE, append_last = FALSE) |> as_degree
-## #'
-## #' # moveHMM (only rel. ta)
-## #' df <- data.frame(ID = 1, x = xy$x, y = xy$y)
-## #' moveHMM::prepData(df, type = "UTM")$angle
-## #' direction_rel(trk)
 
 
 direction_abs <- function(x, ...) {
@@ -151,7 +126,7 @@ direction_rel.track_xy <- function(x, lonlat = FALSE, append_last = TRUE,
 
   p <- direction_abs(x, lonlat = lonlat, full_circle = FALSE,
                      zero_dir = zero_dir, clockwise = FALSE, append_last = append_last)
-  p <- c(NA, diff_rcpp(p)) %% (2 * pi)
+  p <- c(NA, diff(p)) %% (2 * pi)
   p <- ifelse( p > pi, p - 2 * pi, p)
   p
 }

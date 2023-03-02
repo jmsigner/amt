@@ -17,8 +17,8 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ## Background
 
 Several different indices have been proposed for measuring home-range overlap. These are reviewed
-by Fieberg & Kochany
-(2005)^[https://wildlife.onlinelibrary.wiley.com/doi/abs/10.2193/0022-541X%282005%2969%5B1346%3AQHOTIO%5D2.0.CO%3B2].
+by Fieberg & Kochanny
+(2005).
 There are two general approaches used to calculate home-range overlap: 1) calculate the percentage overlap at a given isopleth level (this works for geometric and probabilistic home ranges) or 2) calculate an index of
 similarity between the two utilization distributions (UD; this only works for
 probabilistic estimators)^[For a discussion of geometric vs. probabilistic estimators see here: https://www.biorxiv.org/content/10.1101/2020.08.19.256859v2].
@@ -145,13 +145,13 @@ hr_overlap(dat$kde, type = "vi", labels = dat$week)
 
 Different options exist for the argument `which`. For example, `which = "one_to_all"` calculates the overlap between the first and all other home ranges. 
 
-
+<!--
 Finally, we can calculate the overlap between all elements inside a list (use
-`which = "all"` for this). We will use the `puechcir` from the `adehabitatMA` package to illustrate this. 
+`which = "all"` for this). We will use the `puechcir` from the `adehabitatLT` package to illustrate this. 
 
 
-```{r}
-data("puechabonsp", package = "adehabitatMA")
+```{r, eval = FALSE}
+data("puechabon", package = "adehabitatLT")
 dat <- puechabonsp$relocs %>% as.data.frame() %>% 
   make_track(X, Y, id = Name)
 trast <- make_trast(dat, res = 50)
@@ -161,7 +161,7 @@ dat1 <- dat %>% nest(data = -id) %>%
 
 Now we can calculate the overlaps between animals: 
 
-```{r, fig.width=7, fig.height=7}
+```{r, fig.width=7, fig.height=7, eval = FALSE}
 ov2 <- hr_overlap(dat1$kde, type = "hr", labels = dat1$id, which = "all", 
                   conditional = TRUE) %>% 
   filter(overlap > 0)
@@ -179,6 +179,7 @@ ggraph(graph, layout = 'stress') +
   theme_light() +
   scale_edge_color_gradient(low = "blue", high = "red")
 ```
+-->
   
 ## Overlap between a home range and a simple feature
 
@@ -208,11 +209,8 @@ hr_overlap_feature(hr, poly, direction = "hr_with_feature")
 ```
 
 
-
-
-## Todo
-
-ctmm implements overlap for stationary dist with ci: https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13027
+## References
+- Fieberg, J., & Kochanny, C. O. (2005). Quantifying home‐range overlap: the importance of the utilization distribution. The Journal of Wildlife Management, 69(4), 1346-1359.
 
 
 ## Session
