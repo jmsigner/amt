@@ -12,12 +12,8 @@
 #' data(deer)
 #'
 #' # with random steps
-#' deer |> steps_by_burst() |> random_steps() |> plot_sl()
-#' deer |> steps_by_burst() |> random_steps() |> plot_sl(upper_quantile = 0.5)
-#'
-#' # with fitted ssf
-#' deer |> steps_by_burst() |> random_steps() |>
-#'   fit_ssf(case_ ~ sl_ + strata(step_id_)) |> plot_sl()
+#' deer[1:100, ] |> steps_by_burst() |> random_steps() |> plot_sl()
+#' deer[1:100, ] |> steps_by_burst() |> random_steps() |> plot_sl(upper_quantile = 0.5)
 #'
 plot_sl <- function(x, ...) {
   UseMethod("plot_sl", x)
