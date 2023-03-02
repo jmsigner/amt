@@ -339,14 +339,14 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' # It is also possible to use different step length distributions
 #'
 #' # exponential step-length distribution
-#' s2 <- deer |> steps_by_burst()
+#' s2 <- mini_deer |> steps_by_burst()
 #' s2 <- random_steps(s2, sl_distr = fit_distr(s2$sl_, "exp"))
 #' m2 <- s2 |>
 #'   fit_clogit(case_ ~ sl_ + strata(step_id_))
 #' update_sl_distr(m2)
 #'
 #' # half normal step-length distribution
-#' s3 <- deer |> steps_by_burst()
+#' s3 <- mini_deer |> steps_by_burst()
 #' s3 <- random_steps(s3, sl_distr = fit_distr(s3$sl_, "hnorm"))
 #' m3 <- s3 |>
 #'   mutate(sl_sq_ = sl_^2) |>
@@ -354,7 +354,7 @@ fit_distr <- function(x, dist_name, na.rm = TRUE) {
 #' update_sl_distr(m3)
 #'
 #' # log normal step-length distribution
-#' s4 <- deer |> steps_by_burst()
+#' s4 <- mini_deer |> steps_by_burst()
 #' s4 <- random_steps(s4, sl_distr = fit_distr(s4$sl_, "lnorm"))
 #' m4 <- s4 |>
 #'   mutate(log_sl_ = log(sl_), log_sl_sq_ = log(sl_)^2) |>

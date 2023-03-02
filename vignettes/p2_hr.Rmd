@@ -57,14 +57,14 @@ library(ggraph)
 We will use tracking data from Fishers from New York State, USA. 
 
 ```{r}
-leroy <- amt_fisher %>% filter(name == "Leroy")
-lupe <- amt_fisher %>% filter(name == "Lupe")
+leroy <- amt_fisher |> filter(name == "Leroy")
+lupe <- amt_fisher |> filter(name == "Lupe")
 ```
 
 Create a template raster for the KDE
 
 ```{r}
-trast <- make_trast(amt_fisher %>% filter(name %in% c("Leroy", "Lupe")), res = 50)
+trast <- make_trast(amt_fisher |> filter(name %in% c("Leroy", "Lupe")), res = 50)
 ```
 
 And estimate home-ranges for both fishers
@@ -117,9 +117,9 @@ trast <- make_trast(lupe, res = 50)
 Then we add a new column with day and calculate for each day a `KDE` home range. 
 
 ```{r}
-dat <- lupe %>% 
-  mutate(week = lubridate::floor_date(t_, "week")) %>% 
-  nest(data = -week) %>% 
+dat <- lupe |> 
+  mutate(week = lubridate::floor_date(t_, "week")) |> 
+  nest(data = -week) |> 
   mutate(kde = map(data, hr_kde, trast = trast, levels = c(0.5, 0.95, 0.99)))
 ```
   
@@ -152,10 +152,10 @@ Finally, we can calculate the overlap between all elements inside a list (use
 
 ```{r, eval = FALSE}
 data("puechabon", package = "adehabitatLT")
-dat <- puechabonsp$relocs %>% as.data.frame() %>% 
+dat <- puechabonsp$relocs |> as.data.frame() |> 
   make_track(X, Y, id = Name)
 trast <- make_trast(dat, res = 50)
-dat1 <- dat %>% nest(data = -id) %>% 
+dat1 <- dat |> nest(data = -id) |> 
   mutate(kde = map(data, ~ hr_kde(., trast = trast, level = c(0.5, 0.9, 0.99))))
 ```
 
@@ -163,9 +163,9 @@ Now we can calculate the overlaps between animals:
 
 ```{r, fig.width=7, fig.height=7, eval = FALSE}
 ov2 <- hr_overlap(dat1$kde, type = "hr", labels = dat1$id, which = "all", 
-                  conditional = TRUE) %>% 
+                  conditional = TRUE) |> 
   filter(overlap > 0)
-graph <- as_tbl_graph(ov2) %>% 
+graph <- as_tbl_graph(ov2) |> 
   mutate(Popularity = centrality_degree(mode = 'in')) 
 
 ggraph(graph, layout = 'stress') + 
