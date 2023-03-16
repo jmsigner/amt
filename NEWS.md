@@ -1,3 +1,7 @@
+# amt 0.2.1
+## Fixes
+- The correct step id is now given in `random_steps.brusted_track_xyt()`.
+
 # amt 0.2
 ## updates
 - Removed dependency on Rccp, all code is now in R. 

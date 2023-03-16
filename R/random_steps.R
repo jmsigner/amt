@@ -46,6 +46,7 @@ random_steps.numeric <- function(
 
 
 #' @export
+#' @param start_id [integer] Index where the numbering for step ids start.
 #' @rdname random_steps
 #'
 random_steps.steps_xy <- function(
@@ -54,7 +55,7 @@ random_steps.steps_xy <- function(
   ta_distr = fit_distr(x$ta_, "vonmises"), # this argument could be remove
   rand_sl = random_numbers(sl_distr, n = 1e5),
   rand_ta = random_numbers(ta_distr, n = 1e5),
-  include_observed = TRUE, ...) {
+  include_observed = TRUE, start_id = 1, ...) {
 
   # Generate random points
   ns <- nrow(x)  # number of steps
@@ -63,11 +64,8 @@ random_steps.steps_xy <- function(
 
   x$case_ <- TRUE
 
-  # This could be moved to c++
-  ##xx <- lapply(stps, function(i) {
   xx <- lapply(2:nrow(x), function(i) {
     random_steps(c(x$x1_[i], x$y1_[i]), n_control = n_control,
-                 #angle = x$direction_p[i],
                  angle = x$direction_p[i-1],
                  rand_sl = rand_sl, rand_ta = rand_ta)})
   xx <- do.call(rbind, xx)
@@ -97,7 +95,8 @@ random_steps.steps_xy <- function(
     dplyr::rename(ta_ = rel.dir)
 
   out <- dplyr::bind_rows(x, for_rand) |>
-    dplyr::filter(step_id_ > 1)
+    dplyr::filter(step_id_ > 1) |>
+    dplyr::mutate(step_id_ = step_id_ + start_id)
   out <- dplyr::arrange(out, step_id_)
   out[["direction_p"]] <- NULL
 
@@ -108,7 +107,6 @@ random_steps.steps_xy <- function(
   attr(out, "crs_") <- attr(x, "crs_")
 
   out
-
 }
 
 #' @export
@@ -122,11 +120,15 @@ random_steps.bursted_steps_xyt <- function(
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE, ...) {
 
-  out <- lapply(split(x, x$burst_), function(q) {
+  start_ids <- c(1, head(cumsum(rle(x$burst_)$lengths), -1) + 1)
+  bursts <- split(x, x$burst_)
+
+  out <- lapply(seq_along(start_ids), function(i) {
+    q <- bursts[[i]]
     class(q) <- class(q)[-1]
     if (nrow(q) > 1) {
       random_steps(q, n_control = n_control, sl_distr = NULL, ta_distr = NULL, rand_sl = rand_sl,
-                   rand_ta = rand_ta, include_observed = include_observed, ...)
+                   rand_ta = rand_ta, include_observed = include_observed, start_id = start_ids[i], ...)
     }
   })
 

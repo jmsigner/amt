@@ -26,6 +26,7 @@ random_steps(x, ...)
   rand_sl = random_numbers(sl_distr, n = 1e+05),
   rand_ta = random_numbers(ta_distr, n = 1e+05),
   include_observed = TRUE,
+  start_id = 1,
   ...
 )
 
@@ -59,6 +60,8 @@ with each observed step.}
 \item{ta_distr}{\verb{[amt_distr]} \cr The turn-angle distribution.}
 
 \item{include_observed}{\verb{[logical(1) = TRUE]} \cr Indicates if observed steps are to be included in the result.}
+
+\item{start_id}{\link{integer} Index where the numbering for step ids start.}
 }
 \value{
 A \code{tibble} of class random_steps.

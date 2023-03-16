@@ -366,7 +366,9 @@ movement_kernel1 <- function(x, sl.model, ta.model) {
     # gamma = -x$sl_ / sl.model$params$scale + log(x$sl_) * (sl.model$params$shape - 1),
     gamma = -1 / sl.model$params$scale * x$sl_ + # this is the adjustment term for scale
       log(x$sl_) * (sl.model$params$shape - 1),
-    exp = -x$sl_ * sl.model$params$rate)
+    exp = -x$sl_ * sl.model$params$rate,
+    hnorm = x$sl
+  )
   if(ta.model$name == "vonmises") {
     phi <- phi + cos(x$ta_) * ta.model$params$kappa
   }
