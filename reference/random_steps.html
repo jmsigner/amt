@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">amt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
       </span>
     </div>
 
@@ -99,6 +99,7 @@
 <span>  rand_sl <span class="op">=</span> <span class="fu"><a href="random_numbers.html">random_numbers</a></span><span class="op">(</span><span class="va">sl_distr</span>, n <span class="op">=</span> <span class="fl">1e+05</span><span class="op">)</span>,</span>
 <span>  rand_ta <span class="op">=</span> <span class="fu"><a href="random_numbers.html">random_numbers</a></span><span class="op">(</span><span class="va">ta_distr</span>, n <span class="op">=</span> <span class="fl">1e+05</span><span class="op">)</span>,</span>
 <span>  include_observed <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  start_id <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -152,6 +153,10 @@ with each observed step.</p></dd>
 
 <dt>include_observed</dt>
 <dd><p><code>[logical(1) = TRUE]</code> <br> Indicates if observed steps are to be included in the result.</p></dd>
+
+
+<dt>start_id</dt>
+<dd><p><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a> Index where the numbering for step ids start.</p></dd>
 
 </dl></div>
     <div id="value">
