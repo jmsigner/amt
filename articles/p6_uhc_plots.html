@@ -189,7 +189,7 @@ each dataset, <em>i.e.</em>, <code><a href="../reference/uhc_hsf_locs.html">?uhc
 <code class="sourceCode R"><span><span class="co"># Load all the packages we need</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jmsigner/amt" class="external-link">amt</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">uhc_hab</span><span class="op">)</span></span>
@@ -387,7 +387,7 @@ and model weights.</p>
 <span>  <span class="co"># Drop 'train' column</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">train</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># Get rid of any NAs (sometimes available steps fall outside of raster)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">test_dat</span> <span class="op">&lt;-</span> <span class="va">test</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/random_steps.html">random_steps</a></span><span class="op">(</span>n_control <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -399,7 +399,7 @@ and model weights.</p>
 <span>  <span class="co"># Drop 'train' column</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">train</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># Get rid of any NAs (sometimes available steps fall outside of raster)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fit-models-1">Fit model(s)<a class="anchor" aria-label="anchor" href="#fit-models-1"></a>
