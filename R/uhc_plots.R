@@ -322,10 +322,7 @@ prep_uhc.fit_clogit <- function(object, test_dat,
 
     ### Step 3b. Select points from test data
     # Get habitat formula
-    ff <- issf_w_form(object, l)
-
-    # Drop movement variables from the betas
-    bb <- bb[which(!names(bb) %in% l$move)]
+    ff <- issf_drop_stratum(object, l)
 
     # Calculate w(x) under the model
     ww <- calc_w(f = ff, b = bb, newdata = l$data)
@@ -724,6 +721,8 @@ ua_distr <- function(name, type, data, lims, resp,
 #' @param b `[numeric]` A named vector of coefficients.
 #' @param newdata `[data.frame]` \cr A `data.frame` to predict eHSF values.
 #'
+#' @details This is actually like to be w(x) * \phi(x) for an iSSF.
+#'
 calc_w <- function(f, b, newdata) {
   # Get terms object from formula
   Terms <- stats::delete.response(stats::terms(f))
@@ -738,7 +737,9 @@ calc_w <- function(f, b, newdata) {
   X <- stats::model.matrix(Terms, data = newdata)
 
   # Drop intercept from data matrix
-  X <- X[, -1, drop = FALSE]
+  if (ncol(X) == (length(b) + 1)){
+    X <- X[, -1, drop = FALSE]
+  }
 
   # Linear combination
   l <- as.vector(X %*% b)
@@ -757,6 +758,8 @@ calc_w <- function(f, b, newdata) {
 #' @param object `[fit_clogit]` Fitted iSSF.
 #' @param l `[list]` List returned by `prep_test_dat.fit_clogit()`
 #'
+# BJS Note: this might be a useful user decision, but in general, we
+# probably don't want to drop the movement part of the model
 issf_w_form <- function(object, l) {
   # Get formula terms from object
   tt <- terms(stats::formula(object$model))
@@ -777,6 +780,30 @@ issf_w_form <- function(object, l) {
 
   # Keep only habitat terms
   hab <- stats::drop.terms(tt, drops, keep.response = TRUE)
+
+  # Make formula
+  ff <- formula(hab)
+
+  # Return
+  return(ff)
+}
+
+#' Create formula without stratum from iSSF
+#'
+#' Creates a formula without stratum variable
+#'
+#' @param object `[fit_clogit]` Fitted iSSF.
+#' @param l `[list]` List returned by `prep_test_dat.fit_clogit()`
+#'
+issf_drop_stratum <- function(object, l) {
+  # Get formula terms from object
+  tt <- terms(stats::formula(object$model))
+
+  # Get location of stratum
+  ss <- grep("strata(", attr(tt, "term.labels"), fixed = TRUE)
+
+  # Keep only habitat terms
+  hab <- stats::drop.terms(tt, ss, keep.response = TRUE)
 
   # Make formula
   ff <- formula(hab)
