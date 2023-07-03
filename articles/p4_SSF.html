@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">amt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.0</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
                         <h4 data-toc-skip class="author">Johannes
 Signer</h4>
             
-            <h4 data-toc-skip class="date">2023-06-30</h4>
+            <h4 data-toc-skip class="date">2023-07-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jmsigner/amt/blob/HEAD/vignettes/p4_SSF.Rmd" class="external-link"><code>vignettes/p4_SSF.Rmd</code></a></small>
       <div class="hidden name"><code>p4_SSF.Rmd</code></div>
@@ -264,83 +264,83 @@ function.</p>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="va">ssf1</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/fit_clogit.html">fit_clogit</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">forest</span> <span class="op">+</span> <span class="va">forest</span><span class="op">:</span><span class="va">cos_ta</span> <span class="op">+</span> <span class="va">forest</span><span class="op">:</span><span class="va">log_sl</span> <span class="op">+</span> <span class="va">log_sl</span> <span class="op">+</span> <span class="va">cos_ta</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m0</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Call:</span></span>
-<span><span class="co">## coxph(formula = Surv(rep(1, 12144L), case_) ~ forest + strata(step_id_), </span></span>
+<span><span class="co">## coxph(formula = Surv(rep(1, 12096L), case_) ~ forest + strata(step_id_), </span></span>
 <span><span class="co">##     data = data, method = "exact")</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##   n= 12144, number of events= 759 </span></span>
+<span><span class="co">##   n= 12096, number of events= 756 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                     coef exp(coef) se(coef)      z Pr(&gt;|z|)    </span></span>
-<span><span class="co">## forestnon-forest -0.5108    0.6000   0.1085 -4.708 2.51e-06 ***</span></span>
+<span><span class="co">## forestnon-forest -0.5145    0.5978   0.1088 -4.727 2.28e-06 ***</span></span>
 <span><span class="co">## ---</span></span>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                  exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span><span class="co">## forestnon-forest       0.6      1.667    0.4851    0.7422</span></span>
+<span><span class="co">## forestnon-forest    0.5978      1.673     0.483      0.74</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Concordance= 0.529  (se = 0.007 )</span></span>
-<span><span class="co">## Likelihood ratio test= 21.51  on 1 df,   p=4e-06</span></span>
-<span><span class="co">## Wald test            = 22.16  on 1 df,   p=3e-06</span></span>
-<span><span class="co">## Score (logrank) test = 22.26  on 1 df,   p=2e-06</span></span></code></pre>
+<span><span class="co">## Likelihood ratio test= 21.65  on 1 df,   p=3e-06</span></span>
+<span><span class="co">## Wald test            = 22.34  on 1 df,   p=2e-06</span></span>
+<span><span class="co">## Score (logrank) test = 22.44  on 1 df,   p=2e-06</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Call:</span></span>
-<span><span class="co">## coxph(formula = Surv(rep(1, 12144L), case_) ~ forest + forest:cos_ta + </span></span>
+<span><span class="co">## coxph(formula = Surv(rep(1, 12096L), case_) ~ forest + forest:cos_ta + </span></span>
 <span><span class="co">##     forest:log_sl + log_sl * cos_ta + strata(step_id_), data = data, </span></span>
 <span><span class="co">##     method = "exact")</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##   n= 12144, number of events= 759 </span></span>
+<span><span class="co">##   n= 12096, number of events= 756 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                             coef exp(coef) se(coef)      z Pr(&gt;|z|)    </span></span>
-<span><span class="co">## forestnon-forest         0.76794   2.15533  0.32705  2.348 0.018869 *  </span></span>
-<span><span class="co">## log_sl                   0.16276   1.17675  0.04928  3.303 0.000957 ***</span></span>
-<span><span class="co">## cos_ta                  -0.23534   0.79030  0.20481 -1.149 0.250534    </span></span>
-<span><span class="co">## forestnon-forest:cos_ta -0.26713   0.76557  0.11822 -2.260 0.023844 *  </span></span>
-<span><span class="co">## forestnon-forest:log_sl -0.24073   0.78605  0.05745 -4.191 2.78e-05 ***</span></span>
-<span><span class="co">## log_sl:cos_ta            0.01519   1.01531  0.03424  0.444 0.657310    </span></span>
+<span><span class="co">## forestnon-forest         0.83934   2.31483  0.32799  2.559 0.010497 *  </span></span>
+<span><span class="co">## log_sl                   0.17416   1.19025  0.04958  3.513 0.000443 ***</span></span>
+<span><span class="co">## cos_ta                  -0.20329   0.81604  0.20531 -0.990 0.322092    </span></span>
+<span><span class="co">## forestnon-forest:cos_ta -0.31159   0.73228  0.11769 -2.648 0.008106 ** </span></span>
+<span><span class="co">## forestnon-forest:log_sl -0.25554   0.77450  0.05786 -4.416    1e-05 ***</span></span>
+<span><span class="co">## log_sl:cos_ta            0.01656   1.01669  0.03450  0.480 0.631313    </span></span>
 <span><span class="co">## ---</span></span>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                         exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span><span class="co">## forestnon-forest           2.1553     0.4640    1.1353    4.0917</span></span>
-<span><span class="co">## log_sl                     1.1768     0.8498    1.0684    1.2961</span></span>
-<span><span class="co">## cos_ta                     0.7903     1.2653    0.5290    1.1807</span></span>
-<span><span class="co">## forestnon-forest:cos_ta    0.7656     1.3062    0.6072    0.9652</span></span>
-<span><span class="co">## forestnon-forest:log_sl    0.7861     1.2722    0.7023    0.8797</span></span>
-<span><span class="co">## log_sl:cos_ta              1.0153     0.9849    0.9494    1.0858</span></span>
+<span><span class="co">## forestnon-forest           2.3148     0.4320    1.2171    4.4026</span></span>
+<span><span class="co">## log_sl                     1.1902     0.8402    1.0800    1.3117</span></span>
+<span><span class="co">## cos_ta                     0.8160     1.2254    0.5457    1.2203</span></span>
+<span><span class="co">## forestnon-forest:cos_ta    0.7323     1.3656    0.5814    0.9223</span></span>
+<span><span class="co">## forestnon-forest:log_sl    0.7745     1.2912    0.6915    0.8675</span></span>
+<span><span class="co">## log_sl:cos_ta              1.0167     0.9836    0.9502    1.0878</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Concordance= 0.605  (se = 0.012 )</span></span>
-<span><span class="co">## Likelihood ratio test= 88.02  on 6 df,   p=&lt;2e-16</span></span>
-<span><span class="co">## Wald test            = 86.24  on 6 df,   p=&lt;2e-16</span></span>
-<span><span class="co">## Score (logrank) test = 88.42  on 6 df,   p=&lt;2e-16</span></span></code></pre>
+<span><span class="co">## Concordance= 0.609  (se = 0.013 )</span></span>
+<span><span class="co">## Likelihood ratio test= 90.25  on 6 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Wald test            = 88.38  on 6 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Score (logrank) test = 90.65  on 6 df,   p=&lt;2e-16</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Call:</span></span>
-<span><span class="co">## coxph(formula = Surv(rep(1, 12144L), case_) ~ forest + forest:cos_ta + </span></span>
+<span><span class="co">## coxph(formula = Surv(rep(1, 12096L), case_) ~ forest + forest:cos_ta + </span></span>
 <span><span class="co">##     forest:log_sl + log_sl + cos_ta + strata(step_id_), data = data, </span></span>
 <span><span class="co">##     method = "exact")</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##   n= 12144, number of events= 759 </span></span>
+<span><span class="co">##   n= 12096, number of events= 756 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                             coef exp(coef) se(coef)      z Pr(&gt;|z|)    </span></span>
-<span><span class="co">## forestnon-forest         0.77568   2.17206  0.32638  2.377 0.017473 *  </span></span>
-<span><span class="co">## log_sl                   0.16230   1.17622  0.04926  3.295 0.000984 ***</span></span>
-<span><span class="co">## cos_ta                  -0.15543   0.85604  0.09746 -1.595 0.110758    </span></span>
-<span><span class="co">## forestnon-forest:cos_ta -0.27050   0.76300  0.11798 -2.293 0.021862 *  </span></span>
-<span><span class="co">## forestnon-forest:log_sl -0.24206   0.78501  0.05735 -4.221 2.43e-05 ***</span></span>
+<span><span class="co">## forestnon-forest         0.84859   2.33635  0.32724  2.593 0.009510 ** </span></span>
+<span><span class="co">## log_sl                   0.17369   1.18969  0.04956  3.505 0.000457 ***</span></span>
+<span><span class="co">## cos_ta                  -0.11644   0.89008  0.09693 -1.201 0.229614    </span></span>
+<span><span class="co">## forestnon-forest:cos_ta -0.31497   0.72981  0.11750 -2.681 0.007348 ** </span></span>
+<span><span class="co">## forestnon-forest:log_sl -0.25707   0.77331  0.05776 -4.451 8.56e-06 ***</span></span>
 <span><span class="co">## ---</span></span>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                         exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span><span class="co">## forestnon-forest            2.172     0.4604    1.1457    4.1180</span></span>
-<span><span class="co">## log_sl                      1.176     0.8502    1.0680    1.2954</span></span>
-<span><span class="co">## cos_ta                      0.856     1.1682    0.7072    1.0362</span></span>
-<span><span class="co">## forestnon-forest:cos_ta     0.763     1.3106    0.6055    0.9615</span></span>
-<span><span class="co">## forestnon-forest:log_sl     0.785     1.2739    0.7015    0.8784</span></span>
+<span><span class="co">## forestnon-forest           2.3363     0.4280    1.2302    4.4370</span></span>
+<span><span class="co">## log_sl                     1.1897     0.8406    1.0796    1.3111</span></span>
+<span><span class="co">## cos_ta                     0.8901     1.1235    0.7361    1.0763</span></span>
+<span><span class="co">## forestnon-forest:cos_ta    0.7298     1.3702    0.5797    0.9188</span></span>
+<span><span class="co">## forestnon-forest:log_sl    0.7733     1.2931    0.6905    0.8660</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Concordance= 0.603  (se = 0.012 )</span></span>
-<span><span class="co">## Likelihood ratio test= 87.82  on 5 df,   p=&lt;2e-16</span></span>
-<span><span class="co">## Wald test            = 85.59  on 5 df,   p=&lt;2e-16</span></span>
-<span><span class="co">## Score (logrank) test = 87.55  on 5 df,   p=&lt;2e-16</span></span></code></pre>
+<span><span class="co">## Concordance= 0.609  (se = 0.013 )</span></span>
+<span><span class="co">## Likelihood ratio test= 90.02  on 5 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Wald test            = 87.6  on 5 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Score (logrank) test = 89.63  on 5 df,   p=&lt;2e-16</span></span></code></pre>
 <div class="section level3">
 <h3 id="interpretation-of-coefficients">Interpretation of coefficients<a class="anchor" aria-label="anchor" href="#interpretation-of-coefficients"></a>
 </h3>
@@ -363,34 +363,34 @@ workflow:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Call:</span></span>
-<span><span class="co">## coxph(formula = Surv(rep(1, 12144L), case_) ~ forest + forest:cos_ta + </span></span>
+<span><span class="co">## coxph(formula = Surv(rep(1, 12096L), case_) ~ forest + forest:cos_ta + </span></span>
 <span><span class="co">##     forest:sl_ + sl_ * cos_ta + strata(step_id_), data = data, </span></span>
 <span><span class="co">##     method = "exact")</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##   n= 12144, number of events= 759 </span></span>
+<span><span class="co">##   n= 12096, number of events= 756 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                               coef  exp(coef)   se(coef)      z Pr(&gt;|z|)    </span></span>
-<span><span class="co">## forestnon-forest        -0.0330127  0.9675262  0.1408828 -0.234 0.814731    </span></span>
-<span><span class="co">## sl_                      0.0008085  1.0008088  0.0001600  5.054 4.33e-07 ***</span></span>
-<span><span class="co">## cos_ta                  -0.3528147  0.7027074  0.1115603 -3.163 0.001564 ** </span></span>
-<span><span class="co">## forestnon-forest:cos_ta -0.2475250  0.7807307  0.1180669 -2.096 0.036040 *  </span></span>
-<span><span class="co">## forestnon-forest:sl_    -0.0011685  0.9988322  0.0002031 -5.753 8.76e-09 ***</span></span>
-<span><span class="co">## sl_:cos_ta               0.0004514  1.0004515  0.0001336  3.379 0.000727 ***</span></span>
+<span><span class="co">## forestnon-forest        -0.1036793  0.9015144  0.1407961 -0.736  0.46150    </span></span>
+<span><span class="co">## sl_                      0.0006758  1.0006760  0.0001538  4.394 1.11e-05 ***</span></span>
+<span><span class="co">## cos_ta                  -0.3355283  0.7149603  0.1098064 -3.056  0.00225 ** </span></span>
+<span><span class="co">## forestnon-forest:cos_ta -0.2134928  0.8077580  0.1183237 -1.804  0.07118 .  </span></span>
+<span><span class="co">## forestnon-forest:sl_    -0.0009751  0.9990253  0.0001986 -4.909 9.14e-07 ***</span></span>
+<span><span class="co">## sl_:cos_ta               0.0003849  1.0003850  0.0001271  3.027  0.00247 ** </span></span>
 <span><span class="co">## ---</span></span>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##                         exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span><span class="co">## forestnon-forest           0.9675     1.0336    0.7341    1.2752</span></span>
-<span><span class="co">## sl_                        1.0008     0.9992    1.0005    1.0011</span></span>
-<span><span class="co">## cos_ta                     0.7027     1.4231    0.5647    0.8744</span></span>
-<span><span class="co">## forestnon-forest:cos_ta    0.7807     1.2809    0.6194    0.9840</span></span>
-<span><span class="co">## forestnon-forest:sl_       0.9988     1.0012    0.9984    0.9992</span></span>
-<span><span class="co">## sl_:cos_ta                 1.0005     0.9995    1.0002    1.0007</span></span>
+<span><span class="co">## forestnon-forest           0.9015     1.1092    0.6841    1.1880</span></span>
+<span><span class="co">## sl_                        1.0007     0.9993    1.0004    1.0010</span></span>
+<span><span class="co">## cos_ta                     0.7150     1.3987    0.5765    0.8866</span></span>
+<span><span class="co">## forestnon-forest:cos_ta    0.8078     1.2380    0.6406    1.0186</span></span>
+<span><span class="co">## forestnon-forest:sl_       0.9990     1.0010    0.9986    0.9994</span></span>
+<span><span class="co">## sl_:cos_ta                 1.0004     0.9996    1.0001    1.0006</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Concordance= 0.612  (se = 0.013 )</span></span>
-<span><span class="co">## Likelihood ratio test= 117.9  on 6 df,   p=&lt;2e-16</span></span>
-<span><span class="co">## Wald test            = 121.7  on 6 df,   p=&lt;2e-16</span></span>
-<span><span class="co">## Score (logrank) test = 127.9  on 6 df,   p=&lt;2e-16</span></span></code></pre>
+<span><span class="co">## Concordance= 0.603  (se = 0.013 )</span></span>
+<span><span class="co">## Likelihood ratio test= 105.2  on 6 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Wald test            = 107.8  on 6 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Score (logrank) test = 116.5  on 6 df,   p=&lt;2e-16</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="session">Session<a class="anchor" aria-label="anchor" href="#session"></a>
@@ -407,12 +407,12 @@ workflow:</p>
 <span><span class="co">##  collate  C.UTF-8</span></span>
 <span><span class="co">##  ctype    C.UTF-8</span></span>
 <span><span class="co">##  tz       UTC</span></span>
-<span><span class="co">##  date     2023-06-30</span></span>
+<span><span class="co">##  date     2023-07-03</span></span>
 <span><span class="co">##  pandoc   2.19.2 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">##  <span style="color: #555555; font-style: italic;">package     </span> <span style="color: #555555; font-style: italic;">*</span> <span style="color: #555555; font-style: italic;">version </span> <span style="color: #555555; font-style: italic;">date (UTC)</span> <span style="color: #555555; font-style: italic;">lib</span> <span style="color: #555555; font-style: italic;">source</span></span></span>
-<span><span class="co">##  amt          * 0.2.1.0  <span style="color: #555555;">2023-06-30</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
+<span><span class="co">##  amt          * 0.2.2.0  <span style="color: #555555;">2023-07-03</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
 <span><span class="co">##  backports      1.4.1    <span style="color: #555555;">2021-12-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  boot           1.3-28.1 <span style="color: #555555;">2022-11-22</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">##  bslib          0.5.0    <span style="color: #555555;">2023-06-09</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>

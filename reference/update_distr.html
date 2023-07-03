@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">amt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.0</span>
       </span>
     </div>
 
@@ -159,6 +159,7 @@ the distribution and its parameters (saved in <code>params</code>).</p>
 <span class="r-in"><span>                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forest"</span>, <span class="st">"non-forest"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  cos_ta_ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">ta_</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  log_sl_ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some bursts contain &lt; 3 steps and will be removed</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check tentative distributions</span></span></span>
 <span class="r-in"><span><span class="co"># Step length</span></span></span>
@@ -221,6 +222,7 @@ the distribution and its parameters (saved in <code>params</code>).</p>
 <span class="r-in"><span><span class="co"># exponential step-length distribution</span></span></span>
 <span class="r-in"><span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="va">mini_deer</span> <span class="op">|&gt;</span> <span class="fu"><a href="steps.html">steps_by_burst</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_steps.html">random_steps</a></span><span class="op">(</span><span class="va">s2</span>, sl_distr <span class="op">=</span> <span class="fu"><a href="fit_distr.html">fit_distr</a></span><span class="op">(</span><span class="va">s2</span><span class="op">$</span><span class="va">sl_</span>, <span class="st">"exp"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some bursts contain &lt; 3 steps and will be removed</span>
 <span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="va">s2</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="fit_clogit.html">fit_clogit</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">sl_</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">update_sl_distr</span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span></span>
@@ -229,7 +231,7 @@ the distribution and its parameters (saved in <code>params</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $params</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $params$rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.005361801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.005255201</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $vcov</span>
@@ -241,6 +243,7 @@ the distribution and its parameters (saved in <code>params</code>).</p>
 <span class="r-in"><span><span class="co"># half normal step-length distribution</span></span></span>
 <span class="r-in"><span><span class="va">s3</span> <span class="op">&lt;-</span> <span class="va">mini_deer</span> <span class="op">|&gt;</span> <span class="fu"><a href="steps.html">steps_by_burst</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s3</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_steps.html">random_steps</a></span><span class="op">(</span><span class="va">s3</span>, sl_distr <span class="op">=</span> <span class="fu"><a href="fit_distr.html">fit_distr</a></span><span class="op">(</span><span class="va">s3</span><span class="op">$</span><span class="va">sl_</span>, <span class="st">"hnorm"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some bursts contain &lt; 3 steps and will be removed</span>
 <span class="r-in"><span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="va">s3</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sl_sq_ <span class="op">=</span> <span class="va">sl_</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="fit_clogit.html">fit_clogit</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">sl_sq_</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -250,7 +253,7 @@ the distribution and its parameters (saved in <code>params</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $params</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $params$sd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 390.2299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 396.9396</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $vcov</span>
@@ -262,6 +265,7 @@ the distribution and its parameters (saved in <code>params</code>).</p>
 <span class="r-in"><span><span class="co"># log normal step-length distribution</span></span></span>
 <span class="r-in"><span><span class="va">s4</span> <span class="op">&lt;-</span> <span class="va">mini_deer</span> <span class="op">|&gt;</span> <span class="fu"><a href="steps.html">steps_by_burst</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s4</span> <span class="op">&lt;-</span> <span class="fu"><a href="random_steps.html">random_steps</a></span><span class="op">(</span><span class="va">s4</span>, sl_distr <span class="op">=</span> <span class="fu"><a href="fit_distr.html">fit_distr</a></span><span class="op">(</span><span class="va">s4</span><span class="op">$</span><span class="va">sl_</span>, <span class="st">"lnorm"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some bursts contain &lt; 3 steps and will be removed</span>
 <span class="r-in"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="va">s4</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>log_sl_ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span>, log_sl_sq_ <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="fit_clogit.html">fit_clogit</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">log_sl_</span> <span class="op">+</span> <span class="va">log_sl_sq_</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -271,10 +275,10 @@ the distribution and its parameters (saved in <code>params</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $params</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $params$meanlog</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.536814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.712034</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $params$sdlog</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.492886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.401068</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $vcov</span>

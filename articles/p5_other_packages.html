@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">amt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2.0</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
                         <h4 data-toc-skip class="author">Johannes
 Signer</h4>
             
-            <h4 data-toc-skip class="date">2023-06-30</h4>
+            <h4 data-toc-skip class="date">2023-07-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jmsigner/amt/blob/HEAD/vignettes/p5_other_packages.Rmd" class="external-link"><code>vignettes/p5_other_packages.Rmd</code></a></small>
       <div class="hidden name"><code>p5_other_packages.Rmd</code></div>
@@ -180,31 +180,11 @@ can be coerced to a <code>telemetry</code> object used in
 <h2 id="move">
 <code>move</code><a class="anchor" aria-label="anchor" href="#move"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">move_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coercion.html">as_move</a></span><span class="op">(</span><span class="va">deer</span><span class="op">)</span></span>
-<span><span class="va">move_obj</span></span></code></pre></div>
-<pre><code><span><span class="co">## class       : Move </span></span>
-<span><span class="co">## features    : 826 </span></span>
-<span><span class="co">## extent      : 4309723, 4318383, 3442716, 3450713  (xmin, xmax, ymin, ymax)</span></span>
-<span><span class="co">## crs         : +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs </span></span>
-<span><span class="co">## variables   : 1</span></span>
-<span><span class="co">## names       : burst_ </span></span>
-<span><span class="co">## min values  :      1 </span></span>
-<span><span class="co">## max values  :     35 </span></span>
-<span><span class="co">## timestamps  : 2008-03-30 00:01:47 ... 2009-04-28 00:00:21 Time difference of 394 days  (start ... end, duration) </span></span>
-<span><span class="co">## sensors     : unknown </span></span>
-<span><span class="co">## indiv. data :  </span></span>
-<span><span class="co">## indiv. value:  </span></span>
-<span><span class="co">## date created: 2023-06-21 13:49:57.94075</span></span></code></pre>
-</div>
-<div class="section level2">
-<h2 id="to-sf-and-sp">To <code>sf</code> and <code>sp</code><a class="anchor" aria-label="anchor" href="#to-sf-and-sp"></a>
-</h2>
 </div>
 <div class="section level2">
 <h2 id="session">Session<a class="anchor" aria-label="anchor" href="#session"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Session info ───────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">##  <span style="color: #555555; font-style: italic;">setting </span> <span style="color: #555555; font-style: italic;">value</span></span></span>
@@ -216,7 +196,7 @@ can be coerced to a <code>telemetry</code> object used in
 <span><span class="co">##  collate  C.UTF-8</span></span>
 <span><span class="co">##  ctype    C.UTF-8</span></span>
 <span><span class="co">##  tz       UTC</span></span>
-<span><span class="co">##  date     2023-06-30</span></span>
+<span><span class="co">##  date     2023-07-03</span></span>
 <span><span class="co">##  pandoc   2.19.2 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
@@ -224,7 +204,7 @@ can be coerced to a <code>telemetry</code> object used in
 <span><span class="co">##  ade4           1.7-22   <span style="color: #555555;">2023-02-06</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  adehabitatLT   0.3.27   <span style="color: #555555;">2023-04-06</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  adehabitatMA   0.3.16   <span style="color: #555555;">2023-04-06</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  amt          * 0.2.1.0  <span style="color: #555555;">2023-06-30</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
+<span><span class="co">##  amt          * 0.2.2.0  <span style="color: #555555;">2023-07-03</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
 <span><span class="co">##  boot           1.3-28.1 <span style="color: #555555;">2022-11-22</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">##  bslib          0.5.0    <span style="color: #555555;">2023-06-09</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  cachem         1.0.8    <span style="color: #555555;">2023-05-01</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
@@ -245,11 +225,9 @@ can be coerced to a <code>telemetry</code> object used in
 <span><span class="co">##  fastmap        1.1.1    <span style="color: #555555;">2023-02-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  fs             1.6.2    <span style="color: #555555;">2023-04-25</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  generics       0.1.3    <span style="color: #555555;">2022-07-05</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  geosphere      1.5-18   <span style="color: #555555;">2022-11-15</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  glue           1.6.2    <span style="color: #555555;">2022-02-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  Gmedian        1.2.7    <span style="color: #555555;">2022-06-08</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  htmltools      0.5.5    <span style="color: #555555;">2023-03-23</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  httr           1.4.6    <span style="color: #555555;">2023-05-08</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  jquerylib      0.1.4    <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  jsonlite       1.8.7    <span style="color: #555555;">2023-06-29</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  KernSmooth     2.23-21  <span style="color: #555555;">2023-05-03</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
@@ -261,7 +239,6 @@ can be coerced to a <code>telemetry</code> object used in
 <span><span class="co">##  MASS           7.3-60   <span style="color: #555555;">2023-05-04</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">##  Matrix         1.5-4.1  <span style="color: #555555;">2023-05-18</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">##  memoise        2.0.1    <span style="color: #555555;">2021-11-26</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  move           4.2.2    <span style="color: #555555;">2023-06-07</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  pillar         1.9.0    <span style="color: #555555;">2023-03-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  pkgconfig      2.0.3    <span style="color: #555555;">2019-09-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  pkgdown        2.0.7    <span style="color: #555555;">2022-12-14</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">any (@2.0.7)</span></span></span>
@@ -296,7 +273,6 @@ can be coerced to a <code>telemetry</code> object used in
 <span><span class="co">##  utf8           1.2.3    <span style="color: #555555;">2023-01-31</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  vctrs          0.6.3    <span style="color: #555555;">2023-06-14</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  xfun           0.39     <span style="color: #555555;">2023-04-20</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  xml2           1.3.4    <span style="color: #555555;">2023-04-27</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  yaml           2.3.7    <span style="color: #555555;">2023-01-23</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #555555;"> [1] /home/runner/work/_temp/Library</span></span></span>
