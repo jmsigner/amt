@@ -54,7 +54,7 @@ time_of_day.steps_xyt <- function(x, include.crepuscule = FALSE, where = "end", 
 time_of_day_base <- function(x, t, include.crepuscule, end = TRUE) {
 
   if (!requireNamespace("suncalc", quietly = TRUE)) {
-    stop("Please install package `maptools` first.")
+    stop("Please install package `suncalc` first.")
   }
 
   if (suppressWarnings(has_crs(x))) {
