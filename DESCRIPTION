@@ -1,7 +1,7 @@
 Type: Package
 Package: amt
 Title: Animal Movement Tools
-Version: 0.2.1.0
+Version: 0.2.2.0
 Authors@R: c(
     person("Johannes", "Signer", , "jsigner@gwdg.de", role = c("aut", "cre")),
     person("Brian", "Smith", role = "ctb"),
@@ -55,12 +55,10 @@ Suggests:
     geosphere,
     knitr,
     leaflet,
-    move, 
     moveHMM,
     rmarkdown,
     sessioninfo,
     suncalc,
-    sp,
     tidygraph,
     tinytest
 VignetteBuilder: 

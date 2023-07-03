@@ -48,14 +48,6 @@ class(ctmm_obj)
 
 ## `move`
 
-```{r}
-move_obj <- as_move(deer)
-move_obj
-
-```
-
-## To `sf` and `sp`
-
 
 ## Session
 

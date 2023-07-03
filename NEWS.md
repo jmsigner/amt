@@ -1,3 +1,8 @@
+# amt 0.2.2
+## Fixes
+- Fixed error within `random_steps.brusted_track_xyt()`, when `burst_id` did not start with 1. 
+- Removed `as_move()`. 
+
 # amt 0.2.1
 ## Fixes
 - The correct step id is now given in `random_steps.brusted_track_xyt()`.

@@ -121,62 +121,6 @@ as_sf_lines.steps_xy <- function(x, ...) {
 
 }
 
-
-
-# as_move() ---------------------------------------------------------------
-
-#' @export
-#' @rdname coercion
-
-as_move <- function(x, ...) {
-  UseMethod("as_move", x)
-}
-
-#' @export
-#' @rdname coercion
-as_move.track_xyt <- function(x, id = "id", ...){
-
-  # is a grouping present
-  has_id = TRUE
-
-  # Check if id is present
-  if (!id %in% names(x)) {
-    id <- "unnamed"
-    has_id <- FALSE
-  }
-
-  # Check for duplicates (group by id)
-  any_duplicates <- if (has_id) {
-    any(sapply(split(x, x[[id]]), function(y) any(duplicated(y$t_))))
-  } else {
-    any(duplicated(x$t_))
-  }
-
-  if (any_duplicates) {
-    warning("data contains duplicates. By default 1st entery is kept, and subsequent duplicates are removed. If this is not wanted, please remove duplicates from original input object")
-
-    x <- if (has_id) {
-      do.call(rbind, lapply(split(x, x$t_), function(y)
-        y[!duplicated(y$t_), ]))
-
-    } else {
-      x[!duplicated(x$t_), ]
-    }
-  }
-
-  # Create a move object
-  move::move(
-    x = x$x_,
-    y= x$y_,
-    time = x$t_,
-    data = data.frame(x[!names(x) %in% c("x_","y_","t_")]),
-    proj = if (is.numeric(get_crs(x))) sp::CRS(paste0("+init=epsg:", get_crs(x)))
-    else as(get_crs(x), "CRS"),
-    animal = if (has_id) as.character(x[[id]]) else "unnamed")
-}
-
-
-
 # as_ltraj ----------------------------------------------------------------
 
 #' @export
@@ -264,6 +208,4 @@ as_moveHMM.track_xy <- function(x, ...) {
     moveHMM::prepData(as.data.frame(x), type = "UTM", coordNames = c("x_", "y_"))
   }
 }
-
-
 

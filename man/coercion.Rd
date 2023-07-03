@@ -5,8 +5,6 @@
 \alias{as_sf}
 \alias{as_sf.steps_xy}
 \alias{as_sp}
-\alias{as_move}
-\alias{as_move.track_xyt}
 \alias{as_ltraj}
 \alias{as_ltraj.track_xy}
 \alias{as_ltraj.track_xyt}
@@ -21,10 +19,6 @@ as_sf(x, ...)
 \method{as_sf}{steps_xy}(x, end = TRUE, ...)
 
 as_sp(x, ...)
-
-as_move(x, ...)
-
-\method{as_move}{track_xyt}(x, id = "id", ...)
 
 as_ltraj(x, ...)
 

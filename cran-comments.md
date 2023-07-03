@@ -1,3 +1,19 @@
+# Version 0.2.1
+This is a minor update and fixes a bug that was introduced with the last update.
+## Fixes
+- The correct step id is now given in `random_steps.brusted_track_xyt()`.
+
+### Test environments
+
+- local: Ubuntu 22.04, R 4.2.2
+- Win-builder: windows-latest (release and devel)
+- R-cmd-check on gitHub: macOS-latest, windows-latest (release), ubuntu-latest (release)
+
+### R CMD check results
+
+There were no errors, warnings or notes.
+
+
 # Version 0.2.0
 ## Round 1
 ### updates
@@ -22,9 +38,8 @@
 ### Test environments
 
 - local: Ubuntu 22.04, R 4.2.2
-- Winbuilder: windows-latest (release and devel)
-- AppVeyor on GitHub
-- macos-highsierra-release-cran on r-hub.
+- Win-builder: windows-latest (release and devel)
+- R-cmd-check on gitHub: macOS-latest, windows-latest (release), ubuntu-latest (release)
 
 ### R CMD check results
 
