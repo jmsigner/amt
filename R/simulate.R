@@ -252,9 +252,9 @@ kernel_setup <- function(template, max.dist = 100, start, covars) {
 #' @param map `[SpatRaster]` \cr A SpatRaster with all covariates.
 #' @param fun `[function]` \cr A function that is executed on each location of the redistribution kernel. The default function is `extract_covariates()`.
 #' @param max.dist `[numeric(1)]` \cr The maximum distance of the redistribution kernel.
-#' @param n.control `[integer(1)]{1e6}` \cr The number of points of the redistribution kernel (this is only important if `stochastic = TRUE`).
+#' @param n.control `[integer(1)]{1e6}` \cr The number of points of the redistribution kernel (this is only important if `landscape = "continuous"`).
 #' @param n.sample `[integer(1)]{1}` \cr The number of points sampled from the redistribution kernel (this is only important if `as.rast = FALSE`).
-#' @param stochastic `[logical(1)]{FALSE}` \cr If `TRUE` the redistribution kernel is sampled using a random sample of size `n.control`. Otherwise each cell in the redistribution kernel is used.
+#' @param landscape `[character(1)]{"continuous"}` \cr If `"continuous` the redistribution kernel is sampled using a random sample of size `n.control`. If `landscape = "discrete"` each cell in the redistribution kernel is used.
 #' @param normalize `[logical(1)]{TRUE}` \cr If `TRUE` the redistribution kernel is normalized to sum to one.
 #' @param interpolate `[logical(1)]{FALSE}` \cr If `TRUE` a stochastic redistribution kernel is interpolated to return a raster layer. Note, this is just for completeness and is computationally inefficient in most situations.
 #' @param as.rast `[logical(1)]{TRUE}` \cr If `TRUE` a `SpatRaster` should be returned.
@@ -275,8 +275,9 @@ redistribution_kernel <- function(
   max.dist = get_max_dist(x),
   n.control = 1e6,
   n.sample = 1,
-  stochastic = FALSE,
-  compensate.movement = !stochastic,
+  stochastic = NULL,
+  landscape = "continuous",
+  compensate.movement = landscape == "discrete",
   normalize = TRUE,
   interpolate = FALSE,
   as.rast = FALSE,
@@ -285,7 +286,16 @@ redistribution_kernel <- function(
   arguments <- as.list(environment())
   checkmate::assert_class(start, "sim_start")
 
-  if (stochastic) {
+  if (!missing("stochastic")) {
+    warning("Argument stochastic is deprecated, use the argument 'landscape' instead.")
+  }
+
+  if (!landscape %in% c("continuous", "discrete")) {
+    stop("Argument `landscape` is invalid. Valid values are 'continuous' or 'discrete'.")
+  }
+
+
+  if (landscape == "continuous") {
     xy <- random_steps_simple(start, sl_model = x$sl_,
                               ta_model = x$ta_, n.control = n.control)
   } else {
@@ -320,8 +330,8 @@ redistribution_kernel <- function(
     xy[sample.int(nrow(xy), size = n.sample, prob = w), ] |>
       dplyr::select(x_ = x2_, y_ = y2_, t2_)
   } else {
-    if (stochastic) {
-      stop("`as.rast` not implemented for `stochastic = TRUE`")
+    if (landscape == "continuous") {
+      stop("`as.rast` not implemented for `landscape = 'continuous'`")
     } else {
       terra::rast(data.frame(xy[, c("x2_", "y2_")], w))
     }
