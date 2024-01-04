@@ -429,7 +429,7 @@ simulate_path.redistribution_kernel <- function(
       max.dist = mod$max.dist,
       n.control = mod$n.control,
       n.sample = 1,
-      stochastic = mod$stochastic,
+      landscape = mod$landscape,
       normalize = TRUE,
       interpolate = FALSE,
       as.rast = FALSE,
@@ -449,7 +449,10 @@ simulate_path.redistribution_kernel <- function(
 
     xy$x_[i + 1] <- rk$x_[1]
     xy$y_[i + 1] <- rk$y_[1]
-    start <- make_start(as.numeric(xy[i + 1, c("x_", "y_")]), new.ta, crs = attr(x$args$start, "crs"))
+    start <- make_start(
+      as.numeric(xy[i + 1, c("x_", "y_")]), new.ta,
+      time = xy$t_[i],
+      crs = attr(x$args$start, "crs"))
   }
   return(xy)
 }
