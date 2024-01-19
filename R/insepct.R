@@ -41,8 +41,6 @@ inspect.track_xy <- function(x, popup = NULL, cluster = TRUE, ...) {
   leaflet::leaflet(x) |>
     leaflet::addTiles(group = "OSM (default)") |>
     leaflet::addProviderTiles(leaflet::providers$OpenSeaMap, group = "OpenSeaMap") |>
-    leaflet::addProviderTiles(leaflet::providers$OpenTopoMap, group = "OpenTopoMap") |>
-    leaflet::addProviderTiles(leaflet::providers$Stamen.Watercolor, group = "Water color") |>
     leaflet::addProviderTiles(leaflet::providers$Esri.WorldImagery, group = "ESRI World Imagery") |>
     leaflet::addScaleBar() |>
     leaflet::addCircleMarkers(
@@ -51,9 +49,11 @@ inspect.track_xy <- function(x, popup = NULL, cluster = TRUE, ...) {
       popup = if (!is.null(popup)) as.character(popup) else NULL,
       clusterOptions = if (cluster) leaflet::markerClusterOptions() else NULL
     ) |>
+
     leaflet::addLayersControl(
-      baseGroups = c("OSM (default)", "OpenSeaMap", "OpenTopoMap", "Water color", "ESRI WorldImagery"),
+      baseGroups = c("OSM (default)", "OpenSeaMap", "ESRI WorldImagery"),
       overlayGroups = c("Relocations"),
       options = leaflet::layersControlOptions(collapsed = TRUE)
     )
+
 }
