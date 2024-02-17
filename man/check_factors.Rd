@@ -7,6 +7,9 @@
 check_factors(model, x1, x2)
 }
 \arguments{
+\item{model}{\verb{[glm, clogit]} \cr The model object from a fitted RSF/(i)SSF.
+\emph{I.e.}, it will be \code{object$model} when called within \code{log_rss()}.}
+
 \item{x1}{\verb{[data.frame]} \cr A \code{data.frame} representing the habitat values
 at location x_1. Must contain all fitted covariates as expected by
 \code{predict()}.}
@@ -14,9 +17,6 @@ at location x_1. Must contain all fitted covariates as expected by
 \item{x2}{\verb{[data.frame]} \cr A 1-row \code{data.frame} representing the single
 hypothetical location of x_2. Must contain all fitted covariates as expected
 by \code{predict()}.}
-
-\item{object}{\verb{[glm, clogit]} \cr The model object from a fitted RSF/(i)SSF.
-\emph{I.e.}, it will be \code{object$model} when called within \code{log_rss()}.}
 }
 \description{
 Check factor levels before log-RSS calculation

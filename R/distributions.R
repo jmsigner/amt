@@ -177,6 +177,7 @@ random_numbers.vonmises_distr <- function(x, n = 100, ...) {
   ifelse(x > base::pi, x - (2 * base::pi), x)
 }
 
+#' @export
 random_numbers.hnorm_distr <- function(x, n = 100, ...) {
   base::abs(stats::rnorm(n, mean = 0, sd = x$params$sd))
 }

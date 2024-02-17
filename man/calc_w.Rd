@@ -17,5 +17,5 @@ calc_w(f, b, newdata)
 Calculates the value of the exponential habitat selection function
 }
 \details{
-This is actually like to be w(x) * \phi(x) for an iSSF.
+This is actually like to be w(x) * phi(x) for an iSSF.
 }

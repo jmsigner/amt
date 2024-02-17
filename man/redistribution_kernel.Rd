@@ -15,8 +15,8 @@ redistribution_kernel(
   max.dist = get_max_dist(x),
   n.control = 1e+06,
   n.sample = 1,
-  stochastic = FALSE,
-  compensate.movement = !stochastic,
+  landscape = "continuous",
+  compensate.movement = landscape == "discrete",
   normalize = TRUE,
   interpolate = FALSE,
   as.rast = FALSE,
@@ -36,13 +36,13 @@ redistribution_kernel(
 
 \item{max.dist}{\verb{[numeric(1)]} \cr The maximum distance of the redistribution kernel.}
 
-\item{n.control}{\verb{[integer(1)]\{1e6\}} \cr The number of points of the redistribution kernel (this is only important if \code{stochastic = TRUE}).}
+\item{n.control}{\verb{[integer(1)]\{1e6\}} \cr The number of points of the redistribution kernel (this is only important if \code{landscape = "continuous"}).}
 
 \item{n.sample}{\verb{[integer(1)]\{1\}} \cr The number of points sampled from the redistribution kernel (this is only important if \code{as.rast = FALSE}).}
 
-\item{stochastic}{\verb{[logical(1)]\{FALSE\}} \cr If \code{TRUE} the redistribution kernel is sampled using a random sample of size \code{n.control}. Otherwise each cell in the redistribution kernel is used.}
+\item{landscape}{\verb{[character(1)]\{"continuous"\}} \cr If \verb{"continuous} the redistribution kernel is sampled using a random sample of size \code{n.control}. If \code{landscape = "discrete"} each cell in the redistribution kernel is used.}
 
-\item{compensate.movement}{\verb{[logical(1)]} \cr Indicates if movement parameters are corrected or not. This only relevant if \code{stochastic = FALSE}.}
+\item{compensate.movement}{\verb{[logical(1)]} \cr Indicates if movement parameters are corrected or not. This only relevant if \code{landscape = 'discrete'}.}
 
 \item{normalize}{\verb{[logical(1)]\{TRUE\}} \cr If \code{TRUE} the redistribution kernel is normalized to sum to one.}
 

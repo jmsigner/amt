@@ -402,11 +402,13 @@ prep_uhc.fit_clogit <- function(object, test_dat,
 #' the model passed to `object`.
 #' @param verbose `[logical]` Should messages be displayed (`TRUE`) or not
 #' (`FALSE`)?
+#' @keywords internal
 #'
 prep_test_dat <- function(object, test_dat, verbose = TRUE) {
   UseMethod("prep_test_dat", object)
 }
 
+#' @keywords internal
 prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
 
   # Check that 'test_dat' has no NAs
@@ -515,6 +517,7 @@ prep_test_dat.glm <- function(object, test_dat, verbose = TRUE) {
 
 }
 
+#' @keywords internal
 prep_test_dat.fit_clogit <- function(object, test_dat, verbose = TRUE) {
 
   # Check that 'test_dat' has no NAs
@@ -721,7 +724,7 @@ ua_distr <- function(name, type, data, lims, resp,
 #' @param b `[numeric]` A named vector of coefficients.
 #' @param newdata `[data.frame]` \cr A `data.frame` to predict eHSF values.
 #'
-#' @details This is actually like to be w(x) * \phi(x) for an iSSF.
+#' @details This is actually like to be w(x) * phi(x) for an iSSF.
 #'
 calc_w <- function(f, b, newdata) {
   # Get terms object from formula

@@ -112,12 +112,12 @@ expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(
 expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(col = "sl_") |> nrow(), 22)
 
 
-expect_warning(mini_deer[1:3, ] |> steps_by_burst() |> random_steps() |> remove_incomplete_strata(col = "sl_") |> nrow(), 22)
+expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(col = "sl_") |> nrow(), 22)
 
 expect_error(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(col = "sl"))
 
 
 ###
 mini_deer <- deer[5:20, ]
-expect_true(mini_deer |> steps_by_burst() |> random_steps(n_control = 1) |>
-              pull(step_id_) |> unique() |> length() == (nrow(mini_deer) - 2 * length(unique(mini_deer$burst_))))
+expect_true(mini_deer |> steps() |> random_steps(n_control = 1) |>
+              pull(step_id_) |> unique() |> length() == nrow(mini_deer) - 2)

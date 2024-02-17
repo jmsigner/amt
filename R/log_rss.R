@@ -542,7 +542,7 @@ append_x1 <- function(string){
 #'
 #' Check factor levels before log-RSS calculation
 #'
-#' @param object `[glm, clogit]` \cr The model object from a fitted RSF/(i)SSF.
+#' @param model `[glm, clogit]` \cr The model object from a fitted RSF/(i)SSF.
 #' *I.e.*, it will be `object$model` when called within `log_rss()`.
 #' @param x1 `[data.frame]` \cr A `data.frame` representing the habitat values
 #' at location x_1. Must contain all fitted covariates as expected by

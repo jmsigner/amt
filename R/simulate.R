@@ -260,7 +260,7 @@ kernel_setup <- function(template, max.dist = 100, start, covars) {
 #' @param as.rast `[logical(1)]{TRUE}` \cr If `TRUE` a `SpatRaster` should be returned.
 #' @param tolerance.outside `[numeric(1)]{0}` \cr The proportion of the redistribution kernel that is allowed to be outside the `map`.
 #' @param covars `[tibble]` \cr Additional covariates that might be used in the model (e.g., time of day).
-#' @param compensate.movement `[logical(1)]` \cr Indicates if movement parameters are corrected or not. This only relevant if `stochastic = FALSE`.
+#' @param compensate.movement `[logical(1)]` \cr Indicates if movement parameters are corrected or not. This only relevant if `landscape = 'discrete'`.
 #'
 #' @export
 
@@ -275,7 +275,6 @@ redistribution_kernel <- function(
   max.dist = get_max_dist(x),
   n.control = 1e6,
   n.sample = 1,
-  stochastic = NULL,
   landscape = "continuous",
   compensate.movement = landscape == "discrete",
   normalize = TRUE,
@@ -286,9 +285,6 @@ redistribution_kernel <- function(
   arguments <- as.list(environment())
   checkmate::assert_class(start, "sim_start")
 
-  if (!missing("stochastic")) {
-    warning("Argument stochastic is deprecated, use the argument 'landscape' instead.")
-  }
 
   if (!landscape %in% c("continuous", "discrete")) {
     stop("Argument `landscape` is invalid. Valid values are 'continuous' or 'discrete'.")

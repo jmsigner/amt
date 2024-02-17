@@ -20,3 +20,4 @@ the model passed to \code{object}.}
 \description{
 Internal function to check and format \code{test_dat}
 }
+\keyword{internal}
