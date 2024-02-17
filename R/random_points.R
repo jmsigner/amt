@@ -106,7 +106,8 @@ random_points_base <- function(poly, presence, type, n, ...) {
       ))
   }
 
-  class(xx) <- c("random_points", class(xx))
+  class(xx) <- c("random_points", "track_xy", class(xx))
+  attr(xx, "crs_") <- attr(presence, "crs_")
   xx
 }
 
