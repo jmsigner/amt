@@ -87,7 +87,7 @@
 <span><span class="fu">random_points</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fl">100</span>, type <span class="op">=</span> <span class="st">"random"</span>, presence <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for track_xy</span></span>
-<span><span class="fu">random_points</span><span class="op">(</span><span class="va">x</span>, level <span class="op">=</span> <span class="fl">1</span>, hr <span class="op">=</span> <span class="st">"mcp"</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span>, type <span class="op">=</span> <span class="st">"random"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">random_points</span><span class="op">(</span><span class="va">x</span>, level <span class="op">=</span> <span class="fl">1</span>, hr <span class="op">=</span> <span class="st">"mcp"</span>, n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span>, type <span class="op">=</span> <span class="st">"random"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -141,12 +141,12 @@
 <span class="r-in"><span><span class="co"># Default settings</span></span></span>
 <span class="r-in"><span><span class="va">rp1</span> <span class="op">&lt;-</span> <span class="fu">random_points</span><span class="op">(</span><span class="va">deer</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="random_points-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Ten random points for each observed point</span></span></span>
-<span class="r-in"><span><span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">random_points</span><span class="op">(</span><span class="va">deer</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">deer</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">random_points</span><span class="op">(</span><span class="va">deer</span>, n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">deer</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="random_points-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Within a home range -----------------------------------------------------</span></span></span>
@@ -154,16 +154,16 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># 100 random point within the home range</span></span></span>
 <span class="r-in"><span><span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">random_points</span><span class="op">(</span><span class="va">hr</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="random_points-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># 100 regular point within the home range</span></span></span>
 <span class="r-in"><span><span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">random_points</span><span class="op">(</span><span class="va">hr</span>, n <span class="op">=</span> <span class="fl">100</span>, type <span class="op">=</span> <span class="st">"regular"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="random_points-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># 100 hexagonal point within the home range</span></span></span>
 <span class="r-in"><span><span class="va">rp</span> <span class="op">&lt;-</span> <span class="fu">random_points</span><span class="op">(</span><span class="va">hr</span>, n <span class="op">=</span> <span class="fl">100</span>, type <span class="op">=</span> <span class="st">"hexagonal"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rp</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="random_points-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

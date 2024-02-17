@@ -98,7 +98,7 @@
                         <h4 data-toc-skip class="author">Johannes
 Signer</h4>
             
-            <h4 data-toc-skip class="date">2024-01-19</h4>
+            <h4 data-toc-skip class="date">2024-02-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jmsigner/amt/blob/HEAD/vignettes/p1_getting_started.Rmd" class="external-link"><code>vignettes/p1_getting_started.Rmd</code></a></small>
       <div class="hidden name"><code>p1_getting_started.Rmd</code></div>
@@ -227,7 +227,7 @@ create a track.</p>
 <p>We begin with loading and inspecting the data.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sh</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sh</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sh</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   x_epsg31467 y_epsg31467        day     time</span></span>
 <span><span class="co">## 1     3558403     5999400 2009-02-13 00:02:23</span></span>
 <span><span class="co">## 2     3558548     5999099 2009-02-13 06:02:21</span></span>
@@ -366,7 +366,7 @@ We will start with looking at step length. The function
 <code class="sourceCode R"><span><span class="va">tr2</span> <span class="op">&lt;-</span> <span class="va">tr2</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sl_ <span class="op">=</span> <span class="fu"><a href="../reference/steps.html">step_lengths</a></span><span class="op">(</span><span class="va">tr2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>If we look at a summary of <code>sl_</code> we note two things:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tr2</span><span class="op">$</span><span class="va">sl_</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tr2</span><span class="op">$</span><span class="va">sl_</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's </span></span>
 <span><span class="co">##    0.00   35.01  105.33  249.07  297.75 4727.86       1</span></span></code></pre>
 <p>Note, 1) there is a <code>NA</code> for the last step length, this is
@@ -550,12 +550,12 @@ distributions.</p>
 <span><span class="co">##  collate  C.UTF-8</span></span>
 <span><span class="co">##  ctype    C.UTF-8</span></span>
 <span><span class="co">##  tz       UTC</span></span>
-<span><span class="co">##  date     2024-01-19</span></span>
+<span><span class="co">##  date     2024-02-17</span></span>
 <span><span class="co">##  pandoc   2.19.2 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">##  <span style="color: #555555; font-style: italic;">package    </span> <span style="color: #555555; font-style: italic;">*</span> <span style="color: #555555; font-style: italic;">version</span> <span style="color: #555555; font-style: italic;">date (UTC)</span> <span style="color: #555555; font-style: italic;">lib</span> <span style="color: #555555; font-style: italic;">source</span></span></span>
-<span><span class="co">##  amt         * 0.2.2.0 <span style="color: #555555;">2024-01-19</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
+<span><span class="co">##  amt         * 0.2.2.0 <span style="color: #555555;">2024-02-17</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
 <span><span class="co">##  backports     1.4.1   <span style="color: #555555;">2021-12-13</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  bslib         0.6.1   <span style="color: #555555;">2023-11-28</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  cachem        1.0.8   <span style="color: #555555;">2023-05-01</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
@@ -564,7 +564,7 @@ distributions.</p>
 <span><span class="co">##  classInt      0.4-10  <span style="color: #555555;">2023-09-05</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  cli           3.6.2   <span style="color: #555555;">2023-12-11</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  colorspace    2.1-0   <span style="color: #555555;">2023-01-23</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  data.table    1.14.10 <span style="color: #555555;">2023-12-08</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
+<span><span class="co">##  data.table    1.15.0  <span style="color: #555555;">2024-01-30</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  DBI           1.2.1   <span style="color: #555555;">2024-01-12</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  desc          1.4.3   <span style="color: #555555;">2023-12-10</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  digest        0.6.34  <span style="color: #555555;">2024-01-11</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
@@ -615,14 +615,14 @@ distributions.</p>
 <span><span class="co">##  systemfonts   1.0.5   <span style="color: #555555;">2023-10-09</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  textshaping   0.3.7   <span style="color: #555555;">2023-10-09</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  tibble        3.2.1   <span style="color: #555555;">2023-03-20</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  tidyr         1.3.0   <span style="color: #555555;">2023-01-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
+<span><span class="co">##  tidyr         1.3.1   <span style="color: #555555;">2024-01-24</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  tidyselect    1.2.0   <span style="color: #555555;">2022-10-10</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  timechange    0.2.0   <span style="color: #555555;">2023-01-11</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
+<span><span class="co">##  timechange    0.3.0   <span style="color: #555555;">2024-01-18</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  units         0.8-5   <span style="color: #555555;">2023-11-28</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  utf8          1.2.4   <span style="color: #555555;">2023-10-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  vctrs         0.6.5   <span style="color: #555555;">2023-12-01</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  withr         3.0.0   <span style="color: #555555;">2024-01-16</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
-<span><span class="co">##  xfun          0.41    <span style="color: #555555;">2023-11-01</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
+<span><span class="co">##  xfun          0.42    <span style="color: #555555;">2024-02-08</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">##  yaml          2.3.8   <span style="color: #555555;">2023-12-11</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">RSPM</span></span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #555555;"> [1] /home/runner/work/_temp/Library</span></span></span>

@@ -93,8 +93,8 @@ and the selection function).</p>
 <span>  max.dist <span class="op">=</span> <span class="fu"><a href="get_max_dist.html">get_max_dist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
 <span>  n.control <span class="op">=</span> <span class="fl">1e+06</span>,</span>
 <span>  n.sample <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  stochastic <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  compensate.movement <span class="op">=</span> <span class="op">!</span><span class="va">stochastic</span>,</span>
+<span>  landscape <span class="op">=</span> <span class="st">"continuous"</span>,</span>
+<span>  compensate.movement <span class="op">=</span> <span class="va">landscape</span> <span class="op">==</span> <span class="st">"discrete"</span>,</span>
 <span>  normalize <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  interpolate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  as.rast <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -129,19 +129,19 @@ and the selection function).</p>
 
 
 <dt>n.control</dt>
-<dd><p><code>[integer(1)]{1e6}</code> <br> The number of points of the redistribution kernel (this is only important if <code>stochastic = TRUE</code>).</p></dd>
+<dd><p><code>[integer(1)]{1e6}</code> <br> The number of points of the redistribution kernel (this is only important if <code>landscape = "continuous"</code>).</p></dd>
 
 
 <dt>n.sample</dt>
 <dd><p><code>[integer(1)]{1}</code> <br> The number of points sampled from the redistribution kernel (this is only important if <code>as.rast = FALSE</code>).</p></dd>
 
 
-<dt>stochastic</dt>
-<dd><p><code>[logical(1)]{FALSE}</code> <br> If <code>TRUE</code> the redistribution kernel is sampled using a random sample of size <code>n.control</code>. Otherwise each cell in the redistribution kernel is used.</p></dd>
+<dt>landscape</dt>
+<dd><p><code>[character(1)]{"continuous"}</code> <br> If <code>"continuous</code> the redistribution kernel is sampled using a random sample of size <code>n.control</code>. If <code>landscape = "discrete"</code> each cell in the redistribution kernel is used.</p></dd>
 
 
 <dt>compensate.movement</dt>
-<dd><p><code>[logical(1)]</code> <br> Indicates if movement parameters are corrected or not. This only relevant if <code>stochastic = FALSE</code>.</p></dd>
+<dd><p><code>[logical(1)]</code> <br> Indicates if movement parameters are corrected or not. This only relevant if <code>landscape = 'discrete'</code>.</p></dd>
 
 
 <dt>normalize</dt>

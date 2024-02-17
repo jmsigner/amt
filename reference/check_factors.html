@@ -83,7 +83,12 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>x1</dt>
+    <dl><dt>model</dt>
+<dd><p><code>[glm, clogit]</code> <br> The model object from a fitted RSF/(i)SSF.
+<em>I.e.</em>, it will be <code>object$model</code> when called within <code><a href="log_rss.html">log_rss()</a></code>.</p></dd>
+
+
+<dt>x1</dt>
 <dd><p><code>[data.frame]</code> <br> A <code>data.frame</code> representing the habitat values
 at location x_1. Must contain all fitted covariates as expected by
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p></dd>
@@ -93,11 +98,6 @@ at location x_1. Must contain all fitted covariates as expected by
 <dd><p><code>[data.frame]</code> <br> A 1-row <code>data.frame</code> representing the single
 hypothetical location of x_2. Must contain all fitted covariates as expected
 by <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p></dd>
-
-
-<dt>object</dt>
-<dd><p><code>[glm, clogit]</code> <br> The model object from a fitted RSF/(i)SSF.
-<em>I.e.</em>, it will be <code>object$model</code> when called within <code><a href="log_rss.html">log_rss()</a></code>.</p></dd>
 
 </dl></div>
     <div id="details">

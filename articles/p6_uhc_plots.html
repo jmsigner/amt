@@ -136,7 +136,7 @@ or (i)SSF].</li>
 <li>Prepare UHC plots by passing the fitted model and the
 <strong>testing</strong> data to the function
 <code><a href="../reference/prep_uhc.html">prep_uhc()</a></code>.</li>
-<li>Create the UHC plots by calling <code><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot()</a></code> on the object
+<li>Create the UHC plots by calling <code><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot()</a></code> on the object
 returned in (4).</li>
 </ol>
 </div>
@@ -150,9 +150,9 @@ stored as a <code>RasterStack</code>, but with conversion from
 store a <code>SpatRaster</code> as <code>*.rda</code> (the default
 binary format for included data). Instead, <code>uhc_dat</code> is a
 <code>data.frame</code> that can be converted to a
-<code>SpatRaster</code> with <code><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">terra::rast()</a></code>. For
+<code>SpatRaster</code> with <code><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">terra::rast()</a></code>. For
 example:</p>
-<pre><code><span><span class="va">hab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">uhc_dat</span>, type <span class="op">=</span> <span class="st">"xyz"</span>, crs <span class="op">=</span> <span class="st">"epsg:32612"</span><span class="op">)</span></span></code></pre>
+<pre><code><span><span class="va">hab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">uhc_dat</span>, type <span class="op">=</span> <span class="st">"xyz"</span>, crs <span class="op">=</span> <span class="st">"epsg:32612"</span><span class="op">)</span></span></code></pre>
 <p><code>amt</code> also contains location data simulated under (1) an
 HSF and (2) an iSSF to demonstrate the UHC plot workflow.</p>
 <p>The <code>SpatRaster</code> (<code>hab</code>, once converted)
@@ -193,18 +193,18 @@ each dataset, <em>i.e.</em>, <code><a href="../reference/uhc_hsf_locs.html">?uhc
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">uhc_hab</span><span class="op">)</span></span>
-<span><span class="va">hab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">uhc_hab</span>, type <span class="op">=</span> <span class="st">"xyz"</span>, crs <span class="op">=</span> <span class="st">"epsg:32612"</span><span class="op">)</span></span>
+<span><span class="va">hab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">uhc_hab</span>, type <span class="op">=</span> <span class="st">"xyz"</span>, crs <span class="op">=</span> <span class="st">"epsg:32612"</span><span class="op">)</span></span>
 <span><span class="co"># Convert "cover" layer to factor</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>                                    cover <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grass"</span>, <span class="st">"forest"</span>, <span class="st">"wetland"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Affect habitat selection in simulation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/habitat-1.png" width="672"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Do not affect habitat selection in simulation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/habitat-2.png" width="672"></p>
 <div class="section level3">
 <h3 id="hsf-example">HSF Example<a class="anchor" aria-label="anchor" href="#hsf-example"></a>
@@ -222,17 +222,17 @@ and model weights.</p>
 <span></span>
 <span><span class="co"># Split into train (80%) and test (20%)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">uhc_hsf_locs</span><span class="op">$</span><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">uhc_hsf_locs</span><span class="op">)</span>,</span>
+<span><span class="va">uhc_hsf_locs</span><span class="op">$</span><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">uhc_hsf_locs</span><span class="op">)</span>,</span>
 <span>                             size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">uhc_hsf_locs</span><span class="op">[</span><span class="va">uhc_hsf_locs</span><span class="op">$</span><span class="va">train</span> <span class="op">==</span> <span class="fl">1</span>, <span class="op">]</span></span>
 <span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">uhc_hsf_locs</span><span class="op">[</span><span class="va">uhc_hsf_locs</span><span class="op">$</span><span class="va">train</span> <span class="op">==</span> <span class="fl">0</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Available locations (entire raster extent)</span></span>
 <span><span class="va">avail_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/random_points.html">random_points</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">hab</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                             n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span>
+<span>                             n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">train</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">avail_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/random_points.html">random_points</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html" class="external-link">st_as_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">hab</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                            n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span>
+<span>                            n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Combine with used</span></span>
 <span><span class="va">train_dat</span> <span class="op">&lt;-</span> <span class="va">train</span> <span class="op">|&gt;</span></span>
@@ -293,7 +293,7 @@ the UHC data. This is the function that does most of the heavy lifting
 </h4>
 <p>Finally, we are ready to plot (step 5). First, the wrong model.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_wrong</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_wrong</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-7.png" width="672"></p>
 <p>Note that the used proportions for <code>cover == "forest"</code> and
 <code>cover == "wetland"</code> also fall above and below the modeled
@@ -307,7 +307,7 @@ specification does correctly capture <code>dist_to_water</code>
 <em>without</em> needing to include it in the model.</p>
 <p>Now, the right model.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-7.png" width="672"></p>
 <p>We can see these issues have been resolved for our <code>cover</code>
 variables, indicating that our “right” model is, in fact, better
@@ -330,23 +330,23 @@ choice).</li>
 <p>Subsetting:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># By index</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-2.png" width="672"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># By names (vector of &gt;1 names also allowed)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">[</span><span class="st">"cover"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">[</span><span class="st">"cover"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-3.png" width="672"></p>
 <p>Envelope:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coerce to data.frame</span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create confidence envelopes (95% and 100%)</span></span>
 <span><span class="va">env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/conf_envelope.html">conf_envelope</a></span><span class="op">(</span><span class="va">df</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.95</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">env</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">env</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-7.png" width="672"></p>
 </div>
 </div>
@@ -371,7 +371,7 @@ and model weights.</p>
 <span></span>
 <span><span class="co"># Split into train (80%) and test (20%)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">steps</span><span class="op">$</span><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">steps</span><span class="op">)</span>,</span>
+<span><span class="va">steps</span><span class="op">$</span><span class="va">train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">steps</span><span class="op">)</span>,</span>
 <span>                      size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
 <span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">steps</span><span class="op">[</span><span class="va">steps</span><span class="op">$</span><span class="va">train</span> <span class="op">==</span> <span class="fl">1</span>, <span class="op">]</span></span>
 <span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">steps</span><span class="op">[</span><span class="va">steps</span><span class="op">$</span><span class="va">train</span> <span class="op">==</span> <span class="fl">0</span>, <span class="op">]</span></span>
@@ -387,7 +387,7 @@ and model weights.</p>
 <span>  <span class="co"># Drop 'train' column</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">train</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># Get rid of any NAs (sometimes available steps fall outside of raster)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">test_dat</span> <span class="op">&lt;-</span> <span class="va">test</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/random_steps.html">random_steps</a></span><span class="op">(</span>n_control <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -399,7 +399,7 @@ and model weights.</p>
 <span>  <span class="co"># Drop 'train' column</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">train</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="co"># Get rid of any NAs (sometimes available steps fall outside of raster)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fit-models-1">Fit model(s)<a class="anchor" aria-label="anchor" href="#fit-models-1"></a>
@@ -447,13 +447,13 @@ the UHC data. This is the function that does most of the heavy lifting
 </h4>
 <p>Finally, we are ready to plot (step 5). First, the wrong model.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_issf_wrong</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_issf_wrong</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-7.png" width="672"></p>
 <p>We can see that every variable besides <code>rand</code> shows a
 mismatch between observed and expected.</p>
 <p>Now, the right model.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_issf_right</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_issf_right</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-7.png" width="672"></p>
 <p>Every variable now shows matches between observed and expected.</p>
 </div>
@@ -480,7 +480,7 @@ package.</p>
 <span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "uhc_data" "list"</span></span>
 <span></span>
 <span><span class="co"># Coerce to data.frame</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">uhc_issf_right</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">uhc_issf_right</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       var        x            y dist iter label</span></span>
 <span><span class="co">#&gt; 1  forage 239.4147 1.116098e-06    U   NA  &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 2  forage 240.9079 1.268620e-06    U   NA  &lt;NA&gt;</span></span>
