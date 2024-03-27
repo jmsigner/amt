@@ -2,7 +2,7 @@
 #'
 #' Difference in x and y coordinates.
 #'
-#' @param x A track_xy{t}.
+#' @template track_xy_star
 #' @template dots_none
 #' @return Numeric vector
 #' @name diff

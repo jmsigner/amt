@@ -2,7 +2,7 @@
 #'
 #' The function `nsd()` calculates the net squared displacement (i.e., the squared distance from the first location of a track) for a track. The function `add_nsd()` add a new column to a track or steps object with the nsd (the column name is `nsd_`).
 #'
-#' @param x A track_xy{t}.
+#' @template track_xy_star
 #' @template dots_none
 #' @return Numeric vector (for `nsd()`) and a tillbe with the original data with a new column for `add_nsd()`.
 #' @name nsd
