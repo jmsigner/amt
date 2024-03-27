@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -8,5 +8,5 @@ articles:
   p4_SSF: p4_SSF.html
   p5_other_packages: p5_other_packages.html
   p6_uhc_plots: p6_uhc_plots.html
-last_built: 2024-02-17T20:40Z
+last_built: 2024-03-27T05:52Z
 
