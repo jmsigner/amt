@@ -15,7 +15,6 @@ make_trast <- function(x, ...) {
 #' @export
 #' @rdname trast
 make_trast.track_xy <- function(x, factor = 1.5, res = max(c(extent_max(x) / 100, 1e-9)), ...) {
-  res = max(c(amt::extent_max(x) / 100, 1e-9))
 
   checkmate::assert_number(factor, lower = 1)
   checkmate::assert_number(res, lower = 1e-10)
