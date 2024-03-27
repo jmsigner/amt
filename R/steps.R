@@ -152,7 +152,7 @@ step_lengths <- function(x, ...) {
 #' @rdname steps
 step_lengths.track_xy <- function(x, lonlat = FALSE, append_last = TRUE, ...) {
   if (lonlat) {
-    q <- c(as_sf(x) |> sf::st_distance(which = "Great Circle"), NA)
+    q <- c(as.vector(as_sf(x) |> sf::st_distance(which = "Great Circle") |> units::set_units("m")), NA)
   } else {
     q <- sqrt(step_lengths_sq(x))
   }
