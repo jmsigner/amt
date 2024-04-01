@@ -16,3 +16,8 @@ To install the current development version of `amt` use:
 ``` r
 devtools::install_github("jmsigner/amt")
 ```
+
+## Questions
+- Some discussion can be found here: https://github.com/jmsigner/amt/discussions
+- Answers and links to FAQs are here: https://github.com/jmsigner/amt/wiki
+- If you find a bug, please post a new issue here: https://github.com/jmsigner/amt/issues/new
