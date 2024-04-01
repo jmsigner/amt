@@ -1,7 +1,7 @@
 Type: Package
 Package: amt
 Title: Animal Movement Tools
-Version: 0.2.2.0
+Version: 0.3.0.0
 Authors@R: c(
     person("Johannes", "Signer", , "jsigner@gwdg.de", role = c("aut", "cre")),
     person("Brian", "Smith", role = "ctb"),
@@ -11,7 +11,7 @@ Authors@R: c(
     person("Josh", "O'Brien", role = "ctb"),
     person("Bernardo", "Niebuhr", role = "ctb"),
     person("Alec", "Robitaille", role = "ctb"),
-    person("Avgar", "Tal", role = "ctb"),
+    person("Tal", "Avgar", role = "ctb"),
     person("Scott", "LaPoint", role = "dtc")
   )
 Description: Manage and analyze animal movement data. The functionality of
