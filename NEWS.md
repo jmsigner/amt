@@ -2,7 +2,9 @@
 ## Fixes
 - Fixed error within `random_steps.brusted_track_xyt()`, when `burst_id` did not start with 1. 
 - Removed `as_move()`. 
-- 
+- Fixed documentation (requested by CRAN)
+- Fixed issue in `make_trast()` (reported by joshcullen; #105)
+- Fixed issue `lonlat=TRUE` when calculating step lengths (#103, #107, #108)
 
 # amt 0.2.1
 ## Fixes

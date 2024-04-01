@@ -1,3 +1,37 @@
+# Version 0.2.2
+I was asked to fix two notes that occurred on the CRAN checks. 
+
+
+## Fixes
+- Fixed error within `random_steps.brusted_track_xyt()`, when `burst_id` did not start with 1. 
+- Removed `as_move()`. 
+- Fixed documentation (requested by CRAN)
+- Fixed issue in `make_trast()` (reported by joshcullen; #105)
+- Fixed issue `lonlat=TRUE` when calculating step lengths (#103, #107, #108)
+
+### Test environments
+
+- local: macOS Sonoma 14.4 (R 4.3.2)
+- Win-builder: windows-latest (release and devel)
+- R-hub: `rhub::check_cran_submission()`
+
+### R CMD check results
+
+There were no errors, warnings or notes locally and with win-builder.
+
+There were two notes on rhub: 
+````
+* checking for non-standard things in the check directory ... NOTE
+   Found the following files/directories:
+     ''NULL''
+* checking for detritus in the temp directory ... NOTE
+   Found the following files/directories:
+     'lastMiKTeXException'
+````
+
+The first notes seems to be caused by r-hub: https://stackoverflow.com/questions/76317685/found-the-following-files-directories-null-when-i-run-devtoolscheck-rhub
+
+
 # Version 0.2.1
 This is a minor update and fixes a bug that was introduced with the last update.
 ## Fixes

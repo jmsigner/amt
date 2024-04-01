@@ -11,7 +11,7 @@ diff_x(x, ...)
 diff_y(x, ...)
 }
 \arguments{
-\item{x}{A track_xy{t}.}
+\item{x}{\code{[track_xy, track_xyt]} \cr A track created with \code{make_track}.}
 
 \item{...}{Further arguments, none implemented.}
 }

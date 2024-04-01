@@ -8,9 +8,9 @@
 \usage{
 bootstrap_logrss(object, ...)
 
-\method{bootstrap_logrss}{glm}(object, x1, x2, ci_level, n_boot, mle)
+\method{bootstrap_logrss}{glm}(object, x1, x2, ci_level, n_boot, mle, ...)
 
-\method{bootstrap_logrss}{fit_clogit}(object, x1, x2, ci_level, n_boot, mle)
+\method{bootstrap_logrss}{fit_clogit}(object, x1, x2, ci_level, n_boot, mle, ...)
 }
 \description{
 Use empirical bootstrap to estimate log-RSS CI

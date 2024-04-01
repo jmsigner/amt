@@ -84,7 +84,6 @@ sh_forest <- get_sh_forest()
 mini_deer <- deer[1:20, ]
 mini_deer |> extract_covariates(sh_forest)
 mini_deer |> steps() |> extract_covariates(sh_forest)
-mini_deer |> steps() |> extract_covariates(sh_forest, where = "start")
 
 \donttest{
 # Illustration of extracting covariates along the a step

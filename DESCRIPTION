@@ -11,6 +11,7 @@ Authors@R: c(
     person("Josh", "O'Brien", role = "ctb"),
     person("Bernardo", "Niebuhr", role = "ctb"),
     person("Alec", "Robitaille", role = "ctb"),
+    person("Avgar", "Tal", role = "ctb"),
     person("Scott", "LaPoint", role = "dtc")
   )
 Description: Manage and analyze animal movement data. The functionality of
@@ -60,7 +61,8 @@ Suggests:
     sessioninfo,
     suncalc,
     tidygraph,
-    tinytest
+    tinytest,
+    units
 VignetteBuilder: 
     knitr
 RdMacros: 

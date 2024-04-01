@@ -624,7 +624,7 @@ bootstrap_logrss <- function(object, ...){
 }
 
 #' @rdname bootstrap_logrss
-bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle){
+bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle, ...){
   #Perform the bootstrap
   arr <- replicate(n_boot, boot1.glm(object, x1, x2), simplify = "array")
   #Lower percentile
@@ -647,7 +647,7 @@ bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle){
 }
 
 #' @rdname bootstrap_logrss
-bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle){
+bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle, ...){
   #Perform the bootstrap
   arr <- replicate(n_boot, boot1.fit_clogit(object, x1, x2), simplify = "array")
   #Lower percentile
