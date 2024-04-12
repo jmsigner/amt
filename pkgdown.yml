@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.8
 pkgdown_sha: ~
 articles:
   p1_getting_started: p1_getting_started.html
@@ -8,5 +8,5 @@ articles:
   p4_SSF: p4_SSF.html
   p5_other_packages: p5_other_packages.html
   p6_uhc_plots: p6_uhc_plots.html
-last_built: 2024-04-01T19:14Z
+last_built: 2024-04-12T08:19Z
 
