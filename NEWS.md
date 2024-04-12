@@ -1,5 +1,8 @@
 # amt 0.3.0
 
+## Fixes
+- Solved issue #108
+
 # amt 0.2.2
 ## Fixes
 - Fixed error within `random_steps.brusted_track_xyt()`, when `burst_id` did not start with 1. 

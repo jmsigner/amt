@@ -12,7 +12,9 @@ expect_true(is(d1 |> steps() |> random_steps(), "random_steps"))
 expect_true(is(d2 |> steps() |> random_steps(), "random_steps"))
 expect_true(is(d3 |> step_lengths(lonlat = TRUE), "numeric"))
 
-
+expect_equal(length(d1 |> step_lengths(lonlat = FALSE)), nrow(d1))
+expect_equal(length(d2 |> step_lengths(lonlat = FALSE)), nrow(d2))
+expect_equal(length(d3 |> step_lengths(lonlat = TRUE)), nrow(d3))
 
 # Distributions
 sl <- fit_distr(d2 |> steps() |> pull(sl_), "gamma")
