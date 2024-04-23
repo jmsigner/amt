@@ -2,6 +2,7 @@
 
 ## Fixes
 - Solved issue #108
+- Fixed NA in tac()
 
 # amt 0.2.2
 ## Fixes
