@@ -110,7 +110,7 @@ mini_deer <- deer[1:4, ]
 expect_equal(mini_deer |> steps() |> random_steps() |> nrow(), 22)
 expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata() |> nrow(), 22)
 expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(col = "sl_") |> nrow(), 22)
-
+expect_true(mini_deer |> steps_by_burst() |> nrow() == 3)
 
 expect_equal(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(col = "sl_") |> nrow(), 22)
 

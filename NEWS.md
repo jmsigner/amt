@@ -3,6 +3,7 @@
 ## Fixes
 - Solved issue #108
 - Fixed NA in tac()
+- Fixed error in steps_by_burst()/random_steps() if there is only 1 burst. 
 
 # amt 0.2.2
 ## Fixes
