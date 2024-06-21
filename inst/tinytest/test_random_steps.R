@@ -121,3 +121,11 @@ expect_error(mini_deer |> steps() |> random_steps() |> remove_incomplete_strata(
 mini_deer <- deer[5:20, ]
 expect_true(mini_deer |> steps() |> random_steps(n_control = 1) |>
               pull(step_id_) |> unique() |> length() == nrow(mini_deer) - 2)
+
+
+# More checks
+expect_true(deer |> filter(burst_ %in% c(10, 13)) |> steps_by_burst() |>
+  random_steps() |> is("data.frame"))
+
+expect_error(deer |> filter(burst_ %in% c(18, 21)) |> steps_by_burst() |>
+  random_steps())
