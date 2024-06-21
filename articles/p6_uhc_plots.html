@@ -477,8 +477,9 @@ package.</p>
 <span><span class="co">#&gt;  $ type: Named chr [1:7] "numeric" "numeric" "numeric" "factor" ...</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:7] "forage" "temp" "pred" "cover" ...</span></span>
 <span><span class="co">#&gt;  $ resp: chr "case_"</span></span>
-<span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "uhc_data" "list"</span></span>
-<span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr [1:2] "uhc_data" "list"</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># Coerce to data.frame</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">uhc_issf_right</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       var        x            y dist iter label</span></span>
