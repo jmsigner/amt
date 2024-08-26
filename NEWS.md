@@ -1,5 +1,8 @@
 # amt 0.3.0
 
+## New features
+- `track_align()` added to the package. 
+
 ## Fixes
 - Fixed issue #109
 - Solved issue #108
