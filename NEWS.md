@@ -4,6 +4,7 @@
 - `track_align()` added to the package. 
 
 ## Fixes
+- Upgraded from raster to terra for hr_area(). 
 - Fixed issue #109
 - Solved issue #108
 - Fixed NA in tac()
