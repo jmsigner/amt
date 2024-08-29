@@ -3,7 +3,7 @@
 \name{hr_area}
 \alias{hr_area}
 \alias{hr_area.hr}
-\alias{hr_area.RasterLayer}
+\alias{hr_area.SpatRaster}
 \alias{hr_area.akde}
 \title{Home-range area}
 \usage{
@@ -11,7 +11,7 @@ hr_area(x, ...)
 
 \method{hr_area}{hr}(x, units = FALSE, ...)
 
-\method{hr_area}{RasterLayer}(x, level = 0.95, ...)
+\method{hr_area}{SpatRaster}(x, level = 0.95, ...)
 
 \method{hr_area}{akde}(x, units = FALSE, ...)
 }

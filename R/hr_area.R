@@ -27,7 +27,7 @@ hr_area.hr <- function(x, units = FALSE, ...) {
 
 #' @export
 #' @rdname hr_area
-hr_area.RasterLayer <- function(x, level = 0.95, ...) {
+hr_area.SpatRaster <- function(x, level = 0.95, ...) {
     hr_isopleths(x, level = level)$area
 }
 
