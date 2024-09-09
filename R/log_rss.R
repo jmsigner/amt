@@ -27,6 +27,23 @@
 #' `predict()`. Therefore, the columns of `x1` and `x2` must match
 #' the terms in the model formula exactly.
 #'
+#' `glmmTMB` objects
+#'
+#' `log_rss()` now supports models fit with `glmmTMB`, particularly of interest
+#' for those using the method of Muff et al. (2020) to fit a mixed effects
+#' model. \emph{Note} that at this point, predictions are only at the
+#' population level and do not account for individual variation. Currently,
+#' only `ci = "se"` is supported.
+#'
+#' `gam` objects
+#'
+#' `log_rss()` now supports models fit with `mgcv::gam()`. This method can
+#' be used to fit models with splines and/or random effects. See Klappstein
+#' et al. (2024) for details of model structure. Unlike with models fit via
+#' `glmmTMB`, predictions from models fit with `mgcv::gam()` do support
+#' prediction at the individual level (i.e., considering the random effects).
+#' Currently, only `ci = "se"` is supported.
+#'
 #' @author Brian J. Smith
 #'
 #' @return Returns a `list` of class `log_rss` with four entries:
@@ -40,11 +57,24 @@
 #'
 #' Default plotting method available: \code{\link{plot.log_rss}()}
 #'
+#' For details on models currently supported in `amt`:
+#' \code{\link{supported_models}()}
+#'
 #' @references
 #' - Avgar, T., Lele, S.R., Keim, J.L., and Boyce, M.S.. (2017). Relative Selection
 #' Strength: Quantifying effect size in habitat- and step-selection inference.
-#' *Ecology and Evolution*, 7, 5322–5330.
-#' - Fieberg, J., Signer, J., Smith, B., & Avgar, T. (2021). A "How to" guide for interpreting parameters in habitat-selection analyses. *Journal of Animal Ecology*, 90(5), 1027-1043.
+#' *Ecology and Evolution*, 7, 5322–5330. doi: 10.1002/ece3.3122
+#' - Fieberg, J., Signer, J., Smith, B., & Avgar, T. (2021). A "How to" guide
+#' for interpreting parameters in habitat-selection analyses.
+#' *Journal of Animal Ecology*, 90(5), 1027-1043. doi: 10.1111/1365-2656.13441
+#' - Muff, S., Signer, J. & Fieberg, J.R. (2020). Accounting for individual-
+#' specific variation in habitat-selection studies: Efficient estimation of
+#' mixed-effects models using Bayesian or frequentist computation.
+#' *Journal of Animal Ecology*, 89, 80–92. doi: 10.1111/1365-2656.13087
+#' - Klappstein, N.J., Michelot, T., Fieberg, J., Pedersen, E.J. &
+#' Mills-Flemming, J. (2024). Step selection functions with non‐linear and
+#' random effects. *Methods in Ecology and Evolution*, 15(8), 1332-1346.
+#' doi: 10.1111/2041-210X.14367
 #'
 #' @examples
 #'
