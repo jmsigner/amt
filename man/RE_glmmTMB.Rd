@@ -6,6 +6,9 @@
 \usage{
 RE_glmmTMB(object)
 }
+\arguments{
+\item{object}{\verb{[glmmTMB]} \cr A \code{glmmTMB} model.}
+}
 \description{
 Internal function to return random effects and identify strata variable
 }

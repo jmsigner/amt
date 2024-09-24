@@ -20,6 +20,8 @@ check_glmmTMB <- function() {
 #' Return names of random effects in glmmTMB model
 #'
 #' Internal function to return random effects and identify strata variable
+#' @param object `[glmmTMB]` \cr A `glmmTMB` model.
+#'
 RE_glmmTMB <- function(object) {
   # Names of random effects
   REs <- object$modelInfo$grpVar

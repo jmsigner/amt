@@ -6,6 +6,31 @@
 \usage{
 check_log_rss_inputs(object, x1, x2, ci, ci_level, n_boot, ...)
 }
+\arguments{
+\item{object}{\verb{[a fitted model]} \cr A fitted RSF or (i)SSF model. For possible
+models, see \code{\link{supported_models}()}}
+
+\item{x1}{\verb{[data.frame]} \cr A \code{data.frame} representing the habitat values
+at location x_1. Must contain all fitted covariates as expected by
+\code{predict()}.}
+
+\item{x2}{\verb{[data.frame]} \cr A 1-row \code{data.frame} representing the single
+hypothetical location of x_2. Must contain all fitted covariates as expected
+by \code{predict()}.}
+
+\item{ci}{\verb{[character]} \cr Method for estimating confidence intervals around
+log-RSS. \code{NA} skips calculating CIs. Character string \code{"se"} uses standard error
+method, \code{"para_boot"} uses parametric bootstrap method,  and \code{"emp_boot"} uses
+empirical bootstrap method.}
+
+\item{ci_level}{\verb{[numeric]} \cr Level for confidence interval. Defaults to 0.95
+for a 95\% confidence interval.}
+
+\item{n_boot}{\verb{[integer]} \cr Number of bootstrap samples to estimate confidence
+intervals. Ignored if \code{ci != "boot"}.}
+
+\item{...}{Further arguments, none implemented.}
+}
 \description{
 Internal checks prior to executing \code{log_rss()}
 }

@@ -3,6 +3,7 @@
 \name{log_rss}
 \alias{log_rss}
 \alias{log_rss.default}
+\alias{log_rss.fit_logit}
 \alias{log_rss.fit_clogit}
 \alias{log_rss.glmmTMB}
 \title{Calculate log-RSS for a fitted model}
@@ -10,6 +11,8 @@
 log_rss(object, ...)
 
 \method{log_rss}{default}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
+
+\method{log_rss}{fit_logit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 
 \method{log_rss}{fit_clogit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 
@@ -99,11 +102,14 @@ rsf_data <- amt_fisher |>
   extract_covariates(amt_fisher_covar$elevation) |>
   extract_covariates(amt_fisher_covar$popden) |>
   extract_covariates(amt_fisher_covar$landuse) |>
-  mutate(lu = factor(landuse))
+  mutate(lu = factor(landuse)) |>
+  mutate(w = dplyr::case_when(
+                case_ ~ 1,
+                TRUE ~ 1e5))
 
 # Fit RSF
-m1 <- rsf_data |>
-  fit_rsf(case_ ~ lu + elevation + popden)
+m1 <- glm(case_ ~ lu + elevation + popden, data = rsf_data,
+          family = binomial, weights = w)
 
 # Calculate log-RSS
 # data.frame of x1s

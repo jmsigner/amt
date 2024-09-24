@@ -98,11 +98,14 @@
 #'   extract_covariates(amt_fisher_covar$elevation) |>
 #'   extract_covariates(amt_fisher_covar$popden) |>
 #'   extract_covariates(amt_fisher_covar$landuse) |>
-#'   mutate(lu = factor(landuse))
+#'   mutate(lu = factor(landuse)) |>
+#'   mutate(w = dplyr::case_when(
+#'                 case_ ~ 1,
+#'                 TRUE ~ 1e5))
 #'
 #' # Fit RSF
-#' m1 <- rsf_data |>
-#'   fit_rsf(case_ ~ lu + elevation + popden)
+#' m1 <- glm(case_ ~ lu + elevation + popden, data = rsf_data,
+#'           family = binomial, weights = w)
 #'
 #' # Calculate log-RSS
 #' # data.frame of x1s
@@ -188,9 +191,6 @@ log_rss.default <- function(object, x1, x2, ci = NA, ci_level = 0.95,
   g_x1 <- linear_predictor(object = object, newdata = x1)
   g_x2 <- linear_predictor(object = object, newdata = x2)
 
-  # Get Sigma
-  S <- get_Sigma(object)
-
   #Include values of x1 in return data.frame
   df <- x1
   names(df) <- unname(sapply(names(x1), append_x1))
@@ -200,6 +200,10 @@ log_rss.default <- function(object, x1, x2, ci = NA, ci_level = 0.95,
   #Calculate confidence intervals
   if (!is.na(ci)){
     if (ci == "se"){
+
+      # Get Sigma
+      S <- get_Sigma(object)
+
       # Subtract x2 model matrix from each row of x1
       delta_X <- diff_matrix(object = object, x1 = x1, x2 = x2)
 
@@ -221,7 +225,7 @@ log_rss.default <- function(object, x1, x2, ci = NA, ci_level = 0.95,
       # Parametric bootstrap method
       cat("Generating parametric bootstrapped confidence intervals...\n")
       boot_res <- para_bootstrap_logrss(object = object, x1 = x1, x2 = x2,
-                                       ci_level = ci_level, n_boot = n_boot)
+                                        ci_level = ci_level, n_boot = n_boot)
 
       cat(" ... finished bootstrapping.\n")
       df$lwr <- boot_res$lwr
@@ -253,7 +257,19 @@ log_rss.default <- function(object, x1, x2, ci = NA, ci_level = 0.95,
   return(res)
 }
 
+#' @rdname log_rss
+#' @export
+log_rss.fit_logit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
 
+  # Calculate log-RSS using method 'log_rss.default'
+  res <- log_rss.default(object = object$model,
+                         x1 = x1,
+                         x2 = x2,
+                         ci = ci,
+                         ci_level = 0.95, n_boot = 1000,
+                         ...)
+  return(res)
+}
 
 #' @rdname log_rss
 #' @export
@@ -357,7 +373,9 @@ log_rss.glmmTMB <- function(object, x1, x2, ci = NA, ci_level = 0.95,
 #' Internal argument checks for `log_rss`
 #'
 #' Internal checks prior to executing `log_rss()`
-
+#'
+#' @inheritParams log_rss
+#'
 check_log_rss_inputs <- function(
     object,
     x1,

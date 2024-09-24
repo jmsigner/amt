@@ -307,7 +307,7 @@ resample_betas.default <- function(object, ...) {
   S <- stats::vcov(object)
 
   # Resample betas from multivariate normal distribution
-  bb <- as.vector(mvtnorm::rmvnorm(n = 1, mean = b, sigma = S))
+  bb <- MASS::mvrnorm(n = 1, mu = b, Sigma = S)
   names(bb) <- names(b)
 
   # Return
@@ -318,7 +318,7 @@ resample_betas.default <- function(object, ...) {
 #' @export
 resample_betas.fit_clogit <- function(object, ...) {
   # Resample betas from model object
-  bb <- resample_betas.defaul(object$model)
+  bb <- resample_betas.default(object$model)
 
   # Return
   return(bb)

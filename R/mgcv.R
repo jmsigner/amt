@@ -36,6 +36,7 @@ check_mgcv <- function() {
 #'
 #' # Load data
 #' data("deer")
+#' sh_forest <- get_sh_forest()
 #'
 #' # Prepare data for SSF
 #' ssf_data <- deer |>
@@ -49,7 +50,7 @@ check_mgcv <- function() {
 #'
 #' }
 #' @export
-prep_mgcv <- function(object){
+prep_mgcv <- function(object, ...){
   if (!inherits(object, "data.frame")) {
     stop("Argument `object` must be a data.frame (or tibble).")
   }

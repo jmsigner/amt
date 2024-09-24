@@ -4,7 +4,7 @@
 \alias{prep_mgcv}
 \title{Format data for \code{mgcv}}
 \usage{
-prep_mgcv(object)
+prep_mgcv(object, ...)
 }
 \arguments{
 \item{object}{\verb{[data.frame]} \cr The formatted data. Often an object of
@@ -31,6 +31,7 @@ library(mgcv)
 
 # Load data
 data("deer")
+sh_forest <- get_sh_forest()
 
 # Prepare data for SSF
 ssf_data <- deer |>
