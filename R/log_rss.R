@@ -12,7 +12,8 @@
 #' by `predict()`.
 #' @param ci `[character]` \cr Method for estimating confidence intervals around
 #' log-RSS. `NA` skips calculating CIs. Character string `"se"` uses standard error
-#' method and `"boot"` uses empirical bootstrap method.
+#' method, `"para_boot"` uses parametric bootstrap method,  and `"emp_boot"` uses
+#' empirical bootstrap method.
 #' @param ci_level `[numeric]` \cr Level for confidence interval. Defaults to 0.95
 #' for a 95% confidence interval.
 #' @param n_boot `[integer]` \cr Number of bootstrap samples to estimate confidence
@@ -171,7 +172,8 @@ log_rss <- function(object, ...){
 
 #' @rdname log_rss
 #' @export
-log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...){
+log_rss.default <- function(object, x1, x2, ci = NA, ci_level = 0.95,
+                            n_boot = 1000, ...){
 
   # Check inputs
   check_log_rss_inputs(object = object,
@@ -182,30 +184,12 @@ log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000,
                        n_boot = n_boot,
                        ...)
 
-  # Check if it is a fit_logit
-  model <- if (inherits(object, "fit_logit")) {
-    object$model
-  } else {
-    object
-  }
-
-  # Get model terms
-  Terms <- stats::delete.response(terms(model))
-
-  # Get model matrix
-  X1 <- stats::model.matrix(Terms, data = x1)
-  X2 <- stats::model.matrix(Terms, data = x2)
-
-  # Get betas
-  b <- stats::coef(model)
+  #Calculate g(x) [ the linear predictor ]
+  g_x1 <- linear_predictor(object = object, newdata = x1)
+  g_x2 <- linear_predictor(object = object, newdata = x2)
 
   # Get Sigma
-  S <- stats::vcov(model)
-
-
-  #Calculate g(x) [ the linear predictor ]
-  g_x1 <- unname((X1 %*% b)[, 1])
-  g_x2 <- unname((X2 %*% b)[, 1])
+  S <- get_Sigma(object)
 
   #Include values of x1 in return data.frame
   df <- x1
@@ -217,7 +201,7 @@ log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000,
   if (!is.na(ci)){
     if (ci == "se"){
       # Subtract x2 model matrix from each row of x1
-      delta_X <- sweep(data.matrix(X1), 2, data.matrix(X2))
+      delta_X <- diff_matrix(object = object, x1 = x1, x2 = x2)
 
       #Get variance of log-RSS prediction
       var_pred <- diag(delta_X %*% S %*% t(delta_X))
@@ -233,128 +217,22 @@ log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000,
       df$lwr <- df$log_rss - zstar * logrss_se
       df$upr <- df$log_rss + zstar * logrss_se
     }
-    if (ci == "boot"){
-      # Bootstrap method
-      cat("Generating bootstrapped confidence intervals...\n")
-      boot_res <- bootstrap_logrss(object = object, x1 = x1, x2 = x2,
-                                   ci_level = ci_level, n_boot = n_boot,
-                                   mle = df$log_rss)
+    if (ci == "para_boot"){
+      # Parametric bootstrap method
+      cat("Generating parametric bootstrapped confidence intervals...\n")
+      boot_res <- para_bootstrap_logrss(object = object, x1 = x1, x2 = x2,
+                                       ci_level = ci_level, n_boot = n_boot)
 
       cat(" ... finished bootstrapping.\n")
       df$lwr <- boot_res$lwr
       df$upr <- boot_res$upr
     }
-  }
-
-  #Compose the list to return
-  res <- list(df = df,
-              x1 = x1,
-              x2 = x2,
-              formula = model$formula)
-
-  #Set the S3 class
-  class(res) <- c("log_rss", class(res))
-
-  #Return log_rss
-  return(res)
-}
-#' @rdname log_rss
-#' @export
-log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
-
-  if(is.null(object$model$model)){
-    stop(paste("Please refit your step selection model with the argument 'model = TRUE'.\n"),
-         "  The predict() method from package 'survival' requires that you store the model.\n",
-         "  See the Examples under ?log_rss for a demonstration, and see Details under\n",
-         "     ?survival::predict.coxph for a full explanation.")
-  }
-
-  # Calculate log-RSS using method 'log_rss.clogit'
-  res <- log_rss.clogit(object = object$model,
-                        x1 = x1,
-                        x2 = x2,
-                        ci = ci,
-                        ci_level = 0.95, n_boot = 1000,
-                        ...)
-  return(res)
-}
-
-#' @rdname log_rss
-#' @export
-log_rss.clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
-
-  if(is.null(object$model)){
-    stop(paste("Please refit your step selection model with the argument 'model = TRUE'.\n"),
-         "  The predict() method from package 'survival' requires that you store the model.\n",
-         "  See the Examples under ?log_rss for a demonstration, and see Details under\n",
-         "     ?survival::predict.coxph for a full explanation.")
-  }
-
-
-  # Check inputs
-  check_log_rss_inputs(object = object,
-                       x1 = x1,
-                       x2 = x2,
-                       ci = ci,
-                       ci_level = ci_level,
-                       n_boot = n_boot,
-                       ...)
-
-  #Calculate correction due to sample-centered means (see ?survival::predict.coxph for details)
-  uncenter <- sum(stats::coef(object) * object$means, na.rm=TRUE)
-  #predict(..., reference = "sample", se.fit = TRUE) will throw error without a "step_id_"
-  #column, even though it isn't using it
-  x1_dummy <- x1
-  x2_dummy <- x2
-  x1_dummy$step_id_ = object$model$`strata(step_id_)`[1]
-  x2_dummy$step_id_ = object$model$`strata(step_id_)`[1]
-
-  # Get model matrix
-  X1 <- survival:::model.matrix.coxph(object, data = x1_dummy)
-  X2 <- survival:::model.matrix.coxph(object, data = x2_dummy)
-
-  # Get betas
-  b <- stats::coef(object)
-
-  # Get Sigma
-  S <- stats::vcov(object)
-
-  #Calculate g(x) [ the linear predictor ]
-  g_x1 <- unname((X1 %*% b)[, 1])
-  g_x2 <- unname((X2 %*% b)[, 1])
-
-  #Include values of x1 in return data.frame
-  df <- x1
-  names(df) <- unname(sapply(names(x1), append_x1))
-  #Calculate log_rss
-  df$log_rss <- g_x1 - g_x2
-
-  #Calculate confidence intervals
-  if (!is.na(ci)){
-    if (ci == "se"){ #Standard error method
-      # Subtract x2 model matrix from each row of x1
-      delta_X <- sweep(data.matrix(X1), 2, data.matrix(X2))
-
-      #Get variance of log-RSS prediction
-      var_pred <- diag(delta_X %*% S %*% t(delta_X))
-
-      #Get standard error of prediction
-      logrss_se <- unname(sqrt(var_pred))
-
-      # Get critical value
-      p <- 1 - ((1 - ci_level)/2)
-      zstar <- qnorm(p)
-
-      # Compute bounds
-      df$lwr <- df$log_rss - zstar * logrss_se
-      df$upr <- df$log_rss + zstar * logrss_se
-    }
-    if (ci == "boot") { #Bootstrap method
-      cat("Generating bootstrapped confidence intervals...\n")
-      cat("   Expect this to take some time... \n")
-      boot_res <- bootstrap_logrss.fit_clogit(object = object, x1 = x1, x2 = x2,
-                                              ci_level = ci_level, n_boot = n_boot,
-                                              mle = df$log_rss)
+    if (ci == "emp_boot"){
+      # Empirical Bootstrap method
+      cat("Generating empirically bootstrapped confidence intervals...\n")
+      boot_res <- emp_bootstrap_logrss(object = object, x1 = x1, x2 = x2,
+                                       ci_level = ci_level, n_boot = n_boot,
+                                       mle = df$log_rss)
 
       cat(" ... finished bootstrapping.\n")
       df$lwr <- boot_res$lwr
@@ -375,9 +253,29 @@ log_rss.clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 10
   return(res)
 }
 
+
+
 #' @rdname log_rss
 #' @export
-log_rss.glmmTMB <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
+log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
+
+  # Calculate log-RSS using method 'log_rss.default'
+  res <- log_rss.default(object = object$model,
+                         x1 = x1,
+                         x2 = x2,
+                         ci = ci,
+                         ci_level = 0.95, n_boot = 1000,
+                         ...)
+  return(res)
+}
+
+#' @rdname log_rss
+#' @export
+log_rss.glmmTMB <- function(object, x1, x2, ci = NA, ci_level = 0.95,
+                            n_boot = 1000, ...) {
+
+  # Check glmmTMB
+  check_glmmTMB()
 
   # Which random effects are present?
   REs <- RE_glmmTMB(object)
@@ -434,7 +332,11 @@ log_rss.glmmTMB <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1
       df$lwr <- df$log_rss - zstar * logrss_se
       df$upr <- df$log_rss + zstar * logrss_se
     }
-    if (ci == "boot") { #Bootstrap method
+    if (ci == "para_boot") { #Bootstrap method
+      warning("Bootstrap CI method not currently implemented for glmmTMB models.")
+    }
+
+    if (ci == "emp_boot") { #Bootstrap method
       warning("Bootstrap CI method not currently implemented for glmmTMB models.")
     }
   }
@@ -452,72 +354,9 @@ log_rss.glmmTMB <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1
   return(res)
 }
 
-#' @rdname log_rss
-#' @export
-log_rss.gam <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
-
-  # Get model matrix
-  X1 <- stats::predict(object, type = "lpmatrix", newdata = x1)
-  X2 <- stats::predict(object, type = "lpmatrix", newdata = x2)
-
-  # Get betas
-  b <- stats::coef(object)
-
-  # Get Sigmobject# Get Sigma
-  S <- stats::vcov(object)
-
-  #Calculate g(x) [ the linear predictor ]
-  g_x1 <- unname((X1 %*% b)[, 1])
-  g_x2 <- unname((X2 %*% b)[, 1])
-
-  #Include values of x1 in return data.frame
-  df <- x1
-  names(df) <- unname(sapply(names(x1), append_x1))
-  #Calculate log_rss
-  df$log_rss <- g_x1 - g_x2
-
-  #Calculate confidence intervals
-  if (!is.na(ci)){
-    if (ci == "se"){ #Standard error method
-      # Subtract x2 model matrix from each row of x1
-      delta_X <- sweep(data.matrix(X1), 2, data.matrix(X2))
-
-      #Get variance of log-RSS prediction
-      var_pred <- diag(delta_X %*% S %*% t(delta_X))
-
-      #Get standard error of prediction
-      logrss_se <- unname(sqrt(var_pred))
-
-      # Get critical value
-      p <- 1 - ((1 - ci_level)/2)
-      zstar <- qnorm(p)
-
-      # Compute bounds
-      df$lwr <- df$log_rss - zstar * logrss_se
-      df$upr <- df$log_rss + zstar * logrss_se
-    }
-    if (ci == "boot") { #Bootstrap method
-      warning("Bootstrap CI method not currently implemented for mgcv models.")
-    }
-  }
-
-  #Compose the list to return
-  res <- list(df = df,
-              x1 = x1,
-              x2 = x2,
-              formula = formula(object))
-
-  #Set the S3 class
-  class(res) <- c("log_rss", class(res))
-
-  #Return log_rss
-  return(res)
-}
-
-
 #' Internal argument checks for `log_rss`
 #'
-#' Blah
+#' Internal checks prior to executing `log_rss()`
 
 check_log_rss_inputs <- function(
     object,
@@ -550,8 +389,8 @@ check_log_rss_inputs <- function(
 
   # Check confidence interval arguments
   if(!is.na(ci)){
-    if(!(ci %in% c("se", "boot"))){
-      stop("'ci' should be NA or the string \"se\" or \"boot\".")
+    if(!(ci %in% c("se", "para_boot", "emp_boot"))){
+      stop("'ci' should be NA or the string \"se\", \"para_boot\", or \"emp_boot\".")
     }
     checkmate::assert_numeric(ci_level, lower = 0, upper = 1, max.len = 1)
     if(ci == "boot"){
@@ -827,74 +666,109 @@ check_factors <- function(model, x1, x2){
   }
 }
 
-#' Bootstrap log-RSS estimate
+#' Parametric bootstrap log-RSS estimate
+#'
+#' Use parametric bootstrap to estimate log-RSS CI
+#'
+#' @details This function is meant for internal use by `log_rss()` and is
+#' not meant to be called by the user.
+#'
+#' @rdname para_bootstrap_logrss
+#' @keywords internal
+para_bootstrap_logrss <- function(object, ...) {
+  UseMethod("para_bootstrap_logrss", object)
+}
+
+#' @rdname para_bootstrap_logrss
+#' @keywords internal
+para_bootstrap_logrss.default <- function(object, x1, x2, ci_level, n_boot, ...) {
+  #Perform the bootstrap
+  arr <- replicate(n_boot, para_boot1(object, x1, x2), simplify = "array")
+  # Lower percentile
+  p_lwr <- (1 - ci_level)/2
+  # Upper percentile
+  p_upr <- 1 - p_lwr
+  # Return sample quantiles
+  q_lwr <- apply(arr, 1, quantile, p_lwr)
+  q_upr <- apply(arr, 1, quantile, p_upr)
+  # Return data.frame
+  res <- data.frame(lwr = q_lwr,
+                    upr = q_upr)
+  return(res)
+}
+
+
+#' Single bootstrap iteration
+#'
+#' Runs a single iteration of the parametric bootstrap
+#'
+#' @details This function is meant for internal use by `bootstrap_logrss()` and
+#' is not meant to be called by the user.
+#' @rdname para_boot1
+#' @keywords internal
+#' @export
+para_boot1 <- function(object, x1, x2) {
+  UseMethod("para_boot1", object)
+}
+
+#' @rdname para_boot1
+#' @keywords internal
+#' @export
+para_boot1.default <- function(object, x1, x2) {
+  # Resample the betas
+  B <- resample_betas(object = object)
+
+  # Get model matrices
+  X1 <- model_matrix(object = object, newdata = x1)
+  X2 <- model_matrix(object = object, newdata = x2)
+
+  # Linear predictor
+  g1 <- unname((X1 %*% B)[, 1])
+  g2 <- unname((X2 %*% B)[, 1])
+
+  # log-RSS
+  logrss <- g1 - g2
+
+  # Return
+  return(logrss)
+}
+
+#' Empirical bootstrap log-RSS estimate
 #'
 #' Use empirical bootstrap to estimate log-RSS CI
 #'
 #' @details This function is meant for internal use by `log_rss()` and is
 #' not meant to be called by the user.
 #'
-#' @rdname bootstrap_logrss
+#' @rdname emp_bootstrap_logrss
 #' @keywords internal
-bootstrap_logrss <- function(object, ...){
-
-  warning("For amt version <= 0.3.0.0, bootstrapped confidence intervals ",
-          "were created using empirical bootstrapping ",
-          "(resampling the data). In later versions, these confidence ",
-          "intervals are created using parametric bootstrapping ",
-          "(resampling the coefficients from a multivariate normal ",
-          "distribution). Results should be similar, but may not ",
-          "be exact.")
-
-  UseMethod("bootstrap_logrss", object)
+emp_bootstrap_logrss <- function(object, ...) {
+  UseMethod("emp_bootstrap_logrss", object)
 }
 
-#' @rdname bootstrap_logrss
-bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle, ...){
-  #Perform the bootstrap
-  arr <- replicate(n_boot, boot1.glm(object, x1, x2), simplify = "array")
-  #Lower percentile
+#' @rdname emp_bootstrap_logrss
+#' @export
+emp_bootstrap_logrss.default <- function(object, x1, x2, ci_level, n_boot, mle, ...){
+  # Perform the bootstrap
+  arr <- replicate(n_boot, emp_boot1(object, x1, x2), simplify = "array")
+  # Lower percentile
   p_lwr <- (1 - ci_level)/2
-  #Upper percentile
+  # Upper percentile
   p_upr <- 1 - p_lwr
-  #Return sample quantiles
+  # Return sample quantiles
   q_lwr <- apply(arr, 1, quantile, p_lwr)
   q_upr <- apply(arr, 1, quantile, p_upr)
-  #Return sample mean
+  # Return sample mean
   boot_mean <- apply(arr, 1, mean)
-  #Distance to lower and upper
+  # Distance to lower and upper
   d_lwr <- q_lwr - boot_mean
   d_upr <- q_upr - boot_mean
-  #Calculate CI
+  # Calculate CI
   res <- data.frame(lwr = mle + d_lwr,
                     upr = mle + d_upr)
   #Return
   return(res)
 }
-
-#' @rdname bootstrap_logrss
-bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle, ...){
-  #Perform the bootstrap
-  arr <- replicate(n_boot, boot1.fit_clogit(object, x1, x2), simplify = "array")
-  #Lower percentile
-  p_lwr <- (1 - ci_level)/2
-  #Upper percentile
-  p_upr <- 1 - p_lwr
-  #Return sample quantiles
-  q_lwr <- apply(arr, 1, quantile, p_lwr)
-  q_upr <- apply(arr, 1, quantile, p_upr)
-  #Return sample mean
-  boot_mean <- apply(arr, 1, mean)
-  #Distance to lower and upper
-  d_lwr <- q_lwr - boot_mean
-  d_upr <- q_upr - boot_mean
-  #Calculate CI
-  res <- data.frame(lwr = mle + d_lwr,
-                    upr = mle + d_upr)
-  #Return
-  return(res)
-}
-
 
 #' Single bootstrap iteration
 #'
@@ -902,10 +776,17 @@ bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle, .
 #'
 #' @details This function is meant for internal use by `bootstrap_logrss()` and
 #' is not meant to be called by the user.
-#' @rdname boot1
+#' @rdname emp_boot1
 #' @keywords internal
 #' @export
-boot1.glm <- function(object, x1, x2){
+emp_boot1 <- function(object, x1, x2) {
+  UseMethod("emp_boot1", object)
+}
+
+#' #' @rdname emp_boot1
+#' @keywords internal
+#' @export
+emp_boot1.glm <- function(object, x1, x2){
   # not so nice workaround
   object <- if (inherits(object, "fit_logit")) {
     object$model
@@ -944,10 +825,10 @@ boot1.glm <- function(object, x1, x2){
   return(logrss)
 }
 
-#' @rdname boot1
+#' @rdname emp_boot1
 #' @export
-boot1.fit_clogit <- function(object, x1, x2){
-  dat <- object$model$model
+emp_boot1.clogit <- function(object, x1, x2){
+  dat <- object$model
   #If resampling factor levels, missing levels can cause prediction to fail
   logrss <- NULL
   i <- 1
@@ -955,8 +836,9 @@ boot1.fit_clogit <- function(object, x1, x2){
     #Resample
     newdat <- resample_coxph(dat)
     #Refit model
-    rhs <- as.character(formula(object$model))[3]
-    m <- fit_clogit(formula = reformulate(rhs, response = "case_"), data = newdat, model = TRUE)
+    rhs <- as.character(formula(object))[3]
+    m <- fit_clogit(formula = reformulate(rhs, response = "case_"),
+                    data = newdat, model = TRUE)
     try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
     i <- i + 1
     #Warn after 25 tries
@@ -967,8 +849,8 @@ boot1.fit_clogit <- function(object, x1, x2){
     }
     #Quit after 50 tries (consider giving user control over this)
     if (i == 50){
-      stop(paste("Bootstrapping failed. This may occur if you have very few",
-                 "observations of a level of a factor variable."))
+      stop(paste("Empirical bootstrapping failed. This may occur if you have",
+                 "very few observations of a level of a factor variable."))
     }
   }
   return(logrss)
@@ -996,3 +878,249 @@ resample_coxph <- function(mdat){
   #Return
   return(new_dat)
 }
+
+# No-longer needed S3 methods ----
+# ... log_rss.glm() ----
+# log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...){
+#
+#   # Check inputs
+#   check_log_rss_inputs(object = object,
+#                        x1 = x1,
+#                        x2 = x2,
+#                        ci = ci,
+#                        ci_level = ci_level,
+#                        n_boot = n_boot,
+#                        ...)
+#
+#   # Check if it is a fit_logit
+#   model <- if (inherits(object, "fit_logit")) {
+#     object$model
+#   } else {
+#     object
+#   }
+#
+#   # Get model terms
+#   Terms <- stats::delete.response(terms(model))
+#
+#   # Get model matrix
+#   X1 <- stats::model.matrix(Terms, data = x1)
+#   X2 <- stats::model.matrix(Terms, data = x2)
+#
+#   # Get betas
+#   b <- stats::coef(model)
+#
+#   # Get Sigma
+#   S <- stats::vcov(model)
+#
+#
+#   #Calculate g(x) [ the linear predictor ]
+#   g_x1 <- unname((X1 %*% b)[, 1])
+#   g_x2 <- unname((X2 %*% b)[, 1])
+#
+#   #Include values of x1 in return data.frame
+#   df <- x1
+#   names(df) <- unname(sapply(names(x1), append_x1))
+#   #Calculate log_rss
+#   df$log_rss <- g_x1 - g_x2
+#
+#   #Calculate confidence intervals
+#   if (!is.na(ci)){
+#     if (ci == "se"){
+#       # Subtract x2 model matrix from each row of x1
+#       delta_X <- sweep(data.matrix(X1), 2, data.matrix(X2))
+#
+#       #Get variance of log-RSS prediction
+#       var_pred <- diag(delta_X %*% S %*% t(delta_X))
+#
+#       #Get standard error of prediction
+#       logrss_se <- unname(sqrt(var_pred))
+#
+#       # Get critical value
+#       p <- 1 - ((1 - ci_level)/2)
+#       zstar <- qnorm(p)
+#
+#       # Compute bounds
+#       df$lwr <- df$log_rss - zstar * logrss_se
+#       df$upr <- df$log_rss + zstar * logrss_se
+#     }
+#     if (ci == "boot"){
+#       # Bootstrap method
+#       cat("Generating bootstrapped confidence intervals...\n")
+#       boot_res <- bootstrap_logrss(object = object, x1 = x1, x2 = x2,
+#                                    ci_level = ci_level, n_boot = n_boot,
+#                                    mle = df$log_rss)
+#
+#       cat(" ... finished bootstrapping.\n")
+#       df$lwr <- boot_res$lwr
+#       df$upr <- boot_res$upr
+#     }
+#   }
+#
+#   #Compose the list to return
+#   res <- list(df = df,
+#               x1 = x1,
+#               x2 = x2,
+#               formula = model$formula)
+#
+#   #Set the S3 class
+#   class(res) <- c("log_rss", class(res))
+#
+#   #Return log_rss
+#   return(res)
+# }
+
+# ... log_rss.clogit() ----
+# log_rss.clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
+#
+#   if(is.null(object$model)){
+#     stop(paste("Please refit your step selection model with the argument 'model = TRUE'.\n"),
+#          "  The predict() method from package 'survival' requires that you store the model.\n",
+#          "  See the Examples under ?log_rss for a demonstration, and see Details under\n",
+#          "     ?survival::predict.coxph for a full explanation.")
+#   }
+#
+#
+#   # Check inputs
+#   check_log_rss_inputs(object = object,
+#                        x1 = x1,
+#                        x2 = x2,
+#                        ci = ci,
+#                        ci_level = ci_level,
+#                        n_boot = n_boot,
+#                        ...)
+#
+#   #Calculate correction due to sample-centered means (see ?survival::predict.coxph for details)
+#   uncenter <- sum(stats::coef(object) * object$means, na.rm = TRUE)
+#   #predict(..., reference = "sample", se.fit = TRUE) will throw error without a "step_id_"
+#   #column, even though it isn't using it
+#   x1_dummy <- x1
+#   x2_dummy <- x2
+#   x1_dummy$step_id_ = object$model$`strata(step_id_)`[1]
+#   x2_dummy$step_id_ = object$model$`strata(step_id_)`[1]
+#
+#   # Get model matrix
+#   X1 <- survival:::model.matrix.coxph(object, data = x1_dummy)
+#   X2 <- survival:::model.matrix.coxph(object, data = x2_dummy)
+#
+#   # Get betas
+#   b <- stats::coef(object)
+#
+#   # Get Sigma
+#   S <- stats::vcov(object)
+#
+#   #Calculate g(x) [ the linear predictor ]
+#   g_x1 <- unname((X1 %*% b)[, 1])
+#   g_x2 <- unname((X2 %*% b)[, 1])
+#
+#   #Include values of x1 in return data.frame
+#   df <- x1
+#   names(df) <- unname(sapply(names(x1), append_x1))
+#   #Calculate log_rss
+#   df$log_rss <- g_x1 - g_x2
+#
+#   #Calculate confidence intervals
+#   if (!is.na(ci)){
+#     if (ci == "se"){ #Standard error method
+#       # Subtract x2 model matrix from each row of x1
+#       delta_X <- sweep(data.matrix(X1), 2, data.matrix(X2))
+#
+#       #Get variance of log-RSS prediction
+#       var_pred <- diag(delta_X %*% S %*% t(delta_X))
+#
+#       #Get standard error of prediction
+#       logrss_se <- unname(sqrt(var_pred))
+#
+#       # Get critical value
+#       p <- 1 - ((1 - ci_level)/2)
+#       zstar <- qnorm(p)
+#
+#       # Compute bounds
+#       df$lwr <- df$log_rss - zstar * logrss_se
+#       df$upr <- df$log_rss + zstar * logrss_se
+#     }
+#     if (ci == "boot") { #Bootstrap method
+#       cat("Generating bootstrapped confidence intervals...\n")
+#       cat("   Expect this to take some time... \n")
+#       boot_res <- bootstrap_logrss.fit_clogit(object = object, x1 = x1, x2 = x2,
+#                                               ci_level = ci_level, n_boot = n_boot,
+#                                               mle = df$log_rss)
+#
+#       cat(" ... finished bootstrapping.\n")
+#       df$lwr <- boot_res$lwr
+#       df$upr <- boot_res$upr
+#     }
+#   }
+#
+#   #Compose the list to return
+#   res <- list(df = df,
+#               x1 = x1,
+#               x2 = x2,
+#               formula = object$formula)
+#
+#   #Set the S3 class
+#   class(res) <- c("log_rss", class(res))
+#
+#   #Return log_rss
+#   return(res)
+# }
+
+# ... log_rss.gam() ----
+# log_rss.gam <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
+#
+#   # Get model matrix
+#   X1 <- stats::predict(object, type = "lpmatrix", newdata = x1)
+#   X2 <- stats::predict(object, type = "lpmatrix", newdata = x2)
+#
+#   # Get betas
+#   b <- stats::coef(object)
+#
+#   # Get Sigma
+#   S <- stats::vcov(object)
+#
+#   #Calculate g(x) [ the linear predictor ]
+#   g_x1 <- unname((X1 %*% b)[, 1])
+#   g_x2 <- unname((X2 %*% b)[, 1])
+#
+#   #Include values of x1 in return data.frame
+#   df <- x1
+#   names(df) <- unname(sapply(names(x1), append_x1))
+#   #Calculate log_rss
+#   df$log_rss <- g_x1 - g_x2
+#
+#   #Calculate confidence intervals
+#   if (!is.na(ci)){
+#     if (ci == "se"){ #Standard error method
+#       # Subtract x2 model matrix from each row of x1
+#       delta_X <- sweep(data.matrix(X1), 2, data.matrix(X2))
+#
+#       #Get variance of log-RSS prediction
+#       var_pred <- diag(delta_X %*% S %*% t(delta_X))
+#
+#       #Get standard error of prediction
+#       logrss_se <- unname(sqrt(var_pred))
+#
+#       # Get critical value
+#       p <- 1 - ((1 - ci_level)/2)
+#       zstar <- qnorm(p)
+#
+#       # Compute bounds
+#       df$lwr <- df$log_rss - zstar * logrss_se
+#       df$upr <- df$log_rss + zstar * logrss_se
+#     }
+#     if (ci == "boot") { #Bootstrap method
+#       warning("Bootstrap CI method not currently implemented for mgcv models.")
+#     }
+#   }
+#
+#   #Compose the list to return
+#   res <- list(df = df,
+#               x1 = x1,
+#               x2 = x2,
+#               formula = formula(object))
+#
+#   #Set the S3 class
+#   class(res) <- c("log_rss", class(res))
+#
+#   #Return log_rss
+#   return(res)
+# }

@@ -2,24 +2,18 @@
 % Please edit documentation in R/log_rss.R
 \name{log_rss}
 \alias{log_rss}
-\alias{log_rss.glm}
+\alias{log_rss.default}
 \alias{log_rss.fit_clogit}
-\alias{log_rss.clogit}
 \alias{log_rss.glmmTMB}
-\alias{log_rss.gam}
 \title{Calculate log-RSS for a fitted model}
 \usage{
 log_rss(object, ...)
 
-\method{log_rss}{glm}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
+\method{log_rss}{default}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 
 \method{log_rss}{fit_clogit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 
-\method{log_rss}{clogit}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
-
 \method{log_rss}{glmmTMB}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
-
-\method{log_rss}{gam}(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...)
 }
 \arguments{
 \item{object}{\verb{[a fitted model]} \cr A fitted RSF or (i)SSF model. For possible
@@ -37,7 +31,8 @@ by \code{predict()}.}
 
 \item{ci}{\verb{[character]} \cr Method for estimating confidence intervals around
 log-RSS. \code{NA} skips calculating CIs. Character string \code{"se"} uses standard error
-method and \code{"boot"} uses empirical bootstrap method.}
+method, \code{"para_boot"} uses parametric bootstrap method,  and \code{"emp_boot"} uses
+empirical bootstrap method.}
 
 \item{ci_level}{\verb{[numeric]} \cr Level for confidence interval. Defaults to 0.95
 for a 95\% confidence interval.}

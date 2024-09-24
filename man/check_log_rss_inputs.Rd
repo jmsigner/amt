@@ -7,5 +7,5 @@
 check_log_rss_inputs(object, x1, x2, ci, ci_level, n_boot, ...)
 }
 \description{
-Blah
+Internal checks prior to executing \code{log_rss()}
 }
