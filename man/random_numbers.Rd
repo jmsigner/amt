@@ -14,8 +14,8 @@ random_numbers(x, n = 100, ...)
 \item{...}{none implemented.}
 }
 \value{
-A numermic vector.
+A numeric vector.
 }
 \description{
-Sample radom numbers from a distribution created within the \code{amt} package.
+Sample random numbers from a distribution created within the \code{amt} package.
 }

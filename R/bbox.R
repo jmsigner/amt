@@ -4,7 +4,7 @@
 #' @param buffer `[numeric(0)=NULL]{NULL, >0}` \cr An optional buffer of the bounding box.
 #' @template dots_none
 #' @name bbox
-#' @return If `spatial = FALSE` a named vector of length four with the extent of the bounding box. Otherwise a `SpatialPolygon` or a simple freature polygon with the bounding box.
+#' @return If `spatial = FALSE` a named vector of length four with the extent of the bounding box. Otherwise a `SpatialPolygon` or a simple feature polygon with the bounding box.
 #' @export
 #' @examples
 #' data(deer)
