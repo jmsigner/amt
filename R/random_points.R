@@ -5,7 +5,7 @@
 #' @param n `[integer(1)]` \cr The number of random points.
 #' @param type `[character(1)]` \cr Argument passed to `sf::st_sample`. The default is `random`.
 #' @param level `[numeric(1)]` \cr Home-range level of the minimum convex polygon, used for generating the background samples.
-#' @param hr `[character(1)]` \cr The home range estimator to be used. Currently only MCP is implemented.
+#' @param hr `[character(1)]` \cr The home range estimator to be used. Currently only "mcp" and "kde" are implemented.
 #' @param presence `[track]` \cr The presence points, that will be added to the result.
 #' @param ... `[any]`\cr None implemented.
 #' @note For objects of class `track_xyt` the timestamp (`t_`) is lost.
