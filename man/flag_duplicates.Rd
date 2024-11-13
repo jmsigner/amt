@@ -22,7 +22,7 @@ Should be \code{"secs"}, \code{"mins"}, or \code{"hours"}. Ignored if \verb{clas
 \item{DOP}{\verb{[character]} A character string giving the name of the column
 containing the dilution of precision (DOP) data. See details below.}
 
-\item{...}{Addtional arguments. None currently implemented.}
+\item{...}{Additional arguments. None currently implemented.}
 }
 \value{
 Returns \code{x} (a \code{track_xyt}) with a flagging column added (\code{x$duplicate_}).

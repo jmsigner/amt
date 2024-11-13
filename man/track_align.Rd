@@ -16,7 +16,7 @@ track_align(x, ...)
 
 \item{new.times}{The new time trajectory.}
 
-\item{tolerance}{The tolerance between observed time stamps and new time stamps in seceonds. This should be either a vector of length 1 or length \code{new.times}.}
+\item{tolerance}{The tolerance between observed time stamps and new time stamps in seconds. This should be either a vector of length 1 or length \code{new.times}.}
 }
 \value{
 A \code{track_xyt}.

@@ -23,7 +23,7 @@ hr_kde_pi(x, ...)
 The bandwidth, the standardization method and correction.
 }
 \description{
-This function calculates bandwidths for kernel density estimation by wrapping \code{KernSmooth::dpik}. If \code{correct = TURE}, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
+This function calculates bandwidths for kernel density estimation by wrapping \code{KernSmooth::dpik}. If \code{correct = TURE}, the bandwidth is transformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
 }
 \references{
 Gitzen, R. A., Millspaugh, J. J., & Kernohan, B. J. (2006). Bandwidth selection for fixed-kernel analysis of animal utilization distributions. \emph{Journal of Wildlife Management}, 70(5), 1334-1344.

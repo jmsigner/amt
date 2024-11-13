@@ -145,7 +145,7 @@ hsf_right <- glm(case_ ~ forage + temp + I(temp^2) + pred + cover,
 
 #### Prepare UHC plot data
 
-Next, onto step (4), where we use `prep_uhc()` to prepare the UHC data. This is the function that does most of the heavy lifting (*i.e.*, the boostrapping).
+Next, onto step (4), where we use `prep_uhc()` to prepare the UHC data. This is the function that does most of the heavy lifting (*i.e.*, the bootstrapping).
 
 ```{r hsf prep_uhc}
 # Prep under wrong model
@@ -180,7 +180,7 @@ We can see these issues have been resolved for our `cover` variables, indicating
 Note that with a large number of bootstrap samples, the plots are quite complex and can take multiple seconds to render. If you are working with many candidate variables, this makes examining all the plot quite slow. We have included a few potential solutions to this problem:
 
   - First, you can plot just a single variable, by subsetting the `uhc_data` object by either integers or the names of the variables.
-  - Second, you can convert the many lines to a single polygon representing a confidence enevelope (with a confidence level of your choice).
+  - Second, you can convert the many lines to a single polygon representing a confidence envelope (with a confidence level of your choice).
   
 Subsetting:
 

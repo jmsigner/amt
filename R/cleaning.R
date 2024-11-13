@@ -227,7 +227,7 @@ check_time_unit <- function(tu) {
 #' Should be `"secs"`, `"mins"`, or `"hours"`. Ignored if `class(gamma) == "Period".`
 #' @param DOP `[character]` A character string giving the name of the column
 #' containing the dilution of precision (DOP) data. See details below.
-#' @param ... Addtional arguments. None currently implemented.
+#' @param ... Additional arguments. None currently implemented.
 #'
 #' @details Locations are considered duplicates if their timestamps are within
 #' `gamma` of each other. However, the function runs sequentially through the

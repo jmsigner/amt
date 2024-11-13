@@ -22,7 +22,7 @@ bbox(x, ...)
 \item{buffer}{\verb{[numeric(0)=NULL]\{NULL, >0\}} \cr An optional buffer of the bounding box.}
 }
 \value{
-If \code{spatial = FALSE} a named vector of length four with the extent of the bounding box. Otherwise a \code{SpatialPolygon} or a simple freature polygon with the bounding box.
+If \code{spatial = FALSE} a named vector of length four with the extent of the bounding box. Otherwise a \code{SpatialPolygon} or a simple feature polygon with the bounding box.
 }
 \description{
 Get bounding box of a track.

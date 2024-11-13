@@ -3,7 +3,7 @@
  #' Functions to only selects relocations that can be aligned with a new time series (within some tolerance).
  #' @param x A track.
  #' @param new.times The new time trajectory.
- #' @param tolerance The tolerance between observed time stamps and new time stamps in seceonds. This should be either a vector of length 1 or length `new.times`.
+ #' @param tolerance The tolerance between observed time stamps and new time stamps in seconds. This should be either a vector of length 1 or length `new.times`.
  #' @template dots_none
  #' @return A `track_xyt`.
  #' @name track_align

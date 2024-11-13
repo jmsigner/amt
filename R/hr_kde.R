@@ -142,7 +142,7 @@ hr_kde_ref_scaled <- function(
 
 #' `hr_kde_pi` wraps `KernSmooth::dpik` to select bandwidth for kernel density estimation the plug-in-the-equation method in two dimensions.
 #'
-#' This function calculates bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is trasformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
+#' This function calculates bandwidths for kernel density estimation by wrapping `KernSmooth::dpik`. If `correct = TURE`, the bandwidth is transformed with power 5/6 to correct for using an univariate implementation for bivariate data (Gitzen et. al 2006).
 
 #' @template track_xy_star
 #' @template dots_none

@@ -155,12 +155,12 @@ make_gamma_distr <- function(shape = 1, scale = 1, vcov = NULL) {
 
 #' Sample random numbers
 #'
-#' Sample radom numbers from a distribution created within the `amt` package.
+#' Sample random numbers from a distribution created within the `amt` package.
 
 #' @param x `[amt_distr]` \cr A distribution object.
 #' @param n `[integer(1)=100]{>0}` \cr The number of random draws.
 #' @param ... none implemented.
-#' @return A numermic vector.
+#' @return A numeric vector.
 #' @export
 random_numbers <- function(x, n = 100, ...) {
   UseMethod("random_numbers")
