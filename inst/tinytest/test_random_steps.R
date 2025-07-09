@@ -129,3 +129,6 @@ expect_true(deer |> filter(burst_ %in% c(10, 13)) |> steps_by_burst() |>
 
 expect_error(deer |> filter(burst_ %in% c(18, 21)) |> steps_by_burst() |>
   random_steps())
+
+expect_true(deer |> filter(burst_ == 10) |> steps_by_burst() |>
+  random_steps() |> is("data.frame"))

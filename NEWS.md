@@ -1,3 +1,8 @@
+# amt 0.4.0
+
+## Fixes
+- `random_steps.bursted_track_xyt()` if only one burst is provided (reported by Gerben IJntema). 
+
 # amt 0.3.0
 
 ## New features

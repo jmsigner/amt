@@ -120,6 +120,21 @@ random_steps.bursted_steps_xyt <- function(
   rand_ta = random_numbers(ta_distr, n = 1e5),
   include_observed = TRUE, ...) {
 
+  if (FALSE) {{
+
+    mini_deer <- deer[5:20, ]
+    x <- mini_deer |> steps_by_burst()
+
+
+    x <- deer |> filter(burst_ %in% c(10)) |> steps_by_burst()
+    n_control = 10
+    sl_distr = fit_distr(x$sl_, "gamma")
+    ta_distr = fit_distr(x$ta_, "vonmises")
+    rand_sl = random_numbers(sl_distr, n = 1e5)
+    rand_ta = random_numbers(ta_distr, n = 1e5)
+    include_observed = TRUE
+
+  }}
 
   bursts <- split(x, x$burst_)
 
@@ -130,7 +145,6 @@ random_steps.bursted_steps_xyt <- function(
       stop("No burts left; all bursts were removed, because the had < 3 steps.")
     }
   }
-
 
   start_ids <- if (length(bursts) == 1) {
     1
@@ -148,6 +162,7 @@ random_steps.bursted_steps_xyt <- function(
                    start_id = start_ids[i], ...)
     }
   })
+
 
   out <- out[!sapply(out, is.null)]
 

@@ -12,6 +12,7 @@ Authors@R: c(
     person("Bernardo", "Niebuhr", role = "ctb"),
     person("Alec", "Robitaille", role = "ctb"),
     person("Tal", "Avgar", role = "ctb"),
+    person("Gerben", "IJntema", role = "ctb"),
     person("Scott", "LaPoint", role = "dtc")
   )
 Description: Manage and analyze animal movement data. The functionality of

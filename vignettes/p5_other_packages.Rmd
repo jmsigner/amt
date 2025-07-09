@@ -25,6 +25,7 @@ First we load the required libraries and the relocation data (called `deer`)
 ```{r}
 library(amt)
 data("deer")
+class(deer)
 deer
 ```
 
@@ -32,6 +33,7 @@ deer
 
 ```{r}
 adehabitatLT_ltraj <- as_ltraj(deer)
+class(adehabitatLT_ltraj)
 adehabitatLT_ltraj
 ```
 
@@ -43,10 +45,25 @@ With the function `as_telemetry` a `track_xyt` can be coerced to a `telemetry` o
 ```{r}
 ctmm_obj <- as_telemetry(deer)
 class(ctmm_obj)
+head(ctmm_obj)
 ```
 
+## `sf`
 
+There are three functions that convert tracks/steps to tibbles with a geometry columns (`sf`-objects). 
+
+1. `as_sf()` converts a track or steps to a point geometry, by calling that the function `as_sf_points()`. For steps the end points of steps is used by default. Setting `end = FALSE` will use the start points. 
+2. `as_sf_point()`
+
+It is possible to convert a track and steps to tibble with a geometry column using the function `as_sf
+
+# Todo
 ## `move`
+
+```{r}
+
+```
+
 
 
 ## Session
