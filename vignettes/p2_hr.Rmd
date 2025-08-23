@@ -21,7 +21,7 @@ by Fieberg & Kochanny
 (2005).
 There are two general approaches used to calculate home-range overlap: 1) calculate the percentage overlap at a given isopleth level (this works for geometric and probabilistic home ranges) or 2) calculate an index of
 similarity between the two utilization distributions (UD; this only works for
-probabilistic estimators)^[For a discussion of geometric vs. probabilistic estimators see here: https://www.biorxiv.org/content/10.1101/2020.08.19.256859v2].
+probabilistic estimators)^[For a discussion of geometric vs. probabilistic estimators see here: https://peerj.com/articles/11031/].
 
 ## Implementation in `amt`
 

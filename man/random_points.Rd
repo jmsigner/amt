@@ -28,7 +28,7 @@ random_points(x, ...)
 
 \item{level}{\verb{[numeric(1)]} \cr Home-range level of the minimum convex polygon, used for generating the background samples.}
 
-\item{hr}{\verb{[character(1)]} \cr The home range estimator to be used. Currently only MCP and KDE is implemented.}
+\item{hr}{\verb{[character(1)]} \cr The home range estimator to be used. Currently only "mcp" and "kde" are implemented.}
 }
 \value{
 A \code{tibble} with the observed and random points and a new column \code{case_} that indicates if a point is observed (\code{case_ = TRUE}) or random (\verb{case_ TRUE}).

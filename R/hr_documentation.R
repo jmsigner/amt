@@ -47,7 +47,7 @@
 #' data(deer)
 #' mini_deer <- deer[1:20, ]
 #' ud1 <- hr_akde(mini_deer) # uses an iid ctmm
-#' ud2 <- hr_akde(mini_deer, model = fit_ctmm(deer, "ou")) # uses an OU ctmm
+#' ud2 <- hr_akde(mini_deer, model = fit_ctmm(mini_deer, "ou")) # uses an OU ctmm
 #' }
 
 NULL
