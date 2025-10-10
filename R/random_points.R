@@ -181,3 +181,8 @@ summarise.random_points <- function(.data, ..., .dots) {
   NextMethod()
 }
 
+#' @export
+group_by.random_points <- function(.data, ..., .dots) {
+  NextMethod()
+}
+

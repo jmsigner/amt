@@ -1,6 +1,6 @@
 #' Create a `track_*`
 #'
-#' Constructor to crate a track, the basic building block of the `amt` package. A
+#' Constructor to create a track, the basic building block of the `amt` package. A
 #' `track` is usually created from a set of `x` and `y` coordinates, possibly
 #' time stamps, and any number of optional columns, such as id, sex, age, etc.
 #'

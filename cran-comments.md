@@ -1,3 +1,29 @@
+# Version 0.3.0
+I was asked to fix one error that occurred on cran. 
+
+## New features
+- `track_align()` added to the package. 
+
+## Fixes
+- `random_steps.bursted_track_xyt()` if only one burst is provided (reported by Gerben IJntema). 
+- Upgraded from raster to terra for hr_area(). 
+- Fixed issue #109
+- Solved issue #108
+- Fixed NA in tac()
+- Fixed error in steps_by_burst()/random_steps() if there is only 1 burst. 
+
+
+## Test environments
+
+- local: macOS Sequoia 15.6 (R 4.5.1)
+- Win-builder: windows-latest (release and devel)
+- R-hub: `rhub::rhub_check()` for linux, m1-san, macos, macos-arm64 and windows. 
+
+### R CMD check results
+
+There were no errors, warnings or notes.
+
+
 # Version 0.2.2
 I was asked to fix two notes that occurred on the CRAN checks. 
 

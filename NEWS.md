@@ -1,7 +1,7 @@
-# amt 0.4.0
-
+# amt 0.3.1
 ## Fixes
-- `random_steps.bursted_track_xyt()` if only one burst is provided (reported by Gerben IJntema). 
+- Bug fix with `group_by` for random steps. 
+- Bug fix with interactions within simulate. 
 
 # amt 0.3.0
 
@@ -9,6 +9,7 @@
 - `track_align()` added to the package. 
 
 ## Fixes
+- `random_steps.bursted_track_xyt()` if only one burst is provided (reported by Gerben IJntema). 
 - Upgraded from raster to terra for hr_area(). 
 - Fixed issue #109
 - Solved issue #108

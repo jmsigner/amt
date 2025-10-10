@@ -232,7 +232,7 @@ remove_incomplete_strata.random_steps <- function(x, col = "ta_", ...) {
 
 rsteps_transfer_attr <- function(from, to) {
   from <- attributes(from)
-  attributes(to)$class <- from$class
+  attributes(to)$class <- c(setdiff(from$class, class(to)), class(to))
   attributes(to)$sl_ <- from$sl_
   attributes(to)$ta_ <- from$ta_
   attributes(to)$crs_ <- from$crs_
@@ -257,6 +257,7 @@ filter.random_steps <- function(.data, ..., .dots) {
 
 #' @export
 group_by.random_steps <- function(.data, ..., .dots) {
+  return(NextMethod())
   xx <- NextMethod()
   rsteps_transfer_attr(.data, xx)
 }

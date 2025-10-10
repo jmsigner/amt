@@ -188,6 +188,14 @@ ssf_weights <- function(xy, object, compensate.movement = FALSE) {
   newdata <- xy
   attr(newdata, "na.action") <- "na.pass"
   xyz <- stats::model.matrix.default(ff, data = newdata, na.action = stats::na.pass)
+
+  # make sure all coefficients (particularly interactions) are in the model matrix (xyz)
+  for (i in 1:length(coefs)) {
+    if (!names(coefs)[i] %in% colnames(xyz)) {
+      names(coefs)[i] <- paste0(rev(strsplit(names(coefs)[i], ":")[[1]]), collapse = ":")
+    }
+  }
+
   w <- as.matrix(xyz[, names(coefs)]) %*% coefs
 
   if (compensate.movement) {
