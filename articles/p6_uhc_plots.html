@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">amt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.0</span>
       </span>
     </div>
 
@@ -199,12 +199,12 @@ each dataset, <em>i.e.</em>, <code><a href="../reference/uhc_hsf_locs.html">?uhc
 <span></span>
 <span><span class="co"># Affect habitat selection in simulation</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/habitat-1.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/habitat-1.png" class="r-plt" alt="" width="672"></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Do not affect habitat selection in simulation</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hab</span><span class="op">[[</span><span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/habitat-2.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/habitat-2.png" class="r-plt" alt="" width="672"></p>
 <div class="section level3">
 <h3 id="hsf-example">HSF Example<a class="anchor" aria-label="anchor" href="#hsf-example"></a>
 </h3>
@@ -293,7 +293,7 @@ the UHC data. This is the function that does most of the heavy lifting
 <p>Finally, we are ready to plot (step 5). First, the wrong model.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_wrong</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-7.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-1.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-2.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-3.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-4.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-5.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-6.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20wrong-7.png" class="r-plt" alt="" width="672"></p>
 <p>Note that the used proportions for <code>cover == "forest"</code> and
 <code>cover == "wetland"</code> also fall above and below the modeled
 envelope, respectively. These are our clues that the model is
@@ -307,7 +307,7 @@ specification does correctly capture <code>dist_to_water</code>
 <p>Now, the right model.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-7.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-1.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-2.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-3.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-4.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-5.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-6.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20right-7.png" class="r-plt" alt="" width="672"></p>
 <p>We can see these issues have been resolved for our <code>cover</code>
 variables, indicating that our “right” model is, in fact, better
 calibrated than <code>hsf_wrong</code>. Additionally, there is no longer
@@ -330,12 +330,12 @@ choice).</li>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># By index</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-2.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-1.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-2.png" class="r-plt" alt="" width="672"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># By names (vector of &gt;1 names also allowed)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_hsf_right</span><span class="op">[</span><span class="st">"cover"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-3.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20sub-3.png" class="r-plt" alt="" width="672"></p>
 <p>Envelope:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Coerce to data.frame</span></span>
@@ -346,7 +346,7 @@ choice).</li>
 <span></span>
 <span><span class="co"># Plot</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">env</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-7.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-1.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-2.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-3.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-4.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-5.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-6.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/hsf%20plot%20env-7.png" class="r-plt" alt="" width="672"></p>
 </div>
 </div>
 <div class="section level3">
@@ -447,13 +447,13 @@ the UHC data. This is the function that does most of the heavy lifting
 <p>Finally, we are ready to plot (step 5). First, the wrong model.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_issf_wrong</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-7.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-1.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-2.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-3.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-4.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-5.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-6.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20wrong-7.png" class="r-plt" alt="" width="672"></p>
 <p>We can see that every variable besides <code>rand</code> shows a
 mismatch between observed and expected.</p>
 <p>Now, the right model.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">uhc_issf_right</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-1.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-2.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-3.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-4.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-5.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-6.png" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-7.png" width="672"></p>
+<p><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-1.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-2.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-3.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-4.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-5.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-6.png" class="r-plt" alt="" width="672"><img src="p6_uhc_plots_files/figure-html/issf%20plot%20right-7.png" class="r-plt" alt="" width="672"></p>
 <p>Every variable now shows matches between observed and expected.</p>
 </div>
 </div>
@@ -517,7 +517,7 @@ selection, and step-selection models. <em>Ecography</em> 41:737–752.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
