@@ -1,5 +1,5 @@
 #' @importFrom dplyr arrange filter group_by select summarize summarise ungroup rename
-#' @importFrom dplyr distinct ungroup mutate mutate_at pull bind_rows select_vars n
+#' @importFrom dplyr distinct ungroup mutate pull n
 #' @importFrom graphics plot legend lines par points
 #' @importFrom grDevices adjustcolor
 #' @importFrom lubridate hours minutes seconds now days weeks %within%

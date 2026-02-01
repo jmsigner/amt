@@ -1,5 +1,7 @@
 # amt 0.3.1
+
 ## Fixes
+- Removed import of `select_vars()`, `mutate_at()` and `n()` to comply with `dplyr` updates. 
 - Bug fix with `group_by` for random steps. 
 - Bug fix with interactions within simulate. 
 

@@ -19,7 +19,7 @@ set.seed(20161113)
 
 ## About
 
-This vignette briefly introduces how one can fit a Step-Selection Function (SSF) with the `amt` package. We will be using the example data of one red deer from northern Germany and one covariate: a forest cover map. For a more through discussion see also Fieberg et al. 2020^[https://www.biorxiv.org/content/10.1101/2020.11.12.379834v4] and supplement B.
+This vignette briefly introduces how one can fit a Step-Selection Function (SSF) with the `amt` package. We will be using the example data of one red deer from northern Germany and one covariate: a forest cover map. For a more through discussion see also Fieberg et al. 2020^[https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2656.13441] and supplement B.
 
 ## Getting the data ready
 

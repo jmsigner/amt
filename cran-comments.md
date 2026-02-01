@@ -1,3 +1,27 @@
+# Version 0.3.1
+## Fixes
+- Removed import of `select_vars()`, `mutate_at()` and `n()` to comply with `dplyr` updates. 
+- Bug fix with `group_by` for random steps. 
+- Bug fix with interactions within simulate. 
+
+## Test environments
+
+- local: macOS Sequoia 15.7.3 (R 4.5.1)
+- Win-builder: windows-latest (release and devel)
+- R-hub: `rhub::rhub_check()` for linux, m1-san, macos, macos-arm64 and windows. 
+
+### R CMD check results
+
+I received the following warnings:
+
+Win-builder devel: 
+
+> * checking CRAN incoming feasibility ... WARNING
+> Maintainer: 'Johannes Signer <jsigner@gwdg.de>'
+
+
+
+
 # Version 0.3.0
 I was asked to fix one error that occurred on cran. 
 
@@ -12,7 +36,6 @@ I was asked to fix one error that occurred on cran.
 - Fixed NA in tac()
 - Fixed error in steps_by_burst()/random_steps() if there is only 1 burst. 
 
-
 ## Test environments
 
 - local: macOS Sequoia 15.6 (R 4.5.1)
@@ -21,7 +44,16 @@ I was asked to fix one error that occurred on cran.
 
 ### R CMD check results
 
-There were no errors, warnings or notes.
+I received the following warnings:
+
+Win-builder devel: 
+
+> * checking CRAN incoming feasibility ... WARNING
+> Maintainer: 'Johannes Signer <jsigner@gwdg.de>'
+
+I recieved the following notes: 
+
+Local: 
 
 
 # Version 0.2.2

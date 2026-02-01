@@ -68,7 +68,7 @@ If \code{t} was provided an object of class \code{track_xyt} is returned
 otherwise a \code{track_xy}.
 }
 \description{
-Constructor to crate a track, the basic building block of the \code{amt} package. A
+Constructor to create a track, the basic building block of the \code{amt} package. A
 \code{track} is usually created from a set of \code{x} and \code{y} coordinates, possibly
 time stamps, and any number of optional columns, such as id, sex, age, etc.
 }
