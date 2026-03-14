@@ -241,7 +241,7 @@ and model weights.</p>
 <span>  <span class="co"># Attach covariates</span></span>
 <span>  <span class="fu"><a href="../reference/extract_covariates.html">extract_covariates</a></span><span class="op">(</span><span class="va">hab</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="co"># Assign large weights to available</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
 <span>    <span class="va">case_</span> <span class="op">~</span> <span class="fl">1</span>,</span>
 <span>    <span class="op">!</span><span class="va">case_</span> <span class="op">~</span> <span class="fl">5000</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span>
