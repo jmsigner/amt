@@ -73,10 +73,12 @@
 <url><loc>/reference/log_rss.html</loc></url>
 <url><loc>/reference/make_issf_model.html</loc></url>
 <url><loc>/reference/make_start.html</loc></url>
+<url><loc>/reference/mc_rank_test.html</loc></url>
 <url><loc>/reference/movement_metrics.html</loc></url>
 <url><loc>/reference/nsd.html</loc></url>
 <url><loc>/reference/od.html</loc></url>
 <url><loc>/reference/params.html</loc></url>
+<url><loc>/reference/plot.amt_generative_validation.html</loc></url>
 <url><loc>/reference/plot.hr.html</loc></url>
 <url><loc>/reference/plot.log_rss.html</loc></url>
 <url><loc>/reference/plot.uhc_data.html</loc></url>
@@ -119,5 +121,6 @@
 <url><loc>/reference/uhc_issf_locs.html</loc></url>
 <url><loc>/reference/update_distr.html</loc></url>
 <url><loc>/reference/update_distr_man.html</loc></url>
+<url><loc>/reference/validate_generative.html</loc></url>
 </urlset>
 

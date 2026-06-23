@@ -81,10 +81,24 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_sl</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'fit_clogit'</span></span>
-<span><span class="fu">plot_sl</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fl">1000</span>, upper_quantile <span class="op">=</span> <span class="fl">0.99</span>, plot <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">plot_sl</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  upper_quantile <span class="op">=</span> <span class="fl">0.99</span>,</span>
+<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"base"</span>, <span class="st">"ggplot2"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'random_steps'</span></span>
-<span><span class="fu">plot_sl</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="fl">1000</span>, upper_quantile <span class="op">=</span> <span class="fl">0.99</span>, plot <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">plot_sl</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  upper_quantile <span class="op">=</span> <span class="fl">0.99</span>,</span>
+<span>  plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"base"</span>, <span class="st">"ggplot2"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -109,6 +123,12 @@
 
 <dt id="arg-plot">plot<a class="anchor" aria-label="anchor" href="#arg-plot"></a></dt>
 <dd><p><code>[logical(1)=TRUE]</code> <br> Indicates if a plot should be drawn or not.</p></dd>
+
+
+<dt id="arg-engine">engine<a class="anchor" aria-label="anchor" href="#arg-engine"></a></dt>
+<dd><p><code>[character(1)="base"]</code> <br> Plotting engine. <code>"base"</code> keeps
+the existing base graphics behavior. <code>"ggplot2"</code> returns a ggplot object and
+requires the optional <code>ggplot2</code> package.</p></dd>
 
 </dl></div>
     <div id="value">
