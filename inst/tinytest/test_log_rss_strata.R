@@ -89,3 +89,14 @@ expect_equal(log_rss(combined_model, combined_x1, combined_x2)$df$log_rss,
 set.seed(505)
 expect_true(all(is.finite(log_rss(combined_model, combined_x1, combined_x2,
                                   ci = "boot", n_boot = 5)$df$lwr)))
+
+# Two strata terms give the same results as their combined form.
+separate_model <- fit_clogit(ssf, used ~ x + strata(step_id) + strata(block), model = TRUE)
+expect_equal(log_rss(separate_model, combined_x1, combined_x2)$df$log_rss,
+             log_rss(combined_model, combined_x1, combined_x2)$df$log_rss,
+             tolerance = 1e-10)
+set.seed(606)
+separate_boot <- log_rss(separate_model, combined_x1, combined_x2, ci = "boot", n_boot = 5)$df
+set.seed(606)
+combined_boot <- log_rss(combined_model, combined_x1, combined_x2, ci = "boot", n_boot = 5)$df
+expect_equal(separate_boot, combined_boot, tolerance = 1e-8)

@@ -746,9 +746,13 @@ boot1.fit_clogit <- function(object, x1, x2){
                          function(x) paste(deparse(x, width.cutoff = 500L), collapse = ""),
                          character(1))
   strata_frame <- frame[, strata_names, drop = FALSE]
-  strata_id <- dplyr::group_indices(
-    dplyr::group_by(strata_frame, dplyr::across(dplyr::everything()))
-  )
+  # Group by integer codes so arbitrary stratum labels remain distinct.
+  strata_id <- rep.int(1L, nrow(strata_frame))
+  for (stratum in strata_frame) {
+    codes <- match(stratum, unique(stratum))
+    keys <- paste(strata_id, codes, sep = ":")
+    strata_id <- match(keys, unique(keys))
+  }
   offset <- stats::model.offset(frame)
   if (is.null(offset)) offset <- rep(0, nrow(frame))
   weights <- stats::model.weights(frame)
