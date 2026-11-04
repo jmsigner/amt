@@ -32,10 +32,10 @@ jobs:
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
-          # Newer gsl releases require R >= 4.5.
-          - {os: ubuntu-latest,   r: 'oldrel-2', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
-          - {os: ubuntu-latest,   r: 'oldrel-3', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
-          - {os: ubuntu-latest,   r: 'oldrel-4', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
+          # Match the snapshot's system libraries; newer gsl needs R >= 4.5.
+          - {os: ubuntu-24.04,   r: 'oldrel-2', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
+          - {os: ubuntu-24.04,   r: 'oldrel-3', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
+          - {os: ubuntu-24.04,   r: 'oldrel-4', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
       CRAN: ${{ matrix.config.repo }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: r-lib/actions/setup-pandoc@v2
 
