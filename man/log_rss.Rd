@@ -18,12 +18,11 @@ log_rss(object, ...)
 \item{...}{Further arguments, none implemented.}
 
 \item{x1}{\verb{[data.frame]} \cr A \code{data.frame} representing the habitat values
-at location x_1. Must contain all fitted covariates as expected by
-\code{predict()}.}
+at location x_1. Must contain all fitted covariates needed for prediction.}
 
 \item{x2}{\verb{[data.frame]} \cr A 1-row \code{data.frame} representing the single
-hypothetical location of x_2. Must contain all fitted covariates as expected
-by \code{predict()}.}
+hypothetical location of x_2. Must contain all fitted covariates needed for
+prediction.}
 
 \item{ci}{\verb{[character]} \cr Method for estimating confidence intervals around
 log-RSS. \code{NA} skips calculating CIs. Character string \code{"se"} uses standard error
@@ -53,8 +52,10 @@ selection strengths from at least one proposed location (\code{x1}) to exactly
 one reference location (\code{x2}).
 
 The objects \code{object$model}, \code{x1}, and \code{x2} will be passed to
-\code{predict()}. Therefore, the columns of \code{x1} and \code{x2} must match
-the terms in the model formula exactly.
+\code{predict()} for RSFs. For (i)SSFs, \code{x1} and \code{x2} must contain the
+model covariates, but do not need the stratum identifier. The variable
+used in \code{strata()} does not have to be named \code{step_id_}. Interactions
+between strata and model covariates are not supported.
 }
 \examples{
 
@@ -120,11 +121,12 @@ ssf_data <- deer |>
   mutate(forest = factor(forest, levels = 1:0,
                     labels = c("forest", "non-forest")),
   cos_ta = cos(ta_),
-  log_sl = log(sl_))
+  log_sl = log(sl_),
+  step_id = step_id_)
 
-# Fit an SSF (note model = TRUE necessary for predict() to work)
+# Fit an SSF (model = TRUE is required by log_rss())
 m2 <- ssf_data |>
-  fit_clogit(case_ ~ forest + strata(step_id_), model = TRUE)
+  fit_clogit(case_ ~ forest + strata(step_id), model = TRUE)
 
 # Calculate log-RSS
 # data.frame of x1s

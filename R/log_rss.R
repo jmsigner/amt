@@ -4,11 +4,10 @@
 #'
 #' @param object `[fit_logit, fit_clogit]` \cr A fitted RSF or (i)SSF model.
 #' @param x1 `[data.frame]` \cr A `data.frame` representing the habitat values
-#' at location x_1. Must contain all fitted covariates as expected by
-#' `predict()`.
+#' at location x_1. Must contain all fitted covariates needed for prediction.
 #' @param x2 `[data.frame]` \cr A 1-row `data.frame` representing the single
-#' hypothetical location of x_2. Must contain all fitted covariates as expected
-#' by `predict()`.
+#' hypothetical location of x_2. Must contain all fitted covariates needed for
+#' prediction.
 #' @param ci `[character]` \cr Method for estimating confidence intervals around
 #' log-RSS. `NA` skips calculating CIs. Character string `"se"` uses standard error
 #' method and `"boot"` uses empirical bootstrap method.
@@ -23,8 +22,10 @@
 #' one reference location (`x2`).
 #'
 #' The objects `object$model`, `x1`, and `x2` will be passed to
-#' `predict()`. Therefore, the columns of `x1` and `x2` must match
-#' the terms in the model formula exactly.
+#' `predict()` for RSFs. For (i)SSFs, `x1` and `x2` must contain the
+#' model covariates, but do not need the stratum identifier. The variable
+#' used in `strata()` does not have to be named `step_id_`. Interactions
+#' between strata and model covariates are not supported.
 #'
 #' @author Brian J. Smith
 #'
@@ -109,11 +110,12 @@
 #'   mutate(forest = factor(forest, levels = 1:0,
 #'                     labels = c("forest", "non-forest")),
 #'   cos_ta = cos(ta_),
-#'   log_sl = log(sl_))
+#'   log_sl = log(sl_),
+#'   step_id = step_id_)
 #'
-#' # Fit an SSF (note model = TRUE necessary for predict() to work)
+#' # Fit an SSF (model = TRUE is required by log_rss())
 #' m2 <- ssf_data |>
-#'   fit_clogit(case_ ~ forest + strata(step_id_), model = TRUE)
+#'   fit_clogit(case_ ~ forest + strata(step_id), model = TRUE)
 #'
 #' # Calculate log-RSS
 #' # data.frame of x1s
@@ -244,10 +246,8 @@ log_rss.glm <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000,
 #' @export
 log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot = 1000, ...) {
   if(is.null(object$model$model)){
-    stop(paste("Please refit your step selection model with the argument 'model = TRUE'.\n"),
-         "  The predict() method from package 'survival' requires that you store the model.\n",
-         "  See the Examples under ?log_rss for a demonstration, and see Details under\n",
-         "     ?survival::predict.coxph for a full explanation.")
+    stop("Please refit your step selection model with 'model = TRUE'.\n",
+         "  log_rss() requires the stored model frame.")
   }
   if(!inherits(x1, "data.frame")){
     stop("'x1' should be an object of class 'data.frame'.")
@@ -275,40 +275,24 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
   # in original data, x1, and x2 (internal amt function)
   check_factors(model = object$model, x1 = x1, x2 = x2)
 
-  #Calculate correction due to sample-centered means (see ?survival::predict.coxph for details)
-  uncenter <- sum(coef(object$model) * object$model$means, na.rm=TRUE)
-  #predict(..., reference = "sample", se.fit = TRUE) will throw error without a "step_id_"
-    #column, even though it isn't using it
-  x1_dummy <- x1
-  x2_dummy <- x2
-  x1_dummy$step_id_ = object$model$model$`strata(step_id_)`[1]
-  x2_dummy$step_id_ = object$model$model$`strata(step_id_)`[1]
-  #Calculate y_x
-  pred_x1 <- predict(object$model, newdata = x1_dummy, type = "lp", reference = "sample",
-                  se.fit = TRUE)
-  pred_x2 <- predict(object$model, newdata = x2_dummy, type = "lp", reference = "sample",
-                  se.fit = TRUE)
-  y_x1 <- pred_x1$fit + uncenter
-  y_x2 <- pred_x2$fit + uncenter
+  # Stratum-specific intercepts cancel in the contrast. Construct the
+  # covariate model matrices without requiring a dummy stratum in new data.
+  x1_design <- log_rss_clogit_design(object$model, x1)
+  x2_design <- log_rss_clogit_design(object$model, x2)
+  delta_mm <- sweep(x1_design$matrix, 2, x2_design$matrix[1, ])
 
   #Include values of x1 in return data.frame
   df <- x1
   names(df) <- unname(sapply(names(x1), append_x1))
   #Calculate log_rss
-  df$log_rss <- unname(y_x1 - y_x2)
+  df$log_rss <- unname(drop(delta_mm %*% stats::coef(object$model)) +
+                        x1_design$offset - x2_design$offset[1])
 
   #Calculate confidence intervals
   if (!is.na(ci)){
     if (ci == "se"){ #Standard error method
-      #Get model matrix for x1 and x2
-      x1_mm <- stats::model.matrix(object$model, data = x1_dummy,
-                                   contrast.arg = object$model$contrasts)
-      x2_mm <- stats::model.matrix(object$model, data = x2_dummy,
-                                   contrast.arg = object$model$contrasts)
       #Get model variance-covariance matrix
       m_vcov <- stats::vcov(object$model)
-      #Subtract x2 model matrix from each row of x1
-      delta_mm <- sweep(data.matrix(x1_mm), 2, data.matrix(x2_mm))
       #Get variance of log-RSS prediction
       var_pred <- diag(delta_mm %*% m_vcov %*% t(delta_mm))
       #Get standard error of prediction
@@ -344,6 +328,39 @@ log_rss.fit_clogit <- function(object, x1, x2, ci = NA, ci_level = 0.95, n_boot 
 
   #Return log_rss
   return(res)
+}
+
+log_rss_clogit_design <- function(model, newdata) {
+  terms <- stats::delete.response(stats::terms(model))
+  factors <- attr(terms, "factors")
+  strata_rows <- attr(terms, "specials")$strata
+  if (length(strata_rows)) {
+    strata_terms <- which(colSums(factors[strata_rows, , drop = FALSE] != 0) > 0)
+    if (any(attr(terms, "order")[strata_terms] != 1L)) {
+      stop("Interactions involving strata are not supported by log_rss().", call. = FALSE)
+    }
+    predvars <- attr(terms, "predvars")
+    if (!is.null(predvars)) {
+      predvars <- as.call(as.list(predvars)[-(strata_rows + 1L)])
+    }
+    terms <- stats::drop.terms(terms, strata_terms, keep.response = FALSE)
+    # drop.terms() can retain the wrong prediction variables in offset models.
+    if (!is.null(predvars)) attr(terms, "predvars") <- predvars
+  }
+
+  # The fitted model also stores levels for strata; those variables are not
+  # required in newdata and must not be passed to model.frame().
+  xlevels <- model$xlevels[intersect(names(model$xlevels), all.vars(terms))]
+  frame <- stats::model.frame(terms, data = newdata, xlev = xlevels,
+                              na.action = stats::na.pass)
+  mm <- stats::model.matrix(terms, data = frame, contrasts.arg = model$contrasts)
+  coefficient_names <- names(stats::coef(model))
+  if (!all(coefficient_names %in% colnames(mm))) {
+    stop("Could not construct the model matrix for log_rss().", call. = FALSE)
+  }
+  offset <- stats::model.offset(frame)
+  if (is.null(offset)) offset <- rep(0, nrow(mm))
+  list(matrix = mm[, coefficient_names, drop = FALSE], offset = offset)
 }
 
 
@@ -649,7 +666,8 @@ bootstrap_logrss.glm <- function(object, x1, x2, ci_level, n_boot, mle, ...){
 #' @rdname bootstrap_logrss
 bootstrap_logrss.fit_clogit <- function(object, x1, x2, ci_level, n_boot, mle, ...){
   #Perform the bootstrap
-  arr <- replicate(n_boot, boot1.fit_clogit(object, x1, x2), simplify = "array")
+  arr <- matrix(vapply(seq_len(n_boot), function(i) boot1.fit_clogit(object, x1, x2),
+                       numeric(nrow(x1))), nrow = nrow(x1), ncol = n_boot)
   #Lower percentile
   p_lwr <- (1 - ci_level)/2
   #Upper percentile
@@ -719,17 +737,49 @@ boot1.glm <- function(object, x1, x2){
 
 #' @rdname boot1
 boot1.fit_clogit <- function(object, x1, x2){
-  dat <- object$model$model
-  #If resampling factor levels, missing levels can cause prediction to fail
+  model <- object$model
+  frame <- model$model
+  predictors <- stats::model.matrix(model)
+  response <- stats::model.response(frame)[, "status"]
+  strata_index <- attr(stats::terms(model), "specials")$strata
+  strata_names <- vapply(as.list(attr(stats::terms(model), "variables"))[-1][strata_index],
+                         function(x) paste(deparse(x, width.cutoff = 500L), collapse = ""),
+                         character(1))
+  strata_frame <- frame[, strata_names, drop = FALSE]
+  strata_id <- dplyr::group_indices(
+    dplyr::group_by(strata_frame, dplyr::across(dplyr::everything()))
+  )
+  offset <- stats::model.offset(frame)
+  if (is.null(offset)) offset <- rep(0, nrow(frame))
+  weights <- stats::model.weights(frame)
+  if (is.null(weights)) weights <- rep(1, nrow(frame))
+  design1 <- log_rss_clogit_design(model, x1)
+  design2 <- log_rss_clogit_design(model, x2)
+  delta <- sweep(design1$matrix, 2, design2$matrix[1, ])
+  indices <- split(seq_len(nrow(frame)), factor(strata_id, levels = unique(strata_id)),
+                   drop = TRUE)
+
+  # Retry if a resample does not produce finite coefficients.
   logrss <- NULL
   i <- 1
   while(is.null(logrss)){
-    #Resample
-    newdat <- resample_coxph(dat)
-    #Refit model
-    rhs <- as.character(formula(object$model))[3]
-    m <- fit_clogit(formula = reformulate(rhs, response = "case_"), data = newdat, model = TRUE)
-    try({logrss <- log_rss(m, x1, x2, ci = NA)$df$log_rss}, silent = TRUE)
+    # Sample complete strata and assign a new ID to each draw, including
+    # repeated draws of the same original stratum.
+    draws <- sample.int(length(indices), length(indices), replace = TRUE)
+    rows <- unlist(indices[draws], use.names = FALSE)
+    newdat <- data.frame(.case = response[rows],
+                         .stratum = rep(seq_along(draws), lengths(indices[draws])),
+                         .offset = offset[rows], .weight = weights[rows])
+    newdat$.predictors <- I(predictors[rows, , drop = FALSE])
+    fit_args <- list(formula = .case ~ .predictors + strata(.stratum) + offset(.offset),
+                     data = newdat, method = model$method)
+    if (!is.null(stats::model.weights(frame))) fit_args$weights <- newdat$.weight
+    m <- try(do.call(survival::clogit, fit_args), silent = TRUE)
+    if (!inherits(m, "try-error") && length(stats::coef(m)) == ncol(delta) &&
+        all(is.finite(stats::coef(m)))) {
+      logrss <- unname(drop(delta %*% unname(stats::coef(m))) +
+                        design1$offset - design2$offset[1])
+    }
     i <- i + 1
     #Warn after 25 tries
     if (i == 25){
@@ -744,27 +794,4 @@ boot1.fit_clogit <- function(object, x1, x2){
     }
   }
   return(logrss)
-}
-
-resample_coxph <- function(mdat){
-  #Reformat
-  names(mdat)[1] <- "case_"
-  mdat$case_ <- as.character(mdat$case_) == "1"
-  names(mdat)[which(names(mdat) == "strata(step_id_)")] <- "step_id_"
-  mdat$step_id_ <- as.character(mdat$step_id_)
-  mdat$step_id_ <- unlist(
-    lapply(
-      strsplit(mdat$step_id_, "=", fixed = TRUE), getElement, 2))
-  #Create new data.frame with just columns to drop attributes
-  dat <- mdat[, 1:ncol(mdat)]
-
-  #Sampling only strata
-  n_obs <- sum(dat$case_)
-  strats <- sample(x = unique(dat$step_id_), size = n_obs, replace = TRUE)
-  new_dat_list <- lapply(strats, function(x){
-    dat[which(dat$step_id_ == x),]
-  })
-  new_dat <- dplyr::bind_rows(new_dat_list)
-  #Return
-  return(new_dat)
 }
