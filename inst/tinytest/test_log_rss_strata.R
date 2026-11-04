@@ -85,12 +85,13 @@ mixed_x1 <- data.frame(x = c(-1, 0.5), known_offset = c(0.2, -0.1),
                        habitat = factor(c("forest", "open"), levels = levels(ssf$habitat)))
 mixed_x2 <- data.frame(x = 0, known_offset = 0.1,
                        habitat = factor("forest", levels = levels(ssf$habitat)))
-mixed_pred1 <- predict(mixed_model$model, transform(mixed_x1, step_id = ssf$step_id[1]),
-                       type = "lp", reference = "sample")
-mixed_pred2 <- predict(mixed_model$model, transform(mixed_x2, step_id = ssf$step_id[1]),
-                       type = "lp", reference = "sample")
+mixed_mm1 <- model.matrix(~ x + I(x^2) + habitat, mixed_x1)[, -1, drop = FALSE]
+mixed_mm2 <- model.matrix(~ x + I(x^2) + habitat, mixed_x2)[, -1, drop = FALSE]
+mixed_delta <- sweep(mixed_mm1, 2, mixed_mm2[1, ])
+mixed_expected <- unname(drop(mixed_delta %*% coef(mixed_model$model)) +
+                           mixed_x1$known_offset - mixed_x2$known_offset)
 expect_equal(log_rss(mixed_model, mixed_x1, mixed_x2, ci = "se")$df$log_rss,
-             unname(mixed_pred1 - mixed_pred2[1]), tolerance = 1e-10)
+             mixed_expected, tolerance = 1e-10)
 
 # A stratum expression combining multiple variables does not need those
 # variables in x1 or x2.
