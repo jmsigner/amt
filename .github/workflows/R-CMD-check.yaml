@@ -25,24 +25,26 @@ jobs:
           - {os: macos-latest,   r: 'release'}
 
           - {os: windows-latest, r: 'release'}
-          # Use 3.6 to trigger usage of RTools35
-          - {os: windows-latest, r: '3.6'}
-          # use 4.1 to check with rtools40's older compiler
-          - {os: windows-latest, r: '4.1'}
+          # R 4.1 is the minimum supported version. Use a snapshot with
+          # Windows binaries for its spatial dependencies.
+          - {os: windows-latest, r: '4.1', repo: 'https://packagemanager.posit.co/cran/2023-06-01'}
 
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
-          - {os: ubuntu-latest,   r: 'oldrel-2'}
-          - {os: ubuntu-latest,   r: 'oldrel-3'}
-          - {os: ubuntu-latest,   r: 'oldrel-4'}
+          # Newer gsl releases require R >= 4.5.
+          - {os: ubuntu-latest,   r: 'oldrel-2', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
+          - {os: ubuntu-latest,   r: 'oldrel-3', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
+          - {os: ubuntu-latest,   r: 'oldrel-4', repo: 'https://packagemanager.posit.co/cran/__linux__/noble/2025-04-01'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      RSPM: ${{ matrix.config.repo }}
+      CRAN: ${{ matrix.config.repo }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
