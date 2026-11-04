@@ -78,6 +78,20 @@ set.seed(404)
 offset_boot <- log_rss(offset_model, offset_x1, offset_x2, ci = "boot", n_boot = 10)$df
 expect_true(all(is.finite(offset_boot$lwr)))
 
+# Retain offsets and transformed predictors when their order changes.
+mixed_model <- fit_clogit(ssf, used ~ offset(known_offset) + x + I(x^2) + habitat +
+                           strata(step_id), model = TRUE)
+mixed_x1 <- data.frame(x = c(-1, 0.5), known_offset = c(0.2, -0.1),
+                       habitat = factor(c("forest", "open"), levels = levels(ssf$habitat)))
+mixed_x2 <- data.frame(x = 0, known_offset = 0.1,
+                       habitat = factor("forest", levels = levels(ssf$habitat)))
+mixed_pred1 <- predict(mixed_model$model, transform(mixed_x1, step_id = ssf$step_id[1]),
+                       type = "lp", reference = "sample")
+mixed_pred2 <- predict(mixed_model$model, transform(mixed_x2, step_id = ssf$step_id[1]),
+                       type = "lp", reference = "sample")
+expect_equal(log_rss(mixed_model, mixed_x1, mixed_x2, ci = "se")$df$log_rss,
+             unname(mixed_pred1 - mixed_pred2[1]), tolerance = 1e-10)
+
 # A stratum expression combining multiple variables does not need those
 # variables in x1 or x2.
 ssf$block <- rep(rep(c("A", "B"), length.out = n_strata), each = 3L)

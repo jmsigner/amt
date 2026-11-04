@@ -339,13 +339,29 @@ log_rss_clogit_design <- function(model, newdata) {
     if (any(attr(terms, "order")[strata_terms] != 1L)) {
       stop("Interactions involving strata are not supported by log_rss().", call. = FALSE)
     }
+    variables <- as.list(attr(terms, "variables"))[-1L]
     predvars <- attr(terms, "predvars")
-    if (!is.null(predvars)) {
-      predvars <- as.call(as.list(predvars)[-(strata_rows + 1L)])
+    offsets <- attr(terms, "offset")
+    labels <- attr(terms, "term.labels")[-strata_terms]
+    if (!length(labels)) labels <- "1"
+    if (length(offsets)) {
+      labels <- c(labels, vapply(variables[offsets], function(x) {
+        paste(deparse(x, width.cutoff = 500L), collapse = "")
+      }, character(1)))
     }
-    terms <- stats::drop.terms(terms, strata_terms, keep.response = FALSE)
-    # drop.terms() can retain the wrong prediction variables in offset models.
-    if (!is.null(predvars)) attr(terms, "predvars") <- predvars
+    # R versions before 4.3 do not retain offsets in drop.terms().
+    formula <- stats::reformulate(labels, intercept = attr(terms, "intercept"),
+                                  env = environment(terms))
+    terms <- stats::terms(formula, specials = names(attr(terms, "specials")))
+    if (!is.null(predvars)) {
+      new_variables <- as.list(attr(terms, "variables"))[-1L]
+      positions <- vapply(new_variables, function(x) {
+        match(TRUE, vapply(variables, identical, logical(1), x))
+      }, integer(1))
+      if (anyNA(positions)) stop("Could not match model variables.", call. = FALSE)
+      attr(terms, "predvars") <- as.call(c(list(as.name("list")),
+                                           as.list(predvars)[-1L][positions]))
+    }
   }
 
   # The fitted model also stores levels for strata; those variables are not
