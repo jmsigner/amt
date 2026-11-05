@@ -33,7 +33,7 @@ plot_sl(x, ...)
 
 \item{n}{\verb{[numeric(1)=1000]\{>0\}} \cr The number of breaks between \code{0} and \code{upper_quantile}.}
 
-\item{upper_quantile}{\verb{[nummeric(1)=0.99]\{0-1\}} \cr The quantile until where the distribution should be plotted. Typically this will be \code{0.95} or \code{0.99}.}
+\item{upper_quantile}{\verb{[numeric(1)=0.99]\{0-1\}} \cr The quantile until where the distribution should be plotted. Typically this will be \code{0.95} or \code{0.99}.}
 
 \item{plot}{\verb{[logical(1)=TRUE]} \cr Indicates if a plot should be drawn or not.}
 
@@ -42,10 +42,19 @@ the existing base graphics behavior. \code{"ggplot2"} returns a ggplot object an
 requires the optional \code{ggplot2} package.}
 }
 \value{
-A plot of the step-length distribution.
+With \code{engine = "base"}, a data frame with the step lengths and
+their densities, returned invisibly. With \code{engine = "ggplot2"}, a ggplot
+object, returned invisibly. If \code{plot = TRUE}, the plot is also drawn.
 }
 \description{
 Plot step-length distribution
+}
+\details{
+Gamma, exponential, log-normal, half-normal and uniform
+step-length distributions are supported. The distribution plotted is the
+one stored in \code{x}, which can be supplied by the user or fitted to data.
+If random step lengths were supplied separately through \code{rand_sl}, they
+do not necessarily follow the stored distribution.
 }
 \examples{
 data(deer)
@@ -53,5 +62,10 @@ data(deer)
 # with random steps
 deer[1:100, ] |> steps_by_burst() |> random_steps() |> plot_sl()
 deer[1:100, ] |> steps_by_burst() |> random_steps() |> plot_sl(upper_quantile = 0.5)
+
+# Fit and plot an exponential step-length distribution
+st <- deer[1:100, ] |> filter_min_n_burst(min_n = 4) |> steps_by_burst()
+exp_sl <- fit_distr(st$sl_, "exp")
+st |> random_steps(sl_distr = exp_sl) |> plot_sl()
 
 }
