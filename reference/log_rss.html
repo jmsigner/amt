@@ -101,14 +101,13 @@
 
 <dt id="arg-x-">x1<a class="anchor" aria-label="anchor" href="#arg-x-"></a></dt>
 <dd><p><code>[data.frame]</code> <br> A <code>data.frame</code> representing the habitat values
-at location x_1. Must contain all fitted covariates as expected by
-<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p></dd>
+at location x_1. Must contain all fitted covariates needed for prediction.</p></dd>
 
 
 <dt id="arg-x-">x2<a class="anchor" aria-label="anchor" href="#arg-x-"></a></dt>
 <dd><p><code>[data.frame]</code> <br> A 1-row <code>data.frame</code> representing the single
-hypothetical location of x_2. Must contain all fitted covariates as expected
-by <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p></dd>
+hypothetical location of x_2. Must contain all fitted covariates needed for
+prediction.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -140,8 +139,10 @@ intervals. Ignored if <code>ci != "boot"</code>.</p></dd>
 selection strengths from at least one proposed location (<code>x1</code>) to exactly
 one reference location (<code>x2</code>).</p>
 <p>The objects <code>object$model</code>, <code>x1</code>, and <code>x2</code> will be passed to
-<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>. Therefore, the columns of <code>x1</code> and <code>x2</code> must match
-the terms in the model formula exactly.</p>
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> for RSFs. For (i)SSFs, <code>x1</code> and <code>x2</code> must contain the
+model covariates, but do not need the stratum identifier. The variable
+used in <code><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata()</a></code> does not have to be named <code>step_id_</code>. Interactions
+between strata and model covariates are not supported.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -228,12 +229,13 @@ selection strength.</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>forest <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">forest</span>, levels <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">0</span>,</span></span>
 <span class="r-in"><span>                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"forest"</span>, <span class="st">"non-forest"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  cos_ta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">cos</a></span><span class="op">(</span><span class="va">ta_</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  log_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  log_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">sl_</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  step_id <span class="op">=</span> <span class="va">step_id_</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some bursts contain &lt; 3 steps and will be removed</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Fit an SSF (note model = TRUE necessary for predict() to work)</span></span></span>
+<span class="r-in"><span><span class="co"># Fit an SSF (model = TRUE is required by log_rss())</span></span></span>
 <span class="r-in"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="va">ssf_data</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="fit_clogit.html">fit_clogit</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">forest</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">step_id_</span><span class="op">)</span>, model <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="fit_clogit.html">fit_clogit</a></span><span class="op">(</span><span class="va">case_</span> <span class="op">~</span> <span class="va">forest</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">step_id</span><span class="op">)</span>, model <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Calculate log-RSS</span></span></span>
 <span class="r-in"><span><span class="co"># data.frame of x1s</span></span></span>
